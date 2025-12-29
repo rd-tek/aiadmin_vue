@@ -1,0 +1,467 @@
+.signup {
+    &-wrap {
+        padding: 66px 0;
+        max-width: 502px;
+        margin: 0 auto;
+
+        .logo {
+            margin-bottom: 50px;
+
+            img {
+                margin: 0 auto;
+                height: 62px;
+            }
+        }
+
+        .title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 30px;
+            font-weight: 700;
+            margin-bottom: 40px;
+            line-height: 1.3;
+        }
+
+        & > .title {
+            justify-content: center;
+        }
+        
+        .form-area {
+            .sub {
+                color: #35383B;
+                font-size: 16px;
+                line-height: 1.5;
+                margin-bottom: 18px;
+
+                .required {
+                    color: #EF2B49;
+                }
+            }
+
+            .form {
+                &-section {
+                    &:last-child {
+                        .cont {
+                            margin: 0;
+                        }
+                    }
+
+                    .title {
+                        font-size: 18px;
+                        font-weight: 700;
+                        color: #034B5E;
+                        border-bottom: 1px solid #676D73;
+                        padding-bottom: 18px;
+                        margin-bottom: 40px;
+                        cursor: pointer;
+
+                        &:has(.btn-more) {
+                            display: flex;
+                            align-items: center;
+                            width: 100%;
+
+                            .btn-more {
+                                transition: all ease .2s;
+
+                                &.is-active {
+                                    transform: rotate(180deg);
+                                }
+
+                                img {
+                                    width: 20px;
+                                    height: 20px;
+                                }
+                            }
+                        }
+                    }
+
+                    .cont {
+                        margin-bottom: 48px;
+
+                        &-list {
+                            display: flex;
+                            flex-direction: column;
+                            margin-bottom: 40px;
+
+                            &.col-2 {
+                                width: 50%;
+
+                                .cont-list-box {
+                                    margin-right: 20px;
+                                }
+                            }
+
+                            &.col-3 {
+                                width: 33.333%;
+                            }
+
+                            &:has(.cont-list-col) {
+                                flex-direction: row;
+                                gap: 40px;
+                            }
+
+                            &-box {
+                                display: flex;
+                                align-items: center;
+                                gap: 10px;
+
+                                .radio-box {
+                                    input {
+                                        height: 100%;
+                                        min-width: auto;
+                                    }
+                                }
+
+                                &:has(.mm) {
+                                    gap: 16px;
+                                }
+
+                                .text {
+                                    color: #52575C;
+                                }
+
+                                .select-default {
+                                    width: 100%;
+                                }
+
+                                input, select {
+                                    flex: 1;
+                                }
+                                
+                                & + .cont-list-box {
+                                    margin-top: 10px;
+
+                                    input, select {
+                                        // flex: 0 auto;
+                                    }
+                                }
+
+                                                          .profile {
+                            position: relative;
+
+                            input[type=file] {
+                              position: absolute;
+                              top: 0;
+                              left: 0;
+                              border: 0;
+                              font-size: 0;
+                              z-index: 1;
+                              width: 100%;
+                              height: 100%;
+                              border-radius: 50%;
+                              background: none;
+                              opacity: 0;
+                              cursor: pointer;
+                            }
+                          }
+
+                          .btn-profile {
+                                    position: relative;
+
+                                    &-image {
+                                        background-size: cover;
+                                        background-color: #D9D9D9;
+                                        background-repeat: no-repeat;
+                                        background-position: center;
+                                        width: 70px;
+                                        height: 70px;
+                                        border-radius: 50%;
+                                        overflow: hidden;
+                                        border: 1px solid #D9D9D9;
+
+                                        &.no-data {
+                                            background-image: url('/images/button/btn_profile_02.png');
+                                            background-size: 40px auto;
+                                        }
+                                    }
+
+                                    &:hover {
+                                    .btn-profile-edit {
+                                        background: #298097;
+                                    }
+                                    }
+
+                                    & > img {
+                                    width: 70px;
+                                    height: 70px;
+                                    border-radius: 50%;
+                                    overflow: hidden;
+                                    }
+
+                                    &-edit {
+                                        display: inline-flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        width: 32px;
+                                        height: 32px;
+                                        background: #298097;
+                                        border-radius: 50%;
+                                        position: absolute;
+                                        right: -8px;
+                                        bottom: -5px;
+                                        transition: all ease .2s;
+
+                                        input {
+                                            min-width: auto;
+                                        }
+
+                                    img {
+                                        width: 24px;
+                                        height: 24px; 
+                                    }
+                                    }
+                                }
+                            }
+
+                            .required {
+                                color: #EF2B49;
+                                margin-top: 4px;
+                                line-height: 2;
+                                font-size: 14px;
+
+                                &.mt-0 {
+                                    margin: 0;
+                                }
+                            }
+
+                            &-col {
+                                flex: 1;
+                                display: flex;
+                                flex-direction: column;
+
+                                .select-default {
+                                    width: 100%;
+                                }
+                            }h
+
+                            input, select {
+                                width: 100%;
+
+                                &:focus {
+                                    border: 1px solid #FF7519;
+                                }
+                            }
+
+                            &:last-child {
+                                margin: 0;
+                            }
+
+                            label {
+                                margin-bottom: 12px;
+
+                                .required {
+                                    &:after {
+                                        content: " *";
+                                        color: #FF0000;
+                                    }
+                                }
+                            }
+
+                            .radio-box {
+                                & + .radio-box {
+                                    margin-left: 2px;
+                                }
+
+                                label {
+                                    margin: 0;
+                                }
+                            }
+
+                            input, select {
+                                height: 46px;
+                                min-width: 130px;
+                                border-radius: 6px;
+                                padding: 8px 16px;
+                                font-size: 16px;
+
+                                &::placeholder {
+                                    color: #9B9FA3;
+                                }
+                            }
+
+                            select {
+                                background-image: url('/public/images/icon/icon_arrow_down_teal_02.png');
+                                background-size: 12px auto;
+                                background-position: right 16px center;
+                            }
+
+                            .btn-default {
+                                height: 46px;
+                                line-height: 46px;
+                                border-radius: 6px;
+                                background: #9B9FA3;
+                                margin: 0;
+                                min-width: 100px;
+                                padding: 0 10px;
+                                
+                                &:before {
+                                    background: #000;
+                                }
+                            }
+                        }
+                    }
+
+                    .checkbox {
+                        margin-top: 30px;
+
+                        .check-box {
+                            display: block;
+                            margin-bottom: 10px;
+
+                            input[type=checkbox] {
+                                & + label {
+                                    .check-box-txt {
+                                        color: #676D73;
+                                    }
+                                }
+                            }
+
+                            &:last-child {
+                                margin: 0;
+                            }
+
+                            &.hp-mt-30 {
+                                margin-top: 30px;
+                            }
+                        }
+                    }
+                }
+            }
+
+            .btn-wrap {
+                margin-top: 40px;
+                text-align: center;
+                
+                a, button {
+                    width: 180px;
+                    margin: 0 auto;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .signup {
+        &-wrap {
+            padding: 0;
+
+            .logo {
+                display: none;
+            }
+
+            .title {
+                font-size: 18px;
+                display: none;
+            }
+
+            .form-area {
+                max-width: 100%;
+
+                .sub {
+                    margin-bottom: 18px;
+                    font-size: 15px;
+                    padding: 0 24px;
+                }
+
+                .form {
+                    padding: 0 24px;
+
+                    &-section {
+                        .title {
+                            display: block;
+                            font-size: 18px;
+                            height: auto;
+                        }
+
+                        .cont {
+                            margin-bottom: 58px;
+
+                            &-list {
+                                &.col-2 {
+                                    width: 100%;
+            
+                                    .cont-list-box {
+                                        margin: 0;
+            
+                                        & + .cont-list-box {
+                                            margin-top: 10px;
+                                        }
+                                    }
+                                }
+            
+                                &:has(.cont-list-col) {
+                                    display: block;
+                                    
+                                    .cont-list-col {
+                                        margin-bottom: 20px;
+                                    }
+                                }
+            
+                                input, select {
+                                    height: 46px;
+                                }
+            
+                                &-box {
+                                    gap: 10px;
+            
+                                    &:has(.select-default) {
+                                        display: block;
+                                    }
+                                    
+                                    &:has(.mm) {
+                                        display: flex;
+
+                                        select {
+                                            margin: 0;
+                                        }
+                                    }
+            
+                                    & + .cont-list-box {
+                                        input {
+                                            width: 100%;
+                                        }
+                                    }
+            
+                                    input {
+                                        margin: 0;
+                                    }
+                                    
+                                    .radio-box {
+                                        input {
+                                            height: 24px;
+                                            min-width: auto;
+                                        }
+                                    }
+                                }
+            
+                                .btn-default {
+                                    min-width: 100px;
+                                    height: 46px;
+                                    line-height: 46px;
+                                }
+
+                                .required {
+                                    line-height: 1.4;
+                                    margin-top: 10px;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                .btn-wrap {
+                    padding: 24px 0;
+
+                    button {
+                        max-width: 100%;
+                        min-width: 100%;
+                        width: 100%;
+                        height: 52px;
+                    }
+                }
+            }
+        }
+    }
+}

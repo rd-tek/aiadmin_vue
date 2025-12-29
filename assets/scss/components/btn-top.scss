@@ -1,0 +1,28 @@
+.btn-top {
+    position: fixed!important;
+    right: 60px;
+    bottom: 30px;
+    overflow: hidden!important;
+    z-index: 99!important;
+    transform: translateY(-30px);
+
+    &.is-active {
+        position: absolute!important;
+        bottom: auto;
+    }
+}
+
+@media screen and (max-width: 1024px) {
+  .btn-top {
+      width: 50px!important;
+      height: 50px!important;
+      right: 30px;
+      transform: translateY(-25px);
+
+      &.type01 {
+          svg {
+              height: 30px;
+          }
+      }
+  }
+}
