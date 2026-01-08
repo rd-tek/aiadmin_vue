@@ -101,14 +101,15 @@
   </div>
 </template>
 <script setup>
-import { useCoachingApi } from "~/api/coaching";
+import { useRouter, useRoute } from "vue-router";
+// import { useCoachingApi } from "~/api/coaching";
 import { useCommon } from "@/utils/common";
 import { useRouteQuery } from "@vueuse/router";
 
 const common = useCommon();
 const route = useRoute();
 const router = useRouter();
-const coachingApi = useCoachingApi();
+// const coachingApi = useCoachingApi();
 
 const selectedPk = ref(null);
 const form = reactive({
