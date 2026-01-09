@@ -976,12 +976,6 @@
                 <div class="cont">
                     <p class="desc">차트(line) - type01</p>
                     <div class="chart-list">
-                        <chart-e-chart></chart-e-chart>
-                    </div>
-                </div>
-                <div class="cont">
-                    <p class="desc">차트(line) - type01</p>
-                    <div class="chart-list">
                         <chart-line-type-2></chart-line-type-2>
                     </div>
                 </div>
@@ -1752,9 +1746,9 @@ onUnmounted(() => {
   window.removeEventListener("scroll", handleScroll);
 })
 
-definePageMeta({
-  layout: 'empty',
-});
+// definePageMeta({
+//   layout: 'empty',
+// });
 
 </script>
 <style lang="scss" scoped>

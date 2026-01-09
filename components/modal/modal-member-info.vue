@@ -255,13 +255,13 @@
 
 </template>
 <script setup>
-import { useMembersApi } from "~/api/members";
+// import { useMembersApi } from "~/api/members";
 import { useCommon } from "@/utils/common";
 import toastModal from '@/components/toast-ui/toast-modal.vue';
 import toastErrorModal from '@/components/toast-ui/toast-error-modal.vue';
 
 const common = useCommon();
-const membersApi = useMembersApi();
+// const membersApi = useMembersApi();
 const form = ref({});
 const props = defineProps({
   isOpen: {

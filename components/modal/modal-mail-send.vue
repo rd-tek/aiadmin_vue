@@ -114,12 +114,12 @@
 
 </template>
 <script setup>
-import { useMembersApi } from "~/api/members";
+// import { useMembersApi } from "~/api/members";
 import toastModal from '@/components/toast-ui/toast-modal.vue';
 import toastErrorModal from '@/components/toast-ui/toast-error-modal.vue';
 
 const modals = reactive({});
-const membersApi = useMembersApi();
+// const membersApi = useMembersApi();
 const form = ref({});
 const props = defineProps({
   isOpen: {
