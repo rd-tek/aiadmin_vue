@@ -1,0 +1,273 @@
+.dashboard {
+    opacity: 0;
+    transform: translateY(2%);
+    transition: all .4s cubic-bezier(.37, 0, .63, 1);
+
+    &.is-move {
+        opacity: 1;
+        transform: initial;
+    }
+
+    &-wrap {
+        & + .dashboard-wrap {
+            margin-top: 50px;
+        }
+    }
+
+    &-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 22px;
+
+        & + .dashboard-row {
+            margin-top: 30px;
+        } 
+
+        &-list {
+            flex: 1;
+
+            &.col-1 {
+                flex: .2;
+            }
+
+            &.col-2 {
+                flex: .4;
+            }
+
+            &.col-3 {
+                flex: .6;
+            }
+
+            &.col-4 {
+                flex: .8;
+            }
+
+            .title {
+                font-size: 20px;
+                font-weight: 600;
+                font-family: 'Montserrat';
+                line-height: 1.5;
+            }
+
+            .cont {
+                border: 1px solid #E6EDFF;
+                border-radius: 12px;
+                background-color: #fff;
+                margin-top: 10px;
+                padding: 20px;
+
+                &-wrap {
+                    display: flex;
+                    flex-wrap: wrap;
+
+                    .cont-title {
+                        margin-bottom: 8px;
+                    }
+
+                    .cont-data {
+                        margin-bottom: 9px;
+                    }
+
+                    &-list {
+                        flex: 1;
+                        border-right: 1px solid #E6EDFF;
+                        text-align: center;
+
+                        &:last-child {
+                            border: 0;
+                        }
+                    }
+                }
+
+                &-title {
+                    font-size: 14px;
+                    font-weight: 400;
+                    line-height: 1.5;
+                }
+
+                &-data {
+                    line-height: 1.5;
+
+                    .today {
+                        font-size: 28px;
+                        font-weight: 700;
+                    }
+
+                    .total {
+                        font-size: 18px;
+                        font-weight: 400;
+                        color: #72777A;
+                    }
+                }
+
+                &-rate {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                    svg {
+                        display: inline-block;
+                        width: 20px;
+                        height: 20px;
+                    }
+
+                    .rate {
+                        &.is-up {
+                            .text {
+                                color: #00B34A;
+                            }
+                        }
+
+                        &.is-down {
+                            color: #EF2B49;
+                        }
+
+                        .text {
+                            margin-left: 8px;
+                            font-size: 14px;
+                        }
+                    }
+                }
+            }
+
+            .table {
+                margin-top: 10px;
+            }
+        }
+    }
+}
+
+.no-data {
+    color: #52575c;
+    font-size: 14px;
+    min-height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@media screen and (max-width: 1600px) {
+    .dashboard {
+        &-row {
+            flex-direction: column;
+
+            &-list {
+                .cont {
+                    border: 0;
+                    padding: 0;
+
+                    &-wrap {
+                        gap: 8px;
+
+                        &-list {
+                            border: 1px solid #E6EDFF;
+                            border-radius: 6px;
+                            padding: 16px;
+
+                            &:last-child {
+                                border: 1px solid #E6EDFF;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .no-data {
+        border: 1px solid #E6EDFF;
+        border-radius: 12px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .dashboard {
+        &-wrap {
+            & + .dashboard-wrap {
+                margin-top: 18px;
+            }
+        }
+
+        &-row {
+            display: block;
+
+            & + .dashboard-row {
+                margin-top: 18px;
+            }
+
+            &-list {
+                & + .dashboard-row-list {
+                    margin-top: 18px;
+                }
+
+                .title {
+                    font-size: 18px;
+                }
+
+                .cont {
+                    &-title {
+                        font-size: 13px;
+                    }
+
+                    &-data {
+                        .today {
+                            font-size: 18px;
+                        }
+
+                        .total {
+                            font-size: 15px;
+                        }
+                    }
+
+                    &-rate {
+                        .rate {
+                            .text {
+                                font-size: 12px;
+                                margin-left: 4px;
+                            }
+                        }
+                    }
+
+                    &-wrap {
+                        &.flex-column {
+                            flex-direction: column;
+
+                            .cont-wrap-list {
+                                display: flex;
+                                align-items: center;
+                            }
+
+                            .cont-title {
+                                flex: .4;
+                                text-align: left;
+
+                                span {
+                                    display: block;
+                                }
+                            }
+
+                            .cont-info {
+                                flex: .6;
+                                text-align: left;
+                            }
+
+                            .cont-rate {
+                                justify-content: flex-start;
+                                margin-top: 6px;
+                            }
+                        }
+                    }
+                }
+
+                .table {
+                    .no-data {
+                        border-right: 0;
+                        border-left: 0;
+                        border-bottom: 0;
+                        border-radius: 0;
+                    }
+                }
+            }
+        }
+    }
+}

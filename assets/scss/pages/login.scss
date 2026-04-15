@@ -123,8 +123,8 @@
                     &:checked {
                         & + label {
                             .check-box-item {
-                                background: #FF7519;
-                                border-color: #FF7519;
+                                background: #4318FF;
+                                border-color: #4318FF;
 
                                 .item-line {
                                     &:before, &:after {
@@ -148,13 +148,13 @@
                                     border-radius: 6px;
 
                                     &:before {
-                                        background: #FF7519;
+                                        background: #4318FF;
                                         height: 5px;
                                         left: 8px;
                                     }
 
                                     &:after {
-                                        background: #FF7519;
+                                        background: #4318FF;
                                         height: 9px;
                                         top: 14px;
                                     }
@@ -182,32 +182,32 @@
 
                     & + label + .focus-border {
                         &:before, &:after {
-                            background-color: #FF7519;
+                            background-color: #4318FF;
                         }
                         
                         i {
                             &:before, &:after {
-                                background-color: #FF7519;
+                                background-color: #4318FF;
                             }
                         }
                     }
 
                     &:focus, &:valid {
                         padding: 16px 10px 9px 12px;
-                        border: 1px solid #FF7519;
+                        border: 1px solid #4318FF;
 
                         & + label + .focus-border {
                             &:before, &:after {
                                 width: 100%;
                                 transition: all ease 0.3s;
-                                background-color: #FF7519;
+                                background-color: #4318FF;
                             }
                 
                             i {
                                 &:before , &:after {
                                     height: 100%;
                                     transition: all ease 0.4s;
-                                    background-color: #FF7519;
+                                    background-color: #4318FF;
                                 }
                             }
                         }
@@ -360,7 +360,7 @@
                 }
 
                 .link {
-                    color: #FF7519;
+                    color: #4318FF;
                     text-decoration: underline;
                     text-underline-offset: 3px;
                 }
