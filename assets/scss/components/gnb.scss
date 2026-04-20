@@ -31,19 +31,6 @@
         }
     }
 
-    &:after {
-        content: "";
-        display: block;
-        width: 1px;
-        height: calc(100vh - 0px);
-        background: #E6EDFF;
-        position: absolute;
-        right: 0;
-        top: 50%;
-        transform: translateY(-50%);
-        margin-top: 0px;
-    }
-
     .logo {
         width: 156px;
     }
@@ -61,7 +48,7 @@
             &-link {
                 display: flex;
                 align-items: center;
-                gap: 12px;
+                gap: 12px; 
                 cursor: pointer;
                 transition: all ease .2s;
 

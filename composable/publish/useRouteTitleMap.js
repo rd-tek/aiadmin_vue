@@ -1,24 +1,18 @@
 export const useRouteTitleMap = () => ({
-
-  "publish-membership-search": "회원조회",
-  "publish-membership-locker": "라커관리",
-  "publish-booking-calendar": "예약조회",
-  "publish-booking-table": "예약등록",
-  "publish-booking-list": "예약관리",
-  "publish-simulator-hitting-bay": "타석관리",
-  "publish-simulator-game": "게임관리",
-  "publish-settings-profile": "계정관리",
-  "publish-settings-password": "비밀번호 변경",
-  "publish-settings-email": "이메일 변경",
-  "publish-settings-option": "기타설정",
-  "publish-settings-post": "공지사항",
-  "publish-event-mini-game": "미니게임",
-  "publish-event-winner": "미니게임 당첨자",
-  "publish-membership-search": "회원조회",
-  "publish-membership-locker": "라커관리",
-  "publish-tournament-championship": "챔피언십",
-  "publish-tournament-competition": "매장대회",
   "publish-dashboard": "대시보드",
+  "publish-membership-member": "회원관리",
+  "publish-membership-coach": "코치관리",
+  "publish-membership-shop": "매장관리",
+  "publish-customer-member": "공지사항(회원)",
+  "publish-customer-shop": "공지사항(매장)",
+  "publish-customer-app": "공지사항(앱)",
+  "publish-customer-library": "자료실",
+  "publish-customer-inquiry": "고객문의",
+  "publish-golfcourse": "골프코스",
+  "publish-swing-list": "스윙영상리스트",
+  "publish-manager-list": "관리자 리스트",
+  "publish-manager-game-data": "게임데이터 관리"
+
 })
 
 export default useRouteTitleMap

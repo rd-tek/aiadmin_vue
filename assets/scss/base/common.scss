@@ -1057,6 +1057,16 @@ button, a {
         }
     }
 
+    &[class*=btn-primary-purple] {
+        background: #4318FF;
+
+        &:hover {
+            &:before {
+                background: rgba(45, 10, 200, 1);
+            }
+        }
+    }
+
     &[class*=btn-more-] {
         min-width: 320px;
         padding: 20px 100px;

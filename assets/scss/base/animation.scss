@@ -100,3 +100,19 @@
     opacity: 1;
   }
 }
+
+// 타이틀 애니메이션
+.title-slide-enter-active,
+.title-slide-leave-active {
+  transition: all 0.2s cubic-bezier(.4,0,.2,1);
+}
+
+.title-slide-enter-from {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.title-slide-leave-to {
+  opacity: 0;
+  transform: translateY(-8px);
+}

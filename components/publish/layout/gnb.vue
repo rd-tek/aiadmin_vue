@@ -71,115 +71,86 @@ const props = defineProps({
 // 2026.03.04[cgnoh]: GNB 아이콘
 const iconMap = {
   membership: svgMembership,
-  booking: svgBooking,
-  simulator: svgSimulator,
-  settings: svgSettings,
-  tournament: svgTournament,
-  event: svgEvent
+  customer: svgBooking, 
+  golfcourse: svgSimulator,
+  manager: svgSettings,
+  swing: svgTournament,
 }
 
 // 2026.03.04[cgnoh]: GNB 메뉴
 const gnbMenu = [
     {
-        name: '회원관리',
+        name: '관리',
         path: 'membership',
         children: [
             {
-                name: '회원조회',
-                path: 'membership/search'
+                name: '회원관리',
+                path: 'membership/member'
             },
             {
-                name: '라커관리',
-                path: 'membership/locker'
+                name: '코치관리',
+                path: 'membership/coach'
+            },
+            {
+                name: '매장관리',
+                path: 'membership/shop'
             }
         ]
     },
     {
-        name: '예약',
-        path: 'booking',
+        name: '고객센터',
+        path: 'customer',
         children: [
             {
-                name: '예약조회',
-                path: 'booking/calendar'
+                name: '공지사항(회원)',
+                path: 'customer/member'
             },
             {
-                name: '예약등록',
-                path: 'booking/table'
+                name: '공지사항(매장)',
+                path: 'customer/shop'
             },
             {
-                name: '예약관리',
-                path: 'booking/list'
+                name: '공지사항(앱)',
+                path: 'customer/app'
+            },
+            {
+                name: '자료실',
+                path: 'customer/library'
+            },
+            {
+                name: '고객문의',
+                path: 'customer/inquiry'
             }
         ]
     },
     {
-        name: '시뮬레이터',
-        path: 'simulator',
+        name: '골프코스',
+        path: 'golfcourse',
+    },
+    {
+        name: '스윙영상',
+        path: 'swing',
         children: [
             {
-                name: '타석관리',
-                path: 'simulator/hitting-bay'
-            },
-            { 
-                name: '게임관리',
-                path: 'simulator/game'
+                name: '스윙영상리스트',
+                path: 'swing/list'
             }
         ]
     },
     {
-        name: '환경설정',
-        path: 'settings',
+        name: '관리자',
+        path: 'manager',
         children: [
             {
-                name: '계정관리',
-                path: 'settings/profile'
+                name: '관리자 리스트',
+                path: 'manager/list'
             },
             {
-                name: '비밀번호 변경',
-                path: 'settings/password'
-            },
-            {
-                name: '이메일 변경',
-                path: 'settings/email'
-            },
-            {
-                name: '기타설정',
-                path: 'settings/option'
-            },
-            {
-                name: '공지사항',
-                path: 'settings/post'
+                name: '게임데이터 관리',
+                path: 'manager/game-data'
             }
         ]
     },
-    {
-        name: '대회관리',
-        path: 'tournament',
-        children: [
-            {
-                name: '챔피언십',
-                path: 'tournament/championship'
-            },
-            {
-                name: '매장대회',
-                path: 'tournament/competition'
-            }
-        ]
-    },
-    {
-        name: '이벤트관리',
-        path: 'event',
-        children: [
-            {
-                name: '미니게임',
-                path: 'event/mini-game'
-            },
-            {
-                name: '미니게임 당첨자',
-                path: 'event/winner' 
-            }
-        ]
-    }
 ]
 
 const handleHome = () => {
