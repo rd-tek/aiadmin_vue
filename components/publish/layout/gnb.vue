@@ -80,19 +80,15 @@ const iconMap = {
 // 2026.03.04[cgnoh]: GNB 메뉴
 const gnbMenu = [
     {
-        name: '관리',
+        name: '회원관리',
         path: 'membership',
         children: [
             {
-                name: '회원관리',
+                name: '일반회원',
                 path: 'membership/member'
             },
             {
-                name: '코치관리',
-                path: 'membership/coach'
-            },
-            {
-                name: '매장관리',
+                name: '매장회원',
                 path: 'membership/shop'
             }
         ]
@@ -124,8 +120,14 @@ const gnbMenu = [
         ]
     },
     {
-        name: '골프코스',
+        name: '코스관리',
         path: 'golfcourse',
+        children: [
+            {
+                name: '코스리스트',
+                path: 'golfcourse/list'
+            }
+        ]
     },
     {
         name: '스윙영상',

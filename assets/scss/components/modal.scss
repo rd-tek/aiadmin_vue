@@ -10,6 +10,90 @@
     z-index: 101;
     transition: all ease .2s;
 
+    table {
+        tbody {
+            tr {
+                border-bottom: 1px solid #E6EDFF;
+
+                th {
+                    background: #FAFBFC;
+                    padding: 28px 14px;
+                    font-size: 14px;
+                    font-weight: 400;
+                    color: #35383B;
+                    height: auto;
+                    text-align: left;
+                    line-height: 1.25;
+
+                    .table-head {
+                        display: flex;
+                        height: 100%;
+                        margin-top: 10px;
+                    }
+
+                    .required {
+                        &:after {
+                            content: '*';
+                            color: #EF2B49;
+                        }
+                    }
+                }
+
+                td {
+                    padding: 28px 14px;
+                    height: auto;
+                    text-align: left;
+                    line-height: 1.25;
+
+                    select, input {
+                        width: 100%;
+                        height: 40px;
+                        border-radius: 4px;
+                        min-width: auto;
+                    }
+
+                    .d-flex {
+                        display: flex;
+                        gap: 10px;
+                        flex-wrap: wrap;
+
+                        .datepicker {
+                            flex: 1;
+                            
+                            &::v-deep(input) {
+                                height: 40px;
+                                width: 100%;
+                                border: 1px solid #CDCFD1;
+                            }
+                        }
+
+                        select {
+                            min-width: 128px;
+                            width: auto;
+                        }
+                    }
+
+                    .col-2 {
+                        display: flex;
+                        gap: 8px;
+                    }
+
+                    .mb-10 {
+                        margin-bottom: 10px;
+                    }
+
+                    .color-grey {
+                        color: #72777A;
+                    }
+
+                    .color-red {
+                        color: #EF2B49;
+                    }
+                }
+            }
+        }    
+    }
+
     &.is-active {
         opacity: 1;
         visibility: visible;
@@ -93,6 +177,37 @@
             button {
                 flex: 1;
                 margin: 0;
+            }
+        }
+    }
+
+    &.modal-member-info {
+        &.is-background-none {
+            background: none;
+        }
+        
+        .modal-container {
+            width: 688px;
+        }
+
+        .modal-body {
+            .content-section {
+                & + .content-section {
+                    margin-top: 50px;
+                }
+
+                .title {
+                    font-size: 18px;
+                    font-weight: 400;
+                    margin-bottom: 10px;
+
+                    .sub {
+                        font-size: 14px;
+                        font-weight: 400;
+                        color: #00B34A;
+                        margin-left: 6px;
+                    }
+                }
             }
         }
     }

@@ -30,7 +30,7 @@ input {
 
     &[type=text],  &[type=password], &[type=email], &[type=number] {
         &:focus {
-            border: 1px solid var(--colorAccent1);
+            border: 1px solid #4318FF;
 
             & + .focus-border {
                 &:before, &:after {
@@ -156,7 +156,7 @@ select {
     border: 1px solid var(--colorGrey3);
     min-height: 32px;
     min-width: 120px;
-    height: 48px;
+    height: 40px;
     padding: 0 40px 0 12px;
     transition: all ease .2s;
     color: var(--colorPrimary1);
@@ -166,7 +166,7 @@ select {
     white-space: nowrap;
 
     &:focus {
-        border: 1px solid var(--colorAccent1);
+        border: 1px solid #4318FF;
     }
 
     &:disabled {
@@ -1473,8 +1473,8 @@ table {
 
     &.type03 {
         display: block;
-        border: 1px solid #E6EDFF;
         border-radius: 10px;
+        background: #fff;
     }
 
     &-head {
@@ -1586,6 +1586,14 @@ table {
             }
         }
 
+        &-row {
+            &:last-child {
+                .table-body-col {
+                    border-bottom: 1px solid #E6EDFF; 
+                }
+            }
+        }
+
         &-col {
             flex: 1;
             text-align: center;
@@ -1665,7 +1673,7 @@ table {
         display: flex;
         align-items: center;
         justify-content: center;
-        margin-top: 28px;
+        padding: 26px 0;
 
         &-wrap {
             display: inline-flex;
@@ -1785,7 +1793,7 @@ table {
                 }
     
                 &.active {
-                    background: #000;
+                    background: #11047A;
                     color: #fff;
                 }
             }
@@ -2526,6 +2534,7 @@ table {
     position: relative;
     display: inline-block;
     height: 100%;
+    font-size: 14px;
 }
 
 .input-text {
@@ -2871,7 +2880,7 @@ table {
             height: 24px;
         }
 
-        .text {
+        .text { 
             font-size: 14px;
             color: #298097;
             font-weight: 700;
@@ -2885,8 +2894,8 @@ table {
 }
 
 .filter-box {
-    background: #F8F9FA;
     border-radius: 16px;
+    background: #fff;
 
     .col-2 {
         display: flex;
@@ -2916,7 +2925,7 @@ table {
                 }
 
                 &:has(.btn) {
-                    gap: 12px;
+                    gap: 8px;
                 }
             }
 
@@ -2940,7 +2949,7 @@ table {
             .btn {
                 padding: 6px 16px;
                 height: 32px;
-                background: #000;
+                background: #4318FF;
                 color: #fff;
                 font-size: 14px;
                 font-weight: normal;
@@ -2978,7 +2987,8 @@ table {
             .d-flex {
                 display: flex;
                 align-items: center;
-                gap: 4px;
+                gap: 8px;
+                font-size: 14px;
             }
 
             .radio-box {
@@ -3049,6 +3059,10 @@ table {
                 }
             }
         }
+    }
+
+    input, select {
+        background-color: #F4F7FE;
     }
 }
 

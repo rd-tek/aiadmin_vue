@@ -32,5 +32,4 @@ definePageMeta({
 </script>
 <style lang="scss" scoped>
 @use '@/assets/scss/pages/dashboard.scss';
-
 </style>
