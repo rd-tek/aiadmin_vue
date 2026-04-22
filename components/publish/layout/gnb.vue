@@ -7,7 +7,7 @@
             <ul class="gnb">
                 <li class="gnb-list" v-for="(item, i) in gnbMenu" :key="i">
                     <div class="gnb-list-link" 
-                        :class="{ 'is-active': gnbIndex === i }" 
+                        :class="{ 'is-active': gnbIndex === i, 'is-fill': item.path === 'customer' || item.path === 'golfcourse' || item.path === 'swing' }" 
                         @click="handleAccordion(item, i)">
                         <component :is="iconMap[item.path]" />
                         <span class="name">{{ item.name }}</span>
@@ -23,7 +23,7 @@
                         @before-leave="beforeLeave"
                         @leave="leave">
                         <ul class="depth" v-if="gnbIndex === i && item.children">
-                            <li class="depth-list" v-for="(depth, j) in item.children" :key="j" @click="handleDepth(depth)">
+                            <li class="depth-list" :class="{ 'is-depth-list': item.children.length === 1 }" v-for="(depth, j) in item.children" :key="j" @click="handleDepth(depth)">
                                 <span class="name" :class="{ 'is-active': route.path.endsWith(depth.path) || route.path.includes(depth.path) }">{{ depth.name }}</span>
                             </li>
                         </ul>
@@ -55,11 +55,10 @@ import dayjs from 'dayjs'
 
 // 2026.03.04[cgnoh]: 컴포넌트 관련
 import svgMembership from '@/components/svg/membership.vue'
-import svgBooking from '@/components/svg/booking.vue'
-import svgSimulator from '@/components/svg/simulator.vue'
+import svgCustomer from '@/components/svg/customer.vue'
+import svgCourse from '@/components/svg/course.vue'
 import svgSettings from '@/components/svg/settings.vue'
-import svgTournament from '@/components/svg/tournament.vue'
-import svgEvent from '@/components/svg/event.vue'
+import svgVideo from '@/components/svg/video.vue'
 
 // 2026.03.04[cgnoh]: 라우터 설정
 const router = useRouter();
@@ -71,10 +70,10 @@ const props = defineProps({
 // 2026.03.04[cgnoh]: GNB 아이콘
 const iconMap = {
   membership: svgMembership,
-  customer: svgBooking, 
-  golfcourse: svgSimulator,
+  customer: svgCustomer, 
+  golfcourse: svgCourse,
   manager: svgSettings,
-  swing: svgTournament,
+  swing: svgVideo,
 }
 
 // 2026.03.04[cgnoh]: GNB 메뉴

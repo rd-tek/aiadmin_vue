@@ -948,28 +948,12 @@
                 <div class="cont">
                     <p class="desc">모달</p>
                     <div class="buttons-list">
-                        <button type="button" class="btn-md-line" @click="modalOpen('modalConfirm')">팝업 1</button>
-                        <button type="button" class="btn-md-line" @click="modalOpen('modalMap')">팝업 2</button>
-                        <button type="button" class="btn-md-line" @click="modalOpen('modalRecommendInfo')">추천정보</button>
-                        <button type="button" class="btn-md-line" @click="modalOpen('modalMemberInfo')">회원정보(작성)</button>
-                        <button type="button" class="btn-md-line" @click="modalOpen('modalMemberInfoView')">회원정보(보기)</button>
-                        <button type="button" class="btn-md-line" @click="modalOpen('modalMailSend')">메일 보내기</button>
-                        <button type="button" class="btn-md-line" @click="modalOpen('modalCallback')">불러오기</button>
-                        <button type="button" class="btn-md-line" @click="modalOpen('modalRecommendActive')">추천운동 상세</button>
-                        <button type="button" class="btn-md-line" @click="modalOpen('modalRecommendActiveRegister')">추천운동 등록</button>
-                        <button type="button" class="btn-md-line" @click="modalOpen('modalPreview')">미리보기</button>
+                        <button type="button" class="btn-md-line" @click="modalOpen('modalMemberInfo')">회원정보</button>
+                        <button type="button" class="btn-md-line" @click="modalOpen('modalMachineInfo')">장비정보</button>
                     </div>
                 </div>
-                <modal-confirm :isOpen="modals.modalConfirm" @update:isOpen="modals.modalConfirm = $event"/>
-                <modal-map :isOpen="modals.modalMap" @update:isOpen="modals.modalMap = $event"/>
-                <modal-recommend-info :isOpen="modals.modalRecommendInfo" @update:isOpen="modals.modalRecommendInfo = $event"/>
                 <modal-member-info :isOpen="modals.modalMemberInfo" @update:isOpen="modals.modalMemberInfo = $event"/>
-                <modal-member-info-view :isOpen="modals.modalMemberInfoView" @update:isOpen="modals.modalMemberInfoView = $event"/>
-                <modal-mail-send :isOpen="modals.modalMailSend" @update:isOpen="modals.modalMailSend = $event"/>
-                <modal-callback :isOpen="modals.modalCallback" @update:isOpen="modals.modalCallback = $event"/>
-                <modal-recommend-active :isOpen="modals.modalRecommendActive" @update:isOpen="modals.modalRecommendActive = $event"/>
-                <modal-recommend-active-register :isOpen="modals.modalRecommendActiveRegister" @update:isOpen="modals.modalRecommendActiveRegister = $event"/>
-                <modal-preview :isOpen="modals.modalPreview" @update:isOpen="modals.modalPreview = $event"/>
+                <modal-machine-info :isOpen="modals.modalMachineInfo" @update:isOpen="modals.modalMachineInfo = $event"/>
             </section>
        </main>
        <button type="button" class="btn-scroll-top" v-if="topBtn" @click="topScroll">

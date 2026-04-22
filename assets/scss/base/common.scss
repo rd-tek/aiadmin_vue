@@ -91,7 +91,7 @@ textarea {
     transition: all ease .2s;
 
     &:focus {
-        border: 1px solid var(--colorAccent1);
+        border: 1px solid #4318FF;
     }
 
     &:disabled {
@@ -225,6 +225,7 @@ select {
 
 .checkbox-list, .radio-list {
     display: inline-block;
+    margin-right: 20px;
 }
 
 .radio-list {
@@ -1052,6 +1053,12 @@ button, a {
 
         &:hover {
             &:before {
+                background: rgba(255,117,25,0.1);
+            }
+        }
+
+        &:hover {
+            &:before {
                 background: #5a5a5a;
             }
         }
@@ -1059,6 +1066,19 @@ button, a {
 
     &[class*=btn-primary-purple] {
         background: #4318FF;
+        color: #fff;
+
+        &.btn-lg-line,  &.btn-md-line, &.btn-sm-line {
+            background: #fff;
+            border: 1px solid #4318FF;
+            color: #4318FF;
+
+            &:hover {
+                &:before {
+                    background: rgba(45, 10, 200, 0.1);
+                }
+            }
+        }
 
         &:hover {
             &:before {
@@ -2533,7 +2553,6 @@ table {
 .input-text, .select-default {
     position: relative;
     display: inline-block;
-    height: 100%;
     font-size: 14px;
 }
 
@@ -2905,6 +2924,10 @@ table {
         padding: 16px 20px;
         border-radius: 16px;
         gap: 8px;
+
+        &.flex-end {
+            justify-content: flex-end;
+        }
 
         .col {
             &.d-flex {

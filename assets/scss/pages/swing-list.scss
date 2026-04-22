@@ -1,0 +1,158 @@
+.swing-list {
+    .row {
+        padding: 30px 20px;
+        background: #fff;
+        border-radius: 16px;
+
+        &-list {
+            display: flex;
+            align-items: center;
+            border: 1px solid #E6EDFF;
+            border-radius: 16px;
+            padding: 38px;
+            background: #fff;
+
+            & + .row-list {
+                margin-top: 20px;
+            }
+
+            &-item {
+                flex: 1;
+
+                &.col-1 {
+                    flex: .1;
+                }
+
+                &:has(.checkbox) {
+                    width: 60px;
+                    flex: unset;
+                }
+
+                .cont-wrap {
+                    display: flex;
+                    align-items: center;
+                    gap: 20px;
+
+                    .img-area {
+                        .image {
+                            aspect-ratio: 175/108;
+                            border: 1px solid #ccc;
+                            border-radius: 6px;
+                            background-color: #D9D9D9;
+                            min-width: 180px;
+                            background-size: cover;
+                            background-repeat: no-repeat;
+                            background-position: center;
+                        }
+                    }
+
+                    .info-area {
+                        .label {
+                            display: inline-flex;
+                            align-items: center;
+                            justify-content: center;
+                            min-width: 40px;
+                            height: 24px;
+                            line-height: 22px;
+                            background: #000;
+                            border-radius: 2px;
+                            color: #fff;
+                            text-align: center;
+                            font-size: 14px;
+                        }
+
+                        .title {
+                            font-size: 24px;
+                            font-weight: 500;
+                            line-height: 1.16;
+                            margin-top: 8px;
+                            position: relative;
+
+                            &:hover {
+                                &:after {
+                                    transform: scaleX(1);
+                                }
+                            }
+
+                            &:after {
+                                background: #000;
+                                bottom: 0;
+                                content: "";
+                                display: block;
+                                height: 2px;
+                                bottom: -1px;
+                                left: 0;
+                                position: absolute;
+                                transform: scaleX(0);
+                                transform-origin: left;
+                                transition: all 0.2s ease;
+                                width: 100%;
+                            }
+                        }
+
+                        .desc {
+                            margin-top: 12px;
+
+                            &-list {
+                                font-size: 16px;
+                                margin-right: 16px;
+                                padding-right: 16px;
+                                position: relative;
+                                line-height: 1.25;
+                                font-size: 16px;
+
+                                &:after {
+                                    content: '';
+                                    display: block;
+                                    width: 1px;
+                                    height: 12px;
+                                    background: #ADB0B3;
+                                    position: absolute;
+                                    right: 0;
+                                    top: 50%;
+                                    transform: translateY(-50%);
+                                }
+
+                                &:last-child {
+                                    margin: 0;
+                                    padding: 0;
+
+                                    &:after {
+                                        display: none;
+                                    }
+                                }
+
+                                .name {
+                                    color: #35383B;
+                                }
+
+                                .date {
+                                    color: #72777A;
+                                }
+
+                                .location {
+                                    color: #35383B;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                .btn-area {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 8px;
+                    margin-left: auto;
+
+                    button {
+                        width: 142px;
+                    }
+                }
+            }
+        }
+
+        .pagination-container {
+            padding: 40px 0 20px 0;
+        }
+    }
+}

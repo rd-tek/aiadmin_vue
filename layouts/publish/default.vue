@@ -43,7 +43,7 @@ watch(width, (w) => {
     margin: 0 0 0 262px;
     transition: all ease .2s;
     width: calc(100% - 264px);
-    height: 100%;
+    min-height: 100%;
     background: #F4F7FE;
 
     &.is-on {

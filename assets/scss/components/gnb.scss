@@ -52,6 +52,17 @@
                 cursor: pointer;
                 transition: all ease .2s;
 
+                &.is-fill {
+                    &:hover, &.is-active {
+                        & > svg {
+                            &::v-deep(path) {
+                                fill: #4318FF;
+                                stroke: initial;
+                            }
+                        }
+                    }
+                }
+
                 &:hover, &.is-active {
                     & > svg {
                         &::v-deep(path) {
@@ -85,6 +96,7 @@
                     font-family: 'Montserrat';
                     font-size: 16px;
                     font-weight: 600;
+                    color: #A3AED0;
                 }
 
                 .btn-arrow {
@@ -153,11 +165,15 @@
                     }
 
                     &:first-child {
-                        padding: 18px 35px;
+                        padding: 28px 35px 14px;
                     }
 
                     &:last-child {
-                        padding: 18px 35px;
+                        padding: 14px 35px 28px;
+                    }
+
+                    &.is-depth-list {
+                        padding: 28px 35px;
                     }
 
                     &:hover {

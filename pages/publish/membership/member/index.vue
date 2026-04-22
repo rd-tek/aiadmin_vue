@@ -26,7 +26,7 @@
         </div>
       </div>
       <div class="top-area">
-        <div class="total">전체 <span class="num">0</span></div>
+        <div class="total">전체 <span class="num">{{ tableList.length }}</span></div>
         <div class="select-default"> 
             <select>
                 <option value="10">10개씩 보기</option>
@@ -59,7 +59,7 @@
             <div class="table-body-flex">
               <div class="table-body-col">{{ index + 1 }}</div>
               <div class="table-body-col">
-                <nuxt-link :to="`/publish/membership/member/${index}`" class="link">{{ item.id }}</nuxt-link>
+                <nuxt-link :to="`/publish/membership/member/${index}`" class="link text-underline">{{ item.id }}</nuxt-link>
               </div>
               <div class="table-body-col">
                 <button type="button" @click="modalOpen" class="color-purple text-underline">{{ item.nickname }}</button>

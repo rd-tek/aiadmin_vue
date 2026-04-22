@@ -94,6 +94,13 @@
         }    
     }
 
+    .datepicker {
+        &::v-deep(input) {
+            height: 40px;
+            border: 1px solid var(--colorGrey3);
+        }
+    }
+
     &.is-active {
         opacity: 1;
         visibility: visible;
@@ -207,6 +214,47 @@
                         color: #00B34A;
                         margin-left: 6px;
                     }
+                }
+            }
+        }
+    }
+
+    &.modal-machine-info {
+        .modal-container {
+            width: 800px;
+            overflow: visible;
+        }
+
+        .modal-body {
+            overflow: visible;
+            
+            table {
+                tr {
+                    th {
+                        padding: 16px 10px;
+                    }
+
+                    td {
+                        padding: 16px 10px;
+
+                        .input-wrap {
+                            display: flex;
+                            gap: 8px;
+                        }
+
+                        .input-text,  .select-default {
+                            width: 100%;
+                        }
+                    }
+                }
+            }
+        }
+
+        .modal-footer {
+            .btn-wrap {
+                button {
+                    flex: none;
+                    min-width: 148px;
                 }
             }
         }
