@@ -677,12 +677,67 @@
                 display: flex;
                 gap: 10px;
 
+                .input-text {
+                    display: flex;
+                    gap: 10px;
+                }
+
+                input[type=file] {
+                    font-size: 0;
+                    text-indent: -9999px;
+                    cursor: pointer;
+
+                    &:focus {
+                        border: 1px solid #4318FF;
+                    }
+                }
+
                 .btn-file {
-                    border: 1px solid #000;
+                    min-width: 88px;
                     height: 40px;
                     line-height: 38px;
-                    min-width: 80px;
                     border-radius: 4px;
+                    border: 1px solid #000;
+                    font-size: 14px;
+                    position: relative;
+                    z-index: 0;
+                    overflow: hidden;
+                    position: relative;
+
+                    &:hover {
+                        &:before {
+                            transform: scale(1);
+                            opacity: 1;
+                        }
+                    }
+
+                    &:before {
+                        border-radius: 50%;
+                        content: "";
+                        height: 200%;
+                        left: -20%;
+                        opacity: 0;
+                        background: #F8F9FA;
+                        position: absolute;
+                        top: -50%;
+                        transform: scale(0);
+                        transform-origin: bottom left;
+                        transition: all 0.4s;
+                        width: 150%;
+                        z-index: -1;
+                    }
+
+                    & + .name {
+                        position: absolute;
+                        left: 12px;
+                        top: 50%;
+                        transform: translateY(-50%);
+                    }
+                }
+
+                .placeholder {
+                    color: #72777A;
+                    pointer-events: none;
                 }
             }
 
