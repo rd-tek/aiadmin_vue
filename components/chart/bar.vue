@@ -19,6 +19,10 @@ const props = defineProps({
     type: Array,
     default: () => [],
   },
+  values3: {
+    type: Array,
+    default: () => [],
+  },
   height: {
     type: String,
     default: "300px",
@@ -28,7 +32,6 @@ const props = defineProps({
 const chartRef = ref(null);
 let chart = null;
 
-// 옵션 생성
 const getOption = () => ({
   tooltip: {
     trigger: "axis",
@@ -42,80 +45,55 @@ const getOption = () => ({
   xAxis: {
     type: "category",
     data: props.labels,
-    boundaryGap: false,
-    axisTick: {
-      show: false
-    },
-    axisLine: {
-      show: false
-    },
-    axisLabel: {
-      color: "#A3AED0"
-    },
-    // splitLine: {
-    //   show: true
-    // }
+    axisTick: { show: false },
+    axisLine: { show: false },
   },
-  yAxis: { 
+  yAxis: {
     type: "value",
-    axisLabel: {
-      color: "#A3AED0"
-    },
-    // splitLine: {
-    //   show: false
-    // }
   },
   series: [
     {
-      name: "데이터 1",
-      type: "line",
+      type: "bar",
+      stack: "total",
       data: props.values1,
-      smooth: true,
-      symbol: 'none',
-      lineStyle: {
-        color: '#4318FF',
-        width: 4,
-        cap: "round",
-        shadowColor: "rgba(67, 24, 255, 0.4)",
-        shadowBlur: 10,
-        shadowOffsetX: 0,
-        shadowOffsetY: 4,
+      barWidth: "40%",
+      itemStyle: {
+        color: "#4318FF",
       },
     },
     {
-      name: "데이터 2",
-      type: "line",
+      type: "bar",
+      stack: "total",
       data: props.values2,
-      smooth: true,
-      symbol: 'none',
-      lineStyle: {
-        color: '#6AD2FF',
-        width: 4,
-        cap: "round",
+      barWidth: "40%",
+      itemStyle: {
         color: "#6AD2FF",
-        shadowColor: "rgba(106, 210, 255, 0.3)",
-        shadowBlur: 12,
-        shadowOffsetY: 6,
+      },
+    },
+    {
+      type: "bar",
+      stack: "total",
+      data: props.values3,
+      barWidth: "40%",
+      itemStyle: {
+        color: "rgba(163, 174, 208, .3)",
+        borderRadius: [6, 6, 0, 0],
       },
     },
   ],
 });
 
-// 초기화
 const initChart = () => {
   if (!chartRef.value) return;
-
   chart = echarts.init(chartRef.value);
   chart.setOption(getOption());
 };
 
-// 업데이트
 const updateChart = () => {
   if (!chart) return;
   chart.setOption(getOption());
 };
 
-// resize
 const handleResize = () => {
   chart?.resize();
 };
@@ -130,7 +108,6 @@ onBeforeUnmount(() => {
   chart?.dispose();
 });
 
-// 데이터 변경 감지
 watch(
   () => [props.labels, props.values],
   () => {

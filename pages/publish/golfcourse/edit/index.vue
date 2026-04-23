@@ -1,7 +1,7 @@
 <template>
     <div class="golf-course edit">
         <div class="table-wrap">
-            <div class="table type02">
+            <div class="table type02" :class="{ 'is-move': tableMove }" ref="tableRef">
                 <table>
                     <colgroup>
                         <col width="18%">
@@ -432,8 +432,13 @@
     </div>
 </template>
 <script setup>
+import { useIntersectionObserver } from "@vueuse/core";
 
-
+const tableRef  = ref();
+const tableMove = ref(false);
+useIntersectionObserver(tableRef, ([{ isIntersecting }]) => {
+    if (isIntersecting) tableMove.value = true;
+}, { threshold: 0 });
 
 // 2026.03.04[cgnoh]: 페이지 메타 정보
 definePageMeta({

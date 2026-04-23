@@ -1,6 +1,6 @@
 <template>
     <div class="customer-member detail">
-        <div class="detail-wrap">
+        <div class="detail-wrap" :class="{ 'is-move': detailMove }" ref="detailRef">
             <div class="top-area">
                 <div class="title">X-GOLF 신규 매장 오픈 뉴스</div>
                 <div class="info">
@@ -54,6 +54,13 @@
 </template>
 <script setup>
 import { useRouter } from "vue-router";
+import { useIntersectionObserver } from "@vueuse/core";
+
+const detailRef  = ref();
+const detailMove = ref(false);
+useIntersectionObserver(detailRef, ([{ isIntersecting }]) => {
+    if (isIntersecting) detailMove.value = true;
+}, { threshold: 0 });
 const router = useRouter();
 
 const handleEdit = () => {

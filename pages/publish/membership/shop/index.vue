@@ -55,7 +55,7 @@
           <div class="table-head-col">상태</div>
         </div>
         <div class="table-body">
-          <div class="table-body-row" v-for="(item, index) in tableList" :key="index">
+          <div class="table-body-row" v-for="(item, index) in tableList" :key="index" :class="{ 'is-move': tableMove }" ref="tableRef">
             <div class="table-body-flex">
               <div class="table-body-col">{{ index + 1 }}</div>
               <div class="table-body-col">{{ item.region }}</div>
@@ -115,6 +115,14 @@
 
 </template>
 <script setup>
+import { useIntersectionObserver } from "@vueuse/core";
+
+const tableRef  = ref();
+const tableMove = ref(false);
+useIntersectionObserver(tableRef, ([{ isIntersecting }]) => {
+    if (isIntersecting) tableMove.value = true;
+}, { threshold: 0 });
+
 const tableList = [
   {
     region: '경기도',

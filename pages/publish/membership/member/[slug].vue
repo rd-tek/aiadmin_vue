@@ -1,7 +1,7 @@
 <template>
     <div class="membership-memeber detail">
       <div class="table-wrap">
-        <div class="table type02">
+        <div class="table type02" :class="{ 'is-move': tableMove }" ref="tableRef">
           <table>
             <colgroup>
                 <col width="18%">
@@ -92,6 +92,13 @@
 </template>
 <script setup>
 import { useRouter } from "vue-router";
+import { useIntersectionObserver } from "@vueuse/core";
+
+const tableRef  = ref();
+const tableMove = ref(false);
+useIntersectionObserver(tableRef, ([{ isIntersecting }]) => {
+    if (isIntersecting) tableMove.value = true;
+}, { threshold: 0 });
 
 const router = useRouter();
 const handleList = () => {
@@ -104,5 +111,5 @@ definePageMeta({
 });
 </script>
 <style lang="scss" scoped>
-@use '@/assets/scss/pages/membership/member.scss';
+@use '@/assets/scss/pages/membership.scss';
 </style>

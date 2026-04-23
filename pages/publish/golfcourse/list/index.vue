@@ -14,7 +14,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="row-list" v-for="(item, index) in rowList" :key="index">
+        <div class="row-list" :class="{ 'is-move': rowListMove }" v-for="(item, index) in rowList" :key="index" ref="rowListRef">
           <div class="row-list-item col-1">
             <div class="checkbox">
               <div class="check-box">
@@ -79,9 +79,24 @@
     </div>
 </template>
 <script setup>
+import { useIntersectionObserver } from "@vueuse/core";
 import { useRouter } from "vue-router";
-const router = useRouter();
 
+const rowListRef = ref();
+const rowListMove = ref(false);
+useIntersectionObserver(
+    rowListRef,
+    ([{ isIntersecting }]) => {
+        if (isIntersecting) {
+            rowListMove.value = true;
+        }
+    },
+    {
+        threshold: 0
+    }
+);
+
+const router = useRouter();
 const rowList = [
   {
     state1: '사용',

@@ -52,10 +52,72 @@
                     }
                 }
             }
+
+            &-row {
+                opacity: 0;
+                transform: translateY(5%);
+                transition: all .4s cubic-bezier(.37, 0, .63, 1);
+
+                &:nth-child(1) {
+                    transition-delay: .1s;
+                }
+
+                &:nth-child(2) {
+                    transition-delay: .2s;
+                }
+
+                &:nth-child(3) {
+                    transition-delay: .3s;
+                }
+
+                &:nth-child(4) {
+                    transition-delay: .4s;
+                }
+
+                &:nth-child(5) {
+                    transition-delay: .5s;
+                }
+
+                &:nth-child(6) {
+                    transition-delay: .6s;
+                }
+
+                &:nth-child(7) {
+                    transition-delay: .7s;
+                }
+
+                &:nth-child(8) {
+                    transition-delay: .8s;
+                }
+
+                &:nth-child(9) {
+                    transition-delay: .9s;
+                }
+
+                &:nth-child(10) {
+                    transition-delay: 1s;
+                }
+
+                &.is-move {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
         }
     }
 
     &.detail {
+        .table {
+            opacity: 0;
+            transform: translateY(5%);
+            transition: all .4s cubic-bezier(.37, 0, .63, 1);
+
+            &.is-move {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         .table-wrap {
             background: #fff;
             padding: 20px 30px;

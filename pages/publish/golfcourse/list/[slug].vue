@@ -1,6 +1,6 @@
 <template>
     <div class="golf-course detail">
-        <div class="detail-wrap">
+        <div class="detail-wrap" :class="{ 'is-move': detailMove }" ref="detailRef">
             <div class="top-area">
                 <div class="title">XGUK-St. Andrews Links Old</div>
                 <div class="sub">코드: C_1001</div>
@@ -221,6 +221,13 @@
 </template>
 <script setup>
 import { useRouter } from "vue-router";
+import { useIntersectionObserver } from "@vueuse/core";
+
+const detailRef  = ref();
+const detailMove = ref(false);
+useIntersectionObserver(detailRef, ([{ isIntersecting }]) => {
+    if (isIntersecting) detailMove.value = true;
+}, { threshold: 0 });
 const router = useRouter();
 
 const courseData = {

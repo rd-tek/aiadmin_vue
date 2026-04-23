@@ -4,14 +4,34 @@
         <div class="col-2 flex-end">
             <div class="col d-flex">
                 <div class="d-flex">
-
+                  <div class="datepicker">
+                    <VueDatePicker 
+                      v-model="month"
+                      :format="formatMonth" 
+                      month-picker
+                      auto-apply
+                      @open="isFocused = true"
+                      @closed="isFocused = false"
+                    />
+                  </div>
+                  <span class="wave">~</span>
+                  <div class="datepicker">
+                    <VueDatePicker 
+                      v-model="month"
+                      :format="formatMonth" 
+                      month-picker
+                      auto-apply
+                      @open="isFocused = true"
+                      @closed="isFocused = false"
+                    />
+                  </div>
                 </div>
                 <button type="button" class="btn" @click="handleSearch">검색</button>
             </div>
         </div>
       </div>
       <div class="row">
-        <div class="row-list" v-for="(item, index) in rowList" :key="index">
+        <div class="row-list" :class="{ 'is-move': rowListMove }" v-for="(item, index) in rowList" :key="index" ref="rowListRef">
           <div class="row-list-item col-1">
             <div class="checkbox">
               <div class="check-box">
@@ -25,7 +45,7 @@
             </div>
           </div>
           <div class="row-list-item">
-            <div class="cont-wrap">
+            <div class="cont-wrap" @click="handleDetail">
               <div class="img-area">
                 <div class="image" :style="{ backgroundImage: `url('/images/default/img_coach_01.png')` }"></div>
               </div>
@@ -81,6 +101,22 @@
     </div>
 </template>
 <script setup>
+import { useIntersectionObserver } from "@vueuse/core";
+
+const rowListRef = ref();
+const rowListMove = ref(false);
+useIntersectionObserver(
+    rowListRef,
+    ([{ isIntersecting }]) => {
+        if (isIntersecting) {
+            rowListMove.value = true;
+        }
+    },
+    {
+        threshold: 0
+    }
+);
+
 const rowList = [
   {
     state: '공개',
@@ -104,6 +140,10 @@ const rowList = [
     location: 'XGOLF 대전'
   }
 ]
+
+const handleDetail = () => {
+  
+}
 
 // 2026.03.04[cgnoh]: 페이지 메타 정보
 definePageMeta({
