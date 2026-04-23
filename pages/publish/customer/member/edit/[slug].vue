@@ -63,8 +63,15 @@
                         </div>
                         <div class="input-wrap">
                             <div class="input-text">
-                                <input type="text" placeholder="선택해 주세요.">
-                                <button type="button" class="btn-file">파일선택</button>
+                                <input
+                                    type="file"
+                                    ref="fileInput"
+                                    @change="onFileChange"
+                                    placeholder="파일을 선택하거나 여기에 드롭하세요."  
+                                />
+                                <button type="button" class="btn-file" @click="triggerFile">파일선택</button>
+                                <span class="name" v-if="fileName">{{ fileName }}</span>
+                                <span class="name placeholder" v-else>파일을 선택하거나 여기에 드롭하세요.</span>
                             </div>
                         </div>
                         <div class="desc">
@@ -91,6 +98,27 @@ const handleList = () => {
   router.push('/publish/customer/member');
 }
 
+const fileInput = ref(null);
+const previewImage = ref(null);
+const fileName = ref('');
+const form = ref({ filename: null });
+
+const triggerFile = () => {
+  fileInput.value.click();
+};
+
+const onFileChange = (event) => {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = () => {
+    previewImage.value = reader.result;
+    form.value.filename = file;
+    fileName.value = file.name;
+  };
+  reader.readAsDataURL(file);
+};
 
 // 2026.03.04[cgnoh]: 페이지 메타 정보
 definePageMeta({

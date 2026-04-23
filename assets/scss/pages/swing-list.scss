@@ -122,6 +122,11 @@
                             color: #fff;
                             text-align: center;
                             font-size: 14px;
+                            padding: 0 8px;
+
+                            &.color-green {
+                                background: #00B34A;
+                            }
                         }
 
                         .title {
@@ -203,6 +208,10 @@
 
                     button {
                         width: 142px;
+
+                        &.btn-delete {
+                            border: 1px solid #CDCFD1;
+                        }
                     }
                 }
             }

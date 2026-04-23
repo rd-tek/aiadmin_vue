@@ -8,7 +8,7 @@
                     <VueDatePicker 
                       v-model="month"
                       :format="formatMonth" 
-                      month-picker
+                      date-picker
                       auto-apply
                       @open="isFocused = true"
                       @closed="isFocused = false"
@@ -19,7 +19,7 @@
                     <VueDatePicker 
                       v-model="month"
                       :format="formatMonth" 
-                      month-picker
+                      date-picker
                       auto-apply
                       @open="isFocused = true"
                       @closed="isFocused = false"
@@ -50,7 +50,7 @@
                 <div class="image" :style="{ backgroundImage: `url('/images/default/img_coach_01.png')` }"></div>
               </div>
               <div class="info-area">
-                <div class="label">{{ item.state }}</div>
+                <div class="label" :class="{ 'color-green': item.state === '공개' }">{{ item.state }}</div>
                 <button type="button" class="title">{{ item.title }}</button>
                 <div class="desc">
                   <span class="desc-list">
@@ -66,7 +66,7 @@
               </div>
               <div class="btn-area">
                 <button type="button" class="btn-md-line btn-primary-purple">수정</button>
-                <button type="button" class="btn-md-line">삭제</button>
+                <button type="button" class="btn-md-line btn-delete">삭제</button>
               </div>
             </div>
           </div>
@@ -126,7 +126,7 @@ const rowList = [
     location: 'XGOLF 대전'
   },
   {
-    state: '공개',
+    state: '비공개',
     title: '굿샷입니다.',
     name: '골프왕',
     date: '2024.10.12 09:10:00',
