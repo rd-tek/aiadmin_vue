@@ -45,11 +45,11 @@
             </div>
           </div>
           <div class="row-list-item">
-            <div class="cont-wrap" @click="handleDetail">
+            <div class="cont-wrap">
               <div class="img-area">
                 <div class="image" :style="{ backgroundImage: `url('/images/default/img_coach_01.png')` }"></div>
               </div>
-              <div class="info-area">
+              <nuxt-link :to="`/publish/swing/list/${index}`" class="info-area">
                 <div class="label" :class="{ 'color-green': item.state === '공개' }">{{ item.state }}</div>
                 <button type="button" class="title">{{ item.title }}</button>
                 <div class="desc">
@@ -63,9 +63,9 @@
                     <span class="location">{{ item.location }}</span>
                   </span>
                 </div>
-              </div>
+              </nuxt-link>
               <div class="btn-area">
-                <button type="button" class="btn-md-line btn-primary-purple">수정</button>
+                <button type="button" class="btn-md-line btn-primary-purple" @click="modalOpen">수정</button>
                 <button type="button" class="btn-md-line btn-delete">삭제</button>
               </div>
             </div>
@@ -99,10 +99,17 @@
         </ul>
       </div>
     </div>
+
+    <modal-swing-info
+      :isOpen="modals.modalSwingInfo"
+      @update:isOpen="modals.modalSwingInfo = $event"/>
+
 </template>
 <script setup>
+import { useRouter } from "vue-router";
 import { useIntersectionObserver } from "@vueuse/core";
 
+const router = useRouter();
 const rowListRef = ref();
 const rowListMove = ref(false);
 useIntersectionObserver(
@@ -142,7 +149,13 @@ const rowList = [
 ]
 
 const handleDetail = () => {
-  
+  router.push('/publish/swing/list/0')
+}
+
+const modals = reactive({ modalMemberInfo: false });
+const modalOpen = () => {
+  modals['modalSwingInfo'] = true;
+  document.querySelector('body').classList.add('is-hidden');
 }
 
 // 2026.03.04[cgnoh]: 페이지 메타 정보

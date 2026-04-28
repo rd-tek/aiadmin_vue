@@ -1497,6 +1497,29 @@ table {
         background: #fff;
     }
 
+    &.type04 {
+        font-size: 14px;
+        
+        tbody {
+            border-top: 1px solid #E6EDFF;
+
+            tr {
+                th {
+                    background: #FAFBFC;
+                    font-weight: 400;
+                    color: #35383B;
+                    border-bottom: 1px solid #E6EDFF;
+                }
+
+                td {
+                    border-bottom: 1px solid #E6EDFF;
+                    height: 50px;
+                    padding: 20px;
+                }
+            }
+        }
+    }
+
     &-head {
         height: 54px;
         display: flex;

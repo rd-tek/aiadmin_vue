@@ -950,10 +950,12 @@
                     <div class="buttons-list">
                         <button type="button" class="btn-md-line" @click="modalOpen('modalMemberInfo')">회원정보</button>
                         <button type="button" class="btn-md-line" @click="modalOpen('modalMachineInfo')">장비정보</button>
+                        <button type="button" class="btn-md-line" @click="modalOpen('modalSwingInfo')">스윙등록</button>
                     </div>
                 </div>
                 <modal-member-info :isOpen="modals.modalMemberInfo" @update:isOpen="modals.modalMemberInfo = $event"/>
                 <modal-machine-info :isOpen="modals.modalMachineInfo" @update:isOpen="modals.modalMachineInfo = $event"/>
+                <modal-swing-info :isOpen="modals.modalSwingInfo" @update:isOpen="modals.modalSwingInfo = $event"/>
             </section>
        </main>
        <button type="button" class="btn-scroll-top" v-if="topBtn" @click="topScroll">

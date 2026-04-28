@@ -1,0 +1,32 @@
+.manager-list {
+    .table {
+        &-body {
+            &-col {
+                .link {
+                    position: relative;
+
+                    &:hover {
+                        &:after {
+                            transform: scaleX(1);
+                        }
+                    }
+                    
+                    &:after {
+                            background: #000;
+                            bottom: 0;
+                            content: "";
+                            display: block;
+                            height: 1px;
+                            left: 0;
+                            position: absolute;
+                            bottom: -2px;
+                            transform: scaleX(0);
+                            transform-origin: left;
+                            transition: all 0.2s ease;
+                            width: 100%;
+                    }
+                }
+            }
+        }
+    }
+}

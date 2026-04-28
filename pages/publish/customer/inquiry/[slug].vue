@@ -5,7 +5,7 @@
                 <div class="title">X-GOLF 신규 매장 오픈 뉴스</div>
                 <div class="info">
                     <div class="info-list label">
-                        <span class="label color-purple">공지</span>
+                        <span class="label">공지</span>
                     </div>
                     <div class="info-list name">관리자</div>
                     <div class="info-list date">2026.06.11</div>
@@ -45,15 +45,13 @@
                 </div>
             </div>
             <div class="btn-wrap">
-                <nuxt-link to="/publish/customer/member" class="btn-md-line">목록</nuxt-link>
-                <button type="button" class="btn-md-line">삭제</button>
-                <button type="button" class="btn-md-fill btn-primary-purple" @click="handleEdit">수정</button>
+                <nuxt-link to="/publish/customer/inquiry" class="btn-md-line">목록</nuxt-link>
+                <button type="button" class="btn-md-fill btn-primary-purple">삭제</button>
             </div>
         </div>
     </div>
 </template>
 <script setup>
-import { useRouter } from "vue-router";
 import { useIntersectionObserver } from "@vueuse/core";
 
 const detailRef  = ref();
@@ -61,11 +59,6 @@ const detailMove = ref(false);
 useIntersectionObserver(detailRef, ([{ isIntersecting }]) => {
     if (isIntersecting) detailMove.value = true;
 }, { threshold: 0 });
-
-const router = useRouter();
-const handleEdit = () => {
-    router.push(`/publish/customer/member/edit/0`)
-}
 
 // 2026.03.04[cgnoh]: 페이지 메타 정보
 definePageMeta({

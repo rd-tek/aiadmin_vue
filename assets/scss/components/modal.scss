@@ -94,6 +94,34 @@
         }    
     }
 
+    .form {
+        &-list {
+            display: block;
+            margin-bottom: 40px;
+
+            &:last-child {
+                margin: 0;
+            }
+
+            label {
+                color: #14171a;
+                font-size: 16px;
+            }
+
+            &-box {
+                margin-top: 12px;
+
+                .input-text {
+                    width: 100%;
+                    
+                    input {
+                        min-width: 100%;
+                    }
+                }
+            }
+        }
+    }
+
     .datepicker {
         &::v-deep(input) {
             height: 40px;
@@ -255,6 +283,16 @@
                 button {
                     flex: none;
                     min-width: 148px;
+                }
+            }
+        }
+    }
+
+    &.modal-swing-info {
+        .modal-footer {
+            .btn-wrap {
+                button {
+                    flex: none;
                 }
             }
         }
