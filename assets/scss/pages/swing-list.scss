@@ -256,7 +256,6 @@
                 &-list {
                     flex: 1;
                     background: #ccc;
-                    aspect-ratio: 515/319;
                 }
             }
             
@@ -331,7 +330,6 @@
                     background: #fff;
                     display: flex;
                     flex-direction: column;
-                    height: 100%;
                     flex: 1;
 
                     .col-wrap {
@@ -341,6 +339,10 @@
                             &-list {
                                 margin-bottom: 22px;
 
+                                &:last-child {
+                                    margin: 0;
+                                }
+
                                 &-title {
                                     color: #14171a;
                                     font-size: 18px;
@@ -349,13 +351,24 @@
                                 }
 
                                 &-cont {
-                                    aspect-ratio: 2.327 / 1;
                                     background: #fff;
                                     border: 1px solid #cdcfd1;
                                     border-radius: 25px;
                                     height: auto;
                                     overflow: hidden;
                                     padding: 15px;
+
+                                    &:has(.image) {
+                                        padding: 0;
+                                    }
+                                    
+                                    .image {
+                                        background-size: cover;
+                                        background-repeat: no-repeat;
+                                        background-position: center;
+                                        height: 100%;
+                                        aspect-ratio: 3.25/1;
+                                    }
                                 }
                             }
                         }
@@ -378,6 +391,7 @@
                                 display: grid;
                                 grid-template-columns: repeat(2, 1fr);
                                 height: 100%;
+                                padding: 0;
 
                                 &-item {
                                     border-bottom: 1px solid #cdcfd1;
@@ -405,13 +419,15 @@
             }
 
             .review {
+                margin-top: 70px;
+
                 &-top {
                     font-size: 15px;
                     line-height: 1.6;
                     margin-bottom: 10px;
 
                     .count {
-                        color: #298097;
+                        color: #4318FF;
                         margin-left: 4px;
                     }
                 }
@@ -428,14 +444,14 @@
 
                             .img-area {
                                 position: relative;
-
-                                img {
-                                    border: 1px solid #cdcfd1;
-                                    border-radius: 50%;
-                                    height: 50px;
-                                    min-width: 50px;
-                                    width: 50px;
-                                }
+                                background-size: cover;
+                                background-repeat: no-repeat;
+                                background-position: center;
+                                width: 50px;
+                                min-width: 50px;
+                                height: 50px;
+                                border-radius: 50%;
+                                border: 1px solid #cdcfd1;
                             }
 
                             .info-area {
@@ -464,6 +480,11 @@
                                     display: flex;
                                     gap: 8px;
                                     margin-top: 18px;
+                                    position: relative;
+
+                                    &.align-left {
+                                        justify-content: flex-start;
+                                    }
 
                                     button {
                                         align-items: center;
@@ -477,6 +498,7 @@
                                         overflow: hidden;
                                         position: relative;
                                         width: 70px;
+                                        min-width: 70px;
                                         z-index: 0;
 
                                         .text {
@@ -513,6 +535,10 @@
                         flex-direction: column;
                         gap: 16px;
                         padding: 20px;
+                    }
+
+                    & + .review-writing {
+                        margin: 20px 0;
                     }
                 }
 
@@ -552,11 +578,69 @@
                         .btn-area {
                             display: flex;
                             margin-left: auto;
+                            gap: 10px;
 
                             .btn-primary-yellow {
                                 font-size: 14px;
                                 margin: 0;
                                 min-width: 100px;
+                            }
+                        }
+                    }
+                }
+            }
+
+            .btn-wrap {
+                position: relative;
+
+                .btn-group {
+                    &:has(.pagination-container) {
+                        .btn-md-line {
+                            position: absolute;
+                            left: 0;
+                            top: 50%;
+                            transform: translateY(-50%);
+                        }
+                    }
+                }
+            }
+
+            .more-area {
+                position: relative;
+                margin-left: auto;
+                align-self: flex-start;
+
+                .tooltip-container {
+                    top: 100%;
+                    z-index: 99;
+                    width: 120px;
+                    box-shadow: 0 3px 6px 0 rgba(18, 15, 40, 0.12);
+
+                    .tooltip-body {
+                        padding: 20px 0;
+
+                        .cont {
+                            &-list {
+                                padding: 0 20px;
+                                transition: all ease .2s;
+
+                                &:hover {
+                                    background: #F8F9FA;
+
+                                    button {
+                                        text-decoration: underline;
+                                        text-underline-offset: 3px;
+                                    }
+                                }
+
+                                button {
+                                    width: 100%;
+                                    text-align: left;
+                                    height: 30px;
+                                    font-size: 14px;
+                                    color: #35383B;
+                                    transition: all ease .2s;
+                                }
                             }
                         }
                     }
