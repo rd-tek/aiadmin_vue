@@ -37,7 +37,7 @@ const getOption = () => ({
     left: "3%",
     right: "4%",
     bottom: "3%",
-    containLabel: true,
+    containLabel: true, 
   },
   xAxis: {
     type: "category",
@@ -81,6 +81,9 @@ const getOption = () => ({
         shadowOffsetX: 0,
         shadowOffsetY: 4,
       },
+      itemStyle: {
+        color: "#4318FF",
+      },
     },
     {
       name: "데이터 2",
@@ -92,10 +95,12 @@ const getOption = () => ({
         color: '#6AD2FF',
         width: 4,
         cap: "round",
-        color: "#6AD2FF",
         shadowColor: "rgba(106, 210, 255, 0.3)",
         shadowBlur: 12,
         shadowOffsetY: 6,
+      },
+      itemStyle: {
+        color: "#6AD2FF",
       },
     },
   ],

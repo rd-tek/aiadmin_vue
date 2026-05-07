@@ -217,107 +217,202 @@
                 <span class="text">전체댓글</span>
                 <span class="count">(36)</span>
               </div>
+
+              <!-- 댓글/답글 영역 -->
               <div class="review-reply">
-                <div class="review-reply-list">
+                <div class="review-reply-list" v-for="(item, index) in commentList" :key="index">
                   <div class="review-reply-list-depth">
-                    <div class="img-area" :style="{ backgroundImage: `url('/images/default/img_coach_01.png')` }" />
-                    <div class="info-area">
-                      <div class="tit">타이틀</div>
-                      <div class="date">날짜</div>
-                      <div class="desc">내용</div>
-                      <div class="btn-wrap align-left">
-                        <button type="button" class="btn-comment">
-                          <span class="text">답글쓰기</span>
+
+                    <!-- 댓글(보기) -->
+                    <template v-if="editingId !== index">
+                      <div class="img-area" :style="{ backgroundImage: `url('/images/default/img_coach_01.png')` }" />
+                      <div class="info-area">
+                        <div class="tit">{{ item.nickname }}</div>
+                        <div class="date">{{ item.date }}</div>
+                        <div class="desc">{{ item.text }}</div>
+                        <div class="btn-wrap align-left">
+                          <button type="button" class="btn-comment" @click="handleComment(index)">
+                            <span class="text">답글쓰기</span>
+                          </button>
+                        </div>
+                      </div>
+                      <div class="more-area">
+                        <button type="button" class="btn-more" @click="handleTooltip(index)">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                          >
+                            <mask
+                              id="mask0"
+                              style="mask-type: alpha"
+                              maskUnits="userSpaceOnUse"
+                              x="0"
+                              y="0"
+                              width="24"
+                              height="24"
+                            >
+                              <rect width="24" height="24" fill="#ADB0B3" />
+                            </mask>
+                            <g mask="url(#mask0)">
+                              <path
+                                d="M6 14C5.45 14 4.97917 13.8042 4.5875 13.4125C4.19583 13.0208 4 12.55 4 12C4 11.45 4.19583 10.9792 4.5875 10.5875C4.97917 10.1958 5.45 10 6 10C6.55 10 7.02083 10.1958 7.4125 10.5875C7.80417 10.9792 8 11.45 8 12C8 12.55 7.80417 13.0208 7.4125 13.4125C7.02083 13.8042 6.55 14 6 14ZM12 14C11.45 14 10.9792 13.8042 10.5875 13.4125C10.1958 13.0208 10 12.55 10 12C10 11.45 10.1958 10.9792 10.5875 10.5875C10.9792 10.1958 11.45 10 12 10C12.55 10 13.0208 10.1958 13.4125 10.5875C13.8042 10.9792 14 11.45 14 12C14 12.55 13.8042 13.0208 13.4125 13.4125C13.02083 13.8042 12.55 14 12 14ZM18 14C17.45 14 16.9792 13.8042 16.5875 13.4125C16.1958 13.0208 16 12.55 16 12C16 11.45 16.1958 10.9792 16.5875 10.5875C16.9792 10.1958 17.45 10 18 10C18.55 10 19.0208 10.1958 19.4125 10.5875C19.8042 10.9792 20 11.45 20 12C20 12.55 19.8042 13.0208 19.4125 13.4125C19.0208 13.8042 18.55 14 18 14Z"
+                                fill="#ADB0B3"
+                              />
+                            </g>
+                          </svg>
                         </button>
+                        <transition name="fade">
+                          <div class="tooltip-container" v-if="tooltipShow === index" :ref="(el) => setTooltipRef(el, index)">
+                            <div class="tooltip-body">
+                              <div class="cont">
+                                <div class="cont-list">
+                                  <button type="button" class="btn-edit" @click="handleEdit(index)">수정</button>
+                                </div>
+                                <div class="cont-list">
+                                  <button type="button" class="btn-delete" @click="handleDelete(index)">삭제</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </transition>
+                      </div>
+                    </template>
+
+                    <!-- 댓글(수정) -->
+                    <div class="review-writing" v-else>
+                      <div class="name-area">
+                        <span class="text">이름</span>
+                      </div>
+                      <div class="text-area">
+                        <textarea v-model="editText" placeholder="댓글을 입력해 주세요."></textarea>
+                      </div>
+                      <div class="attach-area">
+                        <div class="btn-area">
+                          <button type="button" class="btn-default btn-md-line" @click="handleCancel(index)">취소</button>
+                          <button type="button" class="btn-primary-yellow btn-md-fill" @click="handleSave(index)">등록</button>
+                        </div>
                       </div>
                     </div>
-                    <div class="more-area">
-                      <div class="tooltip-container">
-                        <div class="tooltip-body">
-                          <div class="cont">
-                            <div class="cont-list">
-                              <button type="button" class="btn-edit">수정</button>
+                  </div>
+
+
+                  <!-- 답글 -->
+                  <div class="review-reply-depth" v-if="item.replies.length !== 0">
+                    <div class="review-reply-list-depth" v-for="(reply, k) in item.replies" :key="k">
+
+                      <!-- 보기 모드 -->
+                      <template v-if="editingReplyId !== k">
+                        <div class="img-area" :style="{ backgroundImage: `url('/images/default/img_coach_01.png')` }" />
+                        <div class="info-area">
+                          <div class="tit">{{ reply.nickname }}</div>
+                          <div class="date">{{ reply.date }}</div>
+                          <div class="desc">{{ reply.text }}</div>
+                        </div>
+                        <div class="more-area">
+                          <button type="button" class="btn-more" @click="handleReplyTooltip(k)">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                            >
+                              <mask
+                                id="mask0"
+                                style="mask-type: alpha"
+                                maskUnits="userSpaceOnUse"
+                                x="0"
+                                y="0"
+                                width="24"
+                                height="24"
+                              >
+                                <rect width="24" height="24" fill="#ADB0B3" />
+                              </mask>
+                              <g mask="url(#mask0)">
+                                <path
+                                  d="M6 14C5.45 14 4.97917 13.8042 4.5875 13.4125C4.19583 13.0208 4 12.55 4 12C4 11.45 4.19583 10.9792 4.5875 10.5875C4.97917 10.1958 5.45 10 6 10C6.55 10 7.02083 10.1958 7.4125 10.5875C7.80417 10.9792 8 11.45 8 12C8 12.55 7.80417 13.0208 7.4125 13.4125C7.02083 13.8042 6.55 14 6 14ZM12 14C11.45 14 10.9792 13.8042 10.5875 13.4125C10.1958 13.0208 10 12.55 10 12C10 11.45 10.1958 10.9792 10.5875 10.5875C10.9792 10.1958 11.45 10 12 10C12.55 10 13.0208 10.1958 13.4125 10.5875C13.8042 10.9792 14 11.45 14 12C14 12.55 13.8042 13.0208 13.4125 13.4125C13.02083 13.8042 12.55 14 12 14ZM18 14C17.45 14 16.9792 13.8042 16.5875 13.4125C16.1958 13.0208 16 12.55 16 12C16 11.45 16.1958 10.9792 16.5875 10.5875C16.9792 10.1958 17.45 10 18 10C18.55 10 19.0208 10.1958 19.4125 10.5875C19.8042 10.9792 20 11.45 20 12C20 12.55 19.8042 13.0208 19.4125 13.4125C19.0208 13.8042 18.55 14 18 14Z"
+                                  fill="#ADB0B3"
+                                />
+                              </g>
+                            </svg>
+                          </button>
+                          <transition name="fade">
+                            <div class="tooltip-container" v-if="tooltipDepthShow === k" :ref="(el) => setTooltipDepthRef(el, k)">
+                              <div class="tooltip-body">
+                                <div class="cont">
+                                  <div class="cont-list">
+                                    <button type="button" class="btn-edit" @click="handleReplyEdit(k)">수정</button>
+                                  </div>
+                                  <div class="cont-list">
+                                    <button type="button" class="btn-delete" @click="handleReplyDelete(k)">삭제</button>
+                                  </div>
+                                </div>
+                              </div>
                             </div>
-                            <div class="cont-list">
-                              <button type="button" class="btn-delete">삭제</button>
-                            </div>
+                          </transition>
+                        </div>
+                      </template>
+
+                      <!-- 수정 모드 -->
+                      <div class="review-writing" v-else>
+                        <div class="name-area">
+                          <span class="text">이름</span>
+                        </div>
+                        <div class="text-area">
+                          <textarea v-model="replyText" placeholder="댓글을 입력해 주세요."></textarea>
+                        </div>
+                        <div class="attach-area">
+                          <div class="btn-area">
+                            <button type="button" class="btn-default btn-md-line" @click="handleReplyCancel(k)">취소</button>
+                            <button type="button" class="btn-primary-yellow btn-md-fill" @click="handleReplySubmit(index)">등록</button>
                           </div>
                         </div>
                       </div>
-                      <button type="button" class="btn-more">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                        >
-                          <mask
-                            id="mask0"
-                            style="mask-type: alpha"
-                            maskUnits="userSpaceOnUse"
-                            x="0"
-                            y="0"
-                            width="24"
-                            height="24"
-                          >
-                            <rect width="24" height="24" fill="#ADB0B3" />
-                          </mask>
-                          <g mask="url(#mask0)">
-                            <path
-                              d="M6 14C5.45 14 4.97917 13.8042 4.5875 13.4125C4.19583 13.0208 4 12.55 4 12C4 11.45 4.19583 10.9792 4.5875 10.5875C4.97917 10.1958 5.45 10 6 10C6.55 10 7.02083 10.1958 7.4125 10.5875C7.80417 10.9792 8 11.45 8 12C8 12.55 7.80417 13.0208 7.4125 13.4125C7.02083 13.8042 6.55 14 6 14ZM12 14C11.45 14 10.9792 13.8042 10.5875 13.4125C10.1958 13.0208 10 12.55 10 12C10 11.45 10.1958 10.9792 10.5875 10.5875C10.9792 10.1958 11.45 10 12 10C12.55 10 13.0208 10.1958 13.4125 10.5875C13.8042 10.9792 14 11.45 14 12C14 12.55 13.8042 13.0208 13.4125 13.4125C13.02083 13.8042 12.55 14 12 14ZM18 14C17.45 14 16.9792 13.8042 16.5875 13.4125C16.1958 13.0208 16 12.55 16 12C16 11.45 16.1958 10.9792 16.5875 10.5875C16.9792 10.1958 17.45 10 18 10C18.55 10 19.0208 10.1958 19.4125 10.5875C19.8042 10.9792 20 11.45 20 12C20 12.55 19.8042 13.0208 19.4125 13.4125C19.0208 13.8042 18.55 14 18 14Z"
-                              fill="#ADB0B3"
-                            />
-                          </g>
-                        </svg>
-                      </button>
                     </div>
                   </div>
-                  <div class="review-reply-depth">
-                    <div class="review-reply-list-depth">
-                      <div class="img-area" :style="{ backgroundImage: `url('/images/default/img_coach_01.png')` }" />
-                      <div class="info-area">
-                        <div class="tit">타이틀</div>
-                        <div class="date">날짜</div>
-                        <div class="desc">내용</div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="review-reply-depth review-reply-list">
+
+                  <!-- 답글 작성 -->
+                  <div class="review-reply-depth review-reply-list" v-if="replyBoxFor === index">
                     <div class="review-writing">
                       <div class="name-area">
                         <span class="text">nickname</span>
                       </div>
                       <div class="text-area">
-                        <textarea placeholder="답글을 입력해주세요."></textarea>
+                        <textarea v-model="replyText" placeholder="답글을 입력해주세요."></textarea>
                       </div>
                       <div class="attach-area">
                         <div class="btn-area">
-                          <button type="button" class="btn-default btn-md-line">취소</button>
-                          <button type="button" class="btn-primary-yellow btn-md-fill">등록</button>
+                          <button type="button" class="btn-default btn-md-line" @click="handleReplyCancel(index)">취소</button>
+                          <button type="button" class="btn-primary-yellow btn-md-fill" @click="handleReplySubmit(index)">등록</button>
                         </div> 
                       </div>
                     </div>
                   </div>
+
                 </div>
               </div>
+
+              <!-- 댓글 작성 -->
               <div class="review-writing">
                 <div class="name-area">
                   <span class="text">이름</span>
                 </div>
                 <div class="text-area">
-                  <textarea placeholder="댓글을 입력해 주세요."></textarea>
+                  <textarea v-model="commentText" placeholder="댓글을 입력해 주세요."></textarea>
                 </div>
                 <div class="attach-area"> 
                   <div class="btn-area">
-                    <button type="button" class="btn-primary-yellow btn-md-fill">등록</button>
+                    <button type="button" class="btn-primary-yellow btn-md-fill" @click="handleSubmit">등록</button>
                   </div>
                 </div>
               </div> 
            </div>
            <div class="btn-wrap">
               <div class="btn-group align-left">
-                <button type="button" class="btn-md-line">목록</button>
+                <nuxt-link to="/publish/swing/list" class="btn-md-line">목록</nuxt-link>
                 <ul class="pagination-container type02">
                   <li>
                       <button type="button" class="paginate-buttons" aria-label="이전">
@@ -351,12 +446,133 @@
     </div>
 </template>
 <script setup>
+const editingId = ref(-1);
 const currentTab = ref('address');
+
+const replyBoxFor = ref(-1);
+const handleComment = (index) => {
+  replyBoxFor.value = replyBoxFor.value === index ? -1 : index;
+};
+
+const tooltipRefs = ref([]);
+const setTooltipRef = (el, index) => {
+  if (!el) return;
+
+  tooltipRefs.value[index] = el;
+}
+
+const tooltipDepthRefs = ref([]);
+const setTooltipDepthRef = (el, index) => {
+  if (!el) return;
+
+  tooltipDepthRefs.value[index] = el;
+
+  onClickOutside(el, () => {
+    if (tooltipDepthShow.value === index) {
+      tooltipDepthShow.value = -1;
+    }
+  });
+}
+
+const editText  = ref('');
+const handleEdit = (index) => {
+  if (editingId.value === index) {
+    editingId.value = -1;
+    editText.value = '';
+    return;
+  }
+
+  editingId.value = index;
+  editText.value = commentList.value[index].text;
+}
+
+const editingReplyId = ref(-1);
+const handleReplyEdit = (index) => {
+  editingReplyId.value = editingReplyId.value === index ? -1 : index;
+}
+
+// 글 등록하기
+const commentText = ref('')
+const handleSubmit = () => {
+  if (!commentText.value.trim()) return;
+
+  commentList.value.push({
+    nickname: '나', // 실제로는 로그인 유저
+    date: new Date().toLocaleDateString(),
+    text: commentText.value,
+    replies: []
+  });
+
+  commentText.value = ''; // 입력 초기화
+};
+
+const handleSave = (index) => {
+  if (!editText.value.trim()) return;
+
+  commentList.value[index].text = editText.value;
+
+  // 초기화
+  editingId.value = -1;
+  editText.value = '';
+}
+
+const replyText = ref('');
+const handleReplySubmit = (index) => {
+  if (!replyText.value.trim()) return;
+
+  commentList.value[index].replies.push({
+    nickname: '나',
+    date: new Date().toLocaleDateString(),
+    text: replyText.value,
+  });
+
+  // 초기화
+  replyText.value = '';
+
+  // 답글창 닫기
+  replyBoxFor.value = -1;
+};
 
 // 탭 클릭 시 특정 프레임으로 이동
 const onClickStage = (tabName) => {
   currentTab.value = tabName;
 };
+
+const commentList = ref([
+  {
+    nickname: '홍길동',
+    date: '2025.01.12',
+    text: '답글 내용입니다.',
+    replies: [
+      {
+        nickname: '홍길동',
+        date: '2025.01.12',
+        text: '답글 내용입니다.'
+      }
+    ]
+  }
+]);
+
+const tooltipShow = ref(-1);
+const handleTooltip = (index) => {
+  tooltipShow.value =
+    tooltipShow.value === index ? -1 : index;
+};
+
+const tooltipDepthShow = ref(-1);
+const handleReplyTooltip = (index) => {
+  tooltipDepthShow.value = tooltipDepthShow.value === index ? -1 : index;
+};
+
+const handleCancel = () => {
+  replyBoxFor.value = -1;
+  editingId.value = -1;
+  editText.value = '';
+}
+
+const handleReplyCancel = () => {
+  editingReplyId.value = -1;
+}
 
 // 2026.03.04[cgnoh]: 페이지 메타 정보
 definePageMeta({

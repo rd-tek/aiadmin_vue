@@ -256,6 +256,12 @@
                 &-list {
                     flex: 1;
                     background: #ccc;
+                    height: 100%;
+
+                    video {
+                        height: 100%;
+                        aspect-ratio: 1075/604;
+                    }
                 }
             }
             
@@ -535,6 +541,10 @@
                         flex-direction: column;
                         gap: 16px;
                         padding: 20px;
+
+                            & + .review-reply-list {
+                                padding: 0 20px 20px;
+                            }
                     }
 
                     & + .review-writing {
