@@ -215,7 +215,7 @@
            <div class="review">
               <div class="review-top">
                 <span class="text">전체댓글</span>
-                <span class="count">(36)</span>
+                <span class="count">({{ commentList.length }})</span>
               </div>
 
               <!-- 댓글/답글 영역 -->
@@ -304,7 +304,10 @@
                     <div class="review-reply-list-depth" v-for="(reply, k) in item.replies" :key="k">
 
                       <!-- 보기 모드 -->
-                      <template v-if="editingReplyId !== k">
+                      <template v-if="
+                          editingReplyId.parentIndex !== index ||
+                          editingReplyId.replyIndex !== k
+                        ">
                         <div class="img-area" :style="{ backgroundImage: `url('/images/default/img_coach_01.png')` }" />
                         <div class="info-area">
                           <div class="tit">{{ reply.nickname }}</div>
@@ -344,10 +347,10 @@
                               <div class="tooltip-body">
                                 <div class="cont">
                                   <div class="cont-list">
-                                    <button type="button" class="btn-edit" @click="handleReplyEdit(k)">수정</button>
+                                    <button type="button" class="btn-edit" @click="handleReplyEdit(index, k)">수정</button>
                                   </div>
                                   <div class="cont-list">
-                                    <button type="button" class="btn-delete" @click="handleReplyDelete(k)">삭제</button>
+                                    <button type="button" class="btn-delete" @click="handleReplyDelete(index, k)">삭제</button>
                                   </div>
                                 </div>
                               </div>
@@ -367,7 +370,7 @@
                         <div class="attach-area">
                           <div class="btn-area">
                             <button type="button" class="btn-default btn-md-line" @click="handleReplyCancel(k)">취소</button>
-                            <button type="button" class="btn-primary-yellow btn-md-fill" @click="handleReplySubmit(index)">등록</button>
+                            <button type="button" class="btn-primary-yellow btn-md-fill" @click="handleReplySave(index, k)">등록</button>
                           </div>
                         </div>
                       </div>
@@ -385,9 +388,9 @@
                       </div>
                       <div class="attach-area">
                         <div class="btn-area">
-                          <button type="button" class="btn-default btn-md-line" @click="handleReplyCancel(index)">취소</button>
+                          <button type="button" class="btn-default btn-md-line" @click="handleReplyCancel">취소</button>
                           <button type="button" class="btn-primary-yellow btn-md-fill" @click="handleReplySubmit(index)">등록</button>
-                        </div> 
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -486,10 +489,57 @@ const handleEdit = (index) => {
   editText.value = commentList.value[index].text;
 }
 
-const editingReplyId = ref(-1);
-const handleReplyEdit = (index) => {
-  editingReplyId.value = editingReplyId.value === index ? -1 : index;
-}
+const handleDelete = (index) => {
+  commentList.value.splice(index, 1);
+
+  // 상태 초기화
+  tooltipShow.value = -1;
+
+  if (editingId.value === index) {
+    editingId.value = -1;
+    editText.value = '';
+  }
+
+  if (replyBoxFor.value === index) {
+    replyBoxFor.value = -1;
+    replyText.value = '';
+  }
+};
+
+const editingReplyId = ref({
+  parentIndex: -1,
+  replyIndex: -1,
+});
+
+const handleReplyEdit = (parentIndex, replyIndex) => {
+  const isSame =
+    editingReplyId.value.parentIndex === parentIndex &&
+    editingReplyId.value.replyIndex === replyIndex;
+
+  if (isSame) {
+    editingReplyId.value = {
+      parentIndex: -1,
+      replyIndex: -1,
+    };
+
+    replyText.value = '';
+    return;
+  }
+
+  editingReplyId.value = {
+    parentIndex,
+    replyIndex,
+  };
+
+  replyText.value =
+    commentList.value[parentIndex].replies[replyIndex].text;
+};
+
+// 답글 삭제
+const handleReplyDelete = (parentIndex, replyIndex) => {
+  commentList.value[parentIndex].replies.splice(replyIndex, 1);
+  tooltipDepthShow.value = -1;
+};
 
 // 글 등록하기
 const commentText = ref('')
@@ -506,6 +556,7 @@ const handleSubmit = () => {
   commentText.value = ''; // 입력 초기화
 };
 
+
 const handleSave = (index) => {
   if (!editText.value.trim()) return;
 
@@ -514,24 +565,26 @@ const handleSave = (index) => {
   // 초기화
   editingId.value = -1;
   editText.value = '';
+  tooltipShow.value = -1;
 }
 
-const replyText = ref('');
-const handleReplySubmit = (index) => {
+const handleReplySave = (parentIndex, replyIndex) => {
   if (!replyText.value.trim()) return;
 
-  commentList.value[index].replies.push({
-    nickname: '나',
-    date: new Date().toLocaleDateString(),
-    text: replyText.value,
-  });
+  commentList.value[parentIndex]
+    .replies[replyIndex]
+    .text = replyText.value;
 
-  // 초기화
+  editingReplyId.value = {
+    parentIndex: -1,
+    replyIndex: -1,
+  };
+
   replyText.value = '';
-
-  // 답글창 닫기
-  replyBoxFor.value = -1;
+  tooltipDepthShow.value = -1;
 };
+
+const replyText = ref('');
 
 // 탭 클릭 시 특정 프레임으로 이동
 const onClickStage = (tabName) => {
@@ -567,12 +620,31 @@ const handleReplyTooltip = (index) => {
 const handleCancel = () => {
   replyBoxFor.value = -1;
   editingId.value = -1;
-  editText.value = '';
+  tooltipShow.value = -1;
 }
 
+// 답글 취소
 const handleReplyCancel = () => {
-  editingReplyId.value = -1;
-}
+  replyBoxFor.value = -1;
+  replyText.value = '';
+  editingReplyId.value = { parentIndex: -1, replyIndex: -1 };
+  tooltipDepthShow.value = -1;
+};
+
+// 답글 등록
+const handleReplySubmit = (parentIndex) => {
+  if (!replyText.value.trim()) return;
+
+  commentList.value[parentIndex].replies.push({
+    nickname: '나', // 실제로는 로그인 유저
+    date: new Date().toLocaleDateString(),
+    text: replyText.value,
+  });
+
+  replyText.value = '';
+  replyBoxFor.value = -1;
+};
+
 
 // 2026.03.04[cgnoh]: 페이지 메타 정보
 definePageMeta({
