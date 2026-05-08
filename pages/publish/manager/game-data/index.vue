@@ -154,7 +154,9 @@
                     <div class="check-box">
                         <input type="checkbox" id="chk_0" name="chk_0">
                         <label for="chk_0">
-                            <span class="check-box-item" />
+                            <span class="check-box-item">
+                              <i class="item-line" />
+                            </span>
                             <span class="check-box-txt">전체</span>
                         </label>
                     </div> 
@@ -163,7 +165,9 @@
                     <div class="check-box">
                         <input type="checkbox" id="chk_1" name="chk_1">
                         <label for="chk_1">
-                            <span class="check-box-item" />
+                            <span class="check-box-item">
+                              <i class="item-line" />
+                            </span>
                             <span class="check-box-txt">진행</span>
                         </label>
                     </div> 
@@ -172,7 +176,9 @@
                     <div class="check-box">
                         <input type="checkbox" id="chk_2" name="chk_2">
                         <label for="chk_2">
-                            <span class="check-box-item" />
+                            <span class="check-box-item">
+                              <i class="item-line" />
+                            </span>
                             <span class="check-box-txt">중단</span>
                         </label>
                     </div> 
@@ -181,7 +187,9 @@
                     <div class="check-box">
                         <input type="checkbox" id="chk_3" name="chk_3">
                         <label for="chk_3">
-                            <span class="check-box-item" />
+                            <span class="check-box-item">
+                              <i class="item-line" />
+                            </span>
                             <span class="check-box-txt">완료</span>
                         </label>
                     </div> 
@@ -199,7 +207,7 @@
 
       <div class="game-data-wrap" v-if="boardType == ''">
         <div class="game-data-cont">
-          <div class="game-data-list" v-for="(item, index) in tableList" :key="index">
+          <div class="game-data-list" :class="{ 'is-move': tableMove }" ref="tableRef" v-for="(item, index) in tableList" :key="index">
             <div class="game-data-item">
               <div class="num">9269</div>
               <div class="nickname">이프로</div>
@@ -275,7 +283,7 @@
             <div class="table-head-col">완료</div>
           </div>
           <div class="table-body">
-            <div class="table-body-row" v-for="(item, index) in scoreboardList" :key="index">
+            <div class="table-body-row" :class="{ 'is-move': scoreBoardListMove }" ref="scoreBoardListRef" v-for="(item, index) in scoreboardList" :key="index">
               <div class="table-body-flex">
                 <div class="table-body-col">
                   {{ item.nickname }}
@@ -323,7 +331,7 @@
             <div class="table-head-col">날짜</div>
           </div>
           <div class="table-body">
-            <div class="table-body-row" v-for="(item, index) in scoreboardGameList" :key="index">
+            <div class="table-body-row" :class="{ 'is-move': scoreBoardGameMove }" ref="scoreBoardGameRef" v-for="(item, index) in scoreboardGameList" :key="index">
               <div class="table-body-flex">
                 <div class="table-body-col">
                   {{ item.nickname }}
@@ -379,7 +387,7 @@
             <div class="table-head-col">멀리건</div>
           </div>
           <div class="table-body">
-            <div class="table-body-row" v-for="(item, index) in oneshotList" :key="index">
+            <div class="table-body-row" :class="{ 'is-move': oneshotListMove }" ref="oneshotListRef" v-for="(item, index) in oneshotList" :key="index">
               <div class="table-body-flex">
                 <div class="table-body-col">
                   {{ item.nickname }}
@@ -427,7 +435,7 @@
           게임정보
         </div>
         <div class="game-data-cont">
-          <table class="table type04">
+          <table class="table type04" :class="{ 'is-move': gameinfoListMove }" ref="gameinfoListRef">
             <colgroup>
               <col width="15%">
               <col width="*%">
@@ -450,6 +458,38 @@
     </div>
 </template>
 <script setup>
+import { useIntersectionObserver } from "@vueuse/core";
+
+const tableRef  = ref();
+const tableMove = ref(false);
+useIntersectionObserver(tableRef, ([{ isIntersecting }]) => {
+    if (isIntersecting) tableMove.value = true;
+}, { threshold: 0 });
+
+const scoreBoardListRef = ref();
+const scoreBoardListMove = ref(false);
+useIntersectionObserver(scoreBoardListRef, ([{ isIntersecting }]) => {
+    if (isIntersecting) scoreBoardListMove.value = true;
+}, { threshold: 0 });
+
+const scoreBoardGameRef = ref();
+const scoreBoardGameMove = ref(false);
+useIntersectionObserver(scoreBoardGameRef, ([{ isIntersecting }]) => {
+    if (isIntersecting) scoreBoardGameMove.value = true;
+}, { threshold: 0 });
+
+const oneshotListRef = ref();
+const oneshotListMove = ref(false);
+useIntersectionObserver(oneshotListRef, ([{ isIntersecting }]) => {
+    if (isIntersecting) oneshotListMove.value = true;
+}, { threshold: 0 });
+
+const gameinfoListRef = ref();
+const gameinfoListMove = ref(false);
+useIntersectionObserver(gameinfoListRef, ([{ isIntersecting }]) => {
+    if (isIntersecting) gameinfoListMove.value = true;
+}, { threshold: 0 });
+
 const tableList = [
   {
     no: 9269,
