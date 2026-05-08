@@ -295,7 +295,7 @@
                           <button type="button" class="btn-primary-yellow btn-md-fill" @click="handleSave(index)">등록</button>
                         </div>
                       </div>
-                    </div>
+                    </div> 
                   </div>
 
 

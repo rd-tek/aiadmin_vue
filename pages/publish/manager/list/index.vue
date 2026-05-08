@@ -70,12 +70,17 @@
               </button>
           </li>
         </ul>
+        <div class="btn-wrap">
+          <button type="button" class="btn-primary-purple btn-md-fill" @click="handleRegister">등록</button>
+        </div>
       </div>
     </div>
 </template>
 <script setup>
+import { useRouter } from "vue-router";
 import { useIntersectionObserver } from "@vueuse/core";
 
+const router = useRouter();
 const tableRef  = ref();
 const tableMove = ref(false);
 useIntersectionObserver(tableRef, ([{ isIntersecting }]) => {
@@ -94,6 +99,10 @@ const tableList = [
     status: '정상'
   },
 ]
+
+const handleRegister = () => {
+  router.push(`/publish/manager/write`)
+}
 
 // 2026.03.04[cgnoh]: 페이지 메타 정보
 definePageMeta({
