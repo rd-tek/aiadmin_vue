@@ -4,7 +4,7 @@ export default defineNuxtConfig({
   devtools: { enabled: false },
   devServer: {
     host: process.env.NUXT_HOST || '192.168.10.222',
-    port: Number(process.env.NUXT_PORT || 3000),
+    port: Number(process.env.NUXT_PORT || 9000),
     hot: true,
   },
   css: [

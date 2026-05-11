@@ -1,5 +1,5 @@
 <template>
-    <div class="membership-memeber">
+    <div class="membership-member">
       <div class="filter-box">
         <div class="col-2">
             <div class="col d-flex">
@@ -14,7 +14,7 @@
                 </select>
               </div>
             </div>
-            <div class="col d-flex">
+            <div class="col d-flex flex-column">
                 <div class="d-flex">
                     <select>
                         <option>이름</option>
@@ -44,39 +44,97 @@
       </div>
       <div class="table type03 mob-type02">
         <div class="table-head">
-          <div class="table-head-col">No</div>
+          <div class="table-head-col col-1 align-left">No</div>
           <div class="table-head-col">아이디</div>
-          <div class="table-head-col">닉네임</div>
-          <div class="table-head-col">이메일</div>
-          <div class="table-head-col">인증</div>
-          <div class="table-head-col">성별</div>
-          <div class="table-head-col">단골매장</div>
-          <div class="table-head-col">가입일</div>
-          <div class="table-head-col">상태</div>
+          <div class="table-head-col is-mob">닉네임</div>
+          <div class="table-head-col is-mob">이메일</div>
+          <div class="table-head-col is-mob">인증</div>
+          <div class="table-head-col is-mob">성별</div>
+          <div class="table-head-col is-mob">단골매장</div>
+          <div class="table-head-col is-mob">가입일</div>
+          <div class="table-head-col is-mob">상태</div>
         </div>
         <div class="table-body">
-          <div class="table-body-row" v-for="(item, index) in tableList" :key="index" :class="{ 'is-move': tableMove }" ref="tableRef">
+          <div class="table-body-row" 
+               v-for="(item, index) in tableList" 
+               :key="index" 
+               :class="{ 'is-move': tableMove }" 
+               ref="tableRef">
             <div class="table-body-flex">
-              <div class="table-body-col">{{ index + 1 }}</div>
-              <div class="table-body-col">
-                <nuxt-link :to="`/publish/membership/member/${index}`" class="link">{{ item.id }}</nuxt-link>
+              <div class="table-body-col col-1 align-left">
+                <span>{{ index + 1 }}</span>
               </div>
-              <div class="table-body-col">
+              <div class="table-body-col" @click="handleMobList(index)">
+                <nuxt-link :to="`/publish/membership/member/${index}`" class="link text-underline">{{ item.id }}</nuxt-link>
+                <button type="button" class="btn-arrow" :class="{ 'is-active': mobListIndex === index }">
+                  <img
+                    src="/public/images/icon/icon_arrow_down.png"
+                    alt="icon_arrow_down"
+                  />
+                </button>
+              </div>
+              <div class="table-body-col is-mob">
                 <button type="button" @click="modalOpen" class="color-purple text-underline">{{ item.nickname }}</button>
               </div>
-              <div class="table-body-col">{{ item.email }}</div>
-              <div class="table-body-col">
+              <div class="table-body-col is-mob">
+                <span class="no-wrap">{{ item.email }}</span>
+              </div>
+              <div class="table-body-col is-mob">
                 <b v-if="item.auth === '인증'">{{ item.auth }}</b>
                 <span v-else-if="item.auth === '미인증'" class="color-grey">{{ item.auth }}</span>
               </div>
-              <div class="table-body-col">{{ item.gender }}</div>
-              <div class="table-body-col">{{ item.shop }}</div>
-              <div class="table-body-col"><span class="color-grey">{{ item.join }}</span></div>
-              <div class="table-body-col">
+              <div class="table-body-col is-mob">{{ item.gender }}</div>
+              <div class="table-body-col is-mob">{{ item.shop }}</div>
+              <div class="table-body-col is-mob"><span class="color-grey">{{ item.join }}</span></div>
+              <div class="table-body-col is-mob">
                 <span v-if="item.status === '정상'" class="color-green">{{ item.status }}</span>
                 <span v-else-if="item.status === '삭제'" class="color-red">{{ item.status }}</span>
               </div>
             </div>
+            <transition
+                @before-enter="beforeEnter"
+                @enter="enter"
+                @before-leave="beforeLeave"
+                @leave="leave">
+              <div class="table-body-mob" v-if="mobListIndex === index">
+                <dl class="list">
+                  <dt class="tit">닉네임</dt>
+                  <dd class="cnt">
+                    <span class="color-purple link" @click="modalOpen">{{ item.nickname }}</span>
+                  </dd>
+                </dl>
+                <dl class="list">
+                  <dt class="tit">이메일</dt>
+                  <dd class="cnt">{{ item.email }}</dd>
+                </dl>
+                <dl class="list">
+                  <dt class="tit">인증</dt>
+                  <dd class="cnt">
+                    <b>{{ item.auth }}</b>
+                  </dd>
+                </dl>
+                <dl class="list">
+                  <dt class="tit">성별</dt>
+                  <dd class="cnt">{{ item.gender }}</dd>
+                </dl>
+                <dl class="list">
+                  <dt class="tit">단골매장</dt>
+                  <dd class="cnt">{{ item.shop }}</dd>
+                </dl>
+                <dl class="list">
+                  <dt class="tit">가입일</dt>
+                  <dd class="cnt">
+                    <span class="color-grey">{{ item.join }}</span>
+                  </dd>
+                </dl>
+                <dl class="list">
+                  <dt class="tit">상태</dt>
+                  <dd class="cnt">
+                    <span class="color-green">{{ item.status }}</span>
+                  </dd>
+                </dl>
+              </div>
+            </transition>
           </div>
         </div>
         <ul class="pagination-container type02">
@@ -160,6 +218,31 @@ const modalOpen = () => {
     modals['modalMemberInfo'] = true;
     document.querySelector('body').classList.add('is-hidden');
 }
+
+const mobListIndex = ref(-1);
+const handleMobList = (index) => {
+  if (window.innerWidth <= 768) {
+    mobListIndex.value = mobListIndex.value === index ? -1 : index;
+  }
+};
+
+const beforeEnter = (el) => {
+  el.style.height = "0";
+};
+
+const enter = (el) => {
+  el.style.transition = "all .4s ease";
+  el.style.height = el.scrollHeight + "px";
+};
+
+const beforeLeave = (el) => {
+  el.style.height = el.scrollHeight + "px";
+};
+
+const leave = (el) => {
+  el.style.transition = "all .4s ease";
+  el.style.height = "0";
+};
 
 // 2026.03.04[cgnoh]: 페이지 메타 정보
 definePageMeta({

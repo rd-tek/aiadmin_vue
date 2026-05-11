@@ -1,5 +1,5 @@
 <template>
-    <div class="membership-memeber">
+    <div class="membership-member">
       <div class="filter-box">
         <div class="col-2">
             <div class="col d-flex">
@@ -44,36 +44,95 @@
       </div>
       <div class="table type03 mob-type02">
         <div class="table-head">
-          <div class="table-head-col">No</div>
-          <div class="table-head-col">지역</div>
-          <div class="table-head-col">매장</div>
+          <div class="table-head-col col-1 align-left">No</div>
           <div class="table-head-col">아이디</div>
-          <div class="table-head-col">대표자</div>
-          <div class="table-head-col">장비수</div>
-          <div class="table-head-col">연락처</div>
-          <div class="table-head-col">등록일</div>
-          <div class="table-head-col">상태</div>
+          <div class="table-head-col is-mob">매장</div>
+          <div class="table-head-col is-mob">지역</div>
+          <div class="table-head-col is-mob">대표자</div>
+          <div class="table-head-col is-mob">장비수</div>
+          <div class="table-head-col is-mob">연락처</div>
+          <div class="table-head-col is-mob">등록일</div>
+          <div class="table-head-col is-mob">상태</div>
         </div>
         <div class="table-body">
-          <div class="table-body-row" v-for="(item, index) in tableList" :key="index" :class="{ 'is-move': tableMove }" ref="tableRef">
+          <div class="table-body-row" 
+            v-for="(item, index) in tableList" 
+            :key="index" 
+            :class="{ 'is-move': tableMove }" 
+            ref="tableRef">
             <div class="table-body-flex">
-              <div class="table-body-col">{{ index + 1 }}</div>
-              <div class="table-body-col">{{ item.region }}</div>
-              <div class="table-body-col">
-                <nuxt-link :to="`/publish/membership/shop/${index}`" class="text-underline">{{ item.shop }}</nuxt-link>
+              <div class="table-body-col col-1 align-left">{{ index + 1 }}</div>
+              <div class="table-body-col" @click="handleMobList(index)">
+                <span>{{ item.id }}</span>
+                <button type="button" class="btn-arrow" :class="{ 'is-active': mobListIndex === index }">
+                  <img
+                    src="/public/images/icon/icon_arrow_down.png"
+                    alt="icon_arrow_down"
+                  />
+                </button>
               </div>
-              <div class="table-body-col">{{ item.id }}</div>
-              <div class="table-body-col">{{ item.name }}</div>
-              <div class="table-body-col">
-                <button type="button" class="color-purple text-underline" @click="modalOpen">{{ item.count }}</button>
+              <div class="table-body-col is-mob">
+                <nuxt-link :to="`/publish/membership/shop/${index}`" class="link text-underline">{{ item.shop }}</nuxt-link>
               </div>
-              <div class="table-body-col">{{ item.number }}</div>
-              <div class="table-body-col">{{ item.date }}</div>
-              <div class="table-body-col">
+              <div class="table-body-col is-mob">{{ item.region }}</div>
+              <div class="table-body-col is-mob">{{ item.name }}</div>
+              <div class="table-body-col is-mob">
+                <button type="button" @click="modalOpen" class="color-purple">{{ item.count }}</button>
+              </div>
+              <div class="table-body-col is-mob">{{ item.number }}</div>
+              <div class="table-body-col is-mob">
+                <span class="color-grey">{{ item.date }}</span>
+              </div>
+              <div class="table-body-col is-mob">
                 <span v-if="item.status === '정상'" class="color-green">{{ item.status }}</span>
                 <span v-else-if="item.status === '탈퇴'" class="color-red">{{ item.status }}</span>
               </div>
             </div>
+            <transition
+                @before-enter="beforeEnter"
+                @enter="enter"
+                @before-leave="beforeLeave"
+                @leave="leave">
+              <div class="table-body-mob" v-if="mobListIndex === index">
+                <dl class="list">
+                  <dt class="tit">지역</dt>
+                  <dd class="cnt">{{ item.region }}</dd>
+                </dl>
+                <dl class="list">
+                  <dt class="tit">매장</dt>
+                  <dd class="cnt">
+                    <nuxt-link :to="`/publish/membership/shop/${index}`" class="link text-underline">{{ item.shop }}</nuxt-link>
+                  </dd>
+                </dl>
+                <dl class="list">
+                  <dt class="tit">대표자</dt>
+                  <dd class="cnt">{{ item.name }}</dd>
+                </dl>
+                <dl class="list">
+                  <dt class="tit">장비 수</dt>
+                  <dd class="cnt">
+                    <button type="button" @click="modalOpen" class="color-purple">{{ item.count }}</button>
+                  </dd>
+                </dl>
+                <dl class="list">
+                  <dt class="tit">연락처</dt>
+                  <dd class="cnt">{{ item.number }}</dd>
+                </dl>
+                <dl class="list">
+                  <dt class="tit">등록일</dt>
+                  <dd class="cnt">
+                    <span class="color-grey">{{ item.date }}</span>
+                  </dd>
+                </dl>
+                <dl class="list">
+                  <dt class="tit">상태</dt>
+                  <dd class="cnt">
+                    <span v-if="item.status === '정상'" class="color-green">{{ item.status }}</span>
+                    <span v-else-if="item.status === '탈퇴'" class="color-red">{{ item.status }}</span>
+                  </dd>
+                </dl>
+              </div>
+            </transition>
           </div>
         </div>
         <ul class="pagination-container type02">
@@ -161,6 +220,31 @@ const modalOpen = () => {
     modals['modalMachineInfo'] = true;
     document.querySelector('body').classList.add('is-hidden');
 }
+
+const mobListIndex = ref(-1);
+const handleMobList = (index) => {
+  if (window.innerWidth <= 768) {
+    mobListIndex.value = mobListIndex.value === index ? -1 : index;
+  }
+};
+
+const beforeEnter = (el) => {
+  el.style.height = "0";
+};
+
+const enter = (el) => {
+  el.style.transition = "all .4s ease";
+  el.style.height = el.scrollHeight + "px";
+};
+
+const beforeLeave = (el) => {
+  el.style.height = el.scrollHeight + "px";
+};
+
+const leave = (el) => {
+  el.style.transition = "all .4s ease";
+  el.style.height = "0";
+};
 
 // 2026.03.04[cgnoh]: 페이지 메타 정보
 definePageMeta({

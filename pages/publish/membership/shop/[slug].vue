@@ -1,5 +1,5 @@
 <template>
-    <div class="membership-memeber detail">
+    <div class="membership-member detail">
       <div class="table-wrap">
         <div class="table type02" :class="{ 'is-move': tableMove }" ref="tableRef">
           <table>

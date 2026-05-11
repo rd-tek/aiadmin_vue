@@ -9,11 +9,17 @@
     }
 
     &-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 20px;
+        &-list {
+            display: flex;
+            gap: 20px;
+
+            & + .dashboard-grid-list {
+                margin-top: 20px;
+            }
+        }
 
         &-item {
+            flex: 1;
             background: #fff;
             padding: 28px 30px;
             border-radius: 16px;
@@ -27,3 +33,37 @@
         }
     }
 } 
+
+@media screen and (max-width: 1024px) {
+    .dashboard {
+        &-grid {
+            &-list {
+                display: block;
+            }
+
+            &-item {
+                & + .dashboard-grid-item {
+                    margin-top: 20px;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .dashboard {
+        &-grid {
+            &-item {
+                padding: 20px;
+
+                .title {
+                    font-size: 16px;
+                }
+                
+                & + .dashboard-grid-item {
+                    margin-top: 16px;
+                }
+            }
+        }
+    }
+}

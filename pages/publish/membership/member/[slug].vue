@@ -1,5 +1,5 @@
 <template>
-    <div class="membership-memeber detail">
+    <div class="membership-member detail">
       <div class="table-wrap">
         <div class="table type02" :class="{ 'is-move': tableMove }" ref="tableRef">
           <table>
@@ -11,7 +11,7 @@
                 <tr>
                     <th>상태</th>
                     <td>
-                      <div class="select-default">
+                      <div class="select-default m-w-100">
                         <select>
                           <option>정상</option>
                         </select>
@@ -36,7 +36,9 @@
                 </tr>
                 <tr>
                     <th>이메일</th>
-                    <td>charles@xgolf.com.au</td>
+                    <td>
+                      <span class="color-blue text-underline">charles@xgolf.com.au</span>
+                    </td>
                 </tr>
                 <tr>
                     <th>인증</th>
@@ -61,7 +63,7 @@
                 <tr>
                   <th>세팅</th>
                   <td>
-                    <div class="select-wrap">
+                    <div class="select-wrap flex-column">
                       <div class="select-default">
                         <select>
                           <option>M</option>

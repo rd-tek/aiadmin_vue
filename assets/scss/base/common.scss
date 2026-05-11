@@ -1485,6 +1485,15 @@ table {
                         overflow: hidden;
                         text-overflow: ellipsis;
                         border-bottom: 1px solid #E6EDFF;
+
+                        .color-blue {
+                            color: #3577F1;
+                        }
+
+                        .text-underline {
+                            text-decoration: underline;
+                            text-underline-offset: 3px;
+                        }
                     }
                 }
             }
@@ -1535,6 +1544,13 @@ table {
             display: flex;
             align-items: center;
             justify-content: center;
+            color: #1B2559;
+            font-weight: 500;
+            line-height: 1.5;
+
+            &.align-left {
+                justify-content: flex-start;
+            }
 
             &.col-1 {
                 flex: .1;
@@ -1626,6 +1642,11 @@ table {
                     transition: all 0.2s ease;
                     width: 100%;
                 }
+            }
+
+            .no-wrap {
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
         }
 
@@ -3483,6 +3504,11 @@ table {
                         &.is-active {
                             transform: translateY(-50%) rotate(180deg);
                         }
+
+                        img {
+                            height: 20px;
+                            width: 20px;
+                        }
                     }
                 }
 
@@ -3513,8 +3539,10 @@ table {
                         
                         .tit {
                             font-size: 14px;
-                            font-weight: 700;
+                            font-weight: 500;
                             min-width: 75px;
+                            color: #1B2559;
+                            line-height: 1.5;
                         }
 
                         .cnt {
@@ -3522,6 +3550,7 @@ table {
                             font-weight: 400;
                             color: #35383B;
                             position: relative;
+                            line-height: 1.5;
 
                             .color-grey {
                                 color: #72777A;
@@ -3531,10 +3560,52 @@ table {
                                 color: #EF2B49;
                             }
 
+                            .color-green {
+                                 color: #00B34A;
+                            }
+
+                            .color-purple {
+                                color: #4318FF;
+                            }
+
                             button {
                                 position: absolute;
                                 top: 50%;
                                 transform: translateY(-50%);
+                            }
+
+                            .link {
+                                position: relative;
+                                line-height: 1.2;
+
+                                &:hover {
+                                    &:after {
+                                        transform: scaleX(1);
+                                    }
+                                }
+
+                                &:after {
+                                    background: #000;
+                                    bottom: 0;
+                                    content: "";
+                                    display: block;
+                                    height: 1px;
+                                    left: 0;
+                                    position: absolute;
+                                    bottom: -2px;
+                                    transform: scaleX(0);
+                                    transform-origin: left;
+                                    transition: all 0.2s ease;
+                                    width: 100%;
+                                }
+                            }
+
+                            .text-underline {
+                                text-decoration: underline;
+                                text-underline-offset: 3px;
+                                white-space: nowrap;
+                                overflow: hidden;
+                                text-overflow: ellipsis;
                             }
                         }
                     }
@@ -3562,9 +3633,12 @@ table {
                     tr {
                         th {
                             height: 60px;
+                            padding: 10px;
                         }
 
                         td {
+                            padding: 10px;
+                            
                             .w-auto {
                                 flex: 1;
                             }
@@ -3574,6 +3648,15 @@ table {
                                     min-width: auto;
                                     max-width: initial;
                                     flex: 1;
+                                    height: 38px;
+                                }
+                            }
+
+                            .m-w-100 {
+                                width: 100%;
+
+                                select {
+                                    width: 100%;
                                 }
                             }
                         }
