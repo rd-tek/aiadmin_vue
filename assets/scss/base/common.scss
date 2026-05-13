@@ -3664,6 +3664,21 @@ table {
                 }
             }
         }
+
+        &-head {
+            &.is-mob {
+                display: none;
+            }
+        }
+
+        &-body {
+            &-flex {
+                &.flex-column {
+                    flex-direction: column;
+                    align-items: flex-start;
+                }
+            }
+        }
     }
 
     .filter-box {

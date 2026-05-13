@@ -31,7 +31,7 @@
         </div>
       </div>
       <div class="table type03 mob-type02">
-        <div class="table-head">
+        <div class="table-head is-mob">
           <div class="table-head-col col-1">No</div>
           <div class="table-head-col col-1">구분</div>
           <div class="table-head-col">제목</div>
@@ -42,8 +42,8 @@
         </div>
         <div class="table-body">
           <div class="table-body-row" v-for="(item, index) in tableList" :key="index" :class="{ 'is-move': tableMove }" ref="tableRef">
-            <div class="table-body-flex">
-              <div class="table-body-col col-1">
+            <div class="table-body-flex flex-column">
+              <div class="table-body-col col-1 is-mob">
                 <span class="color-grey">{{ index + 1 }}</span>
               </div>
               <div class="table-body-col col-1">
@@ -52,18 +52,27 @@
               <div class="table-body-col align-left">
                 <nuxt-link :to="`/publish/customer/inquiry/${index}`" class="link" :class="{ 'line-through': item.note === '삭제' }">{{ item.title }}</nuxt-link>
               </div>
-              <div class="table-body-col col-1">
+              <div class="table-body-col col-1 is-mob">
                 <span class="color-grey">{{ item.date }}</span>
               </div>
-              <div class="table-body-col col-1">
+              <div class="table-body-col col-1 is-mob">
                 <span class="color-grey">{{ item.count }}</span>
               </div>
-              <div class="table-body-col col-1">
+              <div class="table-body-col col-1 is-mob">
                 <span class="color-green">{{ item.status }}</span>
               </div>
-              <div class="table-body-col col-1">
+              <div class="table-body-col col-1 is-mob">
                 <span class="color-green">{{ item.note }}</span>
               </div>
+            </div>
+            <div class="table-body-mob">
+              <div class="row">
+                <div class="row-list">
+                  <span class="date">{{ item.date }}</span>
+                  <span class="status">{{ item.status }}</span>
+                  <span class="note">{{ item.note }}</span>
+                </div>
+              </div> 
             </div>
           </div>
         </div>
@@ -93,9 +102,6 @@
               </button>
           </li>
         </ul>
-        <div class="btn-wrap">
-          <button type="button" class="btn-md-fill btn-primary-purple">등록</button>
-        </div>
       </div>
     </div>
 </template>
