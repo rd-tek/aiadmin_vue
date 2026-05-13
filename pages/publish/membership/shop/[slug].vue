@@ -11,7 +11,7 @@
                 <tr>
                     <th>상태</th>
                     <td>
-                      <div class="select-default">
+                      <div class="select-default m-w-100">
                         <select>
                           <option>정상</option>
                         </select>
@@ -61,7 +61,7 @@
                 <tr>
                   <th>세팅</th>
                   <td>
-                    <div class="select-wrap">
+                    <div class="select-wrap flex-column">
                       <div class="select-default">
                         <select>
                           <option>M</option>

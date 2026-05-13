@@ -65,6 +65,17 @@
                 <span class="color-green">{{ item.note }}</span>
               </div>
             </div>
+            <transition
+                @before-enter="beforeEnter"
+                @enter="enter"
+                @before-leave="beforeLeave"
+                @leave="leave">
+              <div class="table-body-mob">
+                <dl class="list">
+                  <dt class="tit"></dt>
+                </dl>
+              </div>
+            </transition>
           </div>
         </div>
         <ul class="pagination-container type02">

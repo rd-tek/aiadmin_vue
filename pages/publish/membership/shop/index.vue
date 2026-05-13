@@ -161,6 +161,9 @@
               </button>
           </li>
         </ul>
+        <div class="btn-wrap">
+          <button type="button" class="btn-primary-purple btn-md-fill" @click="handleWrite">등록</button>
+        </div>
       </div>
     </div>
 
@@ -175,7 +178,9 @@
 </template>
 <script setup>
 import { useIntersectionObserver } from "@vueuse/core";
+import { useRouter } from "vue-router";
 
+const router = useRouter();
 const tableRef  = ref();
 const tableMove = ref(false);
 useIntersectionObserver(tableRef, ([{ isIntersecting }]) => {
@@ -245,6 +250,10 @@ const leave = (el) => {
   el.style.transition = "all .4s ease";
   el.style.height = "0";
 };
+
+const handleWrite = () => {
+  router.push(`/publish/membership/shop/write`)
+}
 
 // 2026.03.04[cgnoh]: 페이지 메타 정보
 definePageMeta({

@@ -108,6 +108,10 @@
                 }
             }
         }
+
+        .btn-wrap {
+            padding: 26px 0;
+        }
     }
 
     &.detail {
@@ -148,6 +152,65 @@
         table {
             tbody {
                 border-top: 1px solid #E6EDFF;
+            }
+        }
+    }
+
+    &.write {
+        .write-wrap {
+            background: #fff;
+            padding: 20px 30px;
+            border-radius: 16px;
+
+            table {
+                tbody {
+                    tr {
+                        td {
+                            .input-wrap {
+                                display: flex;
+                                align-items: center;
+                                gap: 10px;
+
+                                button { 
+                                    border-radius: 4px;
+                                    height: 40px;
+                                    line-height: 38px;
+                                }
+
+                                .select-wrap {
+                                    margin-left: auto;
+                                    display: flex;
+                                    gap: 10px;
+                                }
+                            }
+
+                            .mb-10 {
+                                margin-bottom: 10px;
+                            }
+
+                            .m-w-100 {
+                                input {
+                                    width: 100%;
+                                }
+                            }
+
+                            .input-text {
+                                display: block;
+
+                                input {
+                                    min-width: 260px;
+                                    height: 40px;
+                                }
+                            }
+
+                            .select-default {
+                                select {
+                                    min-width: 260px;
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -212,6 +275,61 @@
                     width: 100%;
                     height: 40px;
                     line-height: 38px;
+                }
+            }
+        }
+
+        &.write {
+            .write-wrap {
+                padding: 16px;
+
+                table {
+                    tbody {
+                        tr {
+                            td {
+                                .input-text {
+                                    input {
+                                        min-width: 100%;
+                                    }
+                                }
+
+                                .select-default {
+                                    width: 100%;
+
+                                    select {
+                                        min-width: 100%;
+                                    }
+                                }
+
+                                .input-wrap {
+                                    width: 100%;
+
+                                    &.flex-column {
+                                        flex-direction: column;
+                                        align-items: flex-start;
+                                        gap: 18px;
+                                    }
+
+                                    .select-wrap {
+                                        margin: 0;
+                                        
+                                        &.flex-column {
+                                            flex-direction: column;
+                                            width: 100%;
+                                        }
+                                    }
+
+                                    .input-text {
+                                        flex: 1;
+                                    }
+                                    
+                                    button {
+                                        min-width: auto;
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
