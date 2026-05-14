@@ -60,7 +60,7 @@
                                     <div class="table-area type02">
                                         <div class="table-list">
                                             <div class="table-wrap">
-                                                <table class="table type02">
+                                                <table class="table type02 is-move">
                                                     <tbody>
                                                         <tr>
                                                             <th>홀</th>
@@ -200,7 +200,7 @@
                                     <div class="table-area type02">
                                         <div class="table-list">
                                             <div class="table-wrap">
-                                                <table class="table type02">
+                                                <table class="table type02 is-move">
                                                     <tbody>
                                                         <tr>
                                                             <th>홀</th>

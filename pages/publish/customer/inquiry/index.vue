@@ -108,7 +108,7 @@
 <script setup>
 import { useIntersectionObserver } from "@vueuse/core";
 
-const tableRef  = ref();
+const tableRef  = ref(); 
 const tableMove = ref(false);
 useIntersectionObserver(tableRef, ([{ isIntersecting }]) => {
     if (isIntersecting) tableMove.value = true;

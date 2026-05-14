@@ -15,17 +15,8 @@
       </div>
       <div class="row">
         <div class="row-list" :class="{ 'is-move': rowListMove }" v-for="(item, index) in rowList" :key="index" ref="rowListRef">
-          <div class="row-list-item col-1">
-            <div class="checkbox">
-              <div class="check-box">
-                <input type="checkbox" :id="`chk_${index}`" :name="`chk_${index}`">
-                <label :for="`chk_${index}`">
-                  <span class="check-box-item">
-                      <i class="item-line" />
-                  </span>
-                </label>
-              </div>
-            </div>
+          <div class="row-list-item col-1 is-mob">
+            <span class="color-grey">{{ index + 1 }}</span>
           </div>
           <div class="row-list-item">
             <div class="state type01">
@@ -39,9 +30,10 @@
             </div>
             <div class="label">
               <div class="label-list">{{ item.label }}</div>
+              <div class="label-list hole">{{ item.hole }}홀</div>
             </div>
           </div>
-          <div class="row-list-item col-1 align-center">
+          <div class="row-list-item col-1 align-center is-mob">
             <div class="hole">
               {{ item.hole }}홀
             </div>
@@ -72,8 +64,7 @@
           </div>
         </div>
         <div class="btn-wrap">
-          <button type="button" class="btn-md-line">노출</button>
-          <button type="button" class="btn-md-fill btn-primary-purple" @click="handleSave">등록</button>
+          <button type="button" class="btn-md-fill btn-primary-purple" @click="handleSave">등록하기</button>
         </div>
       </div>
     </div>
@@ -84,7 +75,7 @@ import { useRouter } from "vue-router";
 
 const rowListRef = ref();
 const rowListMove = ref(false);
-useIntersectionObserver(
+useIntersectionObserver( 
     rowListRef,
     ([{ isIntersecting }]) => {
         if (isIntersecting) {

@@ -254,7 +254,8 @@
         }
 
         .modal-body {
-            overflow: visible;
+            overflow: hidden;
+            overflow-y: auto;
             
             table {
                 tr {
@@ -297,6 +298,69 @@
             }
         }
     }
+
+    &.modal-course-write {
+        .modal-container {
+            width: 800px;
+            overflow: visible;
+        }
+
+        .modal-body {
+            overflow: hidden;
+            overflow-y: auto;
+            
+            table {
+                tr {
+                    th {
+                        padding: 16px 10px;
+                        height: 72px;
+                    }
+
+                    td {
+                        padding: 16px 10px;
+                        height: 72px;
+
+                        .input-wrap {
+                            display: flex;
+                            gap: 8px;
+
+                            .input-text {
+                                flex: 1;
+                            }
+
+                            button {
+                                min-width: 80px;
+                                height: 40px;
+                                line-height: 38px;
+                                border-radius: 4px;
+                            }
+                        }
+
+                        .file {
+                            font-size: 14px;
+                            color: #52575C;
+                            text-decoration: underline;
+                            text-underline-offset: 3px;
+                            margin-top: 10px;
+                        }
+
+                        .input-text,  .select-default {
+                            width: 100%;
+                        }
+                    }
+                }
+            }
+        }
+
+        .modal-footer {
+            .btn-wrap {
+                button {
+                    flex: none;
+                    min-width: 148px;
+                }
+            }
+        }
+    }
 }
 
 @media screen and (max-width: 768px) {
@@ -324,6 +388,16 @@
                         width: 100%;
                         height: 46px;
                         line-height: 44px;
+                    }
+                }
+            }
+        }
+
+        table {
+            tbody {
+                tr {
+                    th, td {
+                        padding: 20px 14px;
                     }
                 }
             }

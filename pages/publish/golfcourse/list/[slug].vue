@@ -213,12 +213,12 @@
                 </div>
             </div>
             <div class="btn-wrap">
-                <nuxt-link to="/publish/golfcourse/list" class="btn-md-line">목록</nuxt-link>
-                <button type="button" class="btn-md-fill btn-primary-purple" @click="handleEdit">수정</button>
+                <nuxt-link to="/publish/golfcourse/list" class="btn-md-line">목록보기</nuxt-link>
+                <button type="button" class="btn-md-fill btn-primary-purple" @click="handleEdit">수정하기</button>
             </div>
         </div>
     </div>
-</template>
+</template> 
 <script setup>
 import { useRouter } from "vue-router";
 import { useIntersectionObserver } from "@vueuse/core";

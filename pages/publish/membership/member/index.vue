@@ -100,7 +100,7 @@
                 <dl class="list">
                   <dt class="tit">닉네임</dt>
                   <dd class="cnt">
-                    <span class="color-purple link" @click="modalOpen">{{ item.nickname }}</span>
+                    <a class="color-purple" @click="modalOpen">{{ item.nickname }}</a>
                   </dd>
                 </dl>
                 <dl class="list">
