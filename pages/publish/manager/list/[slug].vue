@@ -44,16 +44,20 @@
                             <tr>
                                 <th>부서</th>
                                 <td>
-                                    <div class="input-text">
-                                        <input type="text" placeholder="부서" />
+                                    <div class="select-default">
+                                        <select>
+                                            <option>개발팀</option>
+                                        </select>
                                     </div>
                                 </td>
                             </tr>
                             <tr>
                                 <th>직책</th>
                                 <td>
-                                    <div class="input-text">
-                                        <input type="text" placeholder="직책" />
+                                    <div class="select-default">
+                                        <select>
+                                            <option>과장</option>
+                                        </select>
                                     </div>
                                 </td>
                             </tr>
@@ -76,8 +80,10 @@
                             <tr>
                                 <th>상태</th>
                                 <td>
-                                    <div class="input-text">
-                                        <input type="text" placeholder="상태" />
+                                    <div class="select-default">
+                                        <select>
+                                            <option>대기</option>
+                                        </select>
                                     </div>
                                 </td>
                             </tr>
@@ -85,7 +91,7 @@
                     </table>
                     <div class="btn-wrap">
                         <nuxt-link to="/publish/manager/list" class="btn-md-line">목록보기</nuxt-link>
-                        <button class="btn-primary-purple btn-md-fill">저장</button>
+                        <button class="btn-primary-purple btn-md-fill">등록하기</button>
                     </div>
                 </div>
              </div>

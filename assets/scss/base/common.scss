@@ -3463,8 +3463,10 @@ table {
         &.mob-type02 {
             .table-head {
                 &-col {
+                    border-bottom: 1px solid #E6EDFF;
+
                     &:last-child {
-                        padding: 10px 38px 10px 18px;
+                        padding: 10px 18px;
                     }
 
                     &.is-mob {
@@ -3475,7 +3477,7 @@ table {
 
             .table-body {
                 &-flex {
-                    border-top: 1px solid #E6EDFF;
+                    border-bottom: 1px solid #E6EDFF;
                     margin: 0 20px;
                     padding: 0;
                 }
@@ -3486,7 +3488,7 @@ table {
 
                     &:has(.btn-arrow) {
                         cursor: pointer;
-                        padding: 10px 38px;
+                        padding: 18px 10px;
                     }
 
                     &.is-mob {
@@ -3518,7 +3520,7 @@ table {
 
                 &-mob {
                     display: block;
-                    border-top: 1px solid #E6EDFF;
+                    border-bottom: 1px solid #E6EDFF;
                     margin: 0 20px;
 
                     .list {

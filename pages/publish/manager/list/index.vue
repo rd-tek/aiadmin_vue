@@ -19,29 +19,85 @@
       </div>
       <div class="table type03 mob-type02">
         <div class="table-head">
+          <div class="table-head-col">No</div>
           <div class="table-head-col">이름</div>
-          <div class="table-head-col">ID</div>
-          <div class="table-head-col">부서</div>
-          <div class="table-head-col">직책</div>
-          <div class="table-head-col">번호</div>
-          <div class="table-head-col">이메일</div>
-          <div class="table-head-col">등록일</div>
-          <div class="table-head-col">상태</div>
+          <div class="table-head-col is-mob">ID</div>
+          <div class="table-head-col is-mob">부서</div>
+          <div class="table-head-col is-mob">직급</div>
+          <div class="table-head-col is-mob">연락처</div>
+          <div class="table-head-col is-mob">이메일</div>
+          <div class="table-head-col is-mob">등록일</div>
+          <div class="table-head-col is-mob">상태</div>
         </div>
         <div class="table-body">
           <div class="table-body-row" v-for="(item, index) in tableList" :key="index" :class="{ 'is-move': tableMove }" ref="tableRef">
-            <div class="table-body-flex">
-              <div class="table-body-col">{{ item.name }}</div>
-              <div class="table-body-col">
+            <div class="table-body-flex" :class="{ 'is-active': mobListIndex === index }">
+              <div class="table-body-col">{{ index + 1 }}</div>
+              <div class="table-body-col" @click="handleMobList(index)">
+                <span>{{ item.name }}</span>
+                <button type="button" class="btn-arrow" :class="{ 'is-active': mobListIndex === index }">
+                  <img
+                    src="/public/images/icon/icon_arrow_down.png"
+                    alt="icon_arrow_down"
+                  />
+                </button>
+              </div>
+              <div class="table-body-col is-mob">
                 <nuxt-link :to="`/publish/manager/list/${index}`" class="link">{{ item.id }}</nuxt-link>
               </div>
-              <div class="table-body-col">{{ item.part }}</div>
-              <div class="table-body-col">{{ item.position }}</div>
-              <div class="table-body-col">{{ item.phone }}</div>
-              <div class="table-body-col">{{ item.email }}</div>
-              <div class="table-body-col">{{ item.join }}</div>
-              <div class="table-body-col">{{ item.status }}</div>
+              <div class="table-body-col is-mob">{{ item.part }}</div>
+              <div class="table-body-col is-mob">{{ item.position }}</div>
+              <div class="table-body-col is-mob">{{ item.phone }}</div>
+              <div class="table-body-col is-mob">{{ item.email }}</div>
+              <div class="table-body-col is-mob">
+                <span class="color-grey">{{ item.join }}</span>
+              </div>
+              <div class="table-body-col is-mob">
+                <span class="color-green">{{ item.status }}</span>
+              </div>
             </div>
+            <transition
+                @before-enter="beforeEnter"
+                @enter="enter"
+                @before-leave="beforeLeave"
+                @leave="leave">
+              <div class="table-body-mob" v-if="mobListIndex === index">
+                <dl class="list">
+                  <dt class="tit">아이디</dt>
+                  <dd class="cnt">
+                    <nuxt-link :to="`/publish/manager/list/${index}`" class="link">{{ item.id }}</nuxt-link>
+                  </dd>
+                </dl>
+                <dl class="list">
+                  <dt class="tit">부서</dt>
+                  <dd class="cnt">{{ item.part }}</dd>
+                </dl>
+                <dl class="list"> 
+                  <dt class="tit">직급</dt>
+                  <dd class="cnt">{{ item.position }}</dd>
+                </dl>
+                <dl class="list">
+                  <dt class="tit">연락처</dt>
+                  <dd class="cnt">{{ item.phone }}</dd>
+                </dl>
+                <dl class="list">
+                  <dt class="tit">이메일</dt>
+                  <dd class="cnt">{{ item.email }}</dd>
+                </dl>
+                <dl class="list">
+                  <dt class="tit">등록일</dt>
+                  <dd class="cnt">
+                    <span class="color-grey">{{ item.join }}</span>
+                  </dd>
+                </dl>
+                <dl class="list">
+                  <dt class="tit">상태</dt>
+                  <dd class="cnt">
+                    <span class="color-green">{{ item.status }}</span>
+                  </dd>
+                </dl>
+              </div>
+            </transition>
           </div>
         </div>
         <ul class="pagination-container type02">
@@ -103,6 +159,31 @@ const tableList = [
 const handleRegister = () => {
   router.push(`/publish/manager/write`)
 }
+
+const mobListIndex = ref(-1);
+const handleMobList = (index) => {
+  if (window.innerWidth <= 768) {
+    mobListIndex.value = mobListIndex.value === index ? -1 : index;
+  }
+};
+
+const beforeEnter = (el) => {
+  el.style.height = "0";
+};
+
+const enter = (el) => {
+  el.style.transition = "all .4s ease";
+  el.style.height = el.scrollHeight + "px";
+};
+
+const beforeLeave = (el) => {
+  el.style.height = el.scrollHeight + "px";
+};
+
+const leave = (el) => {
+  el.style.transition = "all .4s ease";
+  el.style.height = "0";
+};
 
 // 2026.03.04[cgnoh]: 페이지 메타 정보
 definePageMeta({

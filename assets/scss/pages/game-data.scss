@@ -18,6 +18,10 @@
         padding: 30px 20px;
         border-radius: 16px;
 
+        &.is-mob {
+            display: none;
+        }
+
         & + .game-data-cont {
             margin-top: 30px;
         }
@@ -359,5 +363,67 @@
 
     .btn-wrap {
         margin-top: 40px;
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    .game-data {
+        &-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .game-data {
+        &-grid {
+            grid-template-columns: repeat(1, 1fr);
+        }
+
+        &-cont {
+            &.is-mob {
+                display: none;
+            }
+        }
+
+        .table {
+            display: table;
+
+            &-title {
+                 padding: 0 16px;
+                 font-size: 18px;
+                 font-weight: 700;
+                 line-height: 1.3;
+                 margin: 26px 0 16px 0;
+            }
+
+            &-head {
+                &-col {
+                    border-top: 1px solid #E6EDFF;
+                }
+            }
+
+            .btn-wrap {
+                flex-direction: column;
+                margin: 25px 0;
+                padding-bottom: 25px;
+                
+                button {
+                    width: 100%;
+                    height: 40px;
+                    line-height: 38px;
+                }
+            }
+        }
+
+        .btn-wrap {
+            margin-top: 30px;
+
+            button {
+                width: 100%;
+                height: 40px;
+                line-height: 38px;
+            }
+        }
     }
 }
