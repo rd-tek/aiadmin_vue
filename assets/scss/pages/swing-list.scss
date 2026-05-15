@@ -73,6 +73,11 @@
 
                 &.col-1 {
                     flex: .1;
+                    max-width: 65px;
+
+                    .color-grey {
+                        color: #72777A; 
+                    }
                 }
 
                 &:has(.checkbox) {
@@ -256,12 +261,6 @@
                 &-list {
                     flex: 1;
                     background: #ccc;
-                    height: 100%;
-
-                    video {
-                        height: 100%;
-                        aspect-ratio: 1075/604;
-                    }
                 }
             }
             
@@ -271,7 +270,16 @@
                 &.type03 {
                     height: 40px;
 
-                    .tab-list {
+                    .tab-list {                        
+                        .icon {
+                            display: none;
+                        }
+
+                        .text {
+                            font-size: 14px;
+                            text-align: center;
+                        }
+
                         &:before {
                             background: #4318FF;
                         }
@@ -336,7 +344,7 @@
                     background: #fff;
                     display: flex;
                     flex-direction: column;
-                    flex: 1;
+                    width: 50%;
 
                     .col-wrap {
                         .col {
@@ -653,6 +661,194 @@
                                 }
                             }
                         }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .filter-box {
+        .col-2 {
+            .col {
+                &.d-flex {
+                    flex-direction: column;
+
+                    .btn {
+                        width: 100%;
+                    }
+                }
+            }
+        }
+    }
+
+    .swing-list {
+        .row {
+            &-list {
+                padding: 20px;
+
+                &-item {
+                    &.is-mob {
+                        display: none;
+                    }
+
+                    .cont-wrap {
+                        flex-direction: column;
+                        align-items: flex-start;
+
+                        .img-area {
+                            width: 100%;
+                        }
+
+                        .info-area {
+                            .title {
+                                font-size: 16px;
+                            }
+
+                            .desc {
+                                margin-top: 16px;
+
+                                &-list {
+                                    font-size: 13px;
+                                    margin-right: 10px;
+                                    padding-right: 10px;
+                                }
+                            }
+                        }
+
+                        .btn-area {
+                            margin: 0;
+                            width: 100%;
+
+                            button {
+                                width: 100%;
+                                height: 40px;
+                                line-height: 38px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        &.detail {
+            .cont {
+                &-section {
+                    margin-bottom: 16px;
+
+                    &:last-child {
+                        margin: 0;
+                    }
+                }
+
+                &-box {
+                    display: block;
+
+                    &:has(.foot-area) {
+                        display: flex;
+                    }
+
+                    &-list {
+                        margin-bottom: 20px;
+
+                        &:last-child {
+                            margin: 0;
+                        }
+                    }
+                }
+
+                .col-2 {
+                    display: block;
+                    margin-top: 50px;
+
+                    .cont-section {
+                        width: 100%;
+                    }
+                }
+
+                .table {
+                    &-area {
+                        .filter {
+                            gap: 10px;
+                                                
+                            .select-default {
+                                flex: 1;
+
+                                select {
+                                    min-width: 100%;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                .tab {
+                    &.type03 {
+                        .tab-list {
+                            &.is-active {
+                                .icon {
+                                    svg {
+                                        &::v-deep(path) {
+                                            fill: #fff;
+                                            transition: all ease .2s;
+                                        }
+                                    }
+                                }
+                            }
+                            .text {
+                                display: none;
+                            }
+
+                            .icon {
+                                display: block;
+                            }
+                        }
+                    }
+                }
+
+                &-row {
+                    flex-direction: column;
+                    gap: 20px;
+
+                    &-list {
+                        width: 100%;
+                    }
+
+                    &.has-border {
+                        flex-direction: row;
+                    }
+                }
+
+                .btn-wrap {
+                    display: block;
+
+                    .btn-group {
+                        display: flex;
+                        flex-direction: column-reverse;
+
+                        &:has(.pagination-container) {
+                            .btn-md-line {
+                                position: relative;
+                                transform: translateY(0);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .swing-list {
+        &.detail {
+            .cont {
+                .step-balance {
+                    flex-direction: column;
+
+                    .chart {
+                        width: 100%;
                     }
                 }
             }

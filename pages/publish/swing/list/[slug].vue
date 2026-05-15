@@ -68,25 +68,46 @@
            </div>
            <div class="tab type03 box">
               <div class="tab-list" @click="onClickStage('address')" :class="{ 'is-active': currentTab == 'address' }">
-                <div class="text">Address</div>
+                <span class="icon">
+                  <svg-address />
+                </span>
+                <span class="text">address</span>
               </div>
               <div class="tab-list" @click="onClickStage('backswing')" :class="{ 'is-active': currentTab == 'backswing' }">
-                <div class="text">Backswing</div>
+                <span class="icon">
+                  <svg-back-swing />
+                </span>
+                <span class="text">Backswing</span>
               </div>
               <div class="tab-list" @click="onClickStage('topswing')" :class="{ 'is-active': currentTab == 'topswing' }">
-                <div class="text">Topswing</div>
+                <span class="icon">
+                  <svg-top-swing />
+                </span>
+                <span class="text">Topswing</span>
               </div>
               <div class="tab-list" @click="onClickStage('downswing')" :class="{ 'is-active': currentTab == 'downswing' }">
-                <div class="text">Downswing</div>
+                <span class="icon">
+                  <svg-down-swing />
+                </span>
+                <span class="text">Downswing</span>
               </div>
               <div class="tab-list" @click="onClickStage('impact')" :class="{ 'is-active': currentTab == 'impact' }">
-                <div class="text">Impact</div>
+                <span class="icon">
+                  <svg-impact />
+                </span>
+                <span class="text">Impact</span>
               </div>
               <div class="tab-list" @click="onClickStage('follow-through')" :class="{ 'is-active': currentTab == 'follow-through' }">
-                <div class="text">Follow-through</div>
+                <span class="icon">
+                  <svg-follow-through />
+                </span>
+                <span class="text">Follow-through</span>
               </div>
               <div class="tab-list" @click="onClickStage('finish')" :class="{ 'is-active': currentTab == 'finish' }">
-                <div class="text">Finish</div>
+                <span class="icon">
+                  <svg-finish />
+                </span>
+                <span class="text">Finish</span>
               </div>
            </div>
            <div class="step-balance">
@@ -292,7 +313,7 @@
                       <div class="attach-area">
                         <div class="btn-area">
                           <button type="button" class="btn-default btn-md-line" @click="handleCancel(index)">취소</button>
-                          <button type="button" class="btn-primary-yellow btn-md-fill" @click="handleSave(index)">등록</button>
+                          <button type="button" class="btn-primary-purple btn-md-fill" @click="handleSave(index)">등록</button>
                         </div>
                       </div>
                     </div> 
@@ -370,7 +391,7 @@
                         <div class="attach-area">
                           <div class="btn-area">
                             <button type="button" class="btn-default btn-md-line" @click="handleReplyCancel(k)">취소</button>
-                            <button type="button" class="btn-primary-yellow btn-md-fill" @click="handleReplySave(index, k)">등록</button>
+                            <button type="button" class="btn-primary-purple btn-md-fill" @click="handleReplySave(index, k)">등록</button>
                           </div>
                         </div>
                       </div>
@@ -389,7 +410,7 @@
                       <div class="attach-area">
                         <div class="btn-area">
                           <button type="button" class="btn-default btn-md-line" @click="handleReplyCancel">취소</button>
-                          <button type="button" class="btn-primary-yellow btn-md-fill" @click="handleReplySubmit(index)">등록</button>
+                          <button type="button" class="btn-primary-purple btn-md-fill" @click="handleReplySubmit(index)">등록</button>
                         </div>
                       </div>
                     </div>
@@ -408,7 +429,7 @@
                 </div>
                 <div class="attach-area"> 
                   <div class="btn-area">
-                    <button type="button" class="btn-primary-yellow btn-md-fill" @click="handleSubmit">등록</button>
+                    <button type="button" class="btn-primary-purple btn-md-fill" @click="handleSubmit">등록</button>
                   </div>
                 </div>
               </div> 

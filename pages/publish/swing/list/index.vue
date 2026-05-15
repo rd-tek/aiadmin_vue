@@ -32,17 +32,8 @@
       </div>
       <div class="row">
         <div class="row-list" :class="{ 'is-move': rowListMove }" v-for="(item, index) in rowList" :key="index" ref="rowListRef">
-          <div class="row-list-item col-1">
-            <div class="checkbox">
-              <div class="check-box">
-                <input type="checkbox" :id="`chk_${index}`" :name="`chk_${index}`">
-                <label :for="`chk_${index}`">
-                  <span class="check-box-item">
-                      <i class="item-line" />
-                  </span>
-                </label>
-              </div>
-            </div>
+          <div class="row-list-item col-1 is-mob">
+            <span class="color-grey">{{ index + 1 }}</span>
           </div>
           <div class="row-list-item">
             <div class="cont-wrap">

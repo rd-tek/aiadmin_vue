@@ -361,6 +361,22 @@
             }
         }
     }
+
+    &.modal-coaching-write {
+        .modal-body {
+            table {
+                tbody {
+                    tr {
+                        td {
+                            .input-text {
+                                width: 100%;
+                            }
+                        }
+                    }
+                }
+            }
+        }   
+    }
 }
 
 @media screen and (max-width: 768px) {
