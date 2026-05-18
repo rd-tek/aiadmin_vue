@@ -194,8 +194,8 @@
                             </tr>
                         </tbody>
                     </table>
-                    <div class="btn-wrap">
-                        <button type="button" class="btn-md-line">목록 보기</button>
+                    <div class="btn-wrap column-reverse">
+                        <nuxt-link to="/publish/membership/shop" class="btn-md-line">목록 보기</nuxt-link>
                         <button type="button" class="btn-md-fill btn-primary-purple">저장하기</button>
                     </div>
                 </div>

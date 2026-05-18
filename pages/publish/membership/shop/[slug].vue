@@ -84,7 +84,7 @@
           </table>
           <div class="btn-wrap">
             <button type="button" class="btn-md-line" @click="handleList">목록보기</button>
-            <button type="button" class="btn-primary-purple btn-md-fill">저장</button>
+            <button type="button" class="btn-primary-purple btn-md-fill">저장하기</button>
           </div>
         </div>
       </div>

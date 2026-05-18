@@ -1035,6 +1035,14 @@
                                         input {
                                             padding: 0;
                                         }
+
+                                        button {
+                                            width: 100%;
+                                            height: 100%;
+                                            text-align: center;
+                                            text-decoration: underline;
+                                            text-underline-offset: 2px;
+                                        }
                                     }
                                 }
                             }
@@ -1293,12 +1301,13 @@
 
                 a, button {
                     width: 100%;
+                    height: 40px;
+                    line-height: 40px;
                 }
             }
         }
 
         &.edit {
-
             table {
                 tbody {
                     tr {
@@ -1345,6 +1354,24 @@
                     width: 100%;
                     height: 40px;
                     line-height: 40px;
+                }
+            }
+        }
+    }
+
+    .filter-box {
+        .col-2 {
+            .col {
+                &.d-flex {
+                    flex-direction: column;
+
+                    .d-flex {
+                        width: 100%;
+                    }
+                    
+                    .btn {
+                        width: 100%;
+                    }
                 }
             }
         }

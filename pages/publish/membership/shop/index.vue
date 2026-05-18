@@ -72,12 +72,12 @@
                 </button>
               </div>
               <div class="table-body-col is-mob">
-                <nuxt-link :to="`/publish/membership/shop/${index}`" class="link text-underline">{{ item.shop }}</nuxt-link>
+                <nuxt-link :to="`/publish/membership/shop/${index}`" class="color-purple link text-underline">{{ item.shop }}</nuxt-link>
               </div>
               <div class="table-body-col is-mob">{{ item.region }}</div>
               <div class="table-body-col is-mob">{{ item.name }}</div>
               <div class="table-body-col is-mob">
-                <button type="button" @click="modalOpen" class="color-purple">{{ item.count }}</button>
+                <button type="button" @click="modalOpen" class="link text-underline">{{ item.count }}</button>
               </div>
               <div class="table-body-col is-mob">{{ item.number }}</div>
               <div class="table-body-col is-mob">
@@ -135,34 +135,36 @@
             </transition>
           </div>
         </div>
-        <ul class="pagination-container type02">
-          <li>
-              <button type="button" class="paginate-buttons" aria-label="이전">
-                  <img src="/images/icon/icon_prev.png" alt="icon_prev"/>
-              </button>
-          </li>
-          <li>
-              <button type="button" class="paginate-buttons active">1</button>
-          </li>
-          <li>
-              <button type="button" class="paginate-buttons">2</button>
-          </li>
-          <li>
-              <button type="button" class="paginate-buttons">3</button>
-          </li> 
-          <li>
-              <button type="button" class="paginate-buttons" aria-label="더보기">
-                  <img src="/images/icon/icon_more_horiz.png" alt="icon_more_horiz" />
-              </button>
-          </li>
-          <li>
-              <button type="button" class="paginate-buttons" aria-label="다음">
-                  <img src="/images/icon/icon_next.png" alt="icon_next"/>
-              </button>
-          </li>
-        </ul>
         <div class="btn-wrap">
-          <button type="button" class="btn-primary-purple btn-md-fill" @click="handleWrite">등록</button>
+          <ul class="pagination-container type02">
+            <li>
+                <button type="button" class="paginate-buttons" aria-label="이전">
+                    <img src="/images/icon/icon_prev.png" alt="icon_prev"/>
+                </button>
+            </li>
+            <li>
+                <button type="button" class="paginate-buttons active">1</button>
+            </li>
+            <li>
+                <button type="button" class="paginate-buttons">2</button>
+            </li>
+            <li>
+                <button type="button" class="paginate-buttons">3</button>
+            </li> 
+            <li>
+                <button type="button" class="paginate-buttons" aria-label="더보기">
+                    <img src="/images/icon/icon_more_horiz.png" alt="icon_more_horiz" />
+                </button>
+            </li>
+            <li>
+                <button type="button" class="paginate-buttons" aria-label="다음">
+                    <img src="/images/icon/icon_next.png" alt="icon_next"/>
+                </button>
+            </li>
+          </ul>
+          <div class="btn-group">
+            <button type="button" class="btn-primary-purple btn-md-fill" @click="handleWrite">등록하기</button>
+          </div>
         </div>
       </div>
     </div>

@@ -243,10 +243,12 @@
               <div class="review-reply">
                 <div class="review-reply-list" v-for="(item, index) in commentList" :key="index">
                   <div class="review-reply-list-depth">
-
+                    
                     <!-- 댓글(보기) -->
                     <template v-if="editingId !== index">
-                      <div class="img-area" :style="{ backgroundImage: `url('/images/default/img_coach_01.png')` }" />
+                      <div class="img-area no-depth">
+                        <div class="img-area-inner" :style="{ backgroundImage: `url('/images/default/img_coach_01.png')` }"></div>
+                      </div>
                       <div class="info-area">
                         <div class="tit">{{ item.nickname }}</div>
                         <div class="date">{{ item.date }}</div>
@@ -319,7 +321,6 @@
                     </div> 
                   </div>
 
-
                   <!-- 답글 -->
                   <div class="review-reply-depth" v-if="item.replies.length !== 0">
                     <div class="review-reply-list-depth" v-for="(reply, k) in item.replies" :key="k">
@@ -329,7 +330,9 @@
                           editingReplyId.parentIndex !== index ||
                           editingReplyId.replyIndex !== k
                         ">
-                        <div class="img-area" :style="{ backgroundImage: `url('/images/default/img_coach_01.png')` }" />
+                        <div class="img-area">
+                          <div class="img-area-inner" :style="{ backgroundImage: `url('/images/default/img_coach_01.png')` }"></div>
+                        </div>
                         <div class="info-area">
                           <div class="tit">{{ reply.nickname }}</div>
                           <div class="date">{{ reply.date }}</div>

@@ -398,12 +398,17 @@
 
                 .btn-wrap {
                     flex-direction: column;
+                    gap: 10px;
+
+                    &.column-reverse{
+                        flex-direction: column-reverse;
+                    }
 
                     button {
                         min-width: auto;
                         width: 100%;
-                        height: 46px;
-                        line-height: 44px;
+                        height: 40px;
+                        line-height: 40px;
                     }
                 }
             }

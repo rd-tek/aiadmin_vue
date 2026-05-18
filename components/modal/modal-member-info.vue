@@ -77,7 +77,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <div class="btn-wrap">
+        <div class="btn-wrap column-reverse">
           <button type="button" class="btn-md-line" @click="modalClose">
             닫기
           </button>

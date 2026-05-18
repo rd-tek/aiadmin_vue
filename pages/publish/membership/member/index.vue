@@ -65,7 +65,7 @@
                 <span>{{ index + 1 }}</span>
               </div>
               <div class="table-body-col" @click="handleMobList(index)">
-                <nuxt-link :to="`/publish/membership/member/${index}`" class="link text-underline">{{ item.id }}</nuxt-link>
+                <nuxt-link :to="`/publish/membership/member/${index}`" class="color-purple link text-underline">{{ item.id }}</nuxt-link>
                 <button type="button" class="btn-arrow" :class="{ 'is-active': mobListIndex === index }">
                   <img
                     src="/public/images/icon/icon_arrow_down.png"
@@ -74,7 +74,7 @@
                 </button>
               </div>
               <div class="table-body-col is-mob">
-                <button type="button" @click="modalOpen" class="color-purple text-underline">{{ item.nickname }}</button>
+                <button type="button" @click="modalOpen" class="link text-underline">{{ item.nickname }}</button>
               </div>
               <div class="table-body-col is-mob">
                 <span class="no-wrap">{{ item.email }}</span>

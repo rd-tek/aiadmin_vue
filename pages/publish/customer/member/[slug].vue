@@ -44,10 +44,10 @@
                     </span>
                 </div>
             </div>
-            <div class="btn-wrap">
-                <nuxt-link to="/publish/customer/member" class="btn-md-line">목록</nuxt-link>
+            <div class="btn-wrap column-reverse">
+                <nuxt-link to="/publish/customer/member" class="btn-md-line">목록보기</nuxt-link>
                 <button type="button" class="btn-md-line">삭제</button>
-                <button type="button" class="btn-md-fill btn-primary-purple" @click="handleEdit">수정</button>
+                <button type="button" class="btn-md-fill btn-primary-purple" @click="handleEdit">수정하기</button>
             </div>
         </div>
     </div>

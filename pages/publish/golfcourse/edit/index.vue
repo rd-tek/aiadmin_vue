@@ -64,15 +64,9 @@
                                                     <tbody>
                                                         <tr>
                                                             <th>홀</th>
-                                                            <td>1</td>
-                                                            <td>2</td>
-                                                            <td>3</td>
-                                                            <td>4</td>
-                                                            <td>5</td>
-                                                            <td>6</td>
-                                                            <td>7</td>
-                                                            <td>8</td>
-                                                            <td>9</td>
+                                                            <td v-for="(item, index) in 9" :key="index">
+                                                                <button type="button" @click="modalOpen" class="link">{{ index + 1 }}</button>
+                                                            </td>
                                                             <td>합계</td>
                                                         </tr>
                                                         <tr>
@@ -204,15 +198,9 @@
                                                     <tbody>
                                                         <tr>
                                                             <th>홀</th>
-                                                            <td>1</td>
-                                                            <td>2</td>
-                                                            <td>3</td>
-                                                            <td>4</td>
-                                                            <td>5</td>
-                                                            <td>6</td>
-                                                            <td>7</td>
-                                                            <td>8</td>
-                                                            <td>9</td>
+                                                            <td v-for="(item, index) in 9" :key="index">
+                                                                <button type="button" @click="modalOpen" class="link">{{ index + 1 }}</button>
+                                                            </td>
                                                             <td>합계</td>
                                                         </tr>
                                                         <tr>
@@ -430,10 +418,17 @@
             </div>
         </div>
     </div>
+
+    <modal-course-write :isOpen="modals.modalCourseWrite" @update:isOpen="modals.modalCourseWrite = $event"/>
 </template>
 <script setup>
 import { useIntersectionObserver } from "@vueuse/core";
 
+const modals = reactive({ modalCourseWrite: false });
+const modalOpen = () => {
+    modals['modalCourseWrite'] = true;
+    document.querySelector('body').classList.add('is-hidden');
+}
 const tableRef  = ref();
 const tableMove = ref(false);
 useIntersectionObserver(tableRef, ([{ isIntersecting }]) => {

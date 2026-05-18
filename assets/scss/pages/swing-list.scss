@@ -451,21 +451,55 @@
                         border-bottom: 1px solid #e5e7e8;
                         width: 100%;
 
+                        .img-area {
+                            position: relative;
+                            background-size: cover;
+                            height: 50px;
+                            padding-left: 32px;
+
+                            &-inner {
+                                background-size: cover;
+                                background-repeat: no-repeat;
+                                background-position: center;
+                                height: 100%;
+                                width: 100%;
+                                min-width: 50px;
+                                border-radius: 50%;
+                            }
+
+                            img {
+                                width: 50px;
+                                min-width: 50px;
+                                height: 50px;
+                                border-radius: 50%;
+                                border: 1px solid #CDCFD1;
+                            }
+
+                            &:before {
+                                content: '';
+                                display: block;
+                                background: url('/public/images/default/img_reply.png') no-repeat;
+                                background-size: auto 100%;
+                                width: 16px;
+                                height: 27px;
+                                position: absolute;
+                                left: 0;
+                            }
+                        }
+
                         &-depth {
                             display: flex;
                             gap: 16px;
                             padding: 20px 0;
 
                             .img-area {
-                                position: relative;
-                                background-size: cover;
-                                background-repeat: no-repeat;
-                                background-position: center;
-                                width: 50px;
-                                min-width: 50px;
-                                height: 50px;
-                                border-radius: 50%;
-                                border: 1px solid #cdcfd1;
+                                &.no-depth {
+                                    padding: 0;
+
+                                    &:before {
+                                        display: none;
+                                    }
+                                }
                             }
 
                             .info-area {
@@ -550,9 +584,9 @@
                         gap: 16px;
                         padding: 20px;
 
-                            & + .review-reply-list {
-                                padding: 0 20px 20px;
-                            }
+                        & + .review-reply-list {
+                            padding: 0 20px 20px;
+                        }
                     }
 
                     & + .review-writing {
@@ -687,6 +721,10 @@
         .row {
             &-list {
                 padding: 20px;
+
+                & + .row-list {
+                    margin-top: 16px;
+                }
 
                 &-item {
                     &.is-mob {

@@ -4,6 +4,7 @@
             &-col {
                 .link {
                     position: relative;
+                    line-height: 1.2;
 
                     &:hover {
                         &:after {
@@ -25,6 +26,18 @@
                             transition: all 0.2s ease;
                             width: 100%;
                     }
+                }
+
+                .color-purple {
+                    color: #4318FF;
+                }
+
+                .text-underline {
+                    text-decoration: underline;
+                    text-underline-offset: 3px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
                 }
             }
 

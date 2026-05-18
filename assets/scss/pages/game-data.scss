@@ -18,10 +18,6 @@
         padding: 30px 20px;
         border-radius: 16px;
 
-        &.is-mob {
-            display: none;
-        }
-
         & + .game-data-cont {
             margin-top: 30px;
         }
@@ -86,6 +82,12 @@
                 opacity: 1;
                 transform: translateY(0);
             }
+        }
+    }
+
+    .table {
+        &.is-mob {
+            display: none;
         }
     }
 
@@ -388,6 +390,10 @@
 
         .table {
             display: table;
+
+            &.is-mob {
+                display: table;
+            }
 
             &-title {
                  padding: 0 16px;

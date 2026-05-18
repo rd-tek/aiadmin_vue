@@ -265,7 +265,7 @@
             </div>
           </div>
         </div>
-        <div class="table type03 mob-type02">
+        <div class="table type03 mob-type02 is-mob">
           <div class="table-title">게임 조회</div>
           <div class="table-head">
             <div class="table-head-col">No</div>
@@ -592,8 +592,8 @@
                 @leave="leave">
                 <div class="table-body-mob" v-if="mobOneshotListIndex === index">
                   <dl class="list">
-                    <dt class="tit">홀번호</dt>
-                    <dd class="cnt">{{ item.hole }}</dd>
+                    <dt class="tit">클럽</dt>
+                    <dd class="cnt">{{ item.club }}</dd>
                   </dl>
                   <dl class="list">
                     <dt class="tit">비거리</dt>
@@ -1012,17 +1012,20 @@ const gameinfoList = [
 // 스코어보드
 const boardType = ref('');
 const handleScoreboard = () => {
-  boardType.value = 'scoreboard'
+  boardType.value = 'scoreboard';
+  mobListIndex.value = -1;
 }
 
 // 원샷정보
 const handleOneshotInfo = () => {
-  boardType.value = 'oneshot'
+  boardType.value = 'oneshot';
+  mobListIndex.value = -1;
 }
 
 // 게임정보
 const handleGameInfo = () => {
-  boardType.value = 'gameinfo'
+  boardType.value = 'gameinfo';
+  mobListIndex.value = -1;
 }
 
 const mobListIndex = ref(-1);

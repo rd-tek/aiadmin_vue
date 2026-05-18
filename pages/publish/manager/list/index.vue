@@ -43,7 +43,7 @@
                 </button>
               </div>
               <div class="table-body-col is-mob">
-                <nuxt-link :to="`/publish/manager/list/${index}`" class="link">{{ item.id }}</nuxt-link>
+                <nuxt-link :to="`/publish/manager/list/${index}`" class="color-purple link text-underline">{{ item.id }}</nuxt-link>
               </div>
               <div class="table-body-col is-mob">{{ item.part }}</div>
               <div class="table-body-col is-mob">{{ item.position }}</div>
