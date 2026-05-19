@@ -157,7 +157,7 @@
         align-items: center;
         flex-wrap: wrap;
         justify-content: space-between;
-        padding: 28px 32px;
+        padding: 20px 32px;
         position: relative;
 
         &:after {
@@ -176,7 +176,7 @@
             font-weight: 600;
             flex: 1;
             text-align: left;
-            line-height: 1.37;
+            line-height: 1.3;
         }
 
         .btn-close {
@@ -213,10 +213,10 @@
                 flex: 1;
                 margin: 0;
             }
-        }
+        } 
     }
 
-    &.modal-member-info {
+    &.modal-member-info { 
         &.is-background-none {
             background: none;
         }
@@ -242,6 +242,14 @@
                         color: #00B34A;
                         margin-left: 6px;
                     }
+                }
+            }
+        }
+        
+        .modal-footer {
+            .btn-wrap {
+                button {
+                    flex: none;
                 }
             }
         }
@@ -390,7 +398,7 @@
             max-width: calc(100% - 32px);
 
             .modal-header {
-                padding: 20px 16px 12px;
+                padding: 13px 16px;
             }
 
             .modal-footer {

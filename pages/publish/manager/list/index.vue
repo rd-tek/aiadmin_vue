@@ -100,34 +100,36 @@
             </transition>
           </div>
         </div>
-        <ul class="pagination-container type02">
-          <li>
-              <button type="button" class="paginate-buttons" aria-label="이전">
-                  <img src="/images/icon/icon_prev.png" alt="icon_prev"/>
-              </button>
-          </li>
-          <li>
-              <button type="button" class="paginate-buttons active">1</button>
-          </li>
-          <li>
-              <button type="button" class="paginate-buttons">2</button>
-          </li>
-          <li>
-              <button type="button" class="paginate-buttons">3</button>
-          </li> 
-          <li>
-              <button type="button" class="paginate-buttons" aria-label="더보기">
-                  <img src="/images/icon/icon_more_horiz.png" alt="icon_more_horiz" />
-              </button>
-          </li>
-          <li>
-              <button type="button" class="paginate-buttons" aria-label="다음">
-                  <img src="/images/icon/icon_next.png" alt="icon_next"/>
-              </button>
-          </li>
-        </ul>
         <div class="btn-wrap">
-          <button type="button" class="btn-primary-purple btn-md-fill" @click="handleRegister">등록</button>
+          <ul class="pagination-container type02">
+            <li>
+                <button type="button" class="paginate-buttons" aria-label="이전">
+                    <img src="/images/icon/icon_prev.png" alt="icon_prev"/>
+                </button>
+            </li>
+            <li>
+                <button type="button" class="paginate-buttons active">1</button>
+            </li>
+            <li>
+                <button type="button" class="paginate-buttons">2</button>
+            </li>
+            <li>
+                <button type="button" class="paginate-buttons">3</button>
+            </li> 
+            <li>
+                <button type="button" class="paginate-buttons" aria-label="더보기">
+                    <img src="/images/icon/icon_more_horiz.png" alt="icon_more_horiz" />
+                </button>
+            </li>
+            <li>
+                <button type="button" class="paginate-buttons" aria-label="다음">
+                    <img src="/images/icon/icon_next.png" alt="icon_next"/>
+                </button>
+            </li>
+          </ul>
+          <div class="btn-group">
+            <button type="button" class="btn-primary-purple btn-md-fill" @click="handleRegister">등록하기</button>
+          </div>
         </div>
       </div>
     </div>
