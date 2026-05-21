@@ -34,7 +34,7 @@ export default defineNuxtConfig({
   'pinia-plugin-persistedstate/nuxt', '@nuxt/image'],
   runtimeConfig: {
     public: {
-      apiBase: process.env.NUXT_PUBLIC_API_BASE || 'https://your-api-server.com',
+      apiBase: process.env.NUXT_PUBLIC_API_BASE || 'https://aiadminapi.thegolf.com',
       recaptchaSitekey: process.env.RECAPTCHA_SITEKEY,
       s3BucketUrl: process.env.NUXT_PUBLIC_S3_BUCKET_URL || "https://aiadmin.thegolf.com",
       kakaoMapKey: process.env.NUXT_PUBLIC_KAKAO_KEY,

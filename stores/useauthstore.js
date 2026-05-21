@@ -39,7 +39,7 @@ export const useAuthStore = defineStore("auth", {
         timezone_offset: 0,
         state: "",
       };
-      sessionStorage.removeItem("aicoachtoken");
+      sessionStorage.removeItem("aiadmintoken");
       sessionStorage.removeItem("nickname");
       sessionStorage.removeItem("expert_pk");
       sessionStorage.removeItem("is_initialize");
@@ -48,7 +48,7 @@ export const useAuthStore = defineStore("auth", {
     },
     login({ token, nickname, expert_pk, is_initialize, binary_filepath }) {
       this.authRequest();
-      sessionStorage.setItem("aicoachtoken", token);
+      sessionStorage.setItem("aiadmintoken", token);
       sessionStorage.setItem("nickname", nickname);
       sessionStorage.setItem("expert_pk", expert_pk);
       sessionStorage.setItem("is_initialize", is_initialize);
