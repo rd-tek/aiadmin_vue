@@ -19,7 +19,7 @@
                     <select>
                         <option>이름</option>
                     </select>
-                    <input type="text" v-model="nickname" placeholder="닉네임" @keyup.enter="handleSearch">
+                    <input type="text" placeholder="닉네임" @keyup.enter="handleSearch">
                 </div>
                 <button type="button" class="btn" @click="handleSearch">검색</button>
             </div>
@@ -61,7 +61,7 @@
             :class="{ 'is-move': tableMove }" 
             ref="tableRef">
             <div class="table-body-flex">
-              <div class="table-body-col col-1 align-left">{{ index + 1 }}</div>
+              <div class="table-body-col col-1 align-left">{{ item.no }}</div>
               <div class="table-body-col" @click="handleMobList(index)">
                 <span>{{ item.id }}</span>
                 <button type="button" class="btn-arrow" :class="{ 'is-active': mobListIndex === index }">
@@ -72,20 +72,20 @@
                 </button>
               </div>
               <div class="table-body-col is-mob">
-                <nuxt-link :to="`/publish/membership/shop/${index}`" class="color-purple link text-underline">{{ item.shop }}</nuxt-link>
+                <nuxt-link :to="`/publish/membership/shop/${index}`" class="color-purple link text-underline">{{ item.shopname }}</nuxt-link>
               </div>
-              <div class="table-body-col is-mob">{{ item.region }}</div>
+              <div class="table-body-col is-mob">{{ item.address4 }}</div>
               <div class="table-body-col is-mob">{{ item.name }}</div>
               <div class="table-body-col is-mob">
-                <button type="button" @click="modalOpen" class="link text-underline">{{ item.count }}</button>
+                <button type="button" @click="modalOpen" class="link text-underline">{{ item.roomcnt }}</button>
               </div>
-              <div class="table-body-col is-mob">{{ item.number }}</div>
+              <div class="table-body-col is-mob">{{ item.phone }}</div>
               <div class="table-body-col is-mob">
-                <span class="color-grey">{{ item.date }}</span>
+                <span class="color-grey">{{ item.regdate }}</span>
               </div>
               <div class="table-body-col is-mob">
-                <span v-if="item.status === '정상'" class="color-green">{{ item.status }}</span>
-                <span v-else-if="item.status === '탈퇴'" class="color-red">{{ item.status }}</span>
+                <span v-if="item.status === '1'" class="color-green">정상</span>
+                <span v-else-if="item.status === '2'" class="color-red">탈퇴</span>
               </div>
             </div>
             <transition
@@ -183,6 +183,41 @@
 <script setup>
 import { useIntersectionObserver } from "@vueuse/core";
 import { useRouter } from "vue-router";
+import { useMembersApi } from "~/api/member";
+
+const membersApi = useMembersApi();
+const tableList = ref([]);
+const totalCount = ref(0);
+const searchForm = reactive({
+  ownertype: "",
+  status: "",
+  searchtype: "shopname",
+  searchname: "",
+  pageno: 1,
+  pagesize: 10,
+});
+
+const getOwnerList = async () => {
+  try {
+    const res = await membersApi._ownerlist(searchForm);
+
+    console.log("ownerlist response", res);
+
+    totalCount.value = res.ownerlistcnt || 0;
+    tableList.value = res.ownerlist || [];
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+const handleSearch = async () => {
+  searchForm.pageno = 1;
+  await getOwnerList();
+};
+
+onMounted(async () => {
+  await getOwnerList();
+});
 
 // 2026.05.22[cgnoh]: 등록하기 이벤트
 const router = useRouter();
@@ -196,40 +231,6 @@ const tableMove = ref(false);
 useIntersectionObserver(tableRef, ([{ isIntersecting }]) => {
     if (isIntersecting) tableMove.value = true;
 }, { threshold: 0 });
-
-// 2026.05.22[cgnoh]: 테이블 리스트
-const tableList = [
-  {
-    region: '경기도',
-    shop: '가나스크린',
-    id: 'gana screen',
-    name: '김주인',
-    count: 10,
-    number: '02-1234-1234',
-    date: '2026.08.08',
-    status: '탈퇴'
-  },
-  {
-    region: '경기도',
-    shop: '가나스크린',
-    id: 'gana screen',
-    name: '김주인',
-    count: 10,
-    number: '02-1234-1234',
-    date: '2026.08.08',
-    status: '정상'
-  },
-  {
-    region: '경기도',
-    shop: '가나스크린',
-    id: 'gana screen',
-    name: '김주인',
-    count: 10,
-    number: '02-1234-1234',
-    date: '2026.08.08',
-    status: '탈퇴'
-  },
-]
 
 // 2026.05.22[cgnoh]: 모달 관련 
 const modals = reactive({ modalMemberInfo: false });
@@ -266,7 +267,7 @@ const leave = (el) => {
 
 // 2026.03.04[cgnoh]: 페이지 메타 정보
 definePageMeta({
-  layout: "publish-default",
+  layout: "default",
 });
 </script>
 <style lang="scss" scoped>

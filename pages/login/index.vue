@@ -61,10 +61,18 @@
       </form>
     </div>
   </div>
+
+  <!-- 토스트 에러 모달 -->
+  <toast-error-modal 
+    :isOpen="modals.toastErrorModal"
+    :toastErrorMessage="toastErrorMessage"
+    @update:isOpen="modals.toastErrorModal = $event"/>
+
 </template>
 <script setup>
 import { useRouter } from "vue-router";
- import { useAuthApi } from "~/api/auth";
+import { useAuthApi } from "~/api/auth";
+import ToastErrorModal from "@/components/toast-ui/toast-error-modal.vue";
 
 const router = useRouter();
 const authApi = useAuthApi();
@@ -80,12 +88,16 @@ const defaultForm = {
 const form = ref({ ...defaultForm });
 
 // 로그인 처리 함수
+const modals = reactive({});
+const toastErrorMessage = ref();
 const handleLogin = async () => {
   try {
     const { message } = await authApi._login(form.value)
     await router.push('/')
   } catch (err) {
-    alert(err.message)
+    document.querySelector('body').classList.add('is-hidden');
+    modals['toastErrorModal'] = true;
+    toastErrorMessage.value = err.message;
   }
 }
 

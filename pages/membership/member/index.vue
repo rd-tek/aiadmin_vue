@@ -14,12 +14,12 @@
                 </select>
               </div>
             </div>
-            <div class="col d-flex">
+            <div class="col d-flex flex-column">
                 <div class="d-flex">
                     <select>
                         <option>이름</option>
                     </select>
-                    <input type="text" v-model="nickname" placeholder="닉네임" @keyup.enter="handleSearch">
+                    <input type="text" placeholder="닉네임" @keyup.enter="handleSearch">
                 </div>
                 <button type="button" class="btn" @click="handleSearch">검색</button>
             </div>
@@ -46,24 +46,26 @@
         <div class="table-head">
           <div class="table-head-col col-1 align-left">No</div>
           <div class="table-head-col">아이디</div>
-          <div class="table-head-col is-mob">매장</div>
-          <div class="table-head-col is-mob">지역</div>
-          <div class="table-head-col is-mob">대표자</div>
-          <div class="table-head-col is-mob">장비수</div>
-          <div class="table-head-col is-mob">연락처</div>
-          <div class="table-head-col is-mob">등록일</div>
+          <div class="table-head-col is-mob">닉네임</div>
+          <div class="table-head-col is-mob">이메일</div>
+          <div class="table-head-col is-mob">인증</div>
+          <div class="table-head-col is-mob">성별</div>
+          <div class="table-head-col is-mob">단골매장</div>
+          <div class="table-head-col is-mob">가입일</div>
           <div class="table-head-col is-mob">상태</div>
         </div>
         <div class="table-body">
           <div class="table-body-row" 
-            v-for="(item, index) in tableList" 
-            :key="index" 
-            :class="{ 'is-move': tableMove }" 
-            ref="tableRef">
+               v-for="(item, index) in tableList" 
+               :key="index" 
+               :class="{ 'is-move': tableMove }" 
+               ref="tableRef">
             <div class="table-body-flex">
-              <div class="table-body-col col-1 align-left">{{ index + 1 }}</div>
+              <div class="table-body-col col-1 align-left">
+                <span>{{ item.playerinfo.no }}</span>
+              </div>
               <div class="table-body-col" @click="handleMobList(index)">
-                <span>{{ item.id }}</span>
+                <nuxt-link :to="`/membership/member/${item.playerinfo.no}`" class="color-purple link text-underline">{{ item.playerinfo.id }}</nuxt-link>
                 <button type="button" class="btn-arrow" :class="{ 'is-active': mobListIndex === index }">
                   <img
                     src="/public/images/icon/icon_arrow_down.png"
@@ -72,20 +74,23 @@
                 </button>
               </div>
               <div class="table-body-col is-mob">
-                <nuxt-link :to="`/publish/membership/shop/${index}`" class="color-purple link text-underline">{{ item.shop }}</nuxt-link>
-              </div>
-              <div class="table-body-col is-mob">{{ item.region }}</div>
-              <div class="table-body-col is-mob">{{ item.name }}</div>
-              <div class="table-body-col is-mob">
-                <button type="button" @click="modalOpen" class="link text-underline">{{ item.count }}</button>
-              </div>
-              <div class="table-body-col is-mob">{{ item.number }}</div>
-              <div class="table-body-col is-mob">
-                <span class="color-grey">{{ item.date }}</span>
+                <button type="button" @click="modalOpen" class="link text-underline">{{ item.playerinfo.nickname || '-' }}</button>
               </div>
               <div class="table-body-col is-mob">
-                <span v-if="item.status === '정상'" class="color-green">{{ item.status }}</span>
-                <span v-else-if="item.status === '탈퇴'" class="color-red">{{ item.status }}</span>
+                <span class="no-wrap">{{ item.playerinfo.email || '-' }}</span>
+              </div>
+              <div class="table-body-col is-mob">
+                <b v-if="item.playerinfo.auth === '1'">인증</b>
+                <span v-else-if="item.playerinfo.auth === '2'" class="color-grey">미인증</span>
+                <span v-else>-</span>
+              </div>
+              <div class="table-body-col is-mob">{{ item.playerinfo.gender || '-' }}</div>
+              <div class="table-body-col is-mob">{{ item.playerinfo.shopname || '-' }}</div>
+              <div class="table-body-col is-mob"><span class="color-grey">{{ item.playerinfo.regdate || '-' }}</span></div>
+              <div class="table-body-col is-mob">
+                <span v-if="item.playerinfo.status === '1'" class="color-green">정상</span>
+                <span v-else-if="item.playerinfo.status === '2'" class="color-red">탈퇴</span>
+                <span v-else>-</span>
               </div>
             </div>
             <transition
@@ -95,77 +100,75 @@
                 @leave="leave">
               <div class="table-body-mob" v-if="mobListIndex === index">
                 <dl class="list">
-                  <dt class="tit">지역</dt>
-                  <dd class="cnt">{{ item.region }}</dd>
-                </dl>
-                <dl class="list">
-                  <dt class="tit">매장</dt>
+                  <dt class="tit">닉네임</dt>
                   <dd class="cnt">
-                    <nuxt-link :to="`/publish/membership/shop/${index}`" class="link text-underline">{{ item.shop }}</nuxt-link>
+                    <a class="link text-underline" @click="modalOpen">{{ item.playerinfo.nickname }}</a>
                   </dd>
                 </dl>
                 <dl class="list">
-                  <dt class="tit">대표자</dt>
-                  <dd class="cnt">{{ item.name }}</dd>
+                  <dt class="tit">이메일</dt>
+                  <dd class="cnt">{{ item.playerinfo.email }}</dd>
                 </dl>
                 <dl class="list">
-                  <dt class="tit">장비 수</dt>
+                  <dt class="tit">인증</dt>
                   <dd class="cnt">
-                    <button type="button" @click="modalOpen" class="color-purple">{{ item.count }}</button>
+                    <b v-if="item.playerinfo.auth === '1'">인증</b>
+                    <span v-else-if="item.playerinfo.auth === '2'" class="color-grey">미인증</span>
+                    <span v-else>-</span>
                   </dd>
                 </dl>
                 <dl class="list">
-                  <dt class="tit">연락처</dt>
-                  <dd class="cnt">{{ item.number }}</dd>
+                  <dt class="tit">성별</dt>
+                  <dd class="cnt">{{ item.playerinfo.gender || '-' }}</dd>
                 </dl>
                 <dl class="list">
-                  <dt class="tit">등록일</dt>
+                  <dt class="tit">단골매장</dt>
+                  <dd class="cnt">{{ item.playerinfo.shopname || '-' }}</dd>
+                </dl>
+                <dl class="list">
+                  <dt class="tit">가입일</dt>
                   <dd class="cnt">
-                    <span class="color-grey">{{ item.date }}</span>
+                    <span class="color-grey">{{ item.playerinfo.regdate || '-' }}</span>
                   </dd>
                 </dl>
                 <dl class="list">
                   <dt class="tit">상태</dt>
                   <dd class="cnt">
-                    <span v-if="item.status === '정상'" class="color-green">{{ item.status }}</span>
-                    <span v-else-if="item.status === '탈퇴'" class="color-red">{{ item.status }}</span>
+                    <span v-if="item.playerinfo.status === '1'" class="color-green">정상</span>
+                    <span v-else-if="item.playerinfo.status === '2'" class="color-red">탈퇴</span>
+                    <span v-else>-</span>
                   </dd>
                 </dl>
               </div>
             </transition>
           </div>
         </div>
-        <div class="btn-wrap">
-          <ul class="pagination-container type02">
-            <li>
-                <button type="button" class="paginate-buttons" aria-label="이전">
-                    <img src="/images/icon/icon_prev.png" alt="icon_prev"/>
-                </button>
-            </li>
-            <li>
-                <button type="button" class="paginate-buttons active">1</button>
-            </li>
-            <li>
-                <button type="button" class="paginate-buttons">2</button>
-            </li>
-            <li>
-                <button type="button" class="paginate-buttons">3</button>
-            </li> 
-            <li>
-                <button type="button" class="paginate-buttons" aria-label="더보기">
-                    <img src="/images/icon/icon_more_horiz.png" alt="icon_more_horiz" />
-                </button>
-            </li>
-            <li>
-                <button type="button" class="paginate-buttons" aria-label="다음">
-                    <img src="/images/icon/icon_next.png" alt="icon_next"/>
-                </button>
-            </li>
-          </ul>
-          <div class="btn-group">
-            <button type="button" class="btn-primary-purple btn-md-fill" @click="handleWrite">등록하기</button>
-          </div>
-        </div>
+        <ul class="pagination-container type02">
+          <li>
+              <button type="button" class="paginate-buttons" aria-label="이전">
+                  <img src="/images/icon/icon_prev.png" alt="icon_prev"/>
+              </button>
+          </li>
+          <li>
+              <button type="button" class="paginate-buttons active">1</button>
+          </li>
+          <li>
+              <button type="button" class="paginate-buttons">2</button>
+          </li>
+          <li>
+              <button type="button" class="paginate-buttons">3</button>
+          </li> 
+          <li>
+              <button type="button" class="paginate-buttons" aria-label="더보기">
+                  <img src="/images/icon/icon_more_horiz.png" alt="icon_more_horiz" />
+              </button>
+          </li>
+          <li>
+              <button type="button" class="paginate-buttons" aria-label="다음">
+                  <img src="/images/icon/icon_next.png" alt="icon_next"/>
+              </button>
+          </li>
+        </ul>
       </div>
     </div>
 
@@ -174,21 +177,44 @@
       :isOpen="modals.modalMemberInfo"
       @update:isOpen="modals.modalMemberInfo = $event"/>
 
-    <!-- 장비 정보 모달 -->
-    <modal-machine-info
-      :isOpen="modals.modalMachineInfo"
-      @update:isOpen="modals.modalMachineInfo = $event"/>
-
 </template>
 <script setup>
 import { useIntersectionObserver } from "@vueuse/core";
-import { useRouter } from "vue-router";
+import { useMembersApi } from "~/api/member";
 
-// 2026.05.22[cgnoh]: 등록하기 이벤트
-const router = useRouter();
-const handleWrite = () => {
-  router.push(`/publish/membership/shop/write`)
-}
+const membersApi = useMembersApi();
+const tableList = ref([]);
+const totalCount = ref(0);
+const searchForm = reactive({
+  ownertype: "",
+  status: "",
+  searchtype: "shopname",
+  searchname: "",
+  pageno: 1,
+  pagesize: 10,
+});
+
+const _playerList = async () => {
+  try {
+    const res = await membersApi._playerlist(searchForm);
+
+    console.log("playerlist response", res);
+
+    totalCount.value = res.playerlistcnt || 0;
+    tableList.value = res.playerlist || [];
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+const handleSearch = async () => {
+  searchForm.pageno = 1;
+  await _playerList();
+};
+
+onMounted(async () => {
+  await _playerList();
+});
 
 // 2026.05.22[cgnoh]: 인터렉션 관련
 const tableRef  = ref();
@@ -197,44 +223,10 @@ useIntersectionObserver(tableRef, ([{ isIntersecting }]) => {
     if (isIntersecting) tableMove.value = true;
 }, { threshold: 0 });
 
-// 2026.05.22[cgnoh]: 테이블 리스트
-const tableList = [
-  {
-    region: '경기도',
-    shop: '가나스크린',
-    id: 'gana screen',
-    name: '김주인',
-    count: 10,
-    number: '02-1234-1234',
-    date: '2026.08.08',
-    status: '탈퇴'
-  },
-  {
-    region: '경기도',
-    shop: '가나스크린',
-    id: 'gana screen',
-    name: '김주인',
-    count: 10,
-    number: '02-1234-1234',
-    date: '2026.08.08',
-    status: '정상'
-  },
-  {
-    region: '경기도',
-    shop: '가나스크린',
-    id: 'gana screen',
-    name: '김주인',
-    count: 10,
-    number: '02-1234-1234',
-    date: '2026.08.08',
-    status: '탈퇴'
-  },
-]
-
 // 2026.05.22[cgnoh]: 모달 관련 
 const modals = reactive({ modalMemberInfo: false });
-const modalOpen = () => { 
-    modals['modalMachineInfo'] = true;
+const modalOpen = () => {
+    modals['modalMemberInfo'] = true;
     document.querySelector('body').classList.add('is-hidden');
 }
 
@@ -266,7 +258,7 @@ const leave = (el) => {
 
 // 2026.03.04[cgnoh]: 페이지 메타 정보
 definePageMeta({
-  layout: "publish-default",
+  layout: "default",
 });
 </script>
 <style lang="scss" scoped>

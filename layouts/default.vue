@@ -37,6 +37,10 @@ watch(width, (w) => {
   isOpen.value = w > 1300
 }, { immediate: true });
 
+definePageMeta({
+  middleware: 'auth'
+})
+
 </script>
 <style lang="scss" scoped>
 #wrapper {

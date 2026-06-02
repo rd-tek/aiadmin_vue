@@ -166,6 +166,7 @@
       </div>
     </div>
 
+    <!-- 회원 정보 모달 -->
     <modal-member-info
       :isOpen="modals.modalMemberInfo"
       @update:isOpen="modals.modalMemberInfo = $event"/>
@@ -174,12 +175,15 @@
 <script setup>
 import { useIntersectionObserver } from "@vueuse/core";
 
+// 2026.05.22[cgnoh]: 인터렉션 관련
 const tableRef  = ref();
 const tableMove = ref(false);
 useIntersectionObserver(tableRef, ([{ isIntersecting }]) => {
     if (isIntersecting) tableMove.value = true;
 }, { threshold: 0 });
 
+
+// 2026.05.22[cgnoh]: 테이블 리스트
 const tableList = [
   {
     id: 'abc1234',
@@ -213,12 +217,14 @@ const tableList = [
   }
 ]
 
+// 2026.05.22[cgnoh]: 모달 관련 
 const modals = reactive({ modalMemberInfo: false });
 const modalOpen = () => {
     modals['modalMemberInfo'] = true;
     document.querySelector('body').classList.add('is-hidden');
 }
 
+// 2026.05.22[cgnoh]: 아코디언 애니메이션
 const mobListIndex = ref(-1);
 const handleMobList = (index) => {
   if (window.innerWidth <= 768) {

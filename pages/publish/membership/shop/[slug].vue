@@ -94,12 +94,14 @@
 import { useRouter } from "vue-router";
 import { useIntersectionObserver } from "@vueuse/core";
 
+// 2026.05.22[cgnoh]: 인터렉션 관련
 const tableRef  = ref();
 const tableMove = ref(false);
 useIntersectionObserver(tableRef, ([{ isIntersecting }]) => {
     if (isIntersecting) tableMove.value = true;
 }, { threshold: 0 });
 
+// 2026.05.22[cgnoh]: 목록보기 이벤트
 const router = useRouter();
 const handleList = () => {
   router.push('/publish/membership/shop');

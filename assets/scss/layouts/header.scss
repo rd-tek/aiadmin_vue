@@ -50,6 +50,10 @@ header {
         }
       }
     }
+
+    .nickname {
+      display: none;
+    }
   }
 
   .right-area {
@@ -80,6 +84,13 @@ header {
         left: 24px;
         top: 50%;
         transform: translateY(-50%);
+      }
+
+      .nickname {
+        white-space: nowrap;
+        z-index: 1;
+        display: block;
+        color: #72777A;
       }
 
       .title {

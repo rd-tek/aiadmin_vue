@@ -2,7 +2,7 @@
     <div class="membership-member detail">
       <div class="table-wrap">
         <div class="table type02" :class="{ 'is-move': tableMove }" ref="tableRef">
-          <table>
+          <table>{{ playerInfo }}
             <colgroup>
                 <col width="18%">
                 <col width="*">
@@ -93,8 +93,48 @@
     </div>
 </template>
 <script setup>
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import { useIntersectionObserver } from "@vueuse/core";
+import { useMembersApi } from "~/api/member";
+
+const membersApi = useMembersApi();
+const router = useRouter();
+const route = useRoute();
+const playerInfo = ref({});
+const getDetail = async () => {
+  try {
+    const playerPk = route.params.slug;
+    const res = await membersApi._playerview(playerPk);
+    const selected = res.playerinfo;
+
+    if (!selected) return;
+
+    const memoRaw = selected.memo || {};
+    const memoObj = typeof memoRaw === 'string'
+      ? (() => { try { return JSON.parse(memoRaw); } catch { return {}; } })()
+      : (memoRaw || {});
+
+    const memoKey = String(playerPk);
+
+    playerInfo.value = {
+      ...selected,
+      player_pk: playerPk,
+      memo: typeof memoRaw === 'string' ? memoRaw : JSON.stringify(memoRaw),
+      filtered_memo: memoObj[memoKey] || '',
+      lockerno: history.state.lockerno || selected.lockerno || '',
+      lockersdate: toDate(selected.lockersdate),
+      lockeredate: toDate(selected.lockeredate),
+    };
+
+  } catch (err) {
+    console.error("상세 조회 실패:", err);
+  }
+};
+
+onMounted(() => {
+    getDetail();
+});
+
 
 // 2026.05.22[cgnoh]: 인터렉션 관련
 const tableRef  = ref();
@@ -104,14 +144,13 @@ useIntersectionObserver(tableRef, ([{ isIntersecting }]) => {
 }, { threshold: 0 });
 
 // 2026.05.22[cgnoh]: 목록보기 이벤트
-const router = useRouter();
 const handleList = () => {
-  router.push('/publish/membership/member');
+  router.push('/membership/member');
 }
 
 // 2026.03.04[cgnoh]: 페이지 메타 정보
 definePageMeta({
-  layout: "publish-default",
+  layout: "default",
 });
 </script>
 <style lang="scss" scoped>

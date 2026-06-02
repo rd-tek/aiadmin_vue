@@ -1,8 +1,9 @@
+// stores/useauthstore.js
 import { defineStore } from "pinia";
 
 export const useAuthStore = defineStore("auth", {
   state: () => ({
-    status: "ready", // ready, loading, error, success
+    status: "ready",
     timezone: {
       timezone_name: "",
       timezone_offset: 0,
@@ -10,80 +11,90 @@ export const useAuthStore = defineStore("auth", {
     },
     searchData: {},
     forceRerender: true,
-    isAuthenticated: false, // ✅ 로그인 여부
+    isAuthenticated: false,
   }),
+
   actions: {
     authRequest() {
       this.status = "loading";
-      console.log(this.status);
     },
+
     authSuccess() {
       this.status = "success";
       this.searchData = {};
-      console.log(this.status);
     },
+
     authError() {
       this.status = "error";
-      console.log(this.status);
     },
+
     setTimezone(payload) {
-      console.log("payload", payload);
       this.timezone = { ...this.timezone, ...payload };
     },
+
     logout() {
       this.status = "ready";
-      this.isAuthenticated = false; // ✅ 로그아웃 시 false
+      this.isAuthenticated = false;
       this.searchData = {};
-      this.timezone = {
-        timezone_name: "",
-        timezone_offset: 0,
-        state: "",
-      };
-      sessionStorage.removeItem("aiadmintoken");
-      sessionStorage.removeItem("nickname");
-      sessionStorage.removeItem("expert_pk");
-      sessionStorage.removeItem("is_initialize");
-      sessionStorage.removeItem("binary_filepath");
-      // sessionStorage.removeItem("member_img");
+      this.timezone = { timezone_name: "", timezone_offset: 0, state: "" };
+
+      // 쿠키 전부 제거
+      const keys = [
+        "aiadmintoken",
+        "nickname",
+        "expert_pk",
+        "is_initialize",
+        "binary_filepath",
+      ];
+      keys.forEach((key) => {
+        const cookie = useCookie(key);
+        cookie.value = null;
+      });
     },
+
     login({ token, nickname, expert_pk, is_initialize, binary_filepath }) {
       this.authRequest();
-      sessionStorage.setItem("aiadmintoken", token);
-      sessionStorage.setItem("nickname", nickname);
-      sessionStorage.setItem("expert_pk", expert_pk);
-      sessionStorage.setItem("is_initialize", is_initialize);
-      sessionStorage.setItem("binary_filepath", binary_filepath);
-      // sessionStorage.setItem("member_img", member_img);
-      this.isAuthenticated = true; // ✅ 로그인 시 true
+
+      // 쿠키에 저장 (8시간)
+      const opt = { maxAge: 60 * 60 * 8 };
+      useCookie("aiadmintoken", opt).value = token;
+      useCookie("nickname", opt).value = nickname;
+      useCookie("expert_pk", opt).value = expert_pk;
+      useCookie("is_initialize", opt).value = is_initialize;
+      useCookie("binary_filepath", opt).value = binary_filepath;
+
+      this.isAuthenticated = true;
       this.authSuccess();
     },
+
     checkLogin() {
-      if (process.client) {
-        const token = sessionStorage.getItem("aicoachtoken");
-        if (token) {
-          this.status = "success";
-          this.isAuthenticated = true;
-        } else {
-          this.status = "ready";
-          this.isAuthenticated = false;
-        }
+      const token = useCookie("aiadmintoken").value;
+      if (token) {
+        this.status = "success";
+        this.isAuthenticated = true;
+      } else {
+        this.status = "ready";
+        this.isAuthenticated = false;
       }
     },
+
     setSearchData(payload) {
       if (Object.keys(payload).length === 0) this.searchData = {};
       this.searchData = { ...this.searchData, ...payload };
     },
+
     triggerRerender() {
       this.forceRerender = !this.forceRerender;
     },
   },
-  persist: {
-    storage: "sessionStorage", // ✅ 이게 가장 안전하고 SSR-safe 방식
-  },
+
+  // persist 제거 → 쿠키가 직접 담당하므로 불필요
+
   getters: {
-    isLogin: (state) =>
-      process.client &&
-      state.status === "success" &&
-      !!sessionStorage.getItem("aicoachtoken"),
+    // SSR/CSR 모두 안전
+    isLogin: (state) => {
+      const token = useCookie("aiadmintoken").value;
+      return state.status === "success" && !!token;
+    },
   },
 });

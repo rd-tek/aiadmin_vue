@@ -1,5 +1,4 @@
 export const useRouteTitleMap = () => ({
-  "": "대시보드",
   "membership-member": "일반회원",
   "membership-shop": "매장회원",
   "customer-member": "공지사항(회원)",
@@ -11,6 +10,7 @@ export const useRouteTitleMap = () => ({
   "swing-list": "스윙영상리스트",
   "manager-list": "관리자 리스트",
   "manager-game-data": "게임데이터 관리",
+  "": "대시보드",
 })
 
 export default useRouteTitleMap
