@@ -1673,9 +1673,9 @@ onUnmounted(() => {
   window.removeEventListener("scroll", handleScroll);
 })
 
-// definePageMeta({
-//   layout: 'empty',
-// });
+definePageMeta({
+  layout: 'empty',
+});
 
 </script>
 <style lang="scss" scoped>

@@ -11,7 +11,7 @@
           <img src="/images/icon/icon_close_grey.png" alt="icon_close_grey" />
         </button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body" v-if="item?.playerinfo">
         <div class="content-section">
           <p class="title">기본 정보</p>
           <table>
@@ -22,17 +22,17 @@
               <tbody>
                   <tr>
                       <th>닉네임</th>
-                      <td>홍길동</td>
+                      <td>{{ item.playerinfo.nickname }}</td>
                       <th>성별</th>
-                      <td>남</td>
+                      <td>{{ item.playerinfo.gender === 'M' ? '남' : item.playerinfo.gender === 'F' ? '여' : '-' }}</td>
                   </tr>
                   <tr>
                       <th>단골매장</th>
                       <td>
-                          <span class="color-grey">2024.07.17</span>
+                          <span class="color-grey">{{ item.playerinfo.shopname || '-' }}</span>
                       </td>
                       <th>가입일</th>
-                      <td>1999.09.19</td>
+                      <td>{{ item.playerinfo.regdate || '-' }}</td>
                   </tr>
               </tbody>
           </table>
@@ -50,27 +50,27 @@
             <tbody>
               <tr>
                 <th>평균 성공 퍼트 거리</th>
-                <td>6m</td>
+                <td>{{ item.playerinfo.avg_putt_distance || '-' }}</td>
                 <th>전체 라운드</th>
-                <td>9</td>
+                <td>{{ item.playerinfo.total_rounds || '-' }}</td>
               </tr>
               <tr>
                 <th>평균 드라이버 거리</th>
-                <td>222m</td>
+                <td>{{ item.playerinfo.avg_driver_distance || '-' }}</td>
                 <th>페어웨이 안착률</th>
-                <td>58.02%</td>
+                <td>{{ item.playerinfo.fairway_hit_rate || '-' }}</td>
               </tr>
               <tr>
-                <th>GIR&</th>
-                <td>222</td>
+                <th>GIR</th>
+                <td>{{ item.playerinfo.gir || '-' }}</td>
                 <th>파 세이브율</th>
-                <td> 73.46</td>
+                <td>{{ item.playerinfo.par_save_rate || '-' }}</td>
               </tr>
               <tr>
                 <th>평균 타수</th>
-                <td>2222</td>
+                <td>{{ item.playerinfo.avg_strokes || '-' }}</td>
                 <th>최저 타수</th>
-                <td>-9</td>
+                <td>{{ item.playerinfo.best_strokes || '-' }}</td>
               </tr>
             </tbody>
           </table>
@@ -93,6 +93,9 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  item: {
+    type: Object
+  }
 });
 const emit = defineEmits(['update:isOpen']);
 const modalClose = () => {

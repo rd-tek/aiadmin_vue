@@ -167,7 +167,7 @@ useIntersectionObserver(tableRef, ([{ isIntersecting }]) => {
 
 // 2026.05.22[cgnoh]: 목록보기 이벤트
 const handleList = () => {
-  router.push('/membership/member');
+  router.push('/membership/shop');
 }
 
 const modals = reactive({});

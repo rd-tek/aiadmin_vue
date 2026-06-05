@@ -72,7 +72,7 @@
                 </button>
               </div>
               <div class="table-body-col is-mob">
-                <nuxt-link :to="`/publish/membership/shop/${index}`" class="color-purple link text-underline">{{ item.shopname }}</nuxt-link>
+                <nuxt-link :to="`/membership/shop/${item.no}`" class="color-purple link text-underline">{{ item.shopname }}</nuxt-link>
               </div>
               <div class="table-body-col is-mob">{{ item.address4 }}</div>
               <div class="table-body-col is-mob">{{ item.name }}</div>
@@ -101,7 +101,7 @@
                 <dl class="list">
                   <dt class="tit">매장</dt>
                   <dd class="cnt">
-                    <nuxt-link :to="`/publish/membership/shop/${index}`" class="link text-underline">{{ item.shop }}</nuxt-link>
+                    <nuxt-link :to="`/membership/shop/${index}`" class="link text-underline">{{ item.shop }}</nuxt-link>
                   </dd>
                 </dl>
                 <dl class="list">
@@ -222,7 +222,7 @@ onMounted(async () => {
 // 2026.05.22[cgnoh]: 등록하기 이벤트
 const router = useRouter();
 const handleWrite = () => {
-  router.push(`/publish/membership/shop/write`)
+  router.push(`/membership/shop/write`)
 }
 
 // 2026.05.22[cgnoh]: 인터렉션 관련

@@ -65,7 +65,7 @@
                 <span>{{ item.playerinfo.no }}</span>
               </div>
               <div class="table-body-col" @click="handleMobList(index)">
-                <nuxt-link :to="`/membership/member/${item.playerinfo.no}`" class="color-purple link text-underline">{{ item.playerinfo.id }}</nuxt-link>
+                <nuxt-link :to="`/membership/member/${item.playerinfo.playerno}`" class="color-purple link text-underline">{{ item.playerinfo.id }}</nuxt-link>
                 <button type="button" class="btn-arrow" :class="{ 'is-active': mobListIndex === index }">
                   <img
                     src="/public/images/icon/icon_arrow_down.png"
@@ -74,7 +74,7 @@
                 </button>
               </div>
               <div class="table-body-col is-mob">
-                <button type="button" @click="modalOpen" class="link text-underline">{{ item.playerinfo.nickname || '-' }}</button>
+                <button type="button" @click="modalOpen(item)" class="link text-underline">{{ item.playerinfo.nickname || '-' }}</button>
               </div>
               <div class="table-body-col is-mob">
                 <span class="no-wrap">{{ item.playerinfo.email || '-' }}</span>
@@ -175,6 +175,7 @@
     <!-- 회원 정보 모달 -->
     <modal-member-info
       :isOpen="modals.modalMemberInfo"
+      :item="selectedItem"
       @update:isOpen="modals.modalMemberInfo = $event"/>
 
 </template>
@@ -223,13 +224,15 @@ useIntersectionObserver(tableRef, ([{ isIntersecting }]) => {
     if (isIntersecting) tableMove.value = true;
 }, { threshold: 0 });
 
-// 2026.05.22[cgnoh]: 모달 관련 
+// 2026.05.22[cgnoh]: 모달 관련
+const selectedItem = ref(null); 
 const modals = reactive({ modalMemberInfo: false });
-const modalOpen = () => {
-    modals['modalMemberInfo'] = true;
-    document.querySelector('body').classList.add('is-hidden');
+const modalOpen = async (item) => {
+  selectedItem.value = item;
+  modals['modalMemberInfo'] = true;
+  document.querySelector('body').classList.add('is-hidden');
 }
-
+ 
 // 2026.05.22[cgnoh]: 아코디언 애니메이션
 const mobListIndex = ref(-1);
 const handleMobList = (index) => {
