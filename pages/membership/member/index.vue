@@ -4,31 +4,31 @@
         <div class="col-2">
             <div class="col d-flex">
               <div class="select-default"> 
-                <select>
-                  <option>전체</option>
-                </select>
-              </div>
-              <div class="select-default"> 
-                <select>
-                  <option>전체</option>
+                <select v-model="searchForm.status">
+                  <option value="">전체</option>
+                  <option value="1">정상</option>
+                  <option value="2">탈퇴</option>
                 </select>
               </div>
             </div>
             <div class="col d-flex flex-column">
                 <div class="d-flex">
-                    <select>
-                        <option>이름</option>
+                    <select v-model="searchForm.searchtype">
+                      <option value="">전체</option>
+                      <option value="id">아이디</option>
+                      <option value="nickname">닉네임</option>
+                      <option value="email">이메일</option>
                     </select>
-                    <input type="text" placeholder="닉네임" @keyup.enter="handleSearch">
+                    <input type="text" v-model="searchForm.searchname" placeholder="닉네임" @keyup.enter="handleSearch">
                 </div>
                 <button type="button" class="btn" @click="handleSearch">검색</button>
             </div>
         </div>
       </div>
       <div class="top-area">
-        <div class="total">전체 <span class="num">{{ tableList.length }}</span></div>
+        <div class="total">전체 <span class="num">{{ totalCount  }}</span></div>
         <div class="select-default"> 
-            <select>
+            <select v-model.number="searchForm.pagesize" @change="handleSearch">
                 <option value="10">10개씩 보기</option>
                 <option value="20">20개씩 보기</option>
                 <option value="30">30개씩 보기</option>
@@ -187,9 +187,8 @@ const membersApi = useMembersApi();
 const tableList = ref([]);
 const totalCount = ref(0);
 const searchForm = reactive({
-  ownertype: "",
   status: "",
-  searchtype: "shopname",
+  searchtype: "id",
   searchname: "",
   pageno: 1,
   pagesize: 10,

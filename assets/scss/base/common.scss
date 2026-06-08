@@ -1717,6 +1717,18 @@ table {
             &.col-9 {
                 flex: .9;
             }
+
+            .color-green {
+                color: #00B34A;
+            }
+
+            .color-red {
+                color: #EF2B49;
+            }
+
+            .color-grey {
+                color: #ADB0B3;
+            }
         }
 
         &-mob {
