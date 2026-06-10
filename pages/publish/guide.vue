@@ -953,13 +953,15 @@
                         <button type="button" class="btn-md-line" @click="modalOpen('modalSwingInfo')">스윙등록</button>
                         <button type="button" class="btn-md-line" @click="modalOpen('modalCourseWrite')">코스 홀 정보 등록/수정</button>
                         <button type="button" class="btn-md-line" @click="modalOpen('modalCoachingWrite')">코칭 제목 등록</button>
+                        <button type="button" class="btn-md-line" @click="modalOpen('modalGolfCourse')">골프 코스</button>
                     </div>
                 </div>
                 <modal-member-info :isOpen="modals.modalMemberInfo" @update:isOpen="modals.modalMemberInfo = $event"/>
                 <modal-machine-info :isOpen="modals.modalMachineInfo" @update:isOpen="modals.modalMachineInfo = $event"/>
                 <modal-swing-info :isOpen="modals.modalSwingInfo" @update:isOpen="modals.modalSwingInfo = $event"/>
-                <modal-course-write :isOpen="modals.modalCourseWrite" @update:isOpen="modalsmodalCourseWrite = $event"/>
+                <modal-course-write :isOpen="modals.modalCourseWrite" @update:isOpen="modals.modalCourseWrite = $event"/>
                 <modal-coaching-write :isOpen="modals.modalCoachingWrite" @update:isOpen="modals.modalCoachingWrite = $event"/>
+                <modal-golf-course :isOpen="modals.modalGolfCourse" @update:isOpen="modals.modalGolfCourse = $event"/>
             </section>
        </main>
        <button type="button" class="btn-scroll-top" v-if="topBtn" @click="topScroll">

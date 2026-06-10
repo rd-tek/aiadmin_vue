@@ -48,7 +48,7 @@
                             <tbody>
                                 <tr>
                                     <th>홀</th>
-                                    <td>
+                                    <td @click="modalOpen">
                                         <span class="is-event">E</span>
                                         <span class="is-par">1</span>
                                     </td>
@@ -217,19 +217,26 @@
                 <button type="button" class="btn-md-fill btn-primary-purple" @click="handleEdit">수정하기</button>
             </div>
         </div>
+
+        <modal-golf-course :isOpen="modals.modalGolfCourse" @update:isOpen="modals.modalGolfCourse = $event"/>
     </div>
+
 </template> 
 <script setup>
 import { useRouter } from "vue-router";
 import { useIntersectionObserver } from "@vueuse/core";
 
+// 라우터 관련
+const router = useRouter();
+
+// 인터렉션 관련
 const detailRef  = ref();
 const detailMove = ref(false);
 useIntersectionObserver(detailRef, ([{ isIntersecting }]) => {
     if (isIntersecting) detailMove.value = true;
 }, { threshold: 0 });
-const router = useRouter();
 
+// 코스 기본 정보
 const courseData = {
     field: 2,
     green: 3,
@@ -237,8 +244,16 @@ const courseData = {
     distance: 5830
 }
 
+// 수정 페이지 이동
 const handleEdit = () => {
     router.push(`/publish/golfcourse/edit/0`)
+}
+
+// 모달 관련
+const modals = reactive({});
+const modalOpen = () => {
+  modals['modalGolfCourse'] = true;
+  document.querySelector('body').classList.add('is-hidden');
 }
 
 // 2026.03.04[cgnoh]: 페이지 메타 정보

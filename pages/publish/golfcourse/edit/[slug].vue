@@ -331,7 +331,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <th>아이디</th>
+                            <th>코스이미지</th>
                             <td>
                                 <div class="input-wrap">
                                     <div class="input-text">
@@ -353,7 +353,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <th>닉네임</th>
+                            <th>코스 사용 여부</th>
                             <td>
                                 <div class="checkbox-list">
                                     <div class="check-box">
@@ -380,7 +380,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <th>이름</th>
+                            <th>난이도</th>
                             <td>
                                 <div class="select-wrap">
                                     <div class="select-list">

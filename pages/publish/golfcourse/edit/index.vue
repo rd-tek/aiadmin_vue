@@ -319,13 +319,18 @@
                             </td>
                         </tr>
                         <tr>
-                            <th>아이디</th>
+                            <th>코스 이미지</th>
                             <td>
-                                <div class="input-wrap">
-                                    <div class="input-text">
-                                        <input type="text" placeholder="선택해 주세요.">
-                                    </div>
-                                    <button type="button" class="btn-file">파일선택</button>
+                                <div class="input-text">
+                                    <input
+                                        type="file"
+                                        ref="fileInput"
+                                        @change="onFileChange"
+                                        placeholder="파일을 선택하거나 여기에 드롭하세요."  
+                                    />
+                                    <button type="button" class="btn-file" @click="triggerFile">파일선택</button>
+                                    <span class="name" v-if="fileName">{{ fileName }}</span>
+                                    <span class="name placeholder" v-else>파일을 선택하거나 여기에 드롭하세요.</span>
                                 </div>
                                 <div class="desc">
                                     <div class="desc-list">* 파일 총 용량은 최대 26MB까지 (파일당 최대 4MB 등록 가능)</div>
@@ -334,7 +339,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <th>닉네임</th>
+                            <th>코스 사용 여부</th>
                             <td>
                                 <div class="checkbox-list">
                                     <div class="check-box">
@@ -361,7 +366,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <th>이름</th>
+                            <th>난이도</th>
                             <td>
                                 <div class="select-wrap">
                                     <div class="select-list">
@@ -429,6 +434,32 @@ const modalOpen = () => {
     modals['modalCourseWrite'] = true;
     document.querySelector('body').classList.add('is-hidden');
 }
+
+// 파일 관련
+const fileInput = ref(null);
+const previewImage = ref(null);
+const fileName = ref("");
+const triggerFile = () => {
+  fileInput.value?.click();
+};
+
+const onFileChange = (event) => {
+  const file = event.target.files?.[0];
+
+  if (!file) return;
+
+  form.filename = file;
+  fileName.value = file.name;
+
+  const reader = new FileReader();
+
+  reader.onload = () => {
+    previewImage.value = reader.result;
+  };
+
+  reader.readAsDataURL(file);
+};
+
 const tableRef  = ref();
 const tableMove = ref(false);
 useIntersectionObserver(tableRef, ([{ isIntersecting }]) => {
