@@ -225,6 +225,13 @@
         .pagination-container {
             padding: 40px 0 20px 0;
         }
+
+        .no-data {
+            color: #52575c;
+            font-size: 14px;
+            padding: 20px;
+            text-align: center;
+        }
     }
 
     &.detail {

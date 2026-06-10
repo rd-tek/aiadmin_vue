@@ -86,7 +86,9 @@
                                                     <tbody>
                                                         <tr>
                                                             <th>홀</th>
-                                                            <td v-for="(item, index) in form.subcourse.subcoursehole[0].hole" :key="index">{{ item }}</td>
+                                                            <td v-for="(item, index) in form.subcourse.subcoursehole[0].hole" :key="index">
+                                                                <button type="button" @click="modalOpen(form)" class="link">{{ item }}</button>
+                                                            </td>
                                                             <td>합계</td>
                                                         </tr>
                                                         <tr>
@@ -141,7 +143,9 @@
                                                     <tbody>
                                                         <tr>
                                                             <th>홀</th>
-                                                            <td v-for="(item, index) in form.subcourse.subcoursehole[1].hole" :key="index">{{ item }}</td>
+                                                            <td v-for="(item, index) in form.subcourse.subcoursehole[1].hole" :key="index">
+                                                                <button type="button" @click="modalOpen(form)" class="link">{{ item }}</button>
+                                                            </td>
                                                             <td>합계</td>
                                                         </tr>
                                                         <tr>
@@ -180,7 +184,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <th>코스이미지</th>
+                            <th>코스 이미지</th>
                             <td>
                                 <div class="input-wrap">
                                     <div class="input-text">
@@ -293,12 +297,26 @@
                 <button type="button" class="btn-md-fill btn-primary-purple" @click="handleSave">저장하기</button>
             </div>
         </div>
+
+        <modal-course-write 
+            :isOpen="modals.modalCourseWrite"
+            :item="selectedItem"
+            @update:isOpen="modals.modalCourseWrite = $event"/>
     </div>
 </template>
 <script setup>
 import { useRoute } from "vue-router";
 import { useIntersectionObserver } from "@vueuse/core";
 import { useCourseApi } from "~/api/course";
+
+const selectedItem = ref(null);
+const modals = reactive({ modalCourseWrite: false });
+const modalOpen = async (item) => {
+    console.log(item)
+    selectedItem.value = item;
+    modals['modalCourseWrite'] = true;
+    document.querySelector('body').classList.add('is-hidden');
+}
 
 const route = useRoute();
 

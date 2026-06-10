@@ -67,9 +67,7 @@
                                                     <tbody>
                                                         <tr>
                                                             <th>홀</th>
-                                                            <td v-for="(item, index) in form.subcourse.subcoursehole[0].hole" :key="index">
-                                                                <button type="button" @click="modalOpen" class="link">{{ item }}</button>
-                                                            </td>
+                                                            <td v-for="(item, index) in form.subcourse.subcoursehole[0].hole" :key="index">{{ item }}</td>
                                                             <td>합계</td>
                                                         </tr>
                                                         <tr>
@@ -120,9 +118,7 @@
                                                     <tbody>
                                                         <tr>
                                                             <th>홀</th>
-                                                            <td v-for="(item, index) in form.subcourse.subcoursehole[1].hole" :key="index">
-                                                                <button type="button" @click="modalOpen" class="link">{{ item }}</button>
-                                                            </td>
+                                                            <td v-for="(item, index) in form.subcourse.subcoursehole[1].hole" :key="index">{{ item }}</td>
                                                             <td>합계</td>
                                                         </tr>
                                                         <tr>
@@ -275,10 +271,6 @@
             </div>
         </div>
     </div>
-
-    <modal-course-write 
-        :isOpen="modals.modalCourseWrite" 
-        @update:isOpen="modals.modalCourseWrite = $event"/>
 </template>
 <script setup>
 import { useIntersectionObserver } from "@vueuse/core";
@@ -333,12 +325,6 @@ const form = reactive({
 
   contents: "",
 });
-
-const modals = reactive({ modalCourseWrite: false });
-const modalOpen = () => {
-    modals['modalCourseWrite'] = true;
-    document.querySelector('body').classList.add('is-hidden');
-}
 
 // 파일 관련
 const fileInput = ref(null);
