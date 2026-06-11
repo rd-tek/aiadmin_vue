@@ -96,12 +96,12 @@
           </li>
         </ul>
       </div>
+      
+      <modal-swing-info
+        :isOpen="modals.modalSwingInfo"
+        @update:isOpen="modals.modalSwingInfo = $event" />
+
     </div>
-
-    <modal-swing-info
-      :isOpen="modals.modalSwingInfo"
-      @update:isOpen="modals.modalSwingInfo = $event"/>
-
 </template>
 <script setup>
 import { useRouter } from "vue-router";

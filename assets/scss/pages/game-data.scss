@@ -131,7 +131,7 @@
                 }   
             }
 
-            .radio-wrap,  .checkbox-wrap {
+            .radio-wrap {
                 display: flex;
                 align-items: center;
                 height: 100%;
@@ -360,6 +360,13 @@
                     border: 1px solid #CDCFD1;
                 }
             }
+        }
+
+        .no-data {
+            color: #52575c;
+            font-size: 14px;
+            width: 100%;
+            text-align: center;
         }
     }
 
