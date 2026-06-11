@@ -170,14 +170,13 @@
           </li>
         </ul>
       </div>
+
+      <!-- 회원 정보 모달 -->
+      <modal-member-info
+        :isOpen="modals.modalMemberInfo"
+        :item="selectedItem"
+        @update:isOpen="modals.modalMemberInfo = $event"/>
     </div>
-
-    <!-- 회원 정보 모달 -->
-    <modal-member-info
-      :isOpen="modals.modalMemberInfo"
-      :item="selectedItem"
-      @update:isOpen="modals.modalMemberInfo = $event"/>
-
 </template>
 <script setup>
 import { useIntersectionObserver } from "@vueuse/core";
