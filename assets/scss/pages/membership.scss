@@ -144,6 +144,7 @@
 
         .select-wrap {
             display: flex;
+            align-items: center;
             gap: 10px;
 
             .select-default {
@@ -222,6 +223,10 @@
     }
 }
 
+.no-data {
+    width: 100%;
+}
+
 @media screen and (max-width: 768px) {
     .membership-member {
         .filter-box {
@@ -296,6 +301,12 @@
             }
 
             .select-wrap {
+                align-items: flex-start;
+                
+                .select-default {
+                    width: 100%;
+                }
+
                 &.flex-column {
                     flex-direction: column;
                 }

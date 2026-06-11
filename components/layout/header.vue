@@ -21,7 +21,11 @@
           {{ typedText }}<span class="cursor">|</span>
         </span>
       </div>
-      <div class="nickname">{{ form.id }} 님</div>
+      <div class="nickname">
+        <client-only>
+          {{ form.id }} 님
+        </client-only>
+      </div>
     </div>
     <div class="right-area" v-if="route.path === '/'">
       <div class="datepicker" 

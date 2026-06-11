@@ -65,21 +65,9 @@
                   <th>세팅</th>
                   <td>
                     <div class="select-wrap flex-column">
-                      <div class="select-default">
-                        <select disabled>
-                          <option>M</option>
-                        </select>
-                      </div>
-                      <div class="select-default">
-                        <select disabled>
-                          <option>M</option>
-                        </select>
-                      </div>
-                      <div class="select-default">
-                        <select disabled>
-                          <option>km/h</option>
-                        </select>
-                      </div>
+                      <div class="select-default">Fairway : <b>{{ playerInfo.fieldunit }}</b></div>
+                      <div class="select-default">Green : <b>{{ playerInfo.greenunit }}</b></div>
+                      <div class="select-default">Speed : <b>{{ playerInfo.speedunit }}</b></div>
                     </div>
                   </td>
                 </tr>
@@ -91,7 +79,6 @@
           </div>
         </div>
       </div>
-    </div>
 
     <!-- 토스트 알림 모달 -->
     <toast-modal
@@ -112,7 +99,7 @@
       :toastErrorMessage="toastErrorMessage"
       @update:isOpen="modals.toastErrorModal = $event"/>
 
-
+    </div>
 </template>
 <script setup>
 import { useRouter, useRoute } from "vue-router";

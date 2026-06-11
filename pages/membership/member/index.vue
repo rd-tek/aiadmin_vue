@@ -4,7 +4,7 @@
         <div class="col-2">
             <div class="col d-flex">
               <div class="select-default"> 
-                <select v-model="searchForm.status">
+                <select v-model="searchForm.status" @change="handleSearch">
                   <option value="">전체</option>
                   <option value="1">정상</option>
                   <option value="2">탈퇴</option>
@@ -14,12 +14,12 @@
             <div class="col d-flex flex-column">
                 <div class="d-flex">
                     <select v-model="searchForm.searchtype">
-                      <option value="">전체</option>
+                      <option value="all">전체</option>
                       <option value="id">아이디</option>
                       <option value="nickname">닉네임</option>
                       <option value="email">이메일</option>
                     </select>
-                    <input type="text" v-model="searchForm.searchname" placeholder="닉네임" @keyup.enter="handleSearch">
+                    <input type="text" v-model="searchForm.searchname" placeholder="검색어를 입력해주세요." @keyup.enter="handleSearch">
                 </div>
                 <button type="button" class="btn" @click="handleSearch">검색</button>
             </div>
@@ -55,7 +55,8 @@
           <div class="table-head-col is-mob">상태</div>
         </div>
         <div class="table-body">
-          <div class="table-body-row" 
+          <template v-if="tableList.length > 0">
+            <div class="table-body-row" 
                v-for="(item, index) in tableList" 
                :key="index" 
                :class="{ 'is-move': tableMove }" 
@@ -102,7 +103,7 @@
                 <dl class="list">
                   <dt class="tit">닉네임</dt>
                   <dd class="cnt">
-                    <a class="link text-underline" @click="modalOpen">{{ item.playerinfo.nickname }}</a>
+                    <a class="link text-underline" @click="modalOpen(item)">{{ item.playerinfo.nickname }}</a>
                   </dd>
                 </dl>
                 <dl class="list">
@@ -142,31 +143,93 @@
               </div>
             </transition>
           </div>
+          </template>
+          <div class="table-body-row is-move" v-else>
+            <div class="table-body-flex">
+              <div class="no-data">데이터가 없습니다.</div>
+            </div>
+          </div>
         </div>
-        <ul class="pagination-container type02">
+        <ul class="pagination-container type02" v-if="totalPage > 0">
+          <!-- 이전 -->
           <li>
-              <button type="button" class="paginate-buttons" aria-label="이전">
-                  <img src="/images/icon/icon_prev.png" alt="icon_prev"/>
-              </button>
+            <button
+              type="button"
+              class="paginate-buttons"
+              aria-label="이전"
+              :disabled="searchForm.pageno === 1"
+              @click="prevPage"
+            >
+              <img
+                src="/images/icon/icon_prev.png"
+                alt="icon_prev"
+              />
+            </button>
           </li>
-          <li>
-              <button type="button" class="paginate-buttons active">1</button>
+
+          <!-- 첫 페이지 -->
+          <li v-if="pageNumbers[0] > 1">
+            <button
+              type="button"
+              class="paginate-buttons"
+              @click="changePage(1)"
+            >
+              1
+            </button>
           </li>
-          <li>
-              <button type="button" class="paginate-buttons">2</button>
+
+          <li v-if="pageNumbers[0] > 2">
+            <button type="button" class="paginate-buttons" disabled>
+              ...
+            </button>
           </li>
-          <li>
-              <button type="button" class="paginate-buttons">3</button>
-          </li> 
-          <li>
-              <button type="button" class="paginate-buttons" aria-label="더보기">
-                  <img src="/images/icon/icon_more_horiz.png" alt="icon_more_horiz" />
-              </button>
+
+          <!-- 페이지 목록 -->
+          <li
+            v-for="page in pageNumbers"
+            :key="page"
+          >
+            <button
+              type="button"
+              class="paginate-buttons"
+              :class="{ active: page === searchForm.pageno }"
+              @click="changePage(page)"
+            >
+              {{ page }}
+            </button>
           </li>
+
+          <!-- 마지막 페이지 -->
+          <li v-if="pageNumbers[pageNumbers.length - 1] < totalPage - 1">
+            <button type="button" class="paginate-buttons" disabled>
+              ...
+            </button>
+          </li>
+
+          <li v-if="pageNumbers[pageNumbers.length - 1] < totalPage">
+            <button
+              type="button"
+              class="paginate-buttons"
+              @click="changePage(totalPage)"
+            >
+              {{ totalPage }}
+            </button>
+          </li>
+
+          <!-- 다음 -->
           <li>
-              <button type="button" class="paginate-buttons" aria-label="다음">
-                  <img src="/images/icon/icon_next.png" alt="icon_next"/>
-              </button>
+            <button
+              type="button"
+              class="paginate-buttons"
+              aria-label="다음"
+              :disabled="searchForm.pageno === totalPage"
+              @click="nextPage"
+            >
+              <img
+                src="/images/icon/icon_next.png"
+                alt="icon_next"
+              />
+            </button>
           </li>
         </ul>
       </div>
@@ -182,23 +245,28 @@
 import { useIntersectionObserver } from "@vueuse/core";
 import { useMembersApi } from "~/api/member";
 
+// 2026.06.11[cgnoh]: api 관련
 const membersApi = useMembersApi();
+
+// 2026.06.11[cgnoh]: 테이블 리스트
 const tableList = ref([]);
+
+// 2026.06.11[cgnoh]: 총 갯수
 const totalCount = ref(0);
+
+// 2026.06.11[cgnoh]: 검색 폼
 const searchForm = reactive({
   status: "",
-  searchtype: "id",
+  searchtype: "all",
   searchname: "",
   pageno: 1,
   pagesize: 10,
 });
 
+// 2026.06.11[cgnoh]: 일반회원 리스트 조회
 const _playerList = async () => {
   try {
     const res = await membersApi._playerlist(searchForm);
-
-    console.log("playerlist response", res);
-
     totalCount.value = res.playerlistcnt || 0;
     tableList.value = res.playerlist || [];
   } catch (err) {
@@ -206,14 +274,11 @@ const _playerList = async () => {
   }
 };
 
+// 2026.06.11[cgnoh]: 검색 핸들러
 const handleSearch = async () => {
   searchForm.pageno = 1;
   await _playerList();
 };
-
-onMounted(async () => {
-  await _playerList();
-});
 
 // 2026.05.22[cgnoh]: 인터렉션 관련
 const tableRef  = ref();
@@ -231,6 +296,57 @@ const modalOpen = async (item) => {
   document.querySelector('body').classList.add('is-hidden');
 }
  
+/** 페이지네이션 **/
+// 총 페이지
+const totalPage = computed(() => {
+  return Math.ceil(totalCount.value / searchForm.pagesize);
+});
+
+// 페이지 전환
+const changePage = async (page) => {
+  if (page < 1 || page > totalPage.value) return;
+
+  searchForm.pageno = page;
+  await _playerList();
+};
+
+// 이전 페이지
+const prevPage = async () => {
+  if (searchForm.pageno <= 1) return;
+
+  searchForm.pageno--;
+  await _playerList();
+};
+
+// 다음 페이지
+const nextPage = async () => {
+  if (searchForm.pageno >= totalPage.value) return;
+
+  searchForm.pageno++;
+  await _playerList();
+};
+
+// 페이지 넘버링
+const pageNumbers = computed(() => {
+  const maxVisible = 5;
+
+  let start = Math.max(1, searchForm.pageno - 2);
+  let end = Math.min(totalPage.value, start + maxVisible - 1);
+
+  if (end - start + 1 < maxVisible) {
+    start = Math.max(1, end - maxVisible + 1);
+  }
+
+  const pages = [];
+
+  for (let i = start; i <= end; i++) {
+    pages.push(i);
+  }
+
+  return pages;
+});
+/** EOD: 페이지네이션 **/
+
 // 2026.05.22[cgnoh]: 아코디언 애니메이션
 const mobListIndex = ref(-1);
 const handleMobList = (index) => {
@@ -256,6 +372,11 @@ const leave = (el) => {
   el.style.transition = "all .4s ease";
   el.style.height = "0";
 };
+
+onMounted(async () => {
+  await _playerList();
+});
+
 
 // 2026.03.04[cgnoh]: 페이지 메타 정보
 definePageMeta({
