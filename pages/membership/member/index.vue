@@ -5,7 +5,7 @@
             <div class="col d-flex">
               <div class="select-default"> 
                 <select v-model="searchForm.status" @change="handleSearch">
-                  <option value="">전체</option>
+                  <option value="0">전체</option>
                   <option value="1">정상</option>
                   <option value="2">탈퇴</option>
                 </select>
@@ -26,7 +26,7 @@
         </div>
       </div>
       <div class="top-area">
-        <div class="total">전체 <span class="num">{{ totalCount  }}</span></div>
+        <div class="total">전체 <span class="num">{{ totalCount }}</span></div>
         <div class="select-default"> 
             <select v-model.number="searchForm.pagesize" @change="handleSearch">
                 <option value="10">10개씩 보기</option>
@@ -256,7 +256,7 @@ const totalCount = ref(0);
 
 // 2026.06.11[cgnoh]: 검색 폼
 const searchForm = reactive({
-  status: "",
+  status: 0,
   searchtype: "all",
   searchname: "",
   pageno: 1,

@@ -29,7 +29,7 @@
                 </tr>
                 <tr>
                     <th>이름</th>
-                    <td>{{ playerInfo.firstname }} {{ playerInfo.lastname }}</td>
+                    <td>{{ playerInfo.firstname }} {{ playerInfo.lastname || '-' }}</td>
                 </tr>
                 <tr>
                     <th>핸드폰</th>
@@ -109,19 +109,21 @@ import toastModal from '@/components/toast-ui/toast-modal.vue';
 import toastWarnModal from '@/components/toast-ui/toast-warn-modal.vue';
 import toastErrorModal from '@/components/toast-ui/toast-error-modal.vue';
 
+// 2026.06.12[cgnoh]: api 관련
 const membersApi = useMembersApi();
+
+// 2026.06.12[cgnoh]: 라우터 관련
 const router = useRouter();
 const route = useRoute();
+
+// 2026.06.12[cgnoh]: 회원 정보 조회
 const playerInfo = ref({});
 
+// 2026.06.12[cgnoh]: 상세 정보 조회
 const getDetail = async () => {
   try {
     const playerPk = route.params.slug;
-
     const res = await membersApi._playerview(playerPk);
-
-    console.log("response =", res);
-
     const selected = res?.memberinfo;
 
     if (!selected) {
@@ -133,17 +135,10 @@ const getDetail = async () => {
       ...selected,
       player_pk: playerPk,
     };
-
-    console.log("playerInfo =", playerInfo.value);
-
   } catch (err) {
     console.error("상세 조회 실패:", err);
   }
 };
-
-onMounted(async () => {
-  await getDetail();
-});
 
 // 2026.05.22[cgnoh]: 인터렉션 관련
 const tableRef  = ref();
@@ -186,13 +181,10 @@ const openErrorToast = (message) => {
 // 2026.06.04[cgnoh]: 저장 핸들링
 const handleSave = async () => {
   try {
-    const res = await membersApi._playeredit(
-      playerInfo.value.player_pk,
-      playerInfo.value
+    const res = await membersApi._ownerwrite(
+      ownerinfo.value.player_pk,
+      ownerinfo.value
     );
-
-    console.log("수정 결과 =", res);
-
     if (res?.success || res?.code === 200) {
       openSaveToast('저장되었습니다.');
       await getDetail();
@@ -204,6 +196,10 @@ const handleSave = async () => {
     openErrorToast("저장 중 오류가 발생했습니다.");
   }
 };
+
+onMounted(async () => {
+  await getDetail();
+});
 
 // 2026.03.04[cgnoh]: 페이지 메타 정보
 definePageMeta({

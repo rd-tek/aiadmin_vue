@@ -126,6 +126,45 @@ export const useMembersApi = () => {
     });
   };
 
+  // 매장 회원 수정
+  const _owneredit = async (ownerno, form) => {
+    return await apiFetch(`/ownership/ownerwrite/${ownerno}`, {
+      method: "POST",
+      body: qs.stringify({
+        password: form.password,
+        shopnameoverlap: form.shopnameoverlap,
+        shopname: form.shopname,
+        emailoverlap: form.emailoverlap,
+        email: form.email,
+        ownertype: form.ownertype,
+        fieldunit: form.fieldunit,
+        greenunit: form.greenunit,
+        speedunit: form.speedunit,
+        agreeemail: form.emailagree,
+        firstname: form.firstname,
+        lastname: form.lastname,
+        address1: form.address1,
+        address2: form.address2,
+        address3: form.address3,
+        address4: form.address4,
+        zipcode: form.zipcode,
+        phone: form.phone,
+        fax: form.fax,
+        website: form.website,
+        status: form.status,
+        oldroomcnt: form.oldroomcnt,
+        roomcnt: form.roomcnt,
+        etcinfo: form.etcinfo,
+        lockercnt: form.lockercnt,
+        address_lat: form.address_lat,
+        address_lng: form.address_lng,
+      }),
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    });
+  };
+
   // 통합관리매장회원장비등록
   const _adminOwnerRoomWrite = async (form) => {
     try {
@@ -151,31 +190,31 @@ export const useMembersApi = () => {
   };
 
 // 통합관리매장회원장비수정
-const _adminOwnerRoomEdit = async (form) => {
-  try {
-    return await apiFetch(`/ownership/ownerroomwrite/${form.ownerno}`, {
-      method: "POST",
-      body: {
-        roomno: form.roomno,
-        roomname: form.roomname,
-        maincode: form.maincode,
-        subcode: form.subcode,
-        etccode: form.etccode,
-        hwmodelno: form.hwmodelno,
-        swmodelno: form.swmodelno,
-        installdate: form.installdate,
-        roomstatus: form.roomstatus,
-        api_pk: form.api_pk,
-        simulator_pk: form.simulator_pk,
-        token: form.token,
-        expdate: form.expdate,
-      },
-    });
-  } catch (err) {
-    console.error("_adminOwnerRoomEdit", err);
-    throw err;
-  }
-};
+  const _adminOwnerRoomEdit = async (form) => {
+    try {
+      return await apiFetch(`/ownership/ownerroomwrite/${form.ownerno}`, {
+        method: "POST",
+        body: {
+          roomno: form.roomno,
+          roomname: form.roomname,
+          maincode: form.maincode,
+          subcode: form.subcode,
+          etccode: form.etccode,
+          hwmodelno: form.hwmodelno,
+          swmodelno: form.swmodelno,
+          installdate: form.installdate,
+          roomstatus: form.roomstatus,
+          api_pk: form.api_pk,
+          simulator_pk: form.simulator_pk,
+          token: form.token,
+          expdate: form.expdate,
+        },
+      });
+    } catch (err) {
+      console.error("_adminOwnerRoomEdit", err);
+      throw err;
+    }
+  };
 
   // 국가 목록
   const _countrylist = async () => {
@@ -236,6 +275,7 @@ const _adminOwnerRoomEdit = async (form) => {
     _availabilityCheck,
     _ownerlist,
     _ownerview,
+    _owneredit,
     _adminOwnerRoomWrite,
     _adminOwnerRoomEdit,
     _countrylist,

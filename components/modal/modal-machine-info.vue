@@ -91,6 +91,7 @@
                             auto-apply
                             @open="isFocused = true"
                             @closed="isFocused = false"
+                            teleport
                         />
                     </div>
                 </td>
@@ -125,6 +126,7 @@
                             auto-apply
                             @open="isFocused = true"
                             @closed="isFocused = false"
+                            teleport
                         />
                     </div>
                 </td>
@@ -143,7 +145,6 @@
         </div>
       </div>
     </div>
-  </div>
 
     <!-- 토스트 알림 모달 -->
     <toast-modal
@@ -164,6 +165,7 @@
         :toastErrorMessage="toastErrorMessage"
         @update:isOpen="modals.toastErrorModal = $event"/>
 
+  </div>
 </template>
 <script setup>
 import dayjs from 'dayjs'
@@ -173,7 +175,6 @@ import toastWarnModal from '@/components/toast-ui/toast-warn-modal.vue';
 import toastErrorModal from '@/components/toast-ui/toast-error-modal.vue';
 
 const membersApi = useMembersApi();
-
 const props = defineProps({
   isOpen: {
     type: Boolean,

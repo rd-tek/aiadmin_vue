@@ -79,12 +79,12 @@
                 </button>
               </div>
               <div class="table-body-col is-mob">
-                <nuxt-link :to="`/membership/shop/${item.no}`" class="color-purple link text-underline">{{ item.shopname }}</nuxt-link>
+                <nuxt-link :to="`/membership/shop/${item.ownerno}`" class="color-purple link text-underline">{{ item.shopname }}</nuxt-link>
               </div>
               <div class="table-body-col is-mob">{{ item.address4 }}</div>
               <div class="table-body-col is-mob">{{ item.name }}</div>
               <div class="table-body-col is-mob">
-                <button type="button" @click="modalOpen" class="link text-underline">{{ item.roomcnt }}</button>
+                <button type="button" @click="modalOpen(item)" class="link text-underline">{{ item.roomcnt }}</button>
               </div>
               <div class="table-body-col is-mob">{{ item.phone }}</div>
               <div class="table-body-col is-mob">
@@ -92,7 +92,7 @@
               </div>
               <div class="table-body-col is-mob">
                 <span v-if="item.status === '1'" class="color-green">정상</span>
-                <span v-else-if="item.status === '2'" class="color-red">탈퇴</span>
+                <span v-else-if="item.status === '2'" class="color-red">정지</span>
               </div>
             </div>
             <transition
@@ -174,27 +174,35 @@
           </div>
         </div>
       </div>
+
+      <!-- 회원 정보 모달 -->
+      <modal-member-info
+        :isOpen="modals.modalMemberInfo"
+        @update:isOpen="modals.modalMemberInfo = $event"/>
+
+      <!-- 장비 정보 모달 -->
+      <modal-machine-info
+        :isOpen="modals.modalMachineInfo"
+        :item="selectedItem"
+        @update:isOpen="modals.modalMachineInfo = $event"/>
+
     </div>
-
-    <!-- 회원 정보 모달 -->
-    <modal-member-info
-      :isOpen="modals.modalMemberInfo"
-      @update:isOpen="modals.modalMemberInfo = $event"/>
-
-    <!-- 장비 정보 모달 -->
-    <modal-machine-info
-      :isOpen="modals.modalMachineInfo"
-      @update:isOpen="modals.modalMachineInfo = $event"/>
-
 </template>
 <script setup>
 import { useIntersectionObserver } from "@vueuse/core";
 import { useRouter } from "vue-router";
 import { useMembersApi } from "~/api/member";
 
+// 2026.06.12[cgnoh]: api 관련
 const membersApi = useMembersApi();
+
+// 2026.06.12[cgnoh]: 테이블 리스트
 const tableList = ref([]);
+
+// 2026.06.12[cgnoh]: 총 갯수
 const totalCount = ref(0);
+
+// 2026.06.12[cgnoh]: 검색 폼
 const searchForm = reactive({
   ownertype: "",
   status: "",
@@ -204,12 +212,10 @@ const searchForm = reactive({
   pagesize: 10,
 });
 
+// 2026.06.12[cgnoh]: 매장 회원 리스트 조회
 const getOwnerList = async () => {
   try {
     const res = await membersApi._ownerlist(searchForm);
-
-    console.log("ownerlist response", res);
-
     totalCount.value = res.ownerlistcnt || 0;
     tableList.value = res.ownerlist || [];
   } catch (err) {
@@ -217,6 +223,7 @@ const getOwnerList = async () => {
   }
 };
 
+// 2026.06.12[cgnoh]: 검색 핸들러
 const handleSearch = async () => {
   searchForm.pageno = 1;
   await getOwnerList();
@@ -240,8 +247,10 @@ useIntersectionObserver(tableRef, ([{ isIntersecting }]) => {
 }, { threshold: 0 });
 
 // 2026.05.22[cgnoh]: 모달 관련 
+const selectedItem = ref(null);
 const modals = reactive({ modalMemberInfo: false });
-const modalOpen = () => { 
+const modalOpen = (item) => { 
+    selectedItem.value = item;
     modals['modalMachineInfo'] = true;
     document.querySelector('body').classList.add('is-hidden');
 }

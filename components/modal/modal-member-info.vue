@@ -102,7 +102,6 @@ const modalClose = () => {
   emit("update:isOpen", false);
   document.querySelector("body").classList.remove("is-hidden");
 };
-
 </script>
 <style lang="scss" scoped>
 @use "@/assets/scss/components/modal.scss";
