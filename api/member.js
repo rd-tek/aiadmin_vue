@@ -5,12 +5,18 @@ export const useMembersApi = () => {
   const apiFetch = useApiFetch();
 
   // 회원 리스트
-  const _playerlist = async (params) => {
-    return await apiFetch("/membership/playerlist", {
-      method: "GET",
-      query: params,
-    });
-  };
+const _playerlist = async (params) => {
+  return await apiFetch("/membership/playerlist", {
+    method: "GET",
+    query: {
+      status: params.status,
+      searchtype: params.searchtype,
+      searchname: params.searchname,
+      pageno: params.pageno,
+      pagesize: params.pagesize,
+    },
+  });
+};
 
   // 회원 상세
   const _playerview = async (playerno) => {

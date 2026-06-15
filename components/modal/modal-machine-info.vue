@@ -119,15 +119,15 @@
                 <th>만료기한</th>
                 <td>
                     <div class="datepicker">
-                        <VueDatePicker 
-                            v-model="expDate"
-                            :format="formatExpDate" 
-                            date-picker
-                            auto-apply
-                            @open="isFocused = true"
-                            @closed="isFocused = false"
-                            teleport
-                        />
+                      <VueDatePicker 
+                        v-model="modal_form.expdate"
+                        :format="formatExpDate"
+                        date-picker
+                        auto-apply
+                        @open="isFocused = true"
+                        @closed="isFocused = false"
+                        teleport
+                    />
                     </div>
                 </td>
                 </tr>
@@ -174,7 +174,10 @@ import toastModal from '@/components/toast-ui/toast-modal.vue';
 import toastWarnModal from '@/components/toast-ui/toast-warn-modal.vue';
 import toastErrorModal from '@/components/toast-ui/toast-error-modal.vue';
 
+// 2026.06.15[cgnoh]: api 관련
 const membersApi = useMembersApi();
+
+// 2026.06.15[cgnoh]: props 관련
 const props = defineProps({
   isOpen: {
     type: Boolean,
@@ -186,16 +189,19 @@ const props = defineProps({
   }
 });
 
+// 2026.06.15[cgnoh]: emit 관련
 const emit = defineEmits([
   "update:isOpen",
   "saved"
 ]);
 
+// 2026.06.15[cgnoh]: 모달 닫기
 const modalClose = () => {
   emit("update:isOpen", false);
   document.querySelector("body").classList.remove("is-hidden");
 };
 
+// 2026.06.15[cgnoh]: form 데이터
 const modal_form = reactive({
   ownerno: "",
   roomcnt: 0,
@@ -213,14 +219,17 @@ const modal_form = reactive({
   expdate: dayjs().add(1, "year").format("YYYY-MM-DD"),
 })
 
+// 2026.06.15[cgnoh]: 만료 기한
 const expDate = ref(new Date());
 const formatExpDate = (date) => {
-  const year = date.getFullYear();
-  const month =  `${date.getMonth() + 1}`.padStart(2, "0");
-  const day = `${date.getDate()}`.padStart(2, "0")
-  return `${year}.${month}.${day}`
-}
+  if (!date) return "";
+  const yyyy = date.getFullYear();
+  const mm = String(date.getMonth() + 1).padStart(2, "0");
+  const dd = String(date.getDate()).padStart(2, "0");
+  return `${yyyy}.${mm}.${dd}`;
+};
 
+// 2026.06.15[cgnoh]: 설치일
 const insDate = ref(new Date());
 const formatInsDate = (date) => {
   const year = date.getFullYear();
@@ -229,10 +238,13 @@ const formatInsDate = (date) => {
   return `${year}.${month}.${day}`
 }
 
-const modals = reactive({});
+// 2026.06.15[cgnoh]: 토스트 메시지 관련
 const toastMessage = ref();
 const toastWarnMessage = ref();
 const toastErrorMessage = ref();
+
+// 2026.06.15[cgnoh]: 모달 관련
+const modals = reactive({});
 
 // 2026.06.04[cgnoh]: 저장 토스트
 const openSaveToast = (message) => {
@@ -255,6 +267,7 @@ const openErrorToast = (message) => {
   toastErrorMessage.value = message;
 }
 
+// 2026.06.15[cgnoh]: 저장 핸들링
 const modalSave = async () => {
   try {
     if (!modal_form.roomname?.trim()) {
@@ -305,10 +318,7 @@ watch(
   () => props.item,
   (item) => {
     if (!item) return;
-
     modal_form.ownerno = item.ownerno || item.owner_pk;
-
-    console.log("owner info", modal_form.ownerno);
   },
   { immediate: true }
 );

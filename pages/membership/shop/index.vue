@@ -3,18 +3,18 @@
       <div class="filter-box">
         <div class="col-2">
             <div class="col d-flex">
-              <div class="select-default"> 
-                <select v-model="searchForm.status">
+              <div class="select-default">
+                <select v-model="searchForm.status" @change="handleSearch">
                   <option value="">전체</option>
                   <option value="1">정상</option>
                   <option value="2">탈퇴</option>
                 </select>
               </div>
               <div class="select-default"> 
-                <select v-model="searchForm.ownertype">
+                <select v-model="searchForm.ownertype" @change="handleSearch">
                   <option value="">전체</option>
-                  <option value="franchise">프랜차이즈</option>
-                  <option value="direct">직영매장</option>
+                  <option value="1">프랜차이즈</option>
+                  <option value="2">직영매장</option>
                 </select>
               </div>
             </div>
@@ -62,111 +62,174 @@
           <div class="table-head-col is-mob">상태</div>
         </div>
         <div class="table-body">
-          <div class="table-body-row" 
-            v-for="(item, index) in tableList" 
-            :key="index" 
-            :class="{ 'is-move': tableMove }" 
-            ref="tableRef">
-            <div class="table-body-flex">
-              <div class="table-body-col col-1 align-left">{{ item.no }}</div>
-              <div class="table-body-col" @click="handleMobList(index)">
-                <span>{{ item.id }}</span>
-                <button type="button" class="btn-arrow" :class="{ 'is-active': mobListIndex === index }">
-                  <img
-                    src="/public/images/icon/icon_arrow_down.png"
-                    alt="icon_arrow_down"
-                  />
-                </button>
+          <template v-if="tableList.length > 0">
+            <div class="table-body-row" 
+              v-for="(item, index) in tableList" 
+              :key="index" 
+              :class="{ 'is-move': tableMove }"
+              ref="tableRef">
+              <div class="table-body-flex">
+                <div class="table-body-col col-1 align-left">{{ item.no }}</div>
+                <div class="table-body-col" @click="handleMobList(index)">
+                  <span>{{ item.id }}</span>
+                  <button type="button" class="btn-arrow" :class="{ 'is-active': mobListIndex === index }">
+                    <img
+                      src="/public/images/icon/icon_arrow_down.png"
+                      alt="icon_arrow_down"
+                    />
+                  </button>
+                </div>
+                <div class="table-body-col is-mob">
+                  <nuxt-link :to="`/membership/shop/${item.ownerno}`" class="color-purple link text-underline">{{ item.shopname }}</nuxt-link>
+                </div>
+                <div class="table-body-col is-mob">{{ item.address4 }}</div>
+                <div class="table-body-col is-mob">{{ item.name }}</div>
+                <div class="table-body-col is-mob">
+                  <button type="button" @click="modalOpen(item)" class="link text-underline">{{ item.roomcnt }}</button>
+                </div>
+                <div class="table-body-col is-mob">{{ item.phone }}</div>
+                <div class="table-body-col is-mob">
+                  <span class="color-grey">{{ item.regdate }}</span>
+                </div>
+                <div class="table-body-col is-mob">
+                  <span v-if="item.status === '1'" class="color-green">정상</span>
+                  <span v-else-if="item.status === '2'" class="color-red">정지</span>
+                </div>
               </div>
-              <div class="table-body-col is-mob">
-                <nuxt-link :to="`/membership/shop/${item.ownerno}`" class="color-purple link text-underline">{{ item.shopname }}</nuxt-link>
-              </div>
-              <div class="table-body-col is-mob">{{ item.address4 }}</div>
-              <div class="table-body-col is-mob">{{ item.name }}</div>
-              <div class="table-body-col is-mob">
-                <button type="button" @click="modalOpen(item)" class="link text-underline">{{ item.roomcnt }}</button>
-              </div>
-              <div class="table-body-col is-mob">{{ item.phone }}</div>
-              <div class="table-body-col is-mob">
-                <span class="color-grey">{{ item.regdate }}</span>
-              </div>
-              <div class="table-body-col is-mob">
-                <span v-if="item.status === '1'" class="color-green">정상</span>
-                <span v-else-if="item.status === '2'" class="color-red">정지</span>
-              </div>
+              <transition
+                  @before-enter="beforeEnter"
+                  @enter="enter"
+                  @before-leave="beforeLeave"
+                  @leave="leave">
+                <div class="table-body-mob" v-if="mobListIndex === index">
+                  <dl class="list">
+                    <dt class="tit">지역</dt>
+                    <dd class="cnt">{{ item.region }}</dd>
+                  </dl>
+                  <dl class="list">
+                    <dt class="tit">매장</dt>
+                    <dd class="cnt">
+                      <nuxt-link :to="`/membership/shop/${index}`" class="link text-underline">{{ item.shop }}</nuxt-link>
+                    </dd>
+                  </dl>
+                  <dl class="list">
+                    <dt class="tit">대표자</dt>
+                    <dd class="cnt">{{ item.name }}</dd>
+                  </dl>
+                  <dl class="list">
+                    <dt class="tit">장비 수</dt>
+                    <dd class="cnt">
+                      <button type="button" @click="modalOpen" class="color-purple">{{ item.count }}</button>
+                    </dd>
+                  </dl>
+                  <dl class="list">
+                    <dt class="tit">연락처</dt>
+                    <dd class="cnt">{{ item.number }}</dd>
+                  </dl>
+                  <dl class="list">
+                    <dt class="tit">등록일</dt>
+                    <dd class="cnt">
+                      <span class="color-grey">{{ item.date }}</span>
+                    </dd>
+                  </dl>
+                  <dl class="list">
+                    <dt class="tit">상태</dt>
+                    <dd class="cnt">
+                      <span v-if="item.status === '정상'" class="color-green">{{ item.status }}</span>
+                      <span v-else-if="item.status === '탈퇴'" class="color-red">{{ item.status }}</span>
+                    </dd>
+                  </dl>
+                </div>
+              </transition>
             </div>
-            <transition
-                @before-enter="beforeEnter"
-                @enter="enter"
-                @before-leave="beforeLeave"
-                @leave="leave">
-              <div class="table-body-mob" v-if="mobListIndex === index">
-                <dl class="list">
-                  <dt class="tit">지역</dt>
-                  <dd class="cnt">{{ item.region }}</dd>
-                </dl>
-                <dl class="list">
-                  <dt class="tit">매장</dt>
-                  <dd class="cnt">
-                    <nuxt-link :to="`/membership/shop/${index}`" class="link text-underline">{{ item.shop }}</nuxt-link>
-                  </dd>
-                </dl>
-                <dl class="list">
-                  <dt class="tit">대표자</dt>
-                  <dd class="cnt">{{ item.name }}</dd>
-                </dl>
-                <dl class="list">
-                  <dt class="tit">장비 수</dt>
-                  <dd class="cnt">
-                    <button type="button" @click="modalOpen" class="color-purple">{{ item.count }}</button>
-                  </dd>
-                </dl>
-                <dl class="list">
-                  <dt class="tit">연락처</dt>
-                  <dd class="cnt">{{ item.number }}</dd>
-                </dl>
-                <dl class="list">
-                  <dt class="tit">등록일</dt>
-                  <dd class="cnt">
-                    <span class="color-grey">{{ item.date }}</span>
-                  </dd>
-                </dl>
-                <dl class="list">
-                  <dt class="tit">상태</dt>
-                  <dd class="cnt">
-                    <span v-if="item.status === '정상'" class="color-green">{{ item.status }}</span>
-                    <span v-else-if="item.status === '탈퇴'" class="color-red">{{ item.status }}</span>
-                  </dd>
-                </dl>
-              </div>
-            </transition>
+          </template>
+          <div class="table-body-row is-move" v-else>
+            <div class="table-body-flex">
+              <div class="no-data">데이터가 없습니다.</div>
+            </div>
           </div>
         </div>
         <div class="btn-wrap">
-          <ul class="pagination-container type02">
+          <ul class="pagination-container type02" v-if="totalPage > 0">
+            <!-- 이전 -->
             <li>
-                <button type="button" class="paginate-buttons" aria-label="이전">
-                    <img src="/images/icon/icon_prev.png" alt="icon_prev"/>
-                </button>
+              <button
+                type="button"
+                class="paginate-buttons"
+                aria-label="이전"
+                :disabled="searchForm.pageno === 1"
+                @click="prevPage"
+              >
+                <img
+                  src="/images/icon/icon_prev.png"
+                  alt="icon_prev"
+                />
+              </button>
             </li>
-            <li>
-                <button type="button" class="paginate-buttons active">1</button>
+
+            <!-- 첫 페이지 -->
+            <li v-if="pageNumbers[0] > 1">
+              <button
+                type="button"
+                class="paginate-buttons"
+                @click="changePage(1)"
+              >
+                1
+              </button>
             </li>
-            <li>
-                <button type="button" class="paginate-buttons">2</button>
+
+            <li v-if="pageNumbers[0] > 2">
+              <button type="button" class="paginate-buttons" disabled>
+                ...
+              </button>
             </li>
-            <li>
-                <button type="button" class="paginate-buttons">3</button>
-            </li> 
-            <li>
-                <button type="button" class="paginate-buttons" aria-label="더보기">
-                    <img src="/images/icon/icon_more_horiz.png" alt="icon_more_horiz" />
-                </button>
+
+            <!-- 페이지 목록 -->
+            <li
+              v-for="page in pageNumbers"
+              :key="page"
+            >
+              <button
+                type="button"
+                class="paginate-buttons"
+                :class="{ active: page === searchForm.pageno }"
+                @click="changePage(page)"
+              >
+                {{ page }}
+              </button>
             </li>
+
+            <!-- 마지막 페이지 -->
+            <li v-if="pageNumbers[pageNumbers.length - 1] < totalPage - 1">
+              <button type="button" class="paginate-buttons" disabled>
+                ...
+              </button>
+            </li>
+
+            <li v-if="pageNumbers[pageNumbers.length - 1] < totalPage">
+              <button
+                type="button"
+                class="paginate-buttons"
+                @click="changePage(totalPage)"
+              >
+                {{ totalPage }}
+              </button>
+            </li>
+
+            <!-- 다음 -->
             <li>
-                <button type="button" class="paginate-buttons" aria-label="다음">
-                    <img src="/images/icon/icon_next.png" alt="icon_next"/>
-                </button>
+              <button
+                type="button"
+                class="paginate-buttons"
+                aria-label="다음"
+                :disabled="searchForm.pageno === totalPage"
+                @click="nextPage"
+              >
+                <img
+                  src="/images/icon/icon_next.png"
+                  alt="icon_next"
+                />
+              </button>
             </li>
           </ul>
           <div class="btn-group">
@@ -254,6 +317,57 @@ const modalOpen = (item) => {
     modals['modalMachineInfo'] = true;
     document.querySelector('body').classList.add('is-hidden');
 }
+
+/** 페이지네이션 **/
+// 총 페이지
+const totalPage = computed(() => {
+  return Math.ceil(totalCount.value / searchForm.pagesize);
+});
+
+// 페이지 전환
+const changePage = async (page) => {
+  if (page < 1 || page > totalPage.value) return;
+
+  searchForm.pageno = page;
+  await getOwnerList();
+};
+
+// 이전 페이지
+const prevPage = async () => {
+  if (searchForm.pageno <= 1) return;
+
+  searchForm.pageno--;
+  await getOwnerList();
+};
+
+// 다음 페이지
+const nextPage = async () => {
+  if (searchForm.pageno >= totalPage.value) return;
+
+  searchForm.pageno++;
+  await getOwnerList();
+};
+
+// 페이지 넘버링
+const pageNumbers = computed(() => {
+  const maxVisible = 5;
+
+  let start = Math.max(1, searchForm.pageno - 2);
+  let end = Math.min(totalPage.value, start + maxVisible - 1);
+
+  if (end - start + 1 < maxVisible) {
+    start = Math.max(1, end - maxVisible + 1);
+  }
+
+  const pages = [];
+
+  for (let i = start; i <= end; i++) {
+    pages.push(i);
+  }
+
+  return pages;
+});
+/** EOD: 페이지네이션 **/
 
 // 2026.05.22[cgnoh]: 아코디언 애니메이션
 const mobListIndex = ref(-1);

@@ -15,6 +15,8 @@
                                     <div class="select-default">
                                         <select v-model="form.status">
                                             <option value="1">정상</option>
+                                            <option value="2">삭제</option>
+                                            <option value="3">보류</option>
                                         </select>
                                     </div>
                                 </td>
@@ -92,7 +94,7 @@
                                         <div class="select-wrap flex-column">
                                             <div class="select-default">
                                                 <select v-model="form.fieldunit">
-                                                    <option value="">페어웨이</option>
+                                                    <option value="" disabled>페어웨이</option>
                                                     <option value="1">M</option>
                                                     <option value="2">Yard</option>
                                                     <option value="3">Feet</option>
@@ -100,7 +102,7 @@
                                             </div>
                                             <div class="select-default">
                                                 <select v-model="form.greenunit">
-                                                    <option value="">Green</option>
+                                                    <option value="" disabled>Green</option>
                                                     <option value="1">M</option>
                                                     <option value="2">Yard</option>
                                                     <option value="3">Feet</option>
@@ -108,7 +110,7 @@
                                             </div>
                                             <div class="select-default">
                                                 <select v-model="form.speedunit">
-                                                    <option value="">Speed</option>
+                                                    <option value="" disabled>Speed</option>
                                                     <option value="1">km/h</option>
                                                     <option value="2">mile/h</option>
                                                     <option value="3">m/s</option>
@@ -186,6 +188,7 @@
                                 <td>
                                     <div class="select-default">
                                         <select v-model="form.roomcnt">
+                                            <option value="0" disabled>0</option>
                                             <option v-for="(item, i) in 50" :key="i" :value="item">{{ item }}</option>
                                         </select>
                                     </div>
@@ -204,6 +207,7 @@
                                 <td>
                                     <div class="select-default">
                                         <select v-model="form.lockercnt">
+                                            <option value="0" disabled>0</option>
                                             <option v-for="(item, i) in 99" :key="i" :value="item">{{ item }}</option>
                                         </select>
                                     </div>
@@ -218,27 +222,27 @@
                 </div>
             </div>
         </div>
+
+        <!-- 토스트 알림 모달 -->
+        <toast-modal
+        :isOpen="modals.toastModal"
+        :toastMessage="toastMessage"
+        @update:isOpen="modals.toastModal = $event"
+        />
+
+        <!-- 토스트 경고 모달 -->
+        <toast-warn-modal 
+        :isOpen="modals.toastWarnModal"
+        :toastWarnMessage="toastWarnMessage"
+        @update:isOpen="modals.toastWarnModal = $event"/>
+
+        <!-- 토스트 에러 모달 -->
+        <toast-error-modal 
+        :isOpen="modals.toastErrorModal"
+        :toastErrorMessage="toastErrorMessage"
+        @update:isOpen="modals.toastErrorModal = $event"/>
+
     </div>
-
-    <!-- 토스트 알림 모달 -->
-    <toast-modal
-      :isOpen="modals.toastModal"
-      :toastMessage="toastMessage"
-      @update:isOpen="modals.toastModal = $event"
-    />
-
-    <!-- 토스트 경고 모달 -->
-    <toast-warn-modal 
-      :isOpen="modals.toastWarnModal"
-      :toastWarnMessage="toastWarnMessage"
-      @update:isOpen="modals.toastWarnModal = $event"/>
-
-    <!-- 토스트 에러 모달 -->
-    <toast-error-modal 
-      :isOpen="modals.toastErrorModal"
-      :toastErrorMessage="toastErrorMessage"
-      @update:isOpen="modals.toastErrorModal = $event"/>
-
 </template>
 <script setup>
 import { useMembersApi } from "~/api/member";
@@ -246,14 +250,19 @@ import toastModal from '@/components/toast-ui/toast-modal.vue';
 import toastWarnModal from '@/components/toast-ui/toast-warn-modal.vue';
 import toastErrorModal from '@/components/toast-ui/toast-error-modal.vue';
 
+// 2026.06.15[cgnoh]: api 관련
 const membersApi = useMembersApi();
+
+// 2026.06.15[cgnoh]: 모달 관련
 const modals = reactive({});
+
+// 2026.06.15[cgnoh]: 토스트 메시지 관련
 const toastMessage = ref();
 const toastWarnMessage = ref();
 const toastErrorMessage = ref();
 
+// 2026.05.22[cgnoh]: 회원 등록 폼
 const form = ref({
-  // 2026.05.22[cgnoh]: 회원 등록 폼 데이터 구조 예시
   status: 1,
   id: '',
   password: '',
@@ -317,7 +326,7 @@ const handleSave = async () => {
   }
 };
 
-// 2026.06.04[cgnoh]: 중복 체크 핸들링 (예시)
+// 2026.06.04[cgnoh]: 중복 체크 핸들링
 const checkDuplicate = (type, field) => {
   const value = field?.trim();
 

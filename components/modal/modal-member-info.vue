@@ -32,7 +32,7 @@
                           <span class="color-grey">{{ item.playerinfo.shopname || '-' }}</span>
                       </td>
                       <th>가입일</th>
-                      <td>{{ item.playerinfo.regdate || '-' }}</td>
+                      <td>{{ formatDate(item.playerinfo.regdate) || '-' }}</td>
                   </tr>
               </tbody>
           </table>
@@ -101,6 +101,23 @@ const emit = defineEmits(['update:isOpen']);
 const modalClose = () => {
   emit("update:isOpen", false);
   document.querySelector("body").classList.remove("is-hidden");
+};
+
+const formatDate = (dateStr) => {
+  if (!dateStr) return "-";
+
+  const date = new Date(dateStr);
+
+  if (isNaN(date.getTime())) return "-";
+
+  const yyyy = date.getFullYear();
+  const mm = String(date.getMonth() + 1).padStart(2, "0");
+  const dd = String(date.getDate()).padStart(2, "0");
+
+  const hh = String(date.getHours()).padStart(2, "0");
+  const min = String(date.getMinutes()).padStart(2, "0");
+
+  return `${yyyy}.${mm}.${dd} ${hh}:${min}`;
 };
 </script>
 <style lang="scss" scoped>

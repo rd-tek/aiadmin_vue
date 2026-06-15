@@ -110,7 +110,6 @@
         }
 
         .btn-wrap {
-            padding: 26px 0;
             position: relative;
 
             .btn-group {
@@ -133,6 +132,10 @@
             &.is-move {
                 opacity: 1;
                 transform: translateY(0);
+            }
+
+            .btn-wrap {
+                padding: 46px 0 26px 0;
             }
         }
 
