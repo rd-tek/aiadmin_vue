@@ -123,7 +123,6 @@
             }
 
             .btn-wrap {
-                padding: 26px 0;
                 position: relative;
 
                 .btn-group {
@@ -611,6 +610,15 @@
                                 padding-right: 10px;
                                 margin-right: 10px;
 
+                                &:last-child {
+                                    padding: 0;
+                                    margin: 0;
+
+                                    &:after {
+                                        display: none;
+                                    }
+                                }
+
                                 &:after {
                                     content: '';
                                     display: block;
@@ -622,11 +630,14 @@
                                     top: 50%;
                                     transform: translateY(-50%);
                                 }
-                            }
 
-                            .note {
-                                font-size: 14px;
-                                color: #00B34A;
+                                &.color-green {
+                                    color: #00B34A;
+                                }
+
+                                &.color-red {
+                                    color: #EF2B49;
+                                }
                             }
                         }
                     }

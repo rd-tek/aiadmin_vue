@@ -14,7 +14,6 @@
             <div class="col d-flex flex-column">
                 <div class="d-flex">
                     <select v-model="searchForm.searchtype">
-                      <option value="all">전체</option>
                       <option value="P.player_id">아이디</option>
                       <option value="P.nickname">닉네임</option>
                       <option value="P.email">이메일</option>
@@ -258,7 +257,7 @@ const totalCount = ref(0);
 // 2026.06.11[cgnoh]: 검색 폼
 const searchForm = reactive({
   status: 0, // 상태
-  searchtype: "all", // 전체
+  searchtype: "P.player_id", // 전체
   id: '', // 아이디
   nickname: '', // 닉네임
   email: '', // 이메일

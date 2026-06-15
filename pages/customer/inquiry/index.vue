@@ -5,10 +5,10 @@
             <div class="col d-flex">
                 <div class="d-flex">
                     <select v-model="searchForm.searchtype">
-                      <option value="title">제목</option>
-                      <option value="contents">내용</option>
+                      <option value="1">제목</option>
+                      <option value="2">내용</option>
                     </select>
-                    <input type="text" v-model="searchForm.searchname" placeholder="검색어" @keyup.enter="handleSearch">
+                    <input type="text" v-model="searchForm.searchname" placeholder="검색어" @input="handleSearch">
                 </div>
                 <button type="button" class="btn" @click="handleSearch">검색</button>
             </div>
@@ -40,34 +40,39 @@
           <div class="table-head-col col-1">비고</div>
         </div>
         <div class="table-body">
-          <div class="table-body-row" v-for="(item, index) in tableList" :key="index" :class="{ 'is-move': tableMove }" ref="tableRef">
-            <div class="table-body-flex flex-column">
-              <div class="table-body-col col-1 is-mob">
-                <span class="color-grey">{{ item.no }}</span>
-              </div>
-              <div class="table-body-col align-left">
-                <nuxt-link :to="`/customer/inquiry/${item.inquiryno}`" class="link" :class="{ 'line-through': item.note === '삭제' }">{{ item.title }}</nuxt-link>
-              </div>
-              <div class="table-body-col col-1 is-mob">
-                <span class="color-grey">{{ item.date }}</span>
-              </div>
-              <div class="table-body-col col-1 is-mob">
-                <span :class="{ 'color-green': item.status === '1', 'color-grey': item.status === '0' }">{{ item.status === '1' ? '게시' : '대기' }}</span>
-              </div>
-              <div class="table-body-col col-1 is-mob">
-                <span :class="{ 'color-green': item.deleteflag === '0', 'color-red': item.deleteflag === '1' }">{{ item.deleteflag === '1' ? '삭제' : '정상' }}</span>
-              </div>
-            </div>
-            <div class="table-body-mob">
-              <div class="row">
-                <div class="row-list">
-                  <span class="date">{{ item.date }}</span>
-                  <span class="status">{{ item.cnt }}</span>
-                  <span class="status"><span class="note">{{ item.type === '1' ? '게시' : '대기' }}</span></span>
-                  <span class="note">{{ item.deleteflag === '1' ? '삭제' : '정상' }}</span>
+          <template v-if="tableList.length > 0">
+            <div class="table-body-row" v-for="(item, index) in tableList" :key="index" :class="{ 'is-move': tableMove }" ref="tableRef">
+              <div class="table-body-flex flex-column">
+                <div class="table-body-col col-1 is-mob">
+                  <span class="color-grey">{{ item.no }}</span>
                 </div>
-              </div> 
+                <div class="table-body-col align-left">
+                  <nuxt-link :to="`/customer/inquiry/${item.inquiryno}`" class="link" :class="{ 'line-through': item.note === '삭제' }">{{ item.title }}</nuxt-link>
+                </div>
+                <div class="table-body-col col-1 is-mob">
+                  <span class="color-grey">{{ item.date }}</span>
+                </div>
+                <div class="table-body-col col-1 is-mob">
+                  <span :class="{ 'color-green': item.status === '1', 'color-grey': item.status === '0' }">{{ item.status === '1' ? '게시' : '대기' }}</span>
+                </div>
+                <div class="table-body-col col-1 is-mob">
+                  <span :class="{ 'color-green': item.deleteflag === '0', 'color-red': item.deleteflag === '1' }">{{ item.deleteflag === '1' ? '삭제' : '정상' }}</span>
+                </div>
+              </div>
+              <div class="table-body-mob">
+                <div class="row">
+                  <div class="row-list">
+                    <span class="date">{{ item.date }}</span>
+                    <span class="status">{{ item.cnt }}</span>
+                    <span class="status"><span class="note">{{ item.type === '1' ? '게시' : '대기' }}</span></span>
+                    <span class="note">{{ item.deleteflag === '1' ? '삭제' : '정상' }}</span>
+                  </div>
+                </div> 
+              </div>
             </div>
+          </template>
+          <div class="table-body-row is-move" v-else>
+            <div class="no-data">데이터가 없습니다.</div>
           </div>
         </div>
         <div class="btn-wrap">
@@ -135,8 +140,8 @@ const totalCount = ref(0);
 
 // 2026.06.08[cgnoh]: 검색 폼 상태
 const searchForm = reactive({
-  searchtype: "title",
-  searchname: "",
+  searchtype: "1", // 검색유형
+  searchname: "", // 검색어
   pageno: 1,
   pagesize: 10,
 });
@@ -155,14 +160,9 @@ const getNoticelist = async () => {
 
 // 2026.06.08[cgnoh]: 검색 처리 (한글 미완성 방지)
 const handleSearch = async () => {
-  const incompleteKorean = /[ㄱ-ㅎㅏ-ㅣ]/;
-  if (incompleteKorean.test(searchForm.searchname)) {
-    alert("검색어를 완성해서 입력해주세요.");
-    return;
-  }
   searchForm.pageno = 1;
   await getNoticelist();
-};
+}
 
 // 2026.06.08[cgnoh]: 페이지 변경
 const handlePageChange = async (page) => {

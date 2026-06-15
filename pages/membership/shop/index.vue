@@ -21,7 +21,6 @@
             <div class="col d-flex">
                 <div class="d-flex">
                     <select v-model="searchForm.searchtype">
-                      <option value="all">전체</option>
                       <option value="1">매장</option>
                       <option value="2">아이디</option>
                       <option value="3">대표자</option>
@@ -270,7 +269,7 @@ const totalCount = ref(0);
 const searchForm = reactive({
   status: "", // 상태(정상/탈퇴)
   ownertype: "", // 유형(프랜차이즈/직영매장)
-  searchtype: "all", // 검색유형(매장/아이디/대표자/연락처)
+  searchtype: "1", // 검색유형(매장/아이디/대표자/연락처)
   searchname: "",
   pageno: 1, // 페이지 넘버
   pagesize: 10, // 페이지 단위
