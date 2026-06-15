@@ -21,12 +21,13 @@
             <div class="col d-flex">
                 <div class="d-flex">
                     <select v-model="searchForm.searchtype">
-                      <option value="">전체</option>
-                      <option value="shopname">이름</option>
-                      <option value="nickname">닉네임</option>
-                      <option value="email">이메일</option>
+                      <option value="all">전체</option>
+                      <option value="1">매장</option>
+                      <option value="2">아이디</option>
+                      <option value="3">대표자</option>
+                      <option value="4">연락처</option>
                     </select>
-                    <input type="text" v-model="searchForm.searchname" placeholder="닉네임" @keyup.enter="handleSearch">
+                    <input type="text" v-model="searchForm.searchname" placeholder="검색어를 입력해주세요." @input="handleSearch">
                 </div>
                 <button type="button" class="btn" @click="handleSearch">검색</button>
             </div>
@@ -80,16 +81,16 @@
                   </button>
                 </div>
                 <div class="table-body-col is-mob">
-                  <nuxt-link :to="`/membership/shop/${item.ownerno}`" class="color-purple link text-underline">{{ item.shopname }}</nuxt-link>
+                  <nuxt-link :to="`/membership/shop/${item.ownerno}`" class="color-purple link text-underline">{{ item.shopname || '-' }}</nuxt-link>
                 </div>
-                <div class="table-body-col is-mob">{{ item.address4 }}</div>
-                <div class="table-body-col is-mob">{{ item.name }}</div>
+                <div class="table-body-col is-mob">{{ item.address4 || '-' }}</div>
+                <div class="table-body-col is-mob">{{ item.name || '-' }}</div>
                 <div class="table-body-col is-mob">
-                  <button type="button" @click="modalOpen(item)" class="link text-underline">{{ item.roomcnt }}</button>
+                  <button type="button" @click="modalOpen(item)" class="link text-underline">{{ item.roomcnt || '-' }}</button>
                 </div>
-                <div class="table-body-col is-mob">{{ item.phone }}</div>
+                <div class="table-body-col is-mob">{{ item.phone || '-' }}</div>
                 <div class="table-body-col is-mob">
-                  <span class="color-grey">{{ item.regdate }}</span>
+                  <span class="color-grey">{{ item.regdate || '-' }}</span>
                 </div>
                 <div class="table-body-col is-mob">
                   <span v-if="item.status === '1'" class="color-green">정상</span>
@@ -104,39 +105,39 @@
                 <div class="table-body-mob" v-if="mobListIndex === index">
                   <dl class="list">
                     <dt class="tit">지역</dt>
-                    <dd class="cnt">{{ item.region }}</dd>
+                    <dd class="cnt">{{ item.address4 || '=' }}</dd>
                   </dl>
                   <dl class="list">
                     <dt class="tit">매장</dt>
                     <dd class="cnt">
-                      <nuxt-link :to="`/membership/shop/${index}`" class="link text-underline">{{ item.shop }}</nuxt-link>
+                      <nuxt-link :to="`/membership/shop/${index}`" class="color-purple link text-underline">{{ item.shopname || '-' }}</nuxt-link>
                     </dd>
                   </dl>
                   <dl class="list">
                     <dt class="tit">대표자</dt>
-                    <dd class="cnt">{{ item.name }}</dd>
+                    <dd class="cnt">{{ item.name || '-' }}</dd>
                   </dl>
                   <dl class="list">
                     <dt class="tit">장비 수</dt>
                     <dd class="cnt">
-                      <button type="button" @click="modalOpen" class="color-purple">{{ item.count }}</button>
+                      <button type="button" @click="modalOpen" class="text-underline">{{ item.roomcnt || '-' }}</button>
                     </dd>
                   </dl>
                   <dl class="list">
                     <dt class="tit">연락처</dt>
-                    <dd class="cnt">{{ item.number }}</dd>
+                    <dd class="cnt">{{ item.phone || '-' }}</dd>
                   </dl>
                   <dl class="list">
                     <dt class="tit">등록일</dt>
                     <dd class="cnt">
-                      <span class="color-grey">{{ item.date }}</span>
+                      <span class="color-grey">{{ item.regdate || '-' }}</span>
                     </dd>
                   </dl>
                   <dl class="list">
                     <dt class="tit">상태</dt>
                     <dd class="cnt">
-                      <span v-if="item.status === '정상'" class="color-green">{{ item.status }}</span>
-                      <span v-else-if="item.status === '탈퇴'" class="color-red">{{ item.status }}</span>
+                      <span v-if="item.status === '1'" class="color-green">정상</span>
+                      <span v-else-if="item.status === '2'" class="color-red">정지</span>
                     </dd>
                   </dl>
                 </div>
@@ -267,12 +268,12 @@ const totalCount = ref(0);
 
 // 2026.06.12[cgnoh]: 검색 폼
 const searchForm = reactive({
-  ownertype: "",
-  status: "",
-  searchtype: "shopname",
+  status: "", // 상태(정상/탈퇴)
+  ownertype: "", // 유형(프랜차이즈/직영매장)
+  searchtype: "all", // 검색유형(매장/아이디/대표자/연락처)
   searchname: "",
-  pageno: 1,
-  pagesize: 10,
+  pageno: 1, // 페이지 넘버
+  pagesize: 10, // 페이지 단위
 });
 
 // 2026.06.12[cgnoh]: 매장 회원 리스트 조회

@@ -15,11 +15,11 @@
                 <div class="d-flex">
                     <select v-model="searchForm.searchtype">
                       <option value="all">전체</option>
-                      <option value="id">아이디</option>
-                      <option value="nickname">닉네임</option>
-                      <option value="email">이메일</option>
+                      <option value="P.player_id">아이디</option>
+                      <option value="P.nickname">닉네임</option>
+                      <option value="P.email">이메일</option>
                     </select>
-                    <input type="text" v-model="searchForm.searchname" placeholder="검색어를 입력해주세요." @keyup.enter="handleSearch">
+                    <input type="text" v-model="searchForm.searchname" placeholder="검색어를 입력해주세요." @input="handleSearch">
                 </div>
                 <button type="button" class="btn" @click="handleSearch">검색</button>
             </div>
@@ -108,7 +108,7 @@
                 </dl>
                 <dl class="list">
                   <dt class="tit">이메일</dt>
-                  <dd class="cnt">{{ item.playerinfo.email }}</dd>
+                  <dd class="cnt">{{ item.playerinfo.email || '-' }}</dd>
                 </dl>
                 <dl class="list">
                   <dt class="tit">인증</dt>
@@ -244,6 +244,7 @@
 <script setup>
 import { useIntersectionObserver } from "@vueuse/core";
 import { useMembersApi } from "~/api/member";
+import { useDebounceFn } from "@vueuse/core";
 
 // 2026.06.11[cgnoh]: api 관련
 const membersApi = useMembersApi();
@@ -256,11 +257,14 @@ const totalCount = ref(0);
 
 // 2026.06.11[cgnoh]: 검색 폼
 const searchForm = reactive({
-  status: 0,
-  searchtype: "all",
-  searchname: "",
-  pageno: 1,
-  pagesize: 10,
+  status: 0, // 상태
+  searchtype: "all", // 전체
+  id: '', // 아이디
+  nickname: '', // 닉네임
+  email: '', // 이메일
+  searchname: "", // 검색어
+  pageno: 1, // 페이지 넘버
+  pagesize: 10, // 페이지 노출수
 });
 
 // 2026.06.11[cgnoh]: 일반회원 리스트 조회
@@ -274,11 +278,23 @@ const _playerList = async () => {
   }
 };
 
-// 2026.06.11[cgnoh]: 검색 핸들러
-const handleSearch = async () => {
-  searchForm.pageno = 1;
-  await _playerList();
+// 2026.06.11[cgnoh]: 동적 검색 핸들러
+const fetchList = async () => {
+  try {
+    const res = await membersApi._playerlist(searchForm);
+
+    totalCount.value = res.playerlistcnt || 0;
+    tableList.value = res.playerlist || [];
+  } catch (err) {
+    console.error(err);
+  }
 };
+
+// 2026.06.11[cgnoh]: 검색 핸들러
+const handleSearch = useDebounceFn(async () => {
+  searchForm.pageno = 1;
+  await fetchList();
+}, 0);
 
 // 2026.05.22[cgnoh]: 인터렉션 관련
 const tableRef  = ref();
