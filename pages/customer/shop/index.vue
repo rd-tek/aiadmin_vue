@@ -72,8 +72,8 @@
                   <div class="row-list">
                     <span class="date">{{ item.date }}</span>
                     <span class="status">{{ item.cnt }}</span>
-                    <span class="status"><span class="note">{{ item.type === '1' ? '게시' : '대기' }}</span></span>
-                    <span class="note">{{ item.deleteflag === '1' ? '삭제' : '정상' }}</span>
+                    <span class="status" :class="{ 'color-green': item.status === '1', 'color-grey': item.status === '0' }">{{ item.status === '1' ? '게시' : '대기' }}</span>
+                    <span class="status" :class="{ 'color-green': item.deleteflag === '0', 'color-red': item.deleteflag === '1' }">{{ item.deleteflag === '1' ? '삭제' : '정상' }}</span>
                   </div>
                 </div> 
               </div>
