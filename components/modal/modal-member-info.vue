@@ -88,7 +88,7 @@
 </template>
 
 <script setup>
-import { useMembersApi } from "~/api/members";
+import { useMembersApi } from "~/api/member";
 
 const membersApi = useMembersApi();
 
@@ -107,8 +107,8 @@ const playerInfo = ref(null);
 watch(() => props.isOpen, async (val) => {
   console.log('Modal open state changed:', props.playerno);
   if (val && props.playerno) {
-    const res = await membersApi._playerview(props.playerno);
-    if (res) playerInfo.value = res.memberinfo;
+    const res = await membersApi._playerinfo(props.playerno);
+    if (res) playerInfo.value = res;
   }
 });
 
