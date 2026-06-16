@@ -5,22 +5,28 @@ export const useMembersApi = () => {
   const apiFetch = useApiFetch();
 
   // 회원 리스트
-const _playerlist = async (params) => {
-  return await apiFetch("/membership/playerlist", {
-    method: "GET",
-    query: {
-      status: params.status,
-      searchtype: params.searchtype,
-      searchname: params.searchname,
-      pageno: params.pageno,
-      pagesize: params.pagesize,
-    },
-  });
-};
+  const _playerlist = async (params) => {
+    return await apiFetch("/membership/playerlist", {
+      method: "GET",
+      query: {
+        status: params.status,
+        searchtype: params.searchtype,
+        searchname: params.searchname,
+        pageno: params.pageno,
+        pagesize: params.pagesize,
+      },
+    });
+  };
 
   // 회원 상세
   const _playerview = async (playerno) => {
     return await apiFetch(`/membership/playerview/${playerno}`, {
+      method: "GET",
+    });
+  };
+
+  const _playerinfo = async (playerno) => {
+    return await apiFetch(`/common/playerinfo/${playerno}`, {
       method: "GET",
     });
   };
@@ -195,7 +201,7 @@ const _playerlist = async (params) => {
     }
   };
 
-// 통합관리매장회원장비수정
+  // 통합관리매장회원장비수정
   const _adminOwnerRoomEdit = async (form) => {
     try {
       return await apiFetch(`/ownership/ownerroomwrite/${form.ownerno}`, {
@@ -290,5 +296,6 @@ const _playerlist = async (params) => {
     _pointlist,
     _addpoint,
     _removepoint,
+    _playerinfo,
   };
 };

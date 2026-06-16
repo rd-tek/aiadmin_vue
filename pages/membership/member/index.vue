@@ -236,7 +236,7 @@
       <!-- 회원 정보 모달 -->
       <modal-member-info
         :isOpen="modals.modalMemberInfo"
-        :item="selectedItem"
+        :playerno="selectedItem?.playerinfo?.playerno"
         @update:isOpen="modals.modalMemberInfo = $event"/>
     </div>
 </template>

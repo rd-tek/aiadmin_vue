@@ -181,9 +181,9 @@ const openErrorToast = (message) => {
 // 2026.06.04[cgnoh]: 저장 핸들링
 const handleSave = async () => {
   try {
-    const res = await membersApi._ownerwrite(
-      ownerinfo.value.player_pk,
-      ownerinfo.value
+    const res = await membersApi._playeredit(
+      playerInfo.value.player_pk,
+      playerInfo.value
     );
     if (res?.success || res?.code === 200) {
       openSaveToast('저장되었습니다.');

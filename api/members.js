@@ -39,9 +39,9 @@ export const useMembersApi = () => {
     }
   };
 
-  const _playerview = async (params) => {
+  const _playerview = async (player_pk) => {
     try {
-      const res = await apiFetch("/membership/playerview/" + params.player_pk, {
+      const res = await apiFetch("/membership/playerview/" + player_pk, {
         method: "GET",
 
         // headers: {
@@ -53,7 +53,7 @@ export const useMembersApi = () => {
       if (res.code === 200) {
         return {
           success: true,
-          view: res.playerview,
+          memberinfo: res.memberinfo,
           message: res.message,
         };
       } else {

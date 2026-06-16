@@ -11,7 +11,7 @@
           <img src="/images/icon/icon_close_grey.png" alt="icon_close_grey" />
         </button>
       </div>
-      <div class="modal-body" v-if="item?.playerinfo">
+      <div class="modal-body" v-if="playerInfo">
         <div class="content-section">
           <p class="title">기본 정보</p>
           <table>
@@ -22,17 +22,17 @@
               <tbody>
                   <tr>
                       <th>닉네임</th>
-                      <td>{{ item.playerinfo.nickname }}</td>
+                      <td>{{ playerInfo?.playerbasicinfo?.nickname || '-' }}</td>
                       <th>성별</th>
-                      <td>{{ item.playerinfo.gender === 'M' ? '남' : item.playerinfo.gender === 'F' ? '여' : '-' }}</td>
+                      <td>{{ playerInfo?.playerbasicinfo?.gender === 'M' ? '남' : playerInfo?.playerbasicinfo?.gender === 'F' ? '여' : '-' }}</td>
                   </tr>
                   <tr>
                       <th>단골매장</th>
                       <td>
-                          <span class="color-grey">{{ item.playerinfo.shopname || '-' }}</span>
+                          <span class="color-grey">{{ playerInfo?.playerbasicinfo?.shopname || '-' }}</span>
                       </td>
                       <th>가입일</th>
-                      <td>{{ formatDate(item.playerinfo.regdate) || '-' }}</td>
+                      <td>{{ formatDate(playerInfo?.playerbasicinfo?.timezone_date) || '-' }}</td>
                   </tr>
               </tbody>
           </table>
@@ -50,27 +50,27 @@
             <tbody>
               <tr>
                 <th>평균 성공 퍼트 거리</th>
-                <td>{{ item.playerinfo.avg_putt_distance || '-' }}</td>
+                <td>{{ playerInfo?.playerpalyinfo?.avggreenhit ? playerInfo.playerpalyinfo.avggreenhit + 'm' : '-' }}</td>
                 <th>전체 라운드</th>
-                <td>{{ item.playerinfo.total_rounds || '-' }}</td>
+                <td>{{ playerInfo?.playerpalyinfo?.playcnt || '-' }}</td>
               </tr>
               <tr>
                 <th>평균 드라이버 거리</th>
-                <td>{{ item.playerinfo.avg_driver_distance || '-' }}</td>
+                <td>{{ playerInfo?.playerpalyinfo?.avgdriver ? playerInfo.playerpalyinfo.avgdriver + 'm' : '-' }}</td>
                 <th>페어웨이 안착률</th>
-                <td>{{ item.playerinfo.fairway_hit_rate || '-' }}</td>
+                <td>{{ playerInfo?.playerpalyinfo?.farewayrate ? playerInfo.playerpalyinfo.farewayrate + '%' : '-' }}</td>
               </tr>
               <tr>
                 <th>GIR</th>
-                <td>{{ item.playerinfo.gir || '-' }}</td>
+                <td>{{ playerInfo?.playerpalyinfo?.greenrate ? playerInfo.playerpalyinfo.greenrate + '%' : '-' }}</td>
                 <th>파 세이브율</th>
-                <td>{{ item.playerinfo.par_save_rate || '-' }}</td>
+                <td>{{ playerInfo?.playerpalyinfo?.parsaverate ? playerInfo.playerpalyinfo.parsaverate + '%' : '-' }}</td>
               </tr>
               <tr>
                 <th>평균 타수</th>
-                <td>{{ item.playerinfo.avg_strokes || '-' }}</td>
+                <td>{{ playerInfo?.playerpalyinfo?.avgshot || '-' }}</td>
                 <th>최저 타수</th>
-                <td>{{ item.playerinfo.best_strokes || '-' }}</td>
+                <td>{{ playerInfo?.playerpalyinfo?.minshot || '-' }}</td>
               </tr>
             </tbody>
           </table>
@@ -85,19 +85,33 @@
       </div>
     </div>
   </div>
-
 </template>
+
 <script setup>
+import { useMembersApi } from "~/api/member";
+
+const membersApi = useMembersApi();
+
 const props = defineProps({
   isOpen: {
     type: Boolean,
     default: false,
   },
-  item: {
-    type: Object
+  playerno: { type: [String, Number], default: null },
+});
+
+const emit = defineEmits(['update:isOpen']);
+
+const playerInfo = ref(null);
+
+watch(() => props.isOpen, async (val) => {
+  console.log('Modal open state changed:', props.playerno);
+  if (val && props.playerno) {
+    const res = await membersApi._playerinfo(props.playerno);
+    if (res) playerInfo.value = res;
   }
 });
-const emit = defineEmits(['update:isOpen']);
+
 const modalClose = () => {
   emit("update:isOpen", false);
   document.querySelector("body").classList.remove("is-hidden");
@@ -120,6 +134,7 @@ const formatDate = (dateStr) => {
   return `${yyyy}.${mm}.${dd} ${hh}:${min}`;
 };
 </script>
+
 <style lang="scss" scoped>
 @use "@/assets/scss/components/modal.scss";
 </style>
