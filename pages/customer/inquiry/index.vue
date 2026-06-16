@@ -150,7 +150,6 @@ const searchForm = reactive({
 const getNoticelist = async () => {
   try {
     const res = await customerApi._inquiryList(searchForm);
-    console.log("inquiryList response", res);
     totalCount.value = res.inquirylistcnt || 0;
     tableList.value = res.inquirylist || [];
   } catch (err) {

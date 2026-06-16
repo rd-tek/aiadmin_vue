@@ -69,119 +69,69 @@
                                 </div>
                             </td>
                         </tr>
-                        <tr>
-                            <th>서브 코스 1</th>
-                            <td>
-                                <div class="course-wrap">
-                                    <div class="input-text">
-                                        <input
-                                            type="text"
-                                            v-model="form.subcourse.subcoursename"
-                                        />
-                                    </div>
-                                    <div class="table-area type02">
-                                        <div class="table-list">
-                                            <div class="table-wrap">
-                                                <table class="table type02 is-move">
-                                                    <tbody>
-                                                        <tr>
-                                                            <th>홀</th>
-                                                            <td v-for="(item, index) in form.subcourse.subcoursehole[0].hole" :key="index">
-                                                                <button type="button" @click="modalOpen(form)" class="link">{{ item }}</button>
-                                                            </td>
-                                                            <td>합계</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>파</th>
-                                                            <td v-for="(item, index) in form.subcourse.subcoursehole[0].par" :key="index">
-                                                                <div class="input-text">
-                                                                    <input type="text" :value="item" disabled>
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                <div class="input-text">
-                                                                    <input type="text" value="-" disabled>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>핸디캡</th>
-                                                            <td v-for="(item, index) in form.subcourse.subcoursehole[0].handicap" :key="index">
-                                                                <div class="input-text">
-                                                                    <input type="text" :value="item" disabled>
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                <div class="input-text">
-                                                                    <input type="text" value="-" disabled>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                    
-                                                </table>
+                        <tr v-for="(anc, i) in subcoursecnt" :key="i">
+                            <template v-if="i < form.subcourselistcnt">
+                                <th>서브 코스 {{ anc }}</th>
+                                <td>
+                                    <div class="course-wrap">
+                                        <div class="input-text">
+                                            <input
+                                                type="text"
+                                                v-model="form.subcourse.subcoursename[index]"
+                                            />
+                                        </div>
+                                        <div class="table-area type02">
+                                            <div class="table-list">
+                                                <div class="table-wrap">
+                                                    <table class="table type02 is-move">
+                                                        <tbody>
+                                                            <tr>
+                                                                <th>홀</th>
+                                                                <td v-for="(item, j) in form.subcourse.subcoursehole[i].hole" :key="j">
+                                                                    <button type="button" @click="modalOpen(form)" class="link">{{ item }}</button>
+                                                                </td>
+                                                                <td>합계</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>파</th>
+                                                                <!-- <td v-for="(item, j) in form.subcourse.subcoursehole[i].par" :key="j">
+                                                                    <div class="input-text">
+                                                                        <input type="text" :value="item" disabled>
+                                                                    </div>
+                                                                </td> -->
+                                                                <td v-for="(item, j) in subcourse[i]?.subcoursehole" :key="j">
+                                                                    {{ item.par_score }}
+                                                                </td>
+                                                                <td>
+                                                                    <div class="input-text">
+                                                                        <input type="text" value="-" disabled>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>핸디캡</th>
+                                                                <!-- <td v-for="(item, index) in form.subcourse.subcoursehole[0].handicap" :key="index">
+                                                                    <div class="input-text">
+                                                                        <input type="text" :value="item" disabled>
+                                                                    </div>
+                                                                </td> -->
+                                                                <td v-for="(item, j) in subcourse[i]?.subcoursehole" :key="j">
+                                                                    {{ item.handicap }}
+                                                                </td>
+                                                                <td>
+                                                                    <div class="input-text">
+                                                                        <input type="text" value="-" disabled>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>서브 코스 2</th>
-                            <td>
-                                <div class="course-wrap">
-                                    <div class="input-text">
-                                        <input
-                                            type="text"
-                                            v-model="form.city"
-                                        />
-                                    </div>
-                                    <div class="table-area type02">
-                                        <div class="table-list">
-                                            <div class="table-wrap">
-                                                <table class="table type02 is-move">
-                                                    <tbody>
-                                                        <tr>
-                                                            <th>홀</th>
-                                                            <td v-for="(item, index) in form.subcourse.subcoursehole[1].hole" :key="index">
-                                                                <button type="button" @click="modalOpen(form)" class="link">{{ item }}</button>
-                                                            </td>
-                                                            <td>합계</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>파</th>
-                                                            <td v-for="(item, index) in form.subcourse.subcoursehole[1].par" :key="index">
-                                                                <div class="input-text">
-                                                                    <input type="text" :value="item" disabled>
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                <div class="input-text">
-                                                                    <input type="text" value="-" disabled>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>핸디캡</th>
-                                                            <td v-for="(item, index) in form.subcourse.subcoursehole[1].handicap" :key="index">
-                                                                <div class="input-text">
-                                                                    <input type="text" :value="item" disabled>
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                <div class="input-text">
-                                                                    <input type="text" value="-" disabled>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                    
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
+                                </td>
+                            </template>
                         </tr>
                         <tr>
                             <th>코스 이미지</th>
@@ -210,7 +160,13 @@
                             <td>
                                 <div class="checkbox-list">
                                     <div class="check-box">
-                                        <input type="checkbox" id="chk_0" name="chk_0" v-model="form.status"> 
+                                        <input 
+                                            type="checkbox" 
+                                            id="chk_0" 
+                                            name="chk_0" 
+                                            v-model="form.status" 
+                                            true-value="0" 
+                                            false-value="1"> 
                                         <label for="chk_0">
                                             <span class="check-box-item">
                                                 <i class="item-line" />
@@ -221,7 +177,13 @@
                                 </div>
                                 <div class="checkbox-list">
                                     <div class="check-box">
-                                        <input type="checkbox" id="chk_1" name="chk_1" v-model="form.viewflag">
+                                        <input 
+                                            type="checkbox" 
+                                            id="chk_1" 
+                                            name="chk_1" 
+                                            v-model="form.viewflag" 
+                                            true-value="0" 
+                                            false-value="1">
                                         <label for="chk_1">
                                             <span class="check-box-item">
                                                 <i class="item-line" />
@@ -267,7 +229,11 @@
                             <th>지역</th>
                             <td>
                                 <div class="input-text">
-                                    <input type="text" v-model="form.area" required>
+                                    <input 
+                                        type="text" 
+                                        v-model="form.area"
+                                        placeholder="지역명을 입력해주세요." 
+                                        required>
                                 </div>
                             </td>
                         </tr>
@@ -276,7 +242,7 @@
                             <td>
                                 <div class="select-default m-w-100">
                                     <select v-model="form.country" required>
-                                        <option value="7">대한민국</option>
+                                        <option value="5">대한민국</option>
                                     </select>
                                 </div>
                             </td>
@@ -284,8 +250,11 @@
                         <tr>
                             <th>설명</th>
                             <td>
-                                <div class="input-text">
-                                    <input type="text" v-model="form.contents" required>
+                                <div class="text-area">
+                                    <textarea 
+                                        v-model="form.contents"
+                                        placeholder="설명을 입력해주세요." 
+                                        required />
                                 </div>
                             </td>
                         </tr>
@@ -298,6 +267,7 @@
             </div>
         </div>
 
+        <!-- 코스 홀 정보 등록/수정 모달 -->
         <modal-course-write 
             :isOpen="modals.modalCourseWrite"
             :item="selectedItem"
@@ -309,89 +279,90 @@ import { useRoute } from "vue-router";
 import { useIntersectionObserver } from "@vueuse/core";
 import { useCourseApi } from "~/api/course";
 
+// 2026.06.16[cgnoh]: 선택된 홀 정보
 const selectedItem = ref(null);
+
+// 2026.06.16[cgnoh]: 모달 관련
 const modals = reactive({ modalCourseWrite: false });
 const modalOpen = async (item) => {
-    console.log(item)
     selectedItem.value = item;
     modals['modalCourseWrite'] = true;
     document.querySelector('body').classList.add('is-hidden');
 }
 
+// 2026.06.16[cgnoh]: 라우터 관련
 const route = useRoute();
 
+// 2026.06.16[cgnoh]: api 관련
 const {
   _courseView,
   _courseEdit,
 } = useCourseApi();
 
-const tableRef = ref();
-const tableMove = ref(false);
+// 2026.06.16[cgnoh]: 폼 형태
+const form = reactive({
+    coursename: "", // 코스명
+    coursecode: "", // 코드
+    holesum: "", // 홀 수
+    parsum: "", // 파 수
+    subcourselistcnt: "2", // 서브 코스 수
 
-useIntersectionObserver(
-  tableRef,
-  ([{ isIntersecting }]) => {
-    if (isIntersecting) tableMove.value = true;
-  },
-  { threshold: 0 }
-);
+    // 서브 코스
+    subcourse: {
+        subcourseseq: [],
+        type_fk: [],
+        subcoursename: [],
+        subcourseparsum: [],
+        subcoursehole: [
+        {
+            hole: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            par: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            handicap: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        },
+        {
+            hole: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            par: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            handicap: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        },
+        {
+            hole: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            par: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            handicap: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        },
+        {
+            hole: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            par: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            handicap: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        },
+        ],
+    },
+    filename: "", // 코스 이미지
+    status: "0", // 코스 사용 여부(사용)
+    viewflag: "0", // 코스 사용 여부(표시)
+    field: "", // 난이도(필드)
+    green: "", // 난이도(그린)
+    area: "", // 지역
+    country: "7", // 국가
+    contents: "", // 설명
+});
 
+// 2026.06.16[cgnoh]: 서브 코스 갯수
+const subcoursecnt = ref([1,2,3,4])
+
+// 2026.06.16[cgnoh]: 파일 관련
 const fileInput = ref(null);
 const previewImage = ref(null);
 const fileName = ref("");
 
-const form = reactive({
-        coursename: "",
-        coursecode: "",
-        holesum: "",
-        parsum: "",
-        subcourselistcnt: "2",
-        subcourse: {
-          subcourseseq: [],
-          type_fk: [],
-          subcoursename: [],
-          subcourseparsum: [],
-          subcoursehole: [
-            {
-              hole: [1, 2, 3, 4, 5, 6, 7, 8, 9],
-              par: [0, 0, 0, 0, 0, 0, 0, 0, 0],
-              handicap: [0, 0, 0, 0, 0, 0, 0, 0, 0],
-            },
-            {
-              hole: [1, 2, 3, 4, 5, 6, 7, 8, 9],
-              par: [0, 0, 0, 0, 0, 0, 0, 0, 0],
-              handicap: [0, 0, 0, 0, 0, 0, 0, 0, 0],
-            },
-            {
-              hole: [1, 2, 3, 4, 5, 6, 7, 8, 9],
-              par: [0, 0, 0, 0, 0, 0, 0, 0, 0],
-              handicap: [0, 0, 0, 0, 0, 0, 0, 0, 0],
-            },
-            {
-              hole: [1, 2, 3, 4, 5, 6, 7, 8, 9],
-              par: [0, 0, 0, 0, 0, 0, 0, 0, 0],
-              handicap: [0, 0, 0, 0, 0, 0, 0, 0, 0],
-            },
-          ],
-        },
-        filename: "",
-        status: "0",
-        viewflag: "",
-        field: "",
-        green: "",
-        country: "",
-        area: "",
-        contents: "",
-        path: "",
-        image: "",
-});
-
+// 2026.06.16[cgnoh]: 서브 코스 리스트
 const subCourseList = ref([]);
 
+// 2026.06.16[cgnoh]: 파일 트리거 이벤트
 const triggerFile = () => {
   fileInput.value?.click();
 };
 
+// 2026.06.16[cgnoh]: 이미지 업로드 핸들링
 const onFileChange = (event) => {
   const file = event.target.files?.[0];
 
@@ -409,62 +380,115 @@ const onFileChange = (event) => {
   reader.readAsDataURL(file);
 };
 
-// 상세조회
+const subcourse = ref({});
+
+// 2026.06.16[cgnoh]: 상세조회
 const getCourseDetail = async () => {
   try {
     const res = await _courseView(route.params.slug);
-
+    console.log(res.subcourse)
     const info = res.coursebasicinfo || {};
+    subcourse.value = res.subcourse;
+    
 
     Object.assign(form, {
-      coursename: info.coursename || "",
-      coursecode: info.coursecode || "",
-      holesum: info.holesum || 0,
-      parsum: info.parsum || 0,
-      subcoursecnt: info.subcoursecnt || 0,
-      field: info.field || 0,
-      green: info.green || 0,
-      city: info.city || "",
-      country: info.country || "",
-      description: info.description || "",
-      useyn: info.useyn || "Y",
-      displayyn: info.displayyn || "Y",
+        coursename: info.coursename || "", // 코스명
+        coursecode: info.coursecode || "", // 코드
+        holesum: info.holesum || 0, // 홀 수
+        parsum: info.parsum || 0, // 파 수
+        subcourselistcnt: String(
+            info.subcoursecnt || res.subcourse?.length || 1
+        ), // 서브 코스 수
+        field: info.field || 0, // 난이도(필드)
+        green: info.green || 0, // 난이도(그린)
+        area: info.area || "", // 지역
+        country: info.country || "", // 국가
+        contents: info.contents || "", // 설명
+        status: info.status ?? "0",
+        viewflag: info.viewflag ?? "0",
     });
 
     subCourseList.value = res.subcourse || [];
+    
   } catch (err) {
     console.error(err);
   }
 };
 
-// 저장
+// 2026.06.16[cgnoh]: 저장 핸들링
 const handleSave = async () => {
-  const formData = new FormData();
+    const formData = new FormData();
 
-  formData.append("coursename", form.coursename);
-  formData.append("coursecode", form.coursecode);
-  formData.append("holesum", form.holesum);
-  formData.append("subcourselistcnt", form.subcourselistcnt);
-  formData.append("status", form.status);
-  formData.append("viewflag", form.viewflag);
-  formData.append("field", form.field);
-  formData.append("green", form.green);
-  formData.append("country", form.country);
-  formData.append("area", form.area);
-  formData.append("contents", form.contents);
+    formData.append("coursename", form.coursename); // 코스명
+    formData.append("coursecode", form.coursecode); // 코드
+    formData.append("holesum", form.holesum); // 홀 수
+    formData.append("subcourselistcnt", form.subcourselistcnt); // 파 수
+    formData.append("status", form.status); // 
+    formData.append("viewflag", form.viewflag);
+    formData.append("field", form.field); // 난이도(필드)
+    formData.append("green", form.green); // 난이도(그린)
+    formData.append("area", form.area); // 지역
+    formData.append("country", form.country); // 나라
+    formData.append("contents", form.contents); // 설명
+    formData.append("parsum", form.parsum);
+    
+    if (form.filename instanceof File) {
+    formData.append("filename", form.filename);
+    }
 
-  // 서브코스 정보
-  formData.append("type_fk[]", 1);
-  formData.append("subcoursename[]", "OUT");
-  formData.append("subcourseparsum[]", 36);
+    // 서브코스
+    for (
+        let i = 0;
+        i < Number(form.subcourselistcnt);
+        i++
+    ) {
+    formData.append(
+        "type_fk[]",
+        form.subcourse.type_fk[i]
+    );
 
-  // 홀정보
-  formData.append("hole[0][0]", 1);
-  formData.append("par[0][0]", 4);
-  formData.append("handicap[0][0]", 1);
+    formData.append(
+        "subcoursename[]",
+        form.subcourse.subcoursename[i]
+    );
 
-  await _courseEdit(route.params.slug, formData);
+    formData.append(
+        "subcourseparsum[]",
+        form.subcourse.subcourseparsum[i]
+    );
+
+    // 9홀 데이터
+    for (let j = 0; j < 9; j++) {
+        formData.append(
+        `hole[${i}][${j}]`,
+        form.subcourse.subcoursehole[i].hole[j]
+        );
+
+        formData.append(
+        `par[${i}][${j}]`,
+        form.subcourse.subcoursehole[i].par[j]
+        );
+
+        formData.append(
+        `handicap[${i}][${j}]`,
+        form.subcourse.subcoursehole[i].handicap[j]
+        );
+    }
+    }
+
+    await _courseEdit(route.params.slug, formData);
 };
+
+// 2026.06.16[cgnoh]: 인터렉션 관련
+const tableRef = ref();
+const tableMove = ref(false);
+useIntersectionObserver(
+  tableRef,
+  ([{ isIntersecting }]) => {
+    if (isIntersecting) tableMove.value = true;
+  },
+  { threshold: 0 }
+);
 
 onMounted(() => {
   getCourseDetail();

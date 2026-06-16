@@ -17,7 +17,7 @@
             <div class="box">
                 <div class="box-list">
                     <p class="box-list-tit">코스 미니맵</p>
-                    <div class="box-list-cnt">{{ holeData }}
+                    <div class="box-list-cnt">
                         <img
                         :src="
                             common.getImg(

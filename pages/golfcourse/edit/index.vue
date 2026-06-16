@@ -12,7 +12,11 @@
                             <th>코스명</th>
                             <td>
                                 <div class="input-text">
-                                    <input type="text" v-model="form.coursename" required>
+                                    <input 
+                                        type="text" 
+                                        v-model="form.coursename"
+                                        placeholder="코스명을 입력해주세요." 
+                                        required>
                                 </div>
                             </td>
                         </tr>
@@ -20,7 +24,11 @@
                             <th>코드</th>
                             <td>
                                 <div class="input-text">
-                                    <input type="text" v-model="form.coursecode" required>
+                                    <input 
+                                        type="text" 
+                                        v-model="form.coursecode"
+                                        placeholder="코드명을 입력해주세요." 
+                                        required>
                                 </div>
                             </td>
                         </tr>
@@ -28,7 +36,11 @@
                             <th>홀 수</th>
                             <td>
                                 <div class="input-text">
-                                    <input type="text" v-model="holenum" required>
+                                    <input 
+                                        type="text" 
+                                        v-model="holesum"
+                                        placeholder="홀 수를 입력해주세요." 
+                                        required>
                                 </div>
                             </td>
                         </tr>
@@ -36,7 +48,11 @@
                             <th>파 수</th>
                             <td>
                                 <div class="input-text">
-                                    <input type="text" v-model="form.par" required>
+                                    <input 
+                                        type="text" 
+                                        v-model="form.parsum"
+                                        placeholder="파 수를 입력해주세요." 
+                                        required>
                                 </div>
                             </td>
                         </tr>
@@ -44,11 +60,11 @@
                             <th>서브 코스 수</th>
                             <td>
                                 <div class="select-default">
-                                    <select v-model="form.subcoursecnt">
+                                    <select v-model="form.subcourselistcnt">
                                         <option value="1">1</option>
-                                        <option value="1">2</option>
-                                        <option value="1">3</option>
-                                        <option value="1">4</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
                                     </select>
                                 </div>
                             </td>
@@ -240,7 +256,11 @@
                             <th>지역</th>
                             <td>
                                 <div class="input-text">
-                                    <input type="text" v-model="form.area" required>
+                                    <input 
+                                        type="text" 
+                                        v-model="form.area"
+                                        placeholder="지역을 입력해주세요." 
+                                        required>
                                 </div>
                             </td>
                         </tr>
@@ -257,8 +277,11 @@
                         <tr>
                             <th>설명</th>
                             <td>
-                                <div class="input-text">
-                                    <input type="text" v-model="form.contents" required>
+                                <div class="text-area">
+                                    <textarea 
+                                        v-model="form.contents" 
+                                        required 
+                                        placeholder="내용을 입력해주세요." />
                                 </div>
                             </td>
                         </tr>
@@ -277,63 +300,65 @@ import { useIntersectionObserver } from "@vueuse/core";
 import { reactive } from "vue";
 import { useCourseApi } from "~/api/course";
 
+// 2026.06.16[cgnoh]: api  관련
 const { _courseWrite } = useCourseApi();
+
+// 2026.06.16[cgnoh]: 폼 형태
 const form = reactive({
-  coursename: "",
-  coursecode: "",
-  holesum: "",
-  parsum: "",
-  subcourselistcnt: 2,
+    coursename: "", // 코스명
+    coursecode: "",  // 코드
+    holesum: "", // 홀 수
+    parsum: "", // 파 수
+    subcourselistcnt: 1, // 서브 코스 수
 
-  subcourse: {
-    subcoursename: ["", "", "", ""],
-    subcourseparsum: ["", "", "", ""],
-    subcoursehole: [
-      {
-        hole: [1,2,3,4,5,6,7,8,9],
-        par: [0,0,0,0,0,0,0,0,0],
-        handicap: [0,0,0,0,0,0,0,0,0],
-      },
-      {
-        hole: [1,2,3,4,5,6,7,8,9],
-        par: [0,0,0,0,0,0,0,0,0],
-        handicap: [0,0,0,0,0,0,0,0,0],
-      },
-      {
-        hole: [1,2,3,4,5,6,7,8,9],
-        par: [0,0,0,0,0,0,0,0,0],
-        handicap: [0,0,0,0,0,0,0,0,0],
-      },
-      {
-        hole: [1,2,3,4,5,6,7,8,9],
-        par: [0,0,0,0,0,0,0,0,0],
-        handicap: [0,0,0,0,0,0,0,0,0],
-      },
-    ],
-  },
-
-  filename: null,
-
-  status: "0",
-  viewflag: "0",
-
-  field: "",
-  green: "",
-
-  area: "",
-  country: "",
-
-  contents: "",
+    // 서브 코스
+    subcourse: {
+        subcoursename: ["", "", "", ""],
+        subcourseparsum: ["", "", "", ""],
+        subcoursehole: [
+        {
+            hole: [1,2,3,4,5,6,7,8,9],
+            par: [0,0,0,0,0,0,0,0,0],
+            handicap: [0,0,0,0,0,0,0,0,0],
+        },
+        {
+            hole: [1,2,3,4,5,6,7,8,9],
+            par: [0,0,0,0,0,0,0,0,0],
+            handicap: [0,0,0,0,0,0,0,0,0],
+        },
+        {
+            hole: [1,2,3,4,5,6,7,8,9],
+            par: [0,0,0,0,0,0,0,0,0],
+            handicap: [0,0,0,0,0,0,0,0,0],
+        },
+        {
+            hole: [1,2,3,4,5,6,7,8,9],
+            par: [0,0,0,0,0,0,0,0,0],
+            handicap: [0,0,0,0,0,0,0,0,0],
+        },
+        ],
+    },
+    filename: null, // 코스 이미지
+    status: '', // 코스 사용 여부(사용여부)
+    viewflag: "0", // 코스 사용 여부(사용여부)
+    field: "1", // 필드
+    green: "1", // 그린
+    area: "", // 지역
+    country: "7", // 국가
+    contents: "", // 설명
 });
 
-// 파일 관련
+// 2026.06.16[cgnoh]: 파일 관련
 const fileInput = ref(null);
 const previewImage = ref(null);
 const fileName = ref("");
+
+// 2026.06.16[cgnoh]: 파일 트리거 이벤트
 const triggerFile = () => {
   fileInput.value?.click();
 };
 
+// 2026.06.16[cgnoh]: 이미지 업로드 핸들링
 const onFileChange = (event) => {
   const file = event.target.files?.[0];
 
@@ -351,6 +376,7 @@ const onFileChange = (event) => {
   reader.readAsDataURL(file);
 };
 
+// 2026.06.16[cgnoh]: 저장 핸들링
 const handleSave = async () => {
   try {
     const formData = new FormData();
@@ -418,6 +444,7 @@ const handleSave = async () => {
   }
 };
 
+// 2026.06.16[cgnoh]: 인터렉션 관련
 const tableRef  = ref();
 const tableMove = ref(false);
 useIntersectionObserver(tableRef, ([{ isIntersecting }]) => {

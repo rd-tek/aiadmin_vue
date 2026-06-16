@@ -20,7 +20,7 @@
           <tbody>
             <tr>
               <th>코스명</th>
-              <td><b>{{ item?.coursename || '-' }}</b></td>
+              <td>{{ item?.coursename || '-' }}</td>
             </tr>
             <tr>
               <th>서브 코스명</th>
@@ -71,7 +71,7 @@
   </div>
 </template>
 <script setup>
-// 파일 필드 정의
+// 2026.06.16[cgnoh]: 파일 필드 정의
 const fileFields = [
   { key: 'holeImage',      label: '홀 이미지',      accept: 'image/*' },
   { key: 'courseMinimap',  label: '코스 미니맵',     accept: 'image/*' },
@@ -80,7 +80,7 @@ const fileFields = [
   { key: 'holeVideo',      label: '홀 동영상',       accept: 'video/*' },
 ];
 
-// 각 파일 필드의 상태를 key로 관리
+// 2026.06.16[cgnoh]: 각 파일 필드의 상태를 key로 관리
 const fileStates = reactive(
   Object.fromEntries(
     fileFields.map(({ key }) => [
@@ -90,7 +90,7 @@ const fileStates = reactive(
   )
 );
 
-// 각 input 엘리먼트를 key로 관리
+// 2026.06.16[cgnoh]: 각 input 엘리먼트를 key로 관리
 const fileRefs = {};
 const setFileRef = (key, el) => {
   if (el) fileRefs[key] = el;
@@ -115,9 +115,7 @@ const onFileChange = (key, event) => {
   reader.readAsDataURL(file);
 };
 
-// 저장 시 fileStates에서 각 파일 접근 가능
-// ex) fileStates.holeImage.file
-
+// 2026.06.16[cgnoh]: 저장 시 fileStates에서 각 파일 접근 가능
 const props = defineProps({
     isOpen: { type: Boolean, default: false },
     item: {
@@ -130,6 +128,7 @@ const modalClose = () => {
   document.querySelector('body').classList.remove('is-hidden');
 };
 
+// 2026.06.16[cgnoh]: 저장 핸들링
 const modalSave = () => {
 
 };

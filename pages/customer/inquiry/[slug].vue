@@ -2,35 +2,19 @@
     <div class="customer-member detail">
         <div class="detail-wrap" :class="{ 'is-move': detailMove }" ref="detailRef">
             <div class="top-area">
-                <div class="title">{{ noticeInfo.title }}</div>
+                <div class="title">{{ noticeInfo.title || '-' }}</div>
                 <div class="info">
-                    <div class="info-list label">
-                        <span class="label" :class="{ 'color-purple': noticeInfo.type === '1', 'color-blue': noticeInfo.type === '2' }">{{ noticeInfo.type === '1' ? '공지' : '뉴스' }}</span>
-                    </div>
-                    <div class="info-list name">{{ noticeInfo.lastname }}</div>
-                    <div class="info-list date">{{ noticeInfo.date }}</div>
+                    <div class="info-list name">{{ noticeInfo.lastname || '-' }}</div>
+                    <div class="info-list date">{{ noticeInfo.date || '-' }}</div>
                 </div>
             </div>
             <div class="desc-area">
                 <span v-html="noticeInfo.content" />
+                <span v-if="!noticeInfo.content">-</span>
             </div>
             <div class="page-area">
                 <div class="page-area-list">
                     <span class="tit">이전글</span>
-                    <span class="cnt">
-                        <nuxt-link
-                            v-if="prevPost"
-                            :to="`/customer/inquiry/${prevPost.inquiry_pk}`"
-                            >
-                            {{ prevPost.title }}
-                        </nuxt-link>
-                        <span v-if="prevPost == ''" class="no-link">
-                            이전 글이 없습니다.
-                        </span>
-                    </span>
-                </div>
-                <div class="page-area-list">
-                    <span class="tit">다음글</span>
                     <span class="cnt">
                         <nuxt-link
                             v-if="nextPost"
@@ -39,6 +23,20 @@
                             {{ nextPost.title }}
                         </nuxt-link>
                         <span v-if="nextPost == ''" class="no-link">
+                            이전 글이 없습니다.
+                        </span>
+                    </span>
+                </div>
+                <div class="page-area-list">
+                    <span class="tit">다음글</span>
+                    <span class="cnt">
+                        <nuxt-link
+                            v-if="prevPost"
+                            :to="`/customer/inquiry/${prevPost.inquiry_pk}`"
+                            >
+                            {{ prevPost.title }}
+                        </nuxt-link>
+                        <span v-if="prevPost == ''" class="no-link">
                             다음 글이 없습니다.
                         </span>
                     </span>
@@ -74,16 +72,15 @@ const customerApi = useCustomerApi();
 const noticeInfo = ref({});
 
 // 2026.06.08[cgnoh]: 이전/다음 글 관련 상태
-const nextPost = ref(null);
 const prevPost = ref(null);
+const nextPost = ref(null);
 
 // 2026.06.08[cgnoh]: 공지사항/뉴스 상세 조회
 const getNoticeDetail = async () => {
-  const res = await customerApi._inquiryView(route.params.slug);
-    console.log(res, 'res')
-  noticeInfo.value = res.inquiryview || {};
-  nextPost.value = res.next_post || null;
-  prevPost.value = res.prev_post || null;
+    const res = await customerApi._inquiryView(route.params.slug);
+    noticeInfo.value = res.inquiryview || {};
+    prevPost.value = res.prev_post || null;
+    nextPost.value = res.next_post || null;
 };
 
 // 2026.06.08[cgnoh]: 글 수정 페이지로 이동

@@ -158,7 +158,6 @@ const searchForm = reactive({
 const getNoticelist = async () => {
   try {
     const res = await customerApi._playerNoticelist(searchForm);
-    console.log("playerNoticelist response", res);
     totalCount.value = res.noticelistcnt || 0;
     tableList.value = res.noticelist || [];
   } catch (err) {

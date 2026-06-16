@@ -2,8 +2,8 @@
     <div class="golf-course detail">
         <div class="detail-wrap" :class="{ 'is-move': detailMove }" ref="detailRef">
             <div class="top-area">
-                <div class="title">{{ courseData.coursename }}</div>
-                <div class="sub">코드: {{ courseData.coursecode }}</div>
+                <div class="title">{{ courseData.coursename || '-' }}</div>
+                <div class="sub">코드: {{ courseData.coursecode || '-' }}</div>
             </div>
             <div class="view-area">
                 <div class="img-area" :style="{
