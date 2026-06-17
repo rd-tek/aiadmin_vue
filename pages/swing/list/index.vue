@@ -65,30 +65,52 @@
             <div class="no-data">데이터가 없습니다.</div>
           </div>
         </div>
-        <ul class="pagination-container type02">
+        <ul
+          class="pagination-container type02"
+        >
+          <!-- 이전 -->
           <li>
-              <button type="button" class="paginate-buttons" aria-label="이전">
-                  <img src="/images/icon/icon_prev.png" alt="icon_prev"/>
-              </button>
+            <button
+              type="button"
+              class="paginate-buttons"
+              :disabled="pageNo === 1"
+              @click="changePage(pageNo - 1)"
+            >
+              <img
+                src="/images/icon/icon_prev.png"
+                alt="prev"
+              />
+            </button>
           </li>
-          <li>
-              <button type="button" class="paginate-buttons active">1</button>
+
+          <!-- 번호 -->
+          <li
+            v-for="page in visiblePages"
+            :key="page"
+          >
+            <button
+              type="button"
+              class="paginate-buttons"
+              :class="{ active: pageNo === page }"
+              @click="changePage(page)"
+            >
+              {{ page }}
+            </button>
           </li>
+
+          <!-- 다음 -->
           <li>
-              <button type="button" class="paginate-buttons">2</button>
-          </li>
-          <li>
-              <button type="button" class="paginate-buttons">3</button>
-          </li> 
-          <li>
-              <button type="button" class="paginate-buttons" aria-label="더보기">
-                  <img src="/images/icon/icon_more_horiz.png" alt="icon_more_horiz" />
-              </button>
-          </li>
-          <li>
-              <button type="button" class="paginate-buttons" aria-label="다음">
-                  <img src="/images/icon/icon_next.png" alt="icon_next"/>
-              </button>
+            <button
+              type="button"
+              class="paginate-buttons"
+              :disabled="pageNo === totalPage"
+              @click="changePage(pageNo + 1)"
+            >
+              <img
+                src="/images/icon/icon_next.png"
+                alt="next"
+              />
+            </button>
           </li>
         </ul>
       </div>
@@ -112,8 +134,43 @@ const { _swingList } = useSwingApi();
 // 2026.06.16[cgnoh]: 스윙영상 리스트
 const rowList = ref([]);
 
-// 2026.06.16[cgnoh]: 페이지 넘버
+// 2026.06.16[cgnoh]: 페이지 관련
 const pageNo = ref(1);
+const pageSize = 10;
+const totalCount = ref(0);
+const totalPage = ref(1);
+
+// 2026.06.16[cgnoh]: 페이지 변경 메서드
+const changePage = (page) => {
+  if (page < 1 || page > totalPage.value) return;
+
+  pageNo.value = page;
+  getSwingList();
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth",
+  });
+};
+
+// 2026.06.16[cgnoh]: 페이지네이션 핸들링
+const visiblePages = computed(() => {
+  const current = pageNo.value;
+  const total = totalPage.value;
+
+  let start = Math.max(1, current - 2);
+  let end = Math.min(total, start + 4);
+
+  if (end - start < 4) {
+    start = Math.max(1, end - 4);
+  }
+
+  return Array.from(
+    { length: end - start + 1 },
+    (_, i) => start + i
+  );
+});
+
 
 // 2026.06.16[cgnoh]: 검색 폼
 const searchForm = reactive({
@@ -175,26 +232,44 @@ const formatApiDate = (date) => {
 };
 
 // 2026.06.16[cgnoh]: 리스트 조회
+// const getSwingList = async () => {
+//   try {
+//     const res = await _swingList({
+//       pageno: pageNo.value,
+//       pagesize: 1000, // 전체 조회
+//     });
+
+//     if (res.code === 200) {
+//       const start = new Date(startDate.value);
+//       start.setHours(0, 0, 0, 0);
+
+//       const end = new Date(endDate.value);
+//       end.setHours(23, 59, 59, 999);
+
+//       rowList.value = (res.swinglist || []).filter((item) => {
+//         if (!item.regdate) return false;
+//         const regDate = new Date(item.regdate.replace(" ", "T"));
+
+//         return regDate >= start && regDate <= end;
+//       });
+//     }
+//   } catch (err) {
+//     console.error(err);
+//   }
+// };
+
 const getSwingList = async () => {
   try {
     const res = await _swingList({
       pageno: pageNo.value,
-      pagesize: 1000, // 전체 조회
+      pagesize: pageSize,
     });
 
     if (res.code === 200) {
-      const start = new Date(startDate.value);
-      start.setHours(0, 0, 0, 0);
+      totalCount.value = Number(res.swinglistcnt || 0);
+      totalPage.value = Math.ceil(totalCount.value / pageSize);
 
-      const end = new Date(endDate.value);
-      end.setHours(23, 59, 59, 999);
-
-      rowList.value = (res.swinglist || []).filter((item) => {
-        if (!item.regdate) return false;
-        const regDate = new Date(item.regdate.replace(" ", "T"));
-
-        return regDate >= start && regDate <= end;
-      });
+      rowList.value = res.swinglist || [];
     }
   } catch (err) {
     console.error(err);
