@@ -422,9 +422,11 @@
                 <button type="button" class="btn-md-fill btn-primary-purple">저장하기</button>
             </div>
         </div>
-    </div>
 
-    <modal-course-write :isOpen="modals.modalCourseWrite" @update:isOpen="modals.modalCourseWrite = $event"/>
+        <modal-course-write 
+            :isOpen="modals.modalCourseWrite" 
+            @update:isOpen="modals.modalCourseWrite = $event"/>
+    </div>
 </template>
 <script setup>
 import { useIntersectionObserver } from "@vueuse/core";

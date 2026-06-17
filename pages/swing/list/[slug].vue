@@ -5,25 +5,29 @@
             <div class="col d-flex">
                 <div class="d-flex">
                   <div class="datepicker">
-                    <VueDatePicker 
-                      v-model="month"
-                      :format="formatMonth" 
-                      date-picker
-                      auto-apply
-                      @open="isFocused = true"
-                      @closed="isFocused = false"
-                    />
+                    <client-only>
+                      <VueDatePicker 
+                        v-model="startDate"
+                        :format="formatDate" 
+                        date-picker
+                        auto-apply
+                        @open="isFocused = true"
+                        @closed="isFocused = false"
+                      />
+                    </client-only>
                   </div>
                   <span class="wave">~</span>
                   <div class="datepicker">
-                    <VueDatePicker 
-                      v-model="month"
-                      :format="formatMonth" 
-                      date-picker
-                      auto-apply
-                      @open="isFocused = true"
-                      @closed="isFocused = false"
-                    />
+                    <client-only>
+                      <VueDatePicker 
+                        v-model="endDate"
+                        :format="formatDate" 
+                        date-picker
+                        auto-apply
+                        @open="isFocused = true"
+                        @closed="isFocused = false"
+                      />
+                    </client-only>
                   </div>
                 </div>
                 <button type="button" class="btn" @click="handleSearch">검색</button>
@@ -31,7 +35,7 @@
         </div>
       </div>
       <div class="detail-wrap">
-        <div class="head">
+        <div class="head">{{ swingInfo }}
           <div class="title">202610120910 스윙영상</div>
           <div class="date">2026-10-01 18:13:13</div>
         </div>
@@ -473,14 +477,48 @@
     </div>
 </template>
 <script setup>
-const editingId = ref(-1);
+import { useRoute } from "vue-router";
+import { useSwingApi } from "~/api/swing";
+
+// 2026.06.17[cgnoh]: 라우터 관련
+const route = useRoute();
+const swingPk = computed(() => route.params.id);
+const { _swingView } = useSwingApi();
+const swingInfo = ref({});
+
+// 2026.06.17[cgnoh]: 상세 조회
+const getDetail = async () => {
+  const res = await _swingView(swingPk.value);
+  console.log(res)
+
+  if (res.code === 200) {
+    swingInfo.value = res.data;
+  }
+};
+
+// 2026.06.16[cgnoh]: 날짜 관련
+const startDate = ref(new Date());
+startDate.value.setMonth(startDate.value.getMonth() - 14);
+const endDate = ref(new Date());
+const formatDate = (date) => {
+  if (!date) return "";
+  const year = date.getFullYear()
+  const month = `${date.getMonth() + 1}`.padStart(2, "0")
+  const day = `${date.getDate()}`.padStart(2, "0")
+  return `${year}.${month}.${day}`
+};
+
+// 2026.06.17[cgnoh]: 현재 탭
 const currentTab = ref('address');
 
+
+// 2026.06.17[cgnoh]: 답글 쓰기
 const replyBoxFor = ref(-1);
 const handleComment = (index) => {
   replyBoxFor.value = replyBoxFor.value === index ? -1 : index;
 };
 
+// 2026.06.17[cgnoh]: 툴팁 핸들링
 const tooltipRefs = ref([]);
 const setTooltipRef = (el, index) => {
   if (!el) return;
@@ -488,6 +526,7 @@ const setTooltipRef = (el, index) => {
   tooltipRefs.value[index] = el;
 }
 
+// 2026.06.17[cgnoh]: 툴팁 핸들링
 const tooltipDepthRefs = ref([]);
 const setTooltipDepthRef = (el, index) => {
   if (!el) return;
@@ -501,7 +540,9 @@ const setTooltipDepthRef = (el, index) => {
   });
 }
 
+// 2026.06.17[cgnoh]: 댓글 수정
 const editText  = ref('');
+const editingId = ref(-1);
 const handleEdit = (index) => {
   if (editingId.value === index) {
     editingId.value = -1;
@@ -513,10 +554,10 @@ const handleEdit = (index) => {
   editText.value = commentList.value[index].text;
 }
 
+// 2026.06.17[cgnoh]: 댓글 삭제
 const handleDelete = (index) => {
   commentList.value.splice(index, 1);
 
-  // 상태 초기화
   tooltipShow.value = -1;
 
   if (editingId.value === index) {
@@ -535,6 +576,7 @@ const editingReplyId = ref({
   replyIndex: -1,
 });
 
+// 2026.06.17[cgnoh]: 답글 수정
 const handleReplyEdit = (parentIndex, replyIndex) => {
   const isSame =
     editingReplyId.value.parentIndex === parentIndex &&
@@ -559,28 +601,28 @@ const handleReplyEdit = (parentIndex, replyIndex) => {
     commentList.value[parentIndex].replies[replyIndex].text;
 };
 
-// 답글 삭제
+// 2026.06.17[cgnoh]: 답글 삭제
 const handleReplyDelete = (parentIndex, replyIndex) => {
   commentList.value[parentIndex].replies.splice(replyIndex, 1);
   tooltipDepthShow.value = -1;
 };
 
-// 글 등록하기
+// 2026.06.17[cgnoh]: 글 등록하기
 const commentText = ref('')
 const handleSubmit = () => {
   if (!commentText.value.trim()) return;
 
   commentList.value.push({
-    nickname: '나', // 실제로는 로그인 유저
+    nickname: '나',
     date: new Date().toLocaleDateString(),
     text: commentText.value,
     replies: []
   });
 
-  commentText.value = ''; // 입력 초기화
+  commentText.value = '';
 };
 
-
+// 2026.06.17[cgnoh]: 답글 등록하기
 const handleSave = (index) => {
   if (!editText.value.trim()) return;
 
@@ -592,6 +634,7 @@ const handleSave = (index) => {
   tooltipShow.value = -1;
 }
 
+// 2026.06.17[cgnoh]: 수정답글 등록하기
 const handleReplySave = (parentIndex, replyIndex) => {
   if (!replyText.value.trim()) return;
 
@@ -608,13 +651,12 @@ const handleReplySave = (parentIndex, replyIndex) => {
   tooltipDepthShow.value = -1;
 };
 
-const replyText = ref('');
-
-// 탭 클릭 시 특정 프레임으로 이동
+// 2026.06.17[cgnoh]: 탭 클릭
 const onClickStage = (tabName) => {
   currentTab.value = tabName;
 };
 
+// 2026.06.17[cgnoh]: 댓글 리스트
 const commentList = ref([
   {
     nickname: '홍길동',
@@ -630,24 +672,28 @@ const commentList = ref([
   }
 ]);
 
+// 2026.06.17[cgnoh]: 툴팁 핸들링
 const tooltipShow = ref(-1);
 const handleTooltip = (index) => {
   tooltipShow.value =
     tooltipShow.value === index ? -1 : index;
 };
 
+// 2026.06.17[cgnoh]: 답글 툴팁 핸들링
 const tooltipDepthShow = ref(-1);
 const handleReplyTooltip = (index) => {
   tooltipDepthShow.value = tooltipDepthShow.value === index ? -1 : index;
 };
 
+// 2026.06.17[cgnoh]: 댓글(수정) 취소
 const handleCancel = () => {
   replyBoxFor.value = -1;
   editingId.value = -1;
   tooltipShow.value = -1;
 }
 
-// 답글 취소
+// 2026.06.17[cgnoh]: 답글 취소
+const replyText = ref('');
 const handleReplyCancel = () => {
   replyBoxFor.value = -1;
   replyText.value = '';
@@ -655,12 +701,12 @@ const handleReplyCancel = () => {
   tooltipDepthShow.value = -1;
 };
 
-// 답글 등록
+// 2026.06.17[cgnoh]: 답글 등록
 const handleReplySubmit = (parentIndex) => {
   if (!replyText.value.trim()) return;
 
   commentList.value[parentIndex].replies.push({
-    nickname: '나', // 실제로는 로그인 유저
+    nickname: '나',
     date: new Date().toLocaleDateString(),
     text: replyText.value,
   });
@@ -669,6 +715,9 @@ const handleReplySubmit = (parentIndex) => {
   replyBoxFor.value = -1;
 };
 
+onMounted(() => {
+  getDetail();
+});
 
 // 2026.03.04[cgnoh]: 페이지 메타 정보
 definePageMeta({

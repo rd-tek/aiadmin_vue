@@ -9,7 +9,7 @@
                 <div class="datepicker">
                   <VueDatePicker 
                     v-model="month"
-                    :format="formatMonth" 
+                    :format="formatDate" 
                     month-picker
                     auto-apply
                     @open="isFocused = true"
@@ -17,7 +17,7 @@
                   />
                   <VueDatePicker 
                     v-model="month"
-                    :format="formatMonth" 
+                    :format="formatDate" 
                     month-picker
                     auto-apply
                     @open="isFocused = true"

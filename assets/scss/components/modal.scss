@@ -298,6 +298,10 @@
     }
 
     &.modal-swing-info {
+        .modal-body {
+            font-size: 14px;
+        }
+
         .modal-footer {
             .btn-wrap {
                 button {

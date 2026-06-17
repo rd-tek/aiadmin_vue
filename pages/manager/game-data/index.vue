@@ -672,13 +672,16 @@
 import { useIntersectionObserver } from "@vueuse/core";
 import { useGameDataApi } from "@/api/gamedata";
 
+// 2026.06.16[cgnoh]: api 관련
 const { _gameDataList } = useGameDataApi();
 
+// 2026.06.16[cgnoh]: 날짜 관련
 const startDate = ref(new Date());
 const endDate = ref(new Date());
 const startTime = ref(new Date());
 const endTime = ref(new Date());
 
+// 2026.06.16[cgnoh]: 시작 날짜 포맷
 const formatStartDate = (date) => {
   if (!date) return "";
   const year = date.getFullYear()
@@ -687,6 +690,7 @@ const formatStartDate = (date) => {
   return `${year}.${month}.${day}`
 };
 
+// 2026.06.16[cgnoh]: 종료 날짜 포맷
 const formatEndDate = (date) => {
   if (!date) return "";
   const year = date.getFullYear()
@@ -695,6 +699,7 @@ const formatEndDate = (date) => {
   return `${year}.${month}.${day}`
 };
 
+// 2026.06.16[cgnoh]: 시작 시간 포맷
 const formatStartTime = (date) => {
   if (!date) return "";
 
@@ -706,6 +711,7 @@ const formatStartTime = (date) => {
   return `${period} ${displayHour}:${minutes}`;
 };
 
+// 2026.06.16[cgnoh]: 종료 시간 포맷
 const formatEndTime = (date) => {
   if (!date) return "";
 

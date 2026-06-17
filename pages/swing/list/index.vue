@@ -4,27 +4,23 @@
         <div class="col-2 flex-end">
             <div class="col d-flex">
                 <div class="d-flex">
-                  <div class="datepicker">
-                    <VueDatePicker 
+                  <ClientOnly>
+                    <VueDatePicker
                       v-model="startDate"
-                      :format="formatDate" 
+                      :format="formatDate"
                       date-picker
                       auto-apply
-                      @open="isFocused = true"
-                      @closed="isFocused = false"
                     />
-                  </div>
+                  </ClientOnly>
                   <span class="wave">~</span>
-                  <div class="datepicker">
-                    <VueDatePicker 
+                  <ClientOnly>
+                    <VueDatePicker
                       v-model="endDate"
-                      :format="formatDate" 
+                      :format="formatDate"
                       date-picker
                       auto-apply
-                      @open="isFocused = true"
-                      @closed="isFocused = false"
                     />
-                  </div>
+                  </ClientOnly>
                 </div>
                 <button type="button" class="btn" @click="handleSearch">검색</button>
             </div>
@@ -39,26 +35,26 @@
             <div class="row-list-item">
               <div class="cont-wrap">
                 <div class="img-area">
-                  <div class="image" :style="{ backgroundImage: `url('/images/default/img_coach_01.png')` }"></div>
+                  <div class="image" :style="{ backgroundImage: `url(${item.fit_preview_path})` }"></div>
                 </div>
-                <nuxt-link :to="`/swing/list/${index}`" class="info-area">
-                  <div class="label" :class="{ 'color-green': item.state === '공개' }">{{ item.state }}</div>
-                  <button type="button" class="title">{{ item.title }}</button>
+                <nuxt-link :to="`/swing/list/${item.swing_pk}`" class="info-area">
+                  <div class="label" :class="{ 'color-green': item.view_flag === '1' }">{{ item.view_flag === '1' ? '공개' : '비공개' }}</div>
+                  <button type="button" class="title">{{ item.title || '-' }}</button>
                   <div class="desc">
                     <span class="desc-list">
-                      <span class="name">{{ item.name }}</span>
+                      <span class="name">{{ item.nickname || '-' }}</span>
                     </span>
                     <span class="desc-list">
-                      <span class="date">{{ item.date }}</span>
+                      <span class="date">{{ item.regdate || '-' }}</span>
                     </span>
                     <span class="desc-list">
-                      <span class="location">{{ item.location }}</span>
+                      <span class="location">{{ item.shopname || '-' }}</span>
                     </span>
                   </div>
                 </nuxt-link>
                 <div class="btn-area">
-                  <button type="button" class="btn-md-line btn-primary-purple" @click="modalOpen">수정</button>
-                  <button type="button" class="btn-md-line btn-delete">삭제</button>
+                  <button type="button" class="btn-md-line btn-primary-purple" @click="modalOpen(item)">수정</button>
+                  <button type="button" class="btn-md-line btn-delete" @click="handleDelete(item)">삭제</button>
                 </div>
               </div>
             </div>
@@ -97,18 +93,70 @@
         </ul>
       </div>
       
+      <!-- 회원 정보 모달 -->
       <modal-swing-info
         :isOpen="modals.modalSwingInfo"
+        :item="selectedItem"
+        @saved="getSwingList"
         @update:isOpen="modals.modalSwingInfo = $event" />
 
     </div>
 </template>
 <script setup>
-import { useRouter } from "vue-router";
 import { useIntersectionObserver } from "@vueuse/core";
 import { useSwingApi } from "~/api/swing";
 
+// 2026.06.16[cgnoh]: api 관련
+const { _swingList } = useSwingApi();
+
+// 2026.06.16[cgnoh]: 스윙영상 리스트
+const rowList = ref([]);
+
+// 2026.06.16[cgnoh]: 페이지 넘버
+const pageNo = ref(1);
+
+// 2026.06.16[cgnoh]: 검색 폼
+const searchForm = reactive({
+  startdate: '',
+  enddate: '',
+});
+
+// 2026.06.16[cgnoh]: 모달관련
+const selectedItem = ref();
+const modals = reactive({ modalMemberInfo: false });
+const modalOpen = (item) => {
+  selectedItem.value = item;
+  modals.modalSwingInfo = true;
+  document.querySelector('body')?.classList.add('is-hidden');
+};
+
+// 2026.06.16[cgnoh]: 삭제 핸들링
+const handleDelete = async (item) => {
+  const isConfirm = confirm(
+    `[${item.title}] 영상을 삭제하시겠습니까?`
+  );
+
+  if (!isConfirm) return;
+
+  try {
+    const res = await _swingDelete(item.swing_pk);
+
+    if (res.code === 200) {
+      alert("삭제되었습니다.");
+
+      await getSwingList();
+    } else {
+      alert(res.message || "삭제에 실패했습니다.");
+    }
+  } catch (err) {
+    console.error(err);
+    alert("삭제 중 오류가 발생했습니다.");
+  }
+};
+
+// 2026.06.16[cgnoh]: 날짜 관련
 const startDate = ref(new Date());
+startDate.value.setMonth(startDate.value.getMonth() - 14);
 const endDate = ref(new Date());
 const formatDate = (date) => {
   if (!date) return "";
@@ -117,9 +165,49 @@ const formatDate = (date) => {
   const day = `${date.getDate()}`.padStart(2, "0")
   return `${year}.${month}.${day}`
 };
-const isFocused = ref(false);
-const { _swingList } = useSwingApi();
-const router = useRouter();
+
+// 2026.06.16[cgnoh]: 날짜 포맷
+const formatApiDate = (date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
+// 2026.06.16[cgnoh]: 리스트 조회
+const getSwingList = async () => {
+  try {
+    const res = await _swingList({
+      pageno: pageNo.value,
+      pagesize: 1000, // 전체 조회
+    });
+
+    if (res.code === 200) {
+      const start = new Date(startDate.value);
+      start.setHours(0, 0, 0, 0);
+
+      const end = new Date(endDate.value);
+      end.setHours(23, 59, 59, 999);
+
+      rowList.value = (res.swinglist || []).filter((item) => {
+        if (!item.regdate) return false;
+        const regDate = new Date(item.regdate.replace(" ", "T"));
+
+        return regDate >= start && regDate <= end;
+      });
+    }
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+// 2026.06.16[cgnoh]: 검색 핸들링
+const handleSearch = () => {
+  pageNo.value = 1;
+  getSwingList();
+};
+
+// 2026.06.16[cgnoh]: 인터렉션 관련
 const rowListRef = ref();
 const rowListMove = ref(false);
 useIntersectionObserver(
@@ -134,42 +222,27 @@ useIntersectionObserver(
     }
 );
 
-const rowList = ref([]);
-const pageNo = ref(1);
+watch(
+  [startDate, endDate],
+  ([newStart, newEnd]) => {
+    if (!newStart || !newEnd) return;
 
-const getSwingList = async () => {
-  try {
-    const res = await _swingList({
-      pageno: pageNo.value,
-      pagesize: 10,
-    });
-
-    if (res.code === 200) {
-      rowList.value = res.swinglist || [];
-    }
-  } catch (err) {
-    console.error("스윙 리스트 조회 실패", err);
+    pageNo.value = 1;
+    getSwingList();
   }
-};
-
-const handleSearch = () => {
-  pageNo.value = 1;
-  getSwingList();
-};
+);
 
 onMounted(() => {
+  const today = new Date();
+
+  const beforeMonth = new Date();
+  beforeMonth.setMonth(beforeMonth.getMonth() - 1);
+
+  searchForm.startdate = formatApiDate(beforeMonth);
+  searchForm.enddate = formatApiDate(today);
+
   getSwingList();
 });
-
-const handleDetail = () => {
-  router.push('/swing/list/0')
-}
-
-const modals = reactive({ modalMemberInfo: false });
-const modalOpen = () => {
-  modals['modalSwingInfo'] = true;
-  document.querySelector('body').classList.add('is-hidden');
-}
 
 // 2026.03.04[cgnoh]: 페이지 메타 정보
 definePageMeta({
