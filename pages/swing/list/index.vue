@@ -232,32 +232,6 @@ const formatApiDate = (date) => {
 };
 
 // 2026.06.16[cgnoh]: 리스트 조회
-// const getSwingList = async () => {
-//   try {
-//     const res = await _swingList({
-//       pageno: pageNo.value,
-//       pagesize: 1000, // 전체 조회
-//     });
-
-//     if (res.code === 200) {
-//       const start = new Date(startDate.value);
-//       start.setHours(0, 0, 0, 0);
-
-//       const end = new Date(endDate.value);
-//       end.setHours(23, 59, 59, 999);
-
-//       rowList.value = (res.swinglist || []).filter((item) => {
-//         if (!item.regdate) return false;
-//         const regDate = new Date(item.regdate.replace(" ", "T"));
-
-//         return regDate >= start && regDate <= end;
-//       });
-//     }
-//   } catch (err) {
-//     console.error(err);
-//   }
-// };
-
 const getSwingList = async () => {
   try {
     const res = await _swingList({

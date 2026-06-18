@@ -12,6 +12,7 @@
                     :format="formatStartDate" 
                     date-picker
                     auto-apply
+                    @update:model-value="getGameList(true)"
                     @open="isFocused = true"
                     @closed="isFocused = false"
                   />
@@ -852,7 +853,7 @@ const resetSearch = () => {
   endTime.value = new Date();
 
   tableList.value = [];
-
+  
   getGameList();
 };
 

@@ -92,7 +92,6 @@ const getOption = () => ({
         color: "#4318FF",
       },
     },
-
     {
       name: "데이터 2",
       type: "line",
@@ -137,7 +136,6 @@ const initChart = async () => {
 // 업데이트
 const updateChart = () => {
   if (!chart) return;
-
   chart.setOption(getOption());
 
   // 데이터 변경 후 리사이즈 한번 더

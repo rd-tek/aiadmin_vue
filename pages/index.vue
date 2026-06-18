@@ -5,17 +5,14 @@
           <div class="dashboard-grid-item">
             <p class="title">
               일반 회원
-              (월누적: {{ dashboardData.playercntmonth.toLocaleString() }}
-              / 총누적: {{ dashboardData.playercnttotal.toLocaleString() }})
+              (월누적: {{ dashboardData.playercntmonth }}
+              / 총누적: {{ dashboardData.playercnttotal }})
             </p>
-            <div class="chart" v-if="dashboardData.length > 0">
+            <div class="chart" v-if="dashboardData !== ''">
               <chart-line
-                :labels="[
-                  '1월','2월','3월','4월','5월','6월',
-                  '7월','8월','9월','10월','11월','12월'
-                ]"
-                :values1="dashboardData.playerlist"
-                :values2="dashboardData.ownerlist"
+                :labels="dashboardData.playerlist.map(v => v.date)"
+                :values1="dashboardData.playerlist.map(v => v.cnt)"
+                :values2="dashboardData.ownerlist.map(v => v.cnt)"
                 height="250px"
               />
             </div>
@@ -24,17 +21,14 @@
           <div class="dashboard-grid-item">
             <p class="title">
               매장 회원
-              (월누적: {{ dashboardData.ownercntmonth.toLocaleString() }}
-              / 총누적: {{ dashboardData.ownercnttotal.toLocaleString() }})
+              (월누적: {{ dashboardData.ownercntmonth }}
+              / 총누적: {{ dashboardData.ownercnttotal }})
             </p>
-            <div class="chart" v-if="dashboardData.length > 0">
+            <div class="chart" v-if="dashboardData !== ''">
               <chart-bar
-                :labels="[
-                  '1월','2월','3월','4월','5월','6월',
-                  '7월','8월','9월','10월','11월','12월'
-                ]"
-                :values1="dashboardData.playerlist"
-                :values2="dashboardData.ownerlist"
+                :labels="dashboardData.playerlist.map(v => v.date)"
+                :values1="dashboardData.playerlist.map(v => v.cnt)"
+                :values2="dashboardData.ownerlist.map(v => v.cnt)"
                 height="250px"
               />
             </div>
@@ -45,17 +39,14 @@
           <div class="dashboard-grid-item">
             <p class="title">
               게임(중단) 회원
-              (월누적: {{ dashboardData.gamestopcntmonth.toLocaleString() }}
-              / 총누적: {{ dashboardData.gamestopcnttotal.toLocaleString() }})
+              (월누적: {{ dashboardData.gamestopcntmonth }}
+              / 총누적: {{ dashboardData.gamestopcnttotal }})
             </p>
-            <div class="chart" v-if="dashboardData.length > 0">
+            <div class="chart" v-if="dashboardData !== ''">
               <chart-line
-                :labels="[
-                  '1월','2월','3월','4월','5월','6월',
-                  '7월','8월','9월','10월','11월','12월'
-                ]"
-                :values1="dashboardData.gamestoplist"
-                :values2="dashboardData.gameendlist"
+                :labels="dashboardData.playerlist.map(v => v.date)"
+                :values1="dashboardData.gamestoplist.map(v => v.cnt)"
+                :values2="dashboardData.gameendlist.map(v => v.cnt)"
                 height="250px"
               />
             </div>
@@ -64,17 +55,14 @@
           <div class="dashboard-grid-item">
             <p class="title">
               게임(완료) 회원
-              (월누적: {{ dashboardData.gameendcntmonth.toLocaleString() }}
-              / 총누적: {{ dashboardData.gameendcnttotal.toLocaleString() }})
+              (월누적: {{ dashboardData.gameendcntmonth }}
+              / 총누적: {{ dashboardData.gameendcnttotal }})
             </p>
-            <div class="chart" v-if="dashboardData.length > 0">
+            <div class="chart" v-if="dashboardData !== ''">
               <chart-bar
-                :labels="[
-                  '1월','2월','3월','4월','5월','6월',
-                  '7월','8월','9월','10월','11월','12월'
-                ]"
-                :values1="dashboardData.gamestoplist"
-                :values2="dashboardData.gameendlist"
+                :labels="dashboardData.playerlist.map(v => v.date)"
+                :values1="dashboardData.gamestoplist.map(v => v.cnt)"
+                :values2="dashboardData.gameendlist.map(v => v.cnt)"
                 height="250px"
               />
             </div>
@@ -85,17 +73,14 @@
           <div class="dashboard-grid-item">
             <p class="title">
               토너먼트 회원
-              (월누적: {{ dashboardData.tournamentcntmonth.toLocaleString() }}
-              / 총누적: {{ dashboardData.tournamentcnttotal.toLocaleString() }})
+              (월누적: {{ dashboardData.tournamentcntmonth }}
+              / 총누적: {{ dashboardData.tournamentcnttotal }})
             </p>
-            <div class="chart" v-if="dashboardData.length > 0">
+            <div class="chart" v-if="dashboardData !== ''">
               <chart-line
-                :labels="[
-                  '1월','2월','3월','4월','5월','6월',
-                  '7월','8월','9월','10월','11월','12월'
-                ]"
-                :values1="dashboardData.tournamentlist"
-                :values2="dashboardData.eventwinninglist"
+                :labels="dashboardData.playerlist.map(v => v.date)"
+                :values1="dashboardData.tournamentlist.map(v => v.cnt)"
+                :values2="dashboardData.eventwinninglist.map(v => v.cnt)"
                 height="250px"
               />
             </div>
@@ -104,17 +89,14 @@
           <div class="dashboard-grid-item">
             <p class="title">
               미니게임 당첨자 회원
-              (월누적: {{ dashboardData.eventwinningcntmonth.toLocaleString() }}
-              / 총누적: {{ dashboardData.eventwinningcnttotal.toLocaleString() }})
+              (월누적: {{ dashboardData.eventwinningcntmonth }}
+              / 총누적: {{ dashboardData.eventwinningcnttotal }})
             </p>
-            <div class="chart" v-if="dashboardData.length > 0">
+            <div class="chart" v-if="dashboardData !== ''">
               <chart-bar
-                :labels="[
-                  '1월','2월','3월','4월','5월','6월',
-                  '7월','8월','9월','10월','11월','12월'
-                ]"
-                :values1="dashboardData.tournamentlist"
-                :values2="dashboardData.eventwinninglist"
+                :labels="dashboardData.playerlist.map(v => v.date)"
+                :values1="dashboardData.tournamentlist.map(v => v.cnt)"
+                :values2="dashboardData.eventwinninglist.map(v => v.cnt)"
                 height="250px"
               />
             </div>
@@ -129,11 +111,10 @@ import { ref, onMounted } from "vue";
 import { useIntersectionObserver } from "@vueuse/core";
 import { useMainApi } from "~/api/main";
 
+// 2026.06.18[cgnoh]: api 관련
 const { _getMain } = useMainApi();
 
-const dashboardRef = ref(null);
-const dashboardMove = ref(false);
-
+// 2026.06.18[cgnoh]: 대시보드 데이터 조회
 const dashboardData = ref({
   
   // 일반 회원
@@ -179,10 +160,19 @@ const dashboardData = ref({
   chart6_data: [],
 });
 
-// 메인 데이터 조회
+// 2026.06.18[cgnoh]: 메인 데이터 조회
 const getMainData = async () => {
   try {
-    const res = await _getMain();
+    const today = new Date();
+
+    const regdate =
+      `${today.getFullYear()}-` +
+      `${String(today.getMonth() + 1).padStart(2, "0")}-` +
+      `${String(today.getDate()).padStart(2, "0")}`;
+
+    const res = await _getMain({
+      regdate,
+    });
 
     if (res.code === 200) {
       dashboardData.value = res;
@@ -192,6 +182,9 @@ const getMainData = async () => {
   }
 };
 
+// 2026.06.18[cgnoh]: 인터렉션 관련
+const dashboardRef = ref(null);
+const dashboardMove = ref(false);
 useIntersectionObserver(
   dashboardRef,
   ([{ isIntersecting }]) => {

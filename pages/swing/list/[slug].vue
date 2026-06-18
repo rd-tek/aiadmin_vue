@@ -34,8 +34,8 @@
             </div>
         </div>
       </div>
-      <div class="detail-wrap">
-        <div class="head">{{ swingInfo }}
+      <div class="detail-wrap">{{ swingInfo }}
+        <div class="head">
           <div class="title">202610120910 스윙영상</div>
           <div class="date">2026-10-01 18:13:13</div>
         </div>
@@ -490,7 +490,7 @@ const swingInfo = ref({});
 const getDetail = async () => {
   const res = await _swingView(swingPk.value);
   console.log(res)
-
+  
   if (res.code === 200) {
     swingInfo.value = res.data;
   }
