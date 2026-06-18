@@ -331,8 +331,21 @@
                 min-width: 40px;
                 font-size: 14px;
 
+                // 완료
                 &.color-blue {
                     background: #3577F1;
+                    color: #fff;
+                }
+
+                // 대기
+                &.color-grey {
+                    background: #ADB0B3;
+                    color: #fff;
+                }
+
+                // 중단
+                &.color-red {
+                    background: #EF2B49;
                     color: #fff;
                 }
             }
@@ -413,6 +426,16 @@
             &-head {
                 &-col {
                     border-top: 1px solid #E6EDFF;
+                }
+            }
+
+            &-body {
+                &-mob {
+                    .list {
+                        .tit {
+                            min-width: 98px;
+                        }
+                    }
                 }
             }
 
