@@ -109,7 +109,7 @@
                 <div class="radio-wrap">
                   <div class="radio-list">
                     <div class="radio-box">
-                        <input type="radio" id="radio_0" name="radio_0">
+                        <input type="radio" id="radio_0" name="radio_0" value="" v-model="searchForm.membertype">
                         <label for="radio_0">
                             <span class="check-box-item" />
                             <span class="check-box-txt">전체</span>
@@ -118,7 +118,7 @@
                   </div>
                   <div class="radio-list">
                     <div class="radio-box">
-                        <input type="radio" id="radio_1" name="radio_0"> 
+                        <input type="radio" id="radio_1" name="radio_0" value="1" v-model="searchForm.membertype"> 
                         <label for="radio_1">
                             <span class="check-box-item" />
                             <span class="check-box-txt">비회원</span>
@@ -127,8 +127,8 @@
                   </div>
                   <div class="radio-list">
                     <div class="radio-box">
-                        <input type="radio" id="radio_2" name="radio_0">
-                        <label for="radio_2">
+                        <input type="radio" id="radio_2" name="radio_0" value="2" v-model="searchForm.membertype">
+                        <label for="radio_2"> 
                             <span class="check-box-item" />
                             <span class="check-box-txt">회원</span>
                         </label>
@@ -230,7 +230,7 @@
             </div>
           </div>
           <div class="btn-wrap">
-            <button type="button" class="btn-md-line">초기화</button>
+            <button type="button" class="btn-md-line" @click="resetSearch">초기화</button>
             <button type="button" class="btn-md-fill btn-primary-purple" @click="getGameList">검색</button>
           </div>
         </div>
@@ -240,99 +240,145 @@
       <div class="game-data-wrap">
         <div class="game-data-cont is-mob">
           <div class="game-data-title">게임 조회</div>
-            <template v-if="tableList.length > 0">
-                <div class="game-data-list" :class="{ 'is-move': tableMove }" ref="tableRef" v-for="(item, index) in tableList" :key="index">
-                    <div class="game-data-item">
-                    <div class="num">{{ item.gameno || '-' }}</div>
-                    <div class="nickname">{{ item.playername || '-' }}</div>
-                    <div class="name">({{ item.gameplayername || '-' }})</div>
-                    </div>
-                    <div class="game-data-item align-left">
-                    <div class="title">{{ item.shopname || '-' }}</div>
-                    <div class="room-wrap">
-                        <span class="room">{{ item.roomno || '-' }}번방</span>
-                        <span class="people">{{ item.cnt || '-' }}명</span>
-                    </div>
-                    </div>
-                    <div class="game-data-item">
-                    <div class="icon-list">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                        <mask id="mask0_2178_3374" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="20" height="20">
-                        <rect width="20" height="20" fill="#D9D9D9"/>
-                        </mask>
-                        <g mask="url(#mask0_2178_3374)">
-                        <path d="M12.7917 13.5417L13.8542 12.4792L10.75 9.375V5H9.25V10L12.7917 13.5417ZM10 18C8.8975 18 7.86146 17.7917 6.89188 17.375C5.92229 16.9583 5.07292 16.3854 4.34375 15.6562C3.61458 14.9271 3.04167 14.0767 2.625 13.105C2.20833 12.1333 2 11.0951 2 9.99042C2 8.88569 2.20833 7.84722 2.625 6.875C3.04167 5.90278 3.61458 5.05556 4.34375 4.33333C5.07292 3.61111 5.92333 3.04167 6.895 2.625C7.86667 2.20833 8.90486 2 10.0096 2C11.1143 2 12.1528 2.21 13.1252 2.63C14.0974 3.05 14.9432 3.62 15.6625 4.34C16.3817 5.06 16.951 5.90667 17.3706 6.88C17.7902 7.85333 18 8.89333 18 10C18 11.1025 17.7917 12.1385 17.375 13.1081C16.9583 14.0777 16.3889 14.9271 15.6667 15.6562C14.9444 16.3854 14.0963 16.9583 13.1223 17.375C12.1483 17.7917 11.1075 18 10 18Z" fill="#72777A"/>
-                        </g>
-                        </svg>
-                        <span class="text">{{ item.timezone_regdate || '-' }}</span>
-                    </div>
-                    <div class="icon-list">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                        <mask id="mask0_2178_3381" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="20" height="20">
-                        <rect width="20" height="20" fill="#D9D9D9"/>
-                        </mask>
-                        <g mask="url(#mask0_2178_3381)">
-                        <path d="M15.75 17C15.4028 17 15.1076 16.8785 14.8646 16.6354C14.6215 16.3924 14.5 16.0972 14.5 15.75C14.5 15.4028 14.6215 15.1076 14.8646 14.8646C15.1076 14.6215 15.4028 14.5 15.75 14.5C16.0972 14.5 16.3924 14.6215 16.6354 14.8646C16.8785 15.1076 17 15.4028 17 15.75C17 16.0972 16.8785 16.3924 16.6354 16.6354C16.3924 16.8785 16.0972 17 15.75 17ZM8 18C6.61111 18 5.43056 17.8289 4.45833 17.4867C3.48611 17.1444 3 16.7331 3 16.2525C3 15.9175 3.24653 15.6146 3.73958 15.3438C4.23264 15.0729 4.90278 14.8611 5.75 14.7083V16.5H7.25V2L13.75 5.25L8.75 7.75V14.5208C10 14.5903 11.0208 14.7842 11.8125 15.1025C12.6042 15.4208 13 15.8021 13 16.2463C13 16.7349 12.5069 17.1493 11.5208 17.4896C10.5347 17.8299 9.36111 18 8 18Z" fill="#72777A"/>
-                        </g>
-                        </svg>
-                        <span class="text">{{ item.playhole || '-' }}H/{{ item.hole || '-' }}H</span>
-                    </div>
-                    <div class="icon-list">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="14" viewBox="0 0 16 14" fill="none">
-                        <path d="M1.5 13.5C1.09722 13.5 0.746528 13.3507 0.447917 13.0521C0.149306 12.7535 0 12.4028 0 12V3C0 2.59722 0.149306 2.24653 0.447917 1.94792C0.746528 1.64931 1.09722 1.5 1.5 1.5H4V0H5.5V1.5H10.5V0H12V1.5H14.5C14.9125 1.5 15.2656 1.64931 15.5594 1.94792C15.8531 2.24653 16 2.59722 16 3V12C16 12.4028 15.8531 12.7535 15.5594 13.0521C15.2656 13.3507 14.9125 13.5 14.5 13.5H1.5ZM7.5 12H8.5V11H7.5V12ZM10.5 9.5H12.5C12.6417 9.5 12.7604 9.45208 12.8562 9.35625C12.9521 9.26042 13 9.14167 13 9V6C13 5.85833 12.9521 5.73958 12.8562 5.64375C12.7604 5.54792 12.6417 5.5 12.5 5.5H10.5C10.3583 5.5 10.2396 5.54792 10.1438 5.64375C10.0479 5.73958 10 5.85833 10 6V9C10 9.14167 10.0479 9.26042 10.1438 9.35625C10.2396 9.45208 10.3583 9.5 10.5 9.5ZM3 9.5H6V8.5H4V8H5.5C5.64167 8 5.76042 7.95208 5.85625 7.85625C5.95208 7.76042 6 7.64167 6 7.5V6C6 5.85833 5.95208 5.73958 5.85625 5.64375C5.76042 5.54792 5.64167 5.5 5.5 5.5H3V6.5H5V7H3.5C3.35833 7 3.23958 7.04792 3.14375 7.14375C3.04792 7.23958 3 7.35833 3 7.5V9.5ZM7.5 9.33333H8.5V8.33333H7.5V9.33333ZM11 8.5V6.5H12V8.5H11ZM7.5 6.66667H8.5V5.66667H7.5V6.66667ZM7.5 4H8.5V3H7.5V4Z" fill="#72777A"/>
+          <template v-if="tableList.length > 0">
+              <div class="game-data-list" :class="{ 'is-move': tableMove }" ref="tableRef" v-for="(item, index) in tableList" :key="index">
+                  <div class="game-data-item">
+                  <div class="num">{{ item.gameno || '-' }}</div>
+                  <div class="nickname">{{ item.playername || '-' }}</div>
+                  <div class="name">({{ item.gameplayername || '-' }})</div>
+                  </div>
+                  <div class="game-data-item align-left">
+                  <div class="title">{{ item.shopname || '-' }}</div>
+                  <div class="room-wrap">
+                      <span class="room">{{ item.roomno || '-' }}번방</span>
+                      <span class="people">{{ item.cnt || '-' }}명</span>
+                  </div>
+                  </div>
+                  <div class="game-data-item">
+                  <div class="icon-list">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                      <mask id="mask0_2178_3374" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="20" height="20">
+                      <rect width="20" height="20" fill="#D9D9D9"/>
+                      </mask>
+                      <g mask="url(#mask0_2178_3374)">
+                      <path d="M12.7917 13.5417L13.8542 12.4792L10.75 9.375V5H9.25V10L12.7917 13.5417ZM10 18C8.8975 18 7.86146 17.7917 6.89188 17.375C5.92229 16.9583 5.07292 16.3854 4.34375 15.6562C3.61458 14.9271 3.04167 14.0767 2.625 13.105C2.20833 12.1333 2 11.0951 2 9.99042C2 8.88569 2.20833 7.84722 2.625 6.875C3.04167 5.90278 3.61458 5.05556 4.34375 4.33333C5.07292 3.61111 5.92333 3.04167 6.895 2.625C7.86667 2.20833 8.90486 2 10.0096 2C11.1143 2 12.1528 2.21 13.1252 2.63C14.0974 3.05 14.9432 3.62 15.6625 4.34C16.3817 5.06 16.951 5.90667 17.3706 6.88C17.7902 7.85333 18 8.89333 18 10C18 11.1025 17.7917 12.1385 17.375 13.1081C16.9583 14.0777 16.3889 14.9271 15.6667 15.6562C14.9444 16.3854 14.0963 16.9583 13.1223 17.375C12.1483 17.7917 11.1075 18 10 18Z" fill="#72777A"/>
+                      </g>
                       </svg>
-                      <span class="text">{{ item.shot || '-' }}점</span>
-                    </div>
-                    </div>
-                    <div class="game-data-item">
-                    <div class="label" 
-                        :class="{ 
-                            'color-blue': item.status === '6', 
-                            'color-grey': item.status === '1', 
-                            'color-red': item.status === '5' }">{{ item.status === '6' ? '완료' : item.status === '1' ? '대기' : item.status === '5' ? '중단' : '-' }}</div>
-                    </div>
-                    <div class="game-data-item">
-                    <div class="teebox">
-                      {{ teeboxText[item.teebox] || '-' }}
-                    </div>
-                    <div class="wind">
-                      {{ windText[item.wind] || '-' }}
-                    </div>
-                    </div>
-                    <div class="game-data-item">
-                    <div class="level">
-                      {{ levelText[item.level] || '-' }}
-                    </div>
-                    <div class="mulligan">멀리건: ({{ item.mulligan || '-' }})</div>
-                    </div>
-                    <div class="game-data-item">
-                    <div class="btn-group">
-                        <button type="button" class="btn-sm-line" @click="handleScoreboard(item.gameno)">스코어보드</button>
-                        <button type="button" class="btn-sm-line" @click="handleOneshotInfo(item.gameno)">원샷정보</button>
-                        <button type="button" class="btn-sm-line" @click="handleGameInfo(item.gameno)">게임정보</button>
-                    </div>
-                    </div>
-                </div>
-            </template>
-            <div class="game-data-list is-move" v-else>
-                <div class="no-data">데이터가 없습니다.</div>
-            </div>
+                      <span class="text">{{ item.timezone_regdate || '-' }}</span>
+                  </div>
+                  <div class="icon-list">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                      <mask id="mask0_2178_3381" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="20" height="20">
+                      <rect width="20" height="20" fill="#D9D9D9"/>
+                      </mask>
+                      <g mask="url(#mask0_2178_3381)">
+                      <path d="M15.75 17C15.4028 17 15.1076 16.8785 14.8646 16.6354C14.6215 16.3924 14.5 16.0972 14.5 15.75C14.5 15.4028 14.6215 15.1076 14.8646 14.8646C15.1076 14.6215 15.4028 14.5 15.75 14.5C16.0972 14.5 16.3924 14.6215 16.6354 14.8646C16.8785 15.1076 17 15.4028 17 15.75C17 16.0972 16.8785 16.3924 16.6354 16.6354C16.3924 16.8785 16.0972 17 15.75 17ZM8 18C6.61111 18 5.43056 17.8289 4.45833 17.4867C3.48611 17.1444 3 16.7331 3 16.2525C3 15.9175 3.24653 15.6146 3.73958 15.3438C4.23264 15.0729 4.90278 14.8611 5.75 14.7083V16.5H7.25V2L13.75 5.25L8.75 7.75V14.5208C10 14.5903 11.0208 14.7842 11.8125 15.1025C12.6042 15.4208 13 15.8021 13 16.2463C13 16.7349 12.5069 17.1493 11.5208 17.4896C10.5347 17.8299 9.36111 18 8 18Z" fill="#72777A"/>
+                      </g>
+                      </svg>
+                      <span class="text">{{ item.playhole || '-' }}H/{{ item.hole || '-' }}H</span>
+                  </div>
+                  <div class="icon-list">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="14" viewBox="0 0 16 14" fill="none">
+                      <path d="M1.5 13.5C1.09722 13.5 0.746528 13.3507 0.447917 13.0521C0.149306 12.7535 0 12.4028 0 12V3C0 2.59722 0.149306 2.24653 0.447917 1.94792C0.746528 1.64931 1.09722 1.5 1.5 1.5H4V0H5.5V1.5H10.5V0H12V1.5H14.5C14.9125 1.5 15.2656 1.64931 15.5594 1.94792C15.8531 2.24653 16 2.59722 16 3V12C16 12.4028 15.8531 12.7535 15.5594 13.0521C15.2656 13.3507 14.9125 13.5 14.5 13.5H1.5ZM7.5 12H8.5V11H7.5V12ZM10.5 9.5H12.5C12.6417 9.5 12.7604 9.45208 12.8562 9.35625C12.9521 9.26042 13 9.14167 13 9V6C13 5.85833 12.9521 5.73958 12.8562 5.64375C12.7604 5.54792 12.6417 5.5 12.5 5.5H10.5C10.3583 5.5 10.2396 5.54792 10.1438 5.64375C10.0479 5.73958 10 5.85833 10 6V9C10 9.14167 10.0479 9.26042 10.1438 9.35625C10.2396 9.45208 10.3583 9.5 10.5 9.5ZM3 9.5H6V8.5H4V8H5.5C5.64167 8 5.76042 7.95208 5.85625 7.85625C5.95208 7.76042 6 7.64167 6 7.5V6C6 5.85833 5.95208 5.73958 5.85625 5.64375C5.76042 5.54792 5.64167 5.5 5.5 5.5H3V6.5H5V7H3.5C3.35833 7 3.23958 7.04792 3.14375 7.14375C3.04792 7.23958 3 7.35833 3 7.5V9.5ZM7.5 9.33333H8.5V8.33333H7.5V9.33333ZM11 8.5V6.5H12V8.5H11ZM7.5 6.66667H8.5V5.66667H7.5V6.66667ZM7.5 4H8.5V3H7.5V4Z" fill="#72777A"/>
+                    </svg>
+                    <span class="text">{{ item.shot || '-' }}점</span>
+                  </div>
+                  </div>
+                  <div class="game-data-item">
+                  <div class="label" 
+                      :class="{ 
+                          'color-blue': item.status === '6', 
+                          'color-grey': item.status === '1', 
+                          'color-red': item.status === '5' }">{{ item.status === '6' ? '완료' : item.status === '1' ? '대기' : item.status === '5' ? '중단' : '-' }}</div>
+                  </div>
+                  <div class="game-data-item">
+                  <div class="teebox">
+                    {{ teeboxText[item.teebox] || '-' }}
+                  </div>
+                  <div class="wind">
+                    {{ windText[item.wind] || '-' }}
+                  </div>
+                  </div>
+                  <div class="game-data-item">
+                  <div class="level">
+                    {{ levelText[item.level] || '-' }}
+                  </div>
+                  <div class="mulligan">멀리건: ({{ item.mulligan || '-' }})</div>
+                  </div>
+                  <div class="game-data-item">
+                  <div class="btn-group">
+                      <button type="button" class="btn-sm-line" @click="handleScoreboard(item.gameno)">스코어보드</button>
+                      <button type="button" class="btn-sm-line" @click="handleOneshotInfo(item.gameno)">원샷정보</button>
+                      <button type="button" class="btn-sm-line" @click="handleGameInfo(item.gameno)">게임정보</button>
+                  </div>
+                  </div>
+              </div>
+          </template>
+          <div class="game-data-list is-move" v-else>
+              <div class="no-data">데이터가 없습니다.</div>
+          </div>
+          <ul
+            class="pagination-container type02"
+            v-if="totalPages > 1"
+          >
+            <li>
+              <button
+                type="button"
+                class="paginate-buttons"
+                :disabled="searchForm.pageno === 1"
+                @click="changePage(searchForm.pageno - 1)"
+              >
+                <img
+                  src="/images/icon/icon_prev.png"
+                  alt="prev"
+                />
+              </button>
+            </li>
+
+            <li
+              v-for="page in pageNumbers"
+              :key="page"
+            >
+              <button
+                type="button"
+                class="paginate-buttons"
+                :class="{ active: page === searchForm.pageno }"
+                @click="changePage(page)"
+              >
+                {{ page }}
+              </button>
+            </li>
+
+            <li>
+              <button
+                type="button"
+                class="paginate-buttons"
+                :disabled="searchForm.pageno === totalPages"
+                @click="changePage(searchForm.pageno + 1)"
+              >
+                <img
+                  src="/images/icon/icon_next.png"
+                  alt="next"
+                />
+              </button>
+            </li>
+          </ul>
         </div>
         <div class="table type03 mob-type02 is-mob">
           <div class="table-title">게임 조회</div>
           <div class="table-head">
-            <div class="table-head-col">No</div>
+            <div class="table-head-col col-1">No</div>
             <div class="table-head-col">이름(닉네임)</div>
           </div>
           <div class="table-body">
             <template v-if="tableList.length > 0">
               <div class="table-body-row" v-for="(item, index) in tableList" :key="index">
                 <div class="table-body-flex">
-                  <div class="table-body-col">
+                  <div class="table-body-col col-1">
                     {{ item.no }}
                   </div>
                   <div class="table-body-col" @click="handleMobList(index)">
-                    <span>{{ item.playername || '-' }}({{ item.gameplayername || '-' }})</span>
+                    <span class="no-wrap">{{ item.playername || '-' }}({{ item.gameplayername || '-' }})</span>
                     <button type="button" class="btn-arrow" :class="{ 'is-active': mobListIndex === index }">
                       <img
                         src="/public/images/icon/icon_arrow_down.png"
@@ -418,6 +464,52 @@
               <div class="no-data">데이터가 없습니다.</div>
             </div>
           </div>
+          <ul
+            class="pagination-container type02"
+            v-if="totalPages > 1"
+          >
+            <li>
+              <button
+                type="button"
+                class="paginate-buttons"
+                :disabled="searchForm.pageno === 1"
+                @click="changePage(searchForm.pageno - 1)"
+              >
+                <img
+                  src="/images/icon/icon_prev.png"
+                  alt="prev"
+                />
+              </button>
+            </li>
+
+            <li
+              v-for="page in pageNumbers"
+              :key="page"
+            >
+              <button
+                type="button"
+                class="paginate-buttons"
+                :class="{ active: page === searchForm.pageno }"
+                @click="changePage(page)"
+              >
+                {{ page }}
+              </button>
+            </li>
+
+            <li>
+              <button
+                type="button"
+                class="paginate-buttons"
+                :disabled="searchForm.pageno === totalPages"
+                @click="changePage(searchForm.pageno + 1)"
+              >
+                <img
+                  src="/images/icon/icon_next.png"
+                  alt="next"
+                />
+              </button>
+            </li>
+          </ul>
         </div>
       </div>
 
@@ -512,8 +604,12 @@ const totalCount = ref(0);
 
 // 2026.06.17[cgnoh]: 게임리스트 조회
 const tableList = ref([]);
-const getGameList = async () => {
+const getGameList = async (resetPage = false) => {
   try {
+    if (resetPage) {
+      searchForm.pageno = 1;
+    }
+
     searchForm.startdate = formatApiDate(startDate.value);
     searchForm.enddate = formatApiDate(endDate.value);
 
@@ -662,8 +758,153 @@ const leave = (el) => {
   el.style.height = "0";
 };
 
-onMounted(() => {
+// 2026.06.18[cgnoh]: 스토리지 관련
+const STORAGE_KEY = "gameDataSearch";
+const saveSearchState = () => {
+  sessionStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify({
+      searchForm: { ...searchForm },
+      startDate: startDate.value,
+      endDate: endDate.value,
+      startTime: startTime.value,
+      endTime: endTime.value,
+      tableList: tableList.value,
+      totalCount: totalCount.value,
+    })
+  );
+};
+
+watch(
+  [
+    searchForm,
+    startDate,
+    endDate,
+    startTime,
+    endTime,
+    tableList,
+  ],
+  () => {
+    saveSearchState();
+  },
+  {
+    deep: true,
+  }
+);
+
+// 2026.06.18[cgnoh]: 페이지 재진입시 복원
+const restoreSearchState = () => {
+  const saved = sessionStorage.getItem(STORAGE_KEY);
+
+  if (!saved) return false;
+
+  const state = JSON.parse(saved);
+
+  Object.assign(searchForm, state.searchForm);
+
+  startDate.value = state.startDate
+    ? new Date(state.startDate)
+    : new Date();
+
+  endDate.value = state.endDate
+    ? new Date(state.endDate)
+    : new Date();
+
+  startTime.value = state.startTime
+    ? new Date(state.startTime)
+    : new Date();
+
+  endTime.value = state.endTime
+    ? new Date(state.endTime)
+    : new Date();
+
+  tableList.value = state.tableList || [];
+  totalCount.value = state.totalCount || 0;
+
+  return true;
+};
+
+// 2026.06.18[cgnoh]: 초기화 핸들러
+const resetSearch = () => {
+  sessionStorage.removeItem(STORAGE_KEY);
+
+  Object.assign(searchForm, {
+    startdate: "",
+    enddate: "",
+    playername: "",
+    playernickname: "",
+    shopname: "",
+    shopno: "",
+    coursename: "",
+    membertype: "",
+    playerno: "",
+    gameno: "",
+    gamestatus0: true,
+    gamestatus1: false,
+    gamestatus2: false,
+    gamestatus3: false,
+    pageno: 1,
+  });
+
+  startDate.value = new Date();
+  endDate.value = new Date();
+  startTime.value = new Date();
+  endTime.value = new Date();
+
+  tableList.value = [];
+
   getGameList();
+};
+
+// 2026.06.18[cgnoh]: 페이지당 개수
+const pageSize = 10;
+
+// 2026.06.18[cgnoh]: 전체 페이지 수
+const totalPages = computed(() =>
+  Math.ceil(totalCount.value / pageSize)
+);
+
+// 2026.06.18[cgnoh]: 페이지 번호 목록
+const pageNumbers = computed(() => {
+  const blockSize = 8;
+
+  const start =
+    Math.floor((searchForm.pageno - 1) / blockSize) *
+      blockSize +
+    1;
+
+  const end = Math.min(
+    start + blockSize - 1,
+    totalPages.value
+  );
+
+  return Array.from(
+    { length: end - start + 1 },
+    (_, i) => start + i
+  );
+});
+
+// 2026.06.18[cgnoh]: 페이지 전환
+const changePage = async (page) => {
+  if (
+    page < 1 ||
+    page > totalPages.value ||
+    page === searchForm.pageno
+  ) {
+    return;
+  }
+
+  searchForm.pageno = page;
+  await getGameList();
+
+};
+
+onMounted(() => {
+  const restored = restoreSearchState();
+
+  if (!restored) {
+    getGameList();
+  }
 });
 
 // 2026.03.04[cgnoh]: 페이지 메타 정보

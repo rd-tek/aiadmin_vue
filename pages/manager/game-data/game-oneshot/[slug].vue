@@ -21,7 +21,7 @@
             <div class="table-head-col is-mob">멀리건</div>
           </div>
           <div class="table-body">
-            <template v-if="oneshotList !== ''">
+            <template v-if="oneshotList.length > 0">
               <div class="table-body-row" 
                   :class="{ 'is-move': oneshotListMove }" 
                   ref="oneshotListRef" 
