@@ -190,7 +190,7 @@ const handleSave = async () => {
     formData.append("topflag", form.topflag);
 
     if (file.value) {
-      formData.append("file", file.value);
+      formData.append("filename", file.value);
     }
 
     const res = await customerApi._inquiryWrite(formData);
