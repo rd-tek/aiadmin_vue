@@ -26,16 +26,15 @@
                 <span class="state-list" :class="{ 'color-green': item.viewflag === '0', 'color-black': item.viewflag === '1' }">{{ item.viewflag === '0' ? '공개' : '비공개' }}</span>
               </div>
               <div class="title">
-                <nuxt-link :to="`/golfcourse/list/${item.courseno}`" class="link">{{ item.coursename }}</nuxt-link>
+                <nuxt-link :to="`/golfcourse/list/${item.courseno}`" class="link">{{ item.coursename || '-' }}</nuxt-link>
               </div>
               <div class="label">
-                <div class="label-list">{{ item.label }}</div>
-                <div class="label-list hole">{{ item.coursecode }}</div>
+                <div class="label-list hole">{{ item.coursecode || '-' }}</div>
               </div>
             </div>
             <div class="row-list-item col-1 align-center is-mob">
               <div class="hole">
-                {{ item.hole }}홀
+                {{ item.hole || '-' }}홀
               </div>
             </div>
             <div class="row-list-item col-3">
@@ -67,6 +66,45 @@
         <div class="row-list is-move" v-else>
           <div class="no-data">데이터가 없습니다.</div>
         </div>
+        <ul
+          class="pagination-container type02"
+        >
+          <li>
+            <button
+              type="button"
+              class="paginate-buttons"
+              :disabled="currentPage === 1"
+              @click="changePage(currentPage - 1)"
+            >
+              <img src="/images/icon/icon_prev.png" alt="prev" />
+            </button>
+          </li>
+
+          <li
+            v-for="page in visiblePages"
+            :key="page"
+          >
+            <button
+              type="button"
+              class="paginate-buttons"
+              :class="{ active: currentPage === page }"
+              @click="changePage(page)"
+            >
+              {{ page }}
+            </button>
+          </li>
+
+          <li>
+            <button
+              type="button"
+              class="paginate-buttons"
+              :disabled="currentPage === totalPages"
+              @click="changePage(currentPage + 1)"
+            >
+              <img src="/images/icon/icon_next.png" alt="next" />
+            </button>
+          </li>
+        </ul>
         <div class="btn-wrap">
           <button type="button" class="btn-md-fill btn-primary-purple" @click="handleSave">등록하기</button>
         </div>
@@ -83,17 +121,17 @@ const { _courseList } = useCourseApi();
 
 // 2026.06.16[cgnoh]: 검색 폼
 const searchForm = reactive({
-  searchtype: 1, // 검색유형
-  searchname: "", // 검색어
+  searchtype: 1,
+  searchname: "",
   pageno: 1,
   pagesize: 10,
 });
 
 // 2026.06.16[cgnoh]: 검색 핸들러
 const handleSearch = async () => {
-  searchForm.pageno = 1;
+  currentPage.value = 1;
   await getCourseList();
-}
+};
 
 // 2026.06.16[cgnoh]: 코스관리 리스트
 const rowList = ref([]);
@@ -104,12 +142,13 @@ const getCourseList = async () => {
     const res = await _courseList({
       searchtype: searchForm.searchtype,
       searchname: searchForm.searchname,
-      pageno: searchForm.pageno,
-      pagesize: searchForm.pagesize,
+      pageno: currentPage.value,
+      pagesize: pageSize.value,
     });
 
     if (res.code === 200) {
       rowList.value = res.courselist || [];
+      totalCount.value = Number(res.totalCount || 0);
     }
   } catch (err) {
     console.error("코스 목록 조회 실패", err);
@@ -123,6 +162,48 @@ const router = useRouter();
 const handleSave = () => {
   router.push(`/golfcourse/edit`)
 }
+
+// 2026.06.16[cgnoh]: 페이지 관련 변수
+const currentPage = ref(1);
+const pageNo = ref(1);
+const pageSize = ref(10);
+const totalCount = ref(0);
+const totalPage = ref(1);
+
+const totalPages = computed(() =>
+  Math.ceil(totalCount.value / pageSize.value)
+);
+
+// 2026.06.16[cgnoh]: 페이지 이동 함수
+const changePage = async (page) => {
+  if (page < 1 || page > totalPages.value) return;
+
+  currentPage.value = page;
+  await getCourseList();
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth",
+  });
+};
+
+// 2026.06.16[cgnoh]: 페이지 번호 계산
+const visiblePages = computed(() => {
+  const current = pageNo.value;
+  const total = totalPage.value;
+
+  let start = Math.max(1, current - 2);
+  let end = Math.min(total, start + 4);
+
+  if (end - start < 4) {
+    start = Math.max(1, end - 4);
+  }
+
+  return Array.from(
+    { length: end - start + 1 },
+    (_, i) => start + i
+  );
+});
 
 // 2026.06.16[cgnoh]: 인터렉션 관련
 const rowListRef = ref();

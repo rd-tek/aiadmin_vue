@@ -106,11 +106,14 @@
 
         .game-data-value {
             margin-top: 10px;
-            height: 40px;
+            height: auto;
+            display: flex;
+            align-items: center;
 
             .datepicker {
                 display: flex;
                 gap: 10px;
+                width: 100%;
 
                 &::v-deep(input) {
                     height: 40px;
@@ -120,6 +123,7 @@
             .input-wrap {
                 display: flex;
                 gap: 10px;
+                width: 100%;
             }
 
             .select-default, .input-text {
@@ -134,7 +138,13 @@
             .radio-wrap {
                 display: flex;
                 align-items: center;
+                flex-wrap: wrap;
+                gap: 20px;
                 height: 100%;
+
+                .radio-list {
+                    margin: 0;
+                }
             }
         }
     }
@@ -331,8 +341,21 @@
                 min-width: 40px;
                 font-size: 14px;
 
+                // 완료
                 &.color-blue {
                     background: #3577F1;
+                    color: #fff;
+                }
+
+                // 대기
+                &.color-grey {
+                    background: #ADB0B3;
+                    color: #fff;
+                }
+
+                // 중단
+                &.color-red {
+                    background: #EF2B49;
                     color: #fff;
                 }
             }
@@ -413,6 +436,26 @@
             &-head {
                 &-col {
                     border-top: 1px solid #E6EDFF;
+                }
+            }
+
+            &-body {
+                &-mob {
+                    .list {
+                        .tit {
+                            min-width: 98px;
+                        }
+                    }
+                }
+
+                &-col {
+                    .no-wrap {
+                        white-space: normal;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        max-width: 100%;
+                        width: 120px;
+                    }
                 }
             }
 

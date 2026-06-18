@@ -3,7 +3,7 @@
       <div class="top-area">
         <div class="total">전체 <span class="num">{{ tableList.length }}</span></div>
         <div class="select-default"> 
-            <select>
+            <select v-model="pageSize" @change="changePageSize">
                 <option value="10">10개씩 보기</option>
                 <option value="20">20개씩 보기</option>
                 <option value="30">30개씩 보기</option>
@@ -101,30 +101,53 @@
           </div>
         </div>
         <div class="btn-wrap">
-          <ul class="pagination-container type02">
+          <ul
+            class="pagination-container type02"
+            v-if="totalPage > 0"
+          >
+            <!-- 이전 -->
             <li>
-                <button type="button" class="paginate-buttons" aria-label="이전">
-                    <img src="/images/icon/icon_prev.png" alt="icon_prev"/>
-                </button>
+              <button
+                type="button"
+                class="paginate-buttons"
+                :disabled="pageNo === 1"
+                @click="changePage(pageNo - 1)"
+              >
+                <img
+                  src="/images/icon/icon_prev.png"
+                  alt="icon_prev"
+                />
+              </button>
             </li>
-            <li>
-                <button type="button" class="paginate-buttons active">1</button>
+
+            <!-- 페이지 번호 -->
+            <li
+              v-for="page in visiblePages"
+              :key="page"
+            >
+              <button
+                type="button"
+                class="paginate-buttons"
+                :class="{ active: pageNo === page }"
+                @click="changePage(page)"
+              >
+                {{ page }}
+              </button>
             </li>
+
+            <!-- 다음 -->
             <li>
-                <button type="button" class="paginate-buttons">2</button>
-            </li>
-            <li>
-                <button type="button" class="paginate-buttons">3</button>
-            </li> 
-            <li>
-                <button type="button" class="paginate-buttons" aria-label="더보기">
-                    <img src="/images/icon/icon_more_horiz.png" alt="icon_more_horiz" />
-                </button>
-            </li>
-            <li>
-                <button type="button" class="paginate-buttons" aria-label="다음">
-                    <img src="/images/icon/icon_next.png" alt="icon_next"/>
-                </button>
+              <button
+                type="button"
+                class="paginate-buttons"
+                :disabled="pageNo === totalPage"
+                @click="changePage(pageNo + 1)"
+              >
+                <img
+                  src="/images/icon/icon_next.png"
+                  alt="icon_next"
+                />
+              </button>
             </li>
           </ul>
           <div class="btn-group">
@@ -139,19 +162,21 @@ import { useRouter } from "vue-router";
 import { useIntersectionObserver } from "@vueuse/core";
 import { useManagerApi } from "@/api/manager";
 
+// 2026.06.17[cgnoh]: api 관련
 const { _adminList } = useManagerApi();
-const router = useRouter();
-const tableRef  = ref();
-const tableMove = ref(false);
-useIntersectionObserver(tableRef, ([{ isIntersecting }]) => {
-    if (isIntersecting) tableMove.value = true;
-}, { threshold: 0 });
 
+// 2026.06.17[cgnoh]: 라우터 관련
+const router = useRouter();
+
+// 2026.06.17[cgnoh]: 관리자 리스트
 const tableList = ref([]);
+
+// 2026.06.17[cgnoh]: 페이지 관련
 const totalCount = ref(0);
 const pageNo = ref(1);
 const pageSize = ref(10);
 
+// 2026.06.17[cgnoh]: 관리자 리스트 조회
 const getAdminList = async () => {
   try {
     const res = await _adminList({
@@ -168,19 +193,48 @@ const getAdminList = async () => {
   }
 };
 
-const changePageSize = async () => {
-  pageNo.value = 1;
-  await getAdminList();
-};
+// 2026.06.17[cgnoh]: 총 페이지 수
+const totalPage = computed(() =>
+  Math.ceil(totalCount.value / pageSize.value)
+);
 
-onMounted(() => {
-  getAdminList();
+// 2026.06.17[cgnoh]: 페이지 노출 메서드
+const visiblePages = computed(() => {
+  const current = pageNo.value;
+  const total = totalPage.value;
+
+  let start = Math.max(1, current - 2);
+  let end = Math.min(total, start + 4);
+
+  if (end - start < 4) {
+    start = Math.max(1, end - 4);
+  }
+
+  return Array.from(
+    { length: end - start + 1 },
+    (_, i) => start + i
+  );
 });
 
+// 2026.06.17[cgnoh]: 페이지네이션 핸들링
+const changePage = async (page) => {
+  if (page < 1 || page > totalPage.value) return;
+
+  pageNo.value = page;
+  await getAdminList();
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth",
+  });
+};
+
+// 2026.06.17[cgnoh]: 등록하기 이동
 const handleRegister = () => {
   router.push(`/manager/write`)
 }
 
+// 2026.06.17[cgnoh]: 아코디언 관련
 const mobListIndex = ref(-1);
 const handleMobList = (index) => {
   if (window.innerWidth <= 768) {
@@ -205,6 +259,17 @@ const leave = (el) => {
   el.style.transition = "all .4s ease";
   el.style.height = "0";
 };
+
+// 2026.06.17[cgnoh]: 인터렉션 관련
+const tableRef  = ref();
+const tableMove = ref(false);
+useIntersectionObserver(tableRef, ([{ isIntersecting }]) => {
+    if (isIntersecting) tableMove.value = true;
+}, { threshold: 0 });
+
+onMounted(() => {
+  getAdminList();
+});
 
 // 2026.03.04[cgnoh]: 페이지 메타 정보
 definePageMeta({

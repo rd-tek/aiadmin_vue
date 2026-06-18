@@ -32,11 +32,11 @@
                     </div>
                     <div class="info-area-list">
                         <div class="info-area-tit">홀/파</div>
-                        <div class="info-area-cnt">{{ courseData.hole }}H/PAR {{ courseData.par }}</div>
+                        <div class="info-area-cnt">{{ courseData.hole || '-' }}H/PAR {{ courseData.par || '-' }}</div>
                     </div>
                     <div class="info-area-list">
                         <div class="info-area-tit">거리</div>
-                        <div class="info-area-cnt">{{courseData.distance}}m</div>
+                        <div class="info-area-cnt">{{courseData.distance || '-' }}m</div>
                     </div>
                 </div>
             </div>
@@ -89,6 +89,7 @@
             </div>
         </div>
 
+        <!-- 골프 코스 모달 -->
         <modal-golf-course 
             :isOpen="modals.modalGolfCourse" 
             @update:isOpen="modals.modalGolfCourse = $event"
@@ -103,34 +104,43 @@ import { useIntersectionObserver } from "@vueuse/core";
 import { useCourseApi } from "~/api/course";
 import { useCommon } from "@/utils/common";
 
+// 2026.06.18[cgnoh]: 공통 함수
 const common = useCommon();
+
+// 2026.06.18[cgnoh]: 라우터 관련
 const route = useRoute();
 const router = useRouter();
+
+// 2026.06.18[cgnoh]: api 관련
 const { _courseView, _courseHoleView } = useCourseApi();
+
+// 2026.06.18[cgnoh]: 홀 데이터
 const holeData = ref({});
+
+// 2026.06.18[cgnoh]: 이벤트 리스트
 const eventList = ref([]);
 
-// 코스 기본 정보
+// 2026.06.18[cgnoh]: 코스 기본 정보
 const courseData = ref({});
 
-// 서브코스 목록
+// 2026.06.18[cgnoh]: 서브코스 목록
 const subCourseList = ref([]);
 
-// 상세 조회
+// 2026.06.18[cgnoh]: 통합관리코스 상세 조회
 const getCourseDetail = async () => {
     try {
         const res = await _courseView(route.params.slug);
         console.log(res, 'res')
         const info = res.coursebasicinfo || {};
         courseData.value = {
-            coursename: info.coursename || "",
-            coursecode: info.coursecode || "",
-            imgurl: info.course_image_url || "",
-            field: info.field || 0,
-            green: info.green || 0,
-            hole: info.holesum || 0,
-            par: info.parsum || 0, 
-            distance: info.distance || 0,
+            coursename: info.coursename || "", // 코스이름
+            coursecode: info.coursecode || "", // 코스코드
+            imgurl: info.course_image_url || "", // 이미지 url
+            field: info.field || 0, // 코스 난이도
+            green: info.green || 0, // 그린 난이도 
+            hole: info.holesum || 0, // 홀
+            par: info.parsum || 0,  // 파
+            distance: info.distance || 0, // 거리
         }; 
         subCourseList.value = res.subcourse || [];
     } catch (err) {
@@ -138,6 +148,7 @@ const getCourseDetail = async () => {
     }
 };
 
+// 2026.06.18[cgnoh]: 통합관리코스홀 상세 조회
 const getCourseHoleDetail = async (params) => {
   try {
     const res = await _courseHoleView(
@@ -158,31 +169,20 @@ const getCourseHoleDetail = async (params) => {
   }
 };
 
-// 홀 점수에 따른 CSS 클래스 반환
-const getHoleClass = (score, par) => {
-    if (score == null || par == null) return "";
-    const diff = Number(score) - Number(par);
-    if (diff <= -2) return "is-eagle";
-    if (diff === -1) return "is-birdie";
-    if (diff === 0) return "";
-    if (diff === 1) return "is-bogey";
-    if (diff === 2) return "is-double-bogey";
-    return "is-triple-bogey-over";
-};
-
+// 2026.06.18[cgnoh]: 인터렉션 관련
 const detailRef  = ref();
 const detailMove = ref(false);
 useIntersectionObserver(detailRef, ([{ isIntersecting }]) => {
     if (isIntersecting) detailMove.value = true;
 }, { threshold: 0 });
 
-// 수정 페이지 이동
+// 2026.06.18[cgnoh]: 수정 페이지 이동
 const handleEdit = () => {
     router.push(`/golfcourse/edit/${route.params.slug}`);
 };
 
 
-// 모달 관련
+// 2026.06.18[cgnoh]: 모달 관련
 const modals = reactive({});
 const modalOpen = async (hole_pk, subcourseseq) => {
   modals.modalGolfCourse = true;
