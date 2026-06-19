@@ -103,6 +103,7 @@ const modalClose = () => {
   document.querySelector("body").classList.remove("is-hidden");
 };
 
+// 2026.06.19[cgnoh]: 날짜 포맷
 const formatDate = (dateStr) => {
   if (!dateStr) return "-";
 

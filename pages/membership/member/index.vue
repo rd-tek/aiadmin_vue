@@ -236,7 +236,7 @@
       <!-- 회원 정보 모달 -->
       <modal-member-info
         :isOpen="modals.modalMemberInfo"
-        :playerno="selectedItem?.playerinfo?.playerno"
+        :item="selectedItem"
         @update:isOpen="modals.modalMemberInfo = $event"/>
     </div>
 </template>
@@ -307,6 +307,7 @@ const selectedItem = ref(null);
 const modals = reactive({ modalMemberInfo: false });
 const modalOpen = async (item) => {
   selectedItem.value = item;
+  console.log(item)
   modals['modalMemberInfo'] = true;
   document.querySelector('body').classList.add('is-hidden');
 }

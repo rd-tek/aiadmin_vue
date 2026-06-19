@@ -7,23 +7,27 @@
               <div class="game-data-title">시작시간</div>
               <div class="game-data-value">
                 <div class="datepicker">
-                  <VueDatePicker 
-                    v-model="startDate"
-                    :format="formatStartDate" 
-                    date-picker
-                    auto-apply
-                    @update:model-value="getGameList(true)"
-                    @open="isFocused = true"
-                    @closed="isFocused = false"
-                  />
-                  <VueDatePicker 
-                    v-model="startTime"
-                    :format="formatStartTime" 
-                    time-picker
-                    auto-apply
-                    @open="isFocused = true"
-                    @closed="isFocused = false"
-                  />
+                  <client-only>
+                    <VueDatePicker 
+                      v-model="startDate"
+                      :format="formatStartDate" 
+                      date-picker
+                      auto-apply
+                      @update:model-value="getGameList(true)"
+                      @open="isFocused = true"
+                      @closed="isFocused = false"
+                    />
+                  </client-only>
+                  <client-only>
+                    <VueDatePicker 
+                      v-model="startTime"
+                      :format="formatStartTime" 
+                      time-picker
+                      auto-apply
+                      @open="isFocused = true"
+                      @closed="isFocused = false"
+                    />
+                  </client-only>
                 </div>
               </div>
             </div>
@@ -50,22 +54,26 @@
               <div class="game-data-title">종료시간</div>
               <div class="game-data-value">
                 <div class="datepicker">
-                  <VueDatePicker 
-                    v-model="endDate"
-                    :format="formatEndDate" 
-                    date-picker
-                    auto-apply
-                    @open="isFocused = true"
-                    @closed="isFocused = false"
-                  />
-                  <VueDatePicker 
-                    v-model="endTime"
-                    :format="formatEndTime" 
-                    time-picker
-                    auto-apply
-                    @open="isFocused = true"
-                    @closed="isFocused = false"
-                  />
+                  <client-only>
+                    <VueDatePicker 
+                      v-model="endDate"
+                      :format="formatEndDate" 
+                      date-picker
+                      auto-apply
+                      @open="isFocused = true"
+                      @closed="isFocused = false"
+                    />
+                  </client-only>
+                  <client-only>
+                    <VueDatePicker 
+                      v-model="endTime"
+                      :format="formatEndTime" 
+                      time-picker
+                      auto-apply
+                      @open="isFocused = true"
+                      @closed="isFocused = false"
+                    />
+                  </client-only>
                 </div>
               </div>
             </div>

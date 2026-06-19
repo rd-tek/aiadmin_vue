@@ -135,8 +135,11 @@ import { useRoute } from "vue-router";
 import { useManagerApi } from "@/api/manager";
 import toastModal from '@/components/toast-ui/toast-modal.vue';
 
+// 2026.06.15[cgnoh]: 라우터 관련 
 const route = useRoute();
 const { _adminView, _adminUpdate } = useManagerApi();
+
+// 2026.06.15[cgnoh]: 폼 형태
 const form = ref({
   name: "",
   id: "",
@@ -149,6 +152,7 @@ const form = ref({
   status: "",
 });
 
+// 2026.06.15[cgnoh]: 상세화면 조회
 const getAdminView = async () => {
   try {
     const adminno = route.params.slug;
@@ -168,6 +172,12 @@ const getAdminView = async () => {
   }
 };
 
+// 2026.06.15[cgnoh]: 모달 관련
+const modals = reactive({});
+
+// 2026.06.15[cgnoh]: 토스트 메시지 관련
+const toastMessage = ref();
+
 // 2026.06.04[cgnoh]: 저장 토스트
 const openSaveToast = (message) => {
   document.querySelector('body').classList.add('is-hidden');
@@ -175,7 +185,7 @@ const openSaveToast = (message) => {
   toastMessage.value = message;
 }
 
-
+// 2026.06.15[cgnoh]: 저장 메서드
 const saveAdmin = async () => {
   const res = await _adminUpdate(
     route.params.slug,

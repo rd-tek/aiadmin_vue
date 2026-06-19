@@ -119,7 +119,7 @@
                   <dl class="list">
                     <dt class="tit">장비 수</dt>
                     <dd class="cnt">
-                      <button type="button" @click="modalOpen" class="text-underline">{{ item.roomcnt || '-' }}</button>
+                      <button type="button" @click="modalOpen(item)" class="text-underline">{{ item.roomcnt || '-' }}</button>
                     </dd>
                   </dl>
                   <dl class="list">
@@ -313,9 +313,9 @@ useIntersectionObserver(tableRef, ([{ isIntersecting }]) => {
 const selectedItem = ref(null);
 const modals = reactive({ modalMemberInfo: false });
 const modalOpen = (item) => { 
-    selectedItem.value = item;
-    modals['modalMachineInfo'] = true;
-    document.querySelector('body').classList.add('is-hidden');
+  selectedItem.value = item;
+  modals['modalMachineInfo'] = true;
+  document.querySelector('body').classList.add('is-hidden');
 }
 
 /** 페이지네이션 **/
