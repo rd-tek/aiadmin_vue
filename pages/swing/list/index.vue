@@ -122,11 +122,41 @@
         @saved="getSwingList"
         @update:isOpen="modals.modalSwingInfo = $event" />
 
+        <!-- 토스트 알림 모달 -->
+        <toast-modal
+            :isOpen="modals.toastModal"
+            :toastMessage="toastMessage"
+            @update:isOpen="modals.toastModal = $event"
+        />
+
+        <!-- 토스트 경고 모달 -->
+        <toast-warn-modal 
+            :isOpen="modals.toastWarnModal"
+            :toastWarnMessage="toastWarnMessage"
+            @update:isOpen="modals.toastWarnModal = $event"/>
+
+        <!-- 토스트 에러 모달 -->
+        <toast-error-modal 
+            :isOpen="modals.toastErrorModal"
+            :toastErrorMessage="toastErrorMessage"
+            @update:isOpen="modals.toastErrorModal = $event"/>
+
+        <!-- 토스트 컨펌 모달 -->
+        <toast-confirm-modal
+            :isOpen="modals.toastConfirmModal"
+            :toastConfirmMessage="toastConfirmMessage"
+            @confirm="handleConfirm"
+            @update:isOpen="modals.toastConfirmModal = $event"/>
+
     </div>
 </template>
 <script setup>
 import { useIntersectionObserver } from "@vueuse/core";
 import { useSwingApi } from "~/api/swing";
+import toastModal from '@/components/toast-ui/toast-modal.vue';
+import toastWarnModal from '@/components/toast-ui/toast-warn-modal.vue';
+import toastErrorModal from '@/components/toast-ui/toast-error-modal.vue';
+import toastConfirmModal from '@/components/toast-ui/toast-confirm-modal.vue';
 
 // 2026.06.16[cgnoh]: api 관련
 const { _swingList } = useSwingApi();
@@ -187,9 +217,55 @@ const modalOpen = (item) => {
   document.querySelector('body')?.classList.add('is-hidden');
 };
 
+// 2026.06.15[cgnoh]: 토스트 메시지 관련
+const toastMessage = ref();
+const toastWarnMessage = ref();
+const toastErrorMessage = ref();
+const toastConfirmMessage = ref();
+
+// 2026.06.04[cgnoh]: 저장 토스트
+const openSaveToast = (message) => {
+  document.querySelector('body').classList.add('is-hidden');
+  modals['toastModal'] = true;
+  toastMessage.value = message;
+}
+
+// 2026.06.04[cgnoh]: 경고 토스트
+const openWarnToast = (message) => {
+  document.querySelector('body').classList.add('is-hidden');
+  modals['toastWarnModal'] = true;
+  toastWarnMessage.value = message;
+}
+
+// 2026.06.04[cgnoh]: 에러 토스트
+const openErrorToast = (message) => {
+  document.querySelector('body').classList.add('is-hidden');
+  modals['toastErrorModal'] = true;
+  toastErrorMessage.value = message;
+}
+
+// 2026.06.19[cgnoh]: 컨펌 핸들링
+const confirmResolver = ref(null);
+const handleConfirm = () => {
+    modals['toastConfirmModal'] = false;
+    document.querySelector('body').classList.add('is-hidden');
+    confirmResolver.value(true);
+    confirmResolver.value = null;
+}
+
+// 2026.06.19[cgnoh]: 컨펌 토스트
+const openConfirmToast = (message) => {
+    return new Promise((resolve) => {
+        confirmResolver.value = resolve;
+        document.querySelector('body').classList.add('is-hidden');
+        modals['toastConfirmModal'] = true;
+        toastConfirmMessage.value = message;
+    })
+}
+
 // 2026.06.16[cgnoh]: 삭제 핸들링
 const handleDelete = async (item) => {
-  const isConfirm = confirm(
+  const isConfirm = openConfirmToast(
     `[${item.title}] 영상을 삭제하시겠습니까?`
   );
 
@@ -199,15 +275,15 @@ const handleDelete = async (item) => {
     const res = await _swingDelete(item.swing_pk);
 
     if (res.code === 200) {
-      alert("삭제되었습니다.");
+      openSaveToast("삭제되었습니다.");
 
       await getSwingList();
     } else {
-      alert(res.message || "삭제에 실패했습니다.");
+      openErrorToast(res.message || "삭제에 실패했습니다.");
     }
   } catch (err) {
     console.error(err);
-    alert("삭제 중 오류가 발생했습니다.");
+    openWarnToast("삭제 중 오류가 발생했습니다.");
   }
 };
 

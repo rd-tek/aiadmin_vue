@@ -7,9 +7,9 @@
                     <div class="info-list label">
                         <span class="label" :class="{ 'color-purple': noticeInfo.type === '1', 'color-blue': noticeInfo.type === '2' }">{{ noticeInfo.type === '1' ? '공지' : '뉴스' }}</span>
                     </div>
-                    <div class="info-list name">{{ noticeInfo.regname }}</div>
-                    <div class="info-list date">{{ noticeInfo.date }}</div>
-                    <div class="info-list count">조회수 : {{ noticeInfo.cnt }}</div>
+                    <div class="info-list name">{{ noticeInfo.regname || '-' }}</div>
+                    <div class="info-list date">{{ noticeInfo.date || '-' }}</div>
+                    <div class="info-list count">조회수 : {{ noticeInfo.cnt || '-' }}</div>
                     <div class="info-list download">
                         <button type="button" class="btn-download" aria-label="다운로드">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -21,7 +21,7 @@
                                 </g>
                             </svg>
                         </button> 
-                        <span class="text">{{ noticeInfo.filename }}</span>
+                        <span class="text">{{ noticeInfo.filename || '-' }}</span>
                     </div>
                 </div>
             </div>
@@ -63,7 +63,7 @@
                   <button
                         type="button"
                         class="btn-md-line"
-                        @click="handleDelete"
+                        @click="handleDelete()"
                     >
                 삭제
                 </button>
@@ -90,6 +90,13 @@
             :toastErrorMessage="toastErrorMessage"
             @update:isOpen="modals.toastErrorModal = $event"/>
 
+        <!-- 토스트 컨펌 모달 -->
+        <toast-confirm-modal
+            :isOpen="modals.toastConfirmModal"
+            :toastConfirmMessage="toastConfirmMessage"
+            @confirm="handleConfirm"
+            @update:isOpen="modals.toastConfirmModal = $event"/>
+
     </div>
 </template>
 <script setup>
@@ -99,6 +106,7 @@ import { useCustomerApi } from "~/api/support";
 import toastModal from '@/components/toast-ui/toast-modal.vue';
 import toastWarnModal from '@/components/toast-ui/toast-warn-modal.vue';
 import toastErrorModal from '@/components/toast-ui/toast-error-modal.vue';
+import toastConfirmModal from '@/components/toast-ui/toast-confirm-modal.vue';
 
 // 2026.06.08[cgnoh]: 라우터 관련
 const route = useRoute();
@@ -131,6 +139,7 @@ const handleEdit = () => {
 const toastMessage = ref();
 const toastWarnMessage = ref();
 const toastErrorMessage = ref();
+const toastConfirmMessage = ref();
 
 // 2026.06.15[cgnoh]: 모달 관련
 const modals = reactive({});
@@ -156,10 +165,28 @@ const openErrorToast = (message) => {
   toastErrorMessage.value = message;
 }
 
+// 2026.06.19[cgnoh]: 컨펌 핸들링
+const confirmResolver = ref(null);
+const handleConfirm = () => {
+    modals['toastConfirmModal'] = false;
+    document.querySelector('body').classList.add('is-hidden');
+    confirmResolver.value(true);
+    confirmResolver.value = null;
+}
+
+// 2026.06.19[cgnoh]: 컨펌 토스트
+const openConfirmToast = (message) => {
+    return new Promise((resolve) => {
+        confirmResolver.value = resolve;
+        document.querySelector('body').classList.add('is-hidden');
+        modals['toastConfirmModal'] = true;
+        toastConfirmMessage.value = message;
+    })
+}
+
 // 2026.06.08[cgnoh]: 글 삭제 처리
 const handleDelete = async () => {
-  const confirmed = confirm("정말 삭제하시겠습니까?");
-
+  const confirmed = await openConfirmToast("정말 삭제하시겠습니까?");
   if (!confirmed) return;
 
   try {

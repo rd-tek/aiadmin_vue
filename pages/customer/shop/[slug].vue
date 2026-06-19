@@ -90,6 +90,13 @@
             :toastErrorMessage="toastErrorMessage"
             @update:isOpen="modals.toastErrorModal = $event"/>
 
+        <!-- 토스트 컨펌 모달 -->
+        <toast-confirm-modal
+            :isOpen="modals.toastConfirmModal"
+            :toastConfirmMessage="toastConfirmMessage"
+            @confirm="handleConfirm"
+            @update:isOpen="modals.toastConfirmModal = $event"/>
+
     </div>
 </template>
 <script setup>
@@ -99,6 +106,7 @@ import { useCustomerApi } from "~/api/support";
 import toastModal from '@/components/toast-ui/toast-modal.vue';
 import toastWarnModal from '@/components/toast-ui/toast-warn-modal.vue';
 import toastErrorModal from '@/components/toast-ui/toast-error-modal.vue';
+import toastConfirmModal from '@/components/toast-ui/toast-confirm-modal.vue';
 
 // 2026.06.08[cgnoh]: 라우터 관련
 const route = useRoute();
@@ -132,6 +140,7 @@ const handleEdit = () => {
 const toastMessage = ref();
 const toastWarnMessage = ref();
 const toastErrorMessage = ref();
+const toastConfirmMessage = ref();
 
 // 2026.06.15[cgnoh]: 모달 관련
 const modals = reactive({});
@@ -157,10 +166,28 @@ const openErrorToast = (message) => {
   toastErrorMessage.value = message;
 }
 
+// 2026.06.19[cgnoh]: 컨펌 핸들링
+const confirmResolver = ref(null);
+const handleConfirm = () => {
+    modals['toastConfirmModal'] = false;
+    document.querySelector('body').classList.add('is-hidden');
+    confirmResolver.value(true);
+    confirmResolver.value = null;
+}
+
+// 2026.06.19[cgnoh]: 컨펌 토스트
+const openConfirmToast = (message) => {
+    return new Promise((resolve) => {
+        confirmResolver.value = resolve;
+        document.querySelector('body').classList.add('is-hidden');
+        modals['toastConfirmModal'] = true;
+        toastConfirmMessage.value = message;
+    })
+}
+
 // 2026.06.08[cgnoh]: 글 삭제 처리
 const handleDelete = async () => {
-  const confirmed = confirm("정말 삭제하시겠습니까?");
-
+  const confirmed = await openConfirmToast("정말 삭제하시겠습니까?");
   if (!confirmed) return;
 
   try {
