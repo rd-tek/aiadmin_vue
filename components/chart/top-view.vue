@@ -142,13 +142,23 @@ const updateChart = () => {
   chart.resize();
 };
 
+// window resize
+const handleResize = () => {
+  nextTick(() => {
+    setTimeout(() => {
+      chart?.resize();
+    }, 100);
+  });
+};
+
 onMounted(() => {
   initChart();
+  window.addEventListener("resize", handleResize);
 });
 
 onBeforeUnmount(() => {
   resizeObserver?.disconnect();
-
+  window.removeEventListener("resize", handleResize);
   chart?.dispose();
 });
 

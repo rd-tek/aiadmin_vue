@@ -144,7 +144,11 @@ const updateChart = () => {
 
 // resize 처리
 const resizeChart = () => {
-  chart?.resize();
+  nextTick(() => {
+    setTimeout(() => {
+      chart?.resize();
+    }, 100);
+  });
 };
 
 onMounted(() => {

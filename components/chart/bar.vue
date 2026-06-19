@@ -159,10 +159,10 @@ const updateChart = () => {
 
 // window resize
 const handleResize = () => {
-  chart?.resize({
-    animation: {
-      duration: 300,
-    },
+  nextTick(() => {
+    setTimeout(() => {
+      chart?.resize();
+    }, 100);
   });
 };
 
@@ -170,6 +170,7 @@ onMounted(() => {
   initChart();
 
   window.addEventListener("resize", handleResize);
+
 });
 
 onBeforeUnmount(() => {

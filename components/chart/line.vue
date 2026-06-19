@@ -144,7 +144,11 @@ const updateChart = () => {
 
 // window resize
 const handleResize = () => {
-  chart?.resize();
+  nextTick(() => {
+    setTimeout(() => {
+      chart?.resize();
+    }, 100);
+  });
 };
 
 onMounted(() => {
