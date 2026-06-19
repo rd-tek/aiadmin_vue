@@ -70,12 +70,35 @@
                 <button type="button" class="btn-md-fill btn-primary-purple" @click="handleEdit">수정하기</button>
             </div>
         </div>
+
+        <!-- 토스트 알림 모달 -->
+        <toast-modal
+            :isOpen="modals.toastModal"
+            :toastMessage="toastMessage"
+            @update:isOpen="modals.toastModal = $event"
+        />
+
+        <!-- 토스트 경고 모달 -->
+        <toast-warn-modal 
+            :isOpen="modals.toastWarnModal"
+            :toastWarnMessage="toastWarnMessage"
+            @update:isOpen="modals.toastWarnModal = $event"/>
+
+        <!-- 토스트 에러 모달 -->
+        <toast-error-modal 
+            :isOpen="modals.toastErrorModal"
+            :toastErrorMessage="toastErrorMessage"
+            @update:isOpen="modals.toastErrorModal = $event"/>
+
     </div>
 </template>
 <script setup>
 import { useRoute, useRouter } from "vue-router";
 import { useIntersectionObserver } from "@vueuse/core";
 import { useCustomerApi } from "~/api/support";
+import toastModal from '@/components/toast-ui/toast-modal.vue';
+import toastWarnModal from '@/components/toast-ui/toast-warn-modal.vue';
+import toastErrorModal from '@/components/toast-ui/toast-error-modal.vue';
 
 // 2026.06.08[cgnoh]: 라우터 관련
 const route = useRoute();
@@ -105,6 +128,35 @@ const handleEdit = () => {
   router.push(`/customer/shop/edit/${route.params.slug}`);
 };
 
+// 2026.06.15[cgnoh]: 토스트 메시지 관련
+const toastMessage = ref();
+const toastWarnMessage = ref();
+const toastErrorMessage = ref();
+
+// 2026.06.15[cgnoh]: 모달 관련
+const modals = reactive({});
+
+// 2026.06.04[cgnoh]: 저장 토스트
+const openSaveToast = (message) => {
+  document.querySelector('body').classList.add('is-hidden');
+  modals['toastModal'] = true;
+  toastMessage.value = message;
+}
+
+// 2026.06.04[cgnoh]: 경고 토스트
+const openWarnToast = (message) => {
+  document.querySelector('body').classList.add('is-hidden');
+  modals['toastWarnModal'] = true;
+  toastWarnMessage.value = message;
+}
+
+// 2026.06.04[cgnoh]: 에러 토스트
+const openErrorToast = (message) => {
+  document.querySelector('body').classList.add('is-hidden');
+  modals['toastErrorModal'] = true;
+  toastErrorMessage.value = message;
+}
+
 // 2026.06.08[cgnoh]: 글 삭제 처리
 const handleDelete = async () => {
   const confirmed = confirm("정말 삭제하시겠습니까?");
@@ -119,17 +171,17 @@ const handleDelete = async () => {
     console.log("delete result", res);
 
     if (res.code === 200 || res.result === "success") {
-      alert("삭제되었습니다.");
+      openSaveToast("삭제되었습니다.");
 
       router.push("/customer/shop");
       return;
     }
 
-    alert(res.message || "삭제에 실패했습니다.");
+    openErrorToast(res.message || "삭제에 실패했습니다.");
   } catch (err) {
     console.error(err);
 
-    alert(
+    openWarnToast(
       err?.data?.message ||
       err?.message ||
       "삭제 중 오류가 발생했습니다."

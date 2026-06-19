@@ -79,12 +79,36 @@
         </div>
       </div>
     </div>
-  </div>
 
+    <!-- 토스트 알림 모달 -->
+    <toast-modal
+        :isOpen="modals.toastModal"
+        :toastMessage="toastMessage"
+        @update:isOpen="modals.toastModal = $event"
+    />
+
+    <!-- 토스트 경고 모달 -->
+    <toast-warn-modal 
+        :isOpen="modals.toastWarnModal"
+        :toastWarnMessage="toastWarnMessage"
+        @update:isOpen="modals.toastWarnModal = $event"/>
+
+    <!-- 토스트 에러 모달 -->
+    <toast-error-modal 
+        :isOpen="modals.toastErrorModal"
+        :toastErrorMessage="toastErrorMessage"
+        @update:isOpen="modals.toastErrorModal = $event"/>
+
+
+  </div>
 </template>
 <script setup>
 import { useSwingApi } from "~/api/swing";
+import toastModal from '@/components/toast-ui/toast-modal.vue';
+import toastWarnModal from '@/components/toast-ui/toast-warn-modal.vue';
+import toastErrorModal from '@/components/toast-ui/toast-error-modal.vue';
 
+// 2026.06.18[cgnoh]: api 관련
 const { _swingTitleWrite } = useSwingApi();
 const props = defineProps({
     isOpen: {
@@ -101,11 +125,13 @@ const emit = defineEmits([
   "saved"
 ]);
 
+// 2026.06.18[cgnoh]: 모달 닫기
 const modalClose = () => {
   emit("update:isOpen", false);
   document.querySelector("body").classList.remove("is-hidden");
 };
 
+// 2026.06.18[cgnoh]: 폼 형태
 const form = reactive({
   swing_pk: "",
   title: "",
@@ -113,10 +139,40 @@ const form = reactive({
   flag: "1",
 });
 
+// 2026.06.15[cgnoh]: 토스트 메시지 관련
+const toastMessage = ref();
+const toastWarnMessage = ref();
+const toastErrorMessage = ref();
+
+// 2026.06.15[cgnoh]: 모달 관련
+const modals = reactive({});
+
+// 2026.06.04[cgnoh]: 저장 토스트
+const openSaveToast = (message) => {
+  document.querySelector('body').classList.add('is-hidden');
+  modals['toastModal'] = true;
+  toastMessage.value = message;
+}
+
+// 2026.06.04[cgnoh]: 경고 토스트
+const openWarnToast = (message) => {
+  document.querySelector('body').classList.add('is-hidden');
+  modals['toastWarnModal'] = true;
+  toastWarnMessage.value = message;
+}
+
+// 2026.06.04[cgnoh]: 에러 토스트
+const openErrorToast = (message) => {
+  document.querySelector('body').classList.add('is-hidden');
+  modals['toastErrorModal'] = true;
+  toastErrorMessage.value = message;
+}
+
+// 2026.06.18[cgnoh]: 모달 저장
 const modalSave = async () => {
   try {
     if (!form.title.trim()) {
-      alert("제목을 입력해주세요.");
+      openWarnToast("제목을 입력해주세요.");
       return;
     }
 
@@ -128,18 +184,18 @@ const modalSave = async () => {
     );
 
     if (res.code === 200) {
-      alert("저장되었습니다.");
+      openSaveToast("저장되었습니다.");
 
       emit("saved");
       emit("update:isOpen", false);
 
       document.body.classList.remove("is-hidden");
     } else {
-      alert(res.message || "저장에 실패했습니다.");
+      openErrorToast(res.message || "저장에 실패했습니다.");
     }
   } catch (err) {
     console.error(err);
-    alert("저장 중 오류가 발생했습니다.");
+    openWarnToast("저장 중 오류가 발생했습니다.");
   }
 };
 
@@ -155,7 +211,6 @@ watch(
   },
   { immediate: true }
 );
-
 
 </script>
 <style lang="scss" scoped>

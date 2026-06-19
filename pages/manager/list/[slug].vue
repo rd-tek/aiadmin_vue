@@ -120,11 +120,20 @@
                 </div>
              </div>
         </div>
+
+        <!-- 토스트 알림 모달 -->
+        <toast-modal
+            :isOpen="modals.toastModal"
+            :toastMessage="toastMessage"
+            @update:isOpen="modals.toastModal = $event"
+        />
+
     </div>
 </template>
 <script setup>
 import { useRoute } from "vue-router";
 import { useManagerApi } from "@/api/manager";
+import toastModal from '@/components/toast-ui/toast-modal.vue';
 
 const route = useRoute();
 const { _adminView, _adminUpdate } = useManagerApi();
@@ -159,6 +168,14 @@ const getAdminView = async () => {
   }
 };
 
+// 2026.06.04[cgnoh]: 저장 토스트
+const openSaveToast = (message) => {
+  document.querySelector('body').classList.add('is-hidden');
+  modals['toastModal'] = true;
+  toastMessage.value = message;
+}
+
+
 const saveAdmin = async () => {
   const res = await _adminUpdate(
     route.params.slug,
@@ -166,7 +183,7 @@ const saveAdmin = async () => {
   );
 
   if (res.code === 200) {
-    alert("수정되었습니다.");
+    openSaveToast("수정되었습니다.");
     navigateTo("/manager/list");
   }
 };

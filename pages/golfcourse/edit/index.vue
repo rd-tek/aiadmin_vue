@@ -293,12 +293,35 @@
                 <button type="button" class="btn-md-fill btn-primary-purple" @click="handleSave">저장하기</button>
             </div>
         </div>
+
+        <!-- 토스트 알림 모달 -->
+        <toast-modal
+            :isOpen="modals.toastModal"
+            :toastMessage="toastMessage"
+            @update:isOpen="modals.toastModal = $event"
+        />
+
+        <!-- 토스트 경고 모달 -->
+        <toast-warn-modal 
+            :isOpen="modals.toastWarnModal"
+            :toastWarnMessage="toastWarnMessage"
+            @update:isOpen="modals.toastWarnModal = $event"/>
+
+        <!-- 토스트 에러 모달 -->
+        <toast-error-modal 
+            :isOpen="modals.toastErrorModal"
+            :toastErrorMessage="toastErrorMessage"
+            @update:isOpen="modals.toastErrorModal = $event"/>
+
     </div>
 </template>
 <script setup>
 import { useIntersectionObserver } from "@vueuse/core";
 import { reactive } from "vue";
 import { useCourseApi } from "~/api/course";
+import toastModal from '@/components/toast-ui/toast-modal.vue';
+import toastWarnModal from '@/components/toast-ui/toast-warn-modal.vue';
+import toastErrorModal from '@/components/toast-ui/toast-error-modal.vue';
 
 // 2026.06.16[cgnoh]: api  관련
 const { _courseWrite } = useCourseApi();
@@ -376,6 +399,35 @@ const onFileChange = (event) => {
   reader.readAsDataURL(file);
 };
 
+// 2026.06.15[cgnoh]: 토스트 메시지 관련
+const toastMessage = ref();
+const toastWarnMessage = ref();
+const toastErrorMessage = ref();
+
+// 2026.06.15[cgnoh]: 모달 관련
+const modals = reactive({});
+
+// 2026.06.04[cgnoh]: 저장 토스트
+const openSaveToast = (message) => {
+  document.querySelector('body').classList.add('is-hidden');
+  modals['toastModal'] = true;
+  toastMessage.value = message;
+}
+
+// 2026.06.04[cgnoh]: 경고 토스트
+const openWarnToast = (message) => {
+  document.querySelector('body').classList.add('is-hidden');
+  modals['toastWarnModal'] = true;
+  toastWarnMessage.value = message;
+}
+
+// 2026.06.04[cgnoh]: 에러 토스트
+const openErrorToast = (message) => {
+  document.querySelector('body').classList.add('is-hidden');
+  modals['toastErrorModal'] = true;
+  toastErrorMessage.value = message;
+}
+
 // 2026.06.16[cgnoh]: 저장 핸들링
 const handleSave = async () => {
   try {
@@ -433,14 +485,14 @@ const handleSave = async () => {
     const res = await _courseWrite(formData);
 
     if (res.code === 200) {
-      alert(res.message || "등록되었습니다.");
+      openSaveToast(res.message || "등록되었습니다.");
       navigateTo("/golfcourse/list");
     } else {
-      alert(res.message || "등록에 실패했습니다.");
+      openErrorToast(res.message || "등록에 실패했습니다.");
     }
   } catch (err) {
     console.error(err);
-    alert("저장 중 오류가 발생했습니다.");
+    openWarnToast("저장 중 오류가 발생했습니다.");
   }
 };
 

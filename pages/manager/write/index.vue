@@ -132,13 +132,38 @@
                 </div>
              </div>
         </div>
+
+        <!-- 토스트 알림 모달 -->
+        <toast-modal
+            :isOpen="modals.toastModal"
+            :toastMessage="toastMessage"
+            @update:isOpen="modals.toastModal = $event"
+        />
+
+        <!-- 토스트 경고 모달 -->
+        <toast-warn-modal 
+            :isOpen="modals.toastWarnModal"
+            :toastWarnMessage="toastWarnMessage"
+            @update:isOpen="modals.toastWarnModal = $event"/>
+
+        <!-- 토스트 에러 모달 -->
+        <toast-error-modal 
+            :isOpen="modals.toastErrorModal"
+            :toastErrorMessage="toastErrorMessage"
+            @update:isOpen="modals.toastErrorModal = $event"/>
+
     </div>
 </template>
 <script setup>
 import { useManagerApi } from "@/api/manager";
+import toastModal from '@/components/toast-ui/toast-modal.vue';
+import toastWarnModal from '@/components/toast-ui/toast-warn-modal.vue';
+import toastErrorModal from '@/components/toast-ui/toast-error-modal.vue';
 
+// 2026.06.19[cgnoh]: api 관련
 const { _adminWrite } = useManagerApi();
 
+// 2026.06.19[cgnoh]: 폼 형태
 const form = ref({
   name: "",
   id: "",
@@ -151,39 +176,69 @@ const form = ref({
   status: "1",
 });
 
+// 2026.06.15[cgnoh]: 토스트 메시지 관련
+const toastMessage = ref();
+const toastWarnMessage = ref();
+const toastErrorMessage = ref();
+
+// 2026.06.15[cgnoh]: 모달 관련
+const modals = reactive({});
+
+// 2026.06.04[cgnoh]: 저장 토스트
+const openSaveToast = (message) => {
+  document.querySelector('body').classList.add('is-hidden');
+  modals['toastModal'] = true;
+  toastMessage.value = message;
+}
+
+// 2026.06.04[cgnoh]: 경고 토스트
+const openWarnToast = (message) => {
+  document.querySelector('body').classList.add('is-hidden');
+  modals['toastWarnModal'] = true;
+  toastWarnMessage.value = message;
+}
+
+// 2026.06.04[cgnoh]: 에러 토스트
+const openErrorToast = (message) => {
+  document.querySelector('body').classList.add('is-hidden');
+  modals['toastErrorModal'] = true;
+  toastErrorMessage.value = message;
+}
+
+// 2026.06.19[cgnoh]: 저장 핸들링
 const saveAdmin = async () => {
   try {
     if (!form.value.name) {
-      alert("이름을 입력해주세요.");
+      openWarnToast("이름을 입력해주세요.");
       return;
     }
 
     if (!form.value.id) {
-      alert("아이디를 입력해주세요.");
+      openWarnToast("아이디를 입력해주세요.");
       return;
     }
 
     if (!form.value.password) {
-      alert("비밀번호를 입력해주세요.");
+      openWarnToast("비밀번호를 입력해주세요.");
       return;
     }
 
     if (form.value.password !== form.value.password_re) {
-      alert("비밀번호가 일치하지 않습니다.");
+      openWarnToast("비밀번호가 일치하지 않습니다.");
       return;
     }
 
     const res = await _adminWrite(form.value);
 
     if (res.code === 200) {
-      alert("등록되었습니다.");
+      openSaveToast("등록되었습니다.");
       navigateTo("/manager/list");
     } else {
-      alert(res.message || "등록에 실패했습니다.");
+      openErrorToast(res.message || "등록에 실패했습니다.");
     }
   } catch (err) {
     console.error(err);
-    alert("등록 중 오류가 발생했습니다.");
+    openWarnToast("등록 중 오류가 발생했습니다.");
   }
 };
 

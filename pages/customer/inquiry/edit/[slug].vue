@@ -118,11 +118,34 @@
             </div>
         </div>
       </div>
+
+        <!-- 토스트 알림 모달 -->
+        <toast-modal
+            :isOpen="modals.toastModal"
+            :toastMessage="toastMessage"
+            @update:isOpen="modals.toastModal = $event"
+        />
+
+        <!-- 토스트 경고 모달 -->
+        <toast-warn-modal 
+            :isOpen="modals.toastWarnModal"
+            :toastWarnMessage="toastWarnMessage"
+            @update:isOpen="modals.toastWarnModal = $event"/>
+
+        <!-- 토스트 에러 모달 -->
+        <toast-error-modal 
+            :isOpen="modals.toastErrorModal"
+            :toastErrorMessage="toastErrorMessage"
+            @update:isOpen="modals.toastErrorModal = $event"/>
+
     </div>
 </template>
 <script setup>
 import { useRoute, useRouter } from "vue-router";
 import { useCustomerApi } from "~/api/support";
+import toastModal from '@/components/toast-ui/toast-modal.vue';
+import toastWarnModal from '@/components/toast-ui/toast-warn-modal.vue';
+import toastErrorModal from '@/components/toast-ui/toast-error-modal.vue';
 
 // 2026.06.08[cgnoh]: 라우터 관련
 const route = useRoute();
@@ -174,6 +197,35 @@ const triggerFile = () => {
   fileInput.value?.click();
 };
 
+// 2026.06.15[cgnoh]: 토스트 메시지 관련
+const toastMessage = ref();
+const toastWarnMessage = ref();
+const toastErrorMessage = ref();
+
+// 2026.06.15[cgnoh]: 모달 관련
+const modals = reactive({});
+
+// 2026.06.04[cgnoh]: 저장 토스트
+const openSaveToast = (message) => {
+  document.querySelector('body').classList.add('is-hidden');
+  modals['toastModal'] = true;
+  toastMessage.value = message;
+}
+
+// 2026.06.04[cgnoh]: 경고 토스트
+const openWarnToast = (message) => {
+  document.querySelector('body').classList.add('is-hidden');
+  modals['toastWarnModal'] = true;
+  toastWarnMessage.value = message;
+}
+
+// 2026.06.04[cgnoh]: 에러 토스트
+const openErrorToast = (message) => {
+  document.querySelector('body').classList.add('is-hidden');
+  modals['toastErrorModal'] = true;
+  toastErrorMessage.value = message;
+}
+
 // 2026.06.08[cgnoh]: 파일 선택 처리
 const onFileChange = (e) => {
   const selected = e.target.files?.[0];
@@ -188,12 +240,12 @@ const onFileChange = (e) => {
 const handleSave = async () => {
   try {
     if (!form.title.trim()) {
-      alert("제목을 입력해주세요.");
+      openWarnToast("제목을 입력해주세요.");
       return;
     }
 
     if (form.title.length > 30) {
-      alert("제목은 30자 이하만 입력 가능합니다.");
+      openWarnToast("제목은 30자 이하만 입력 가능합니다.");
       return;
     }
 
@@ -206,7 +258,7 @@ const handleSave = async () => {
     formData.append("topflag", form.topflag);
 
     if (file.value) {
-    formData.append("filename", file.value);
+    formData.append("file", file.value);
     }
 
     const res = await customerApi._playerNoticeModify(
@@ -214,10 +266,10 @@ const handleSave = async () => {
     formData
     );
 
-    alert("수정되었습니다.");
+    openSaveToast("수정되었습니다.");
     router.push(`/customer/inquiry/${noticeno.value}`);
   } catch (err) {
-    alert(res.message || "수정에 실패했습니다.");
+    openErrorToast(res.message || "수정에 실패했습니다.");
   }
 };
 

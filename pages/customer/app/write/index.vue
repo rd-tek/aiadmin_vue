@@ -122,11 +122,34 @@
           </div>
         </div>
       </div>
+
+        <!-- 토스트 알림 모달 -->
+        <toast-modal
+            :isOpen="modals.toastModal"
+            :toastMessage="toastMessage"
+            @update:isOpen="modals.toastModal = $event"
+        />
+
+        <!-- 토스트 경고 모달 -->
+        <toast-warn-modal 
+            :isOpen="modals.toastWarnModal"
+            :toastWarnMessage="toastWarnMessage"
+            @update:isOpen="modals.toastWarnModal = $event"/>
+
+        <!-- 토스트 에러 모달 -->
+        <toast-error-modal 
+            :isOpen="modals.toastErrorModal"
+            :toastErrorMessage="toastErrorMessage"
+            @update:isOpen="modals.toastErrorModal = $event"/>
+
     </div>
 </template>
 <script setup>
 import { useRouter } from "vue-router";
 import { useCustomerApi } from "~/api/support";
+import toastModal from '@/components/toast-ui/toast-modal.vue';
+import toastWarnModal from '@/components/toast-ui/toast-warn-modal.vue';
+import toastErrorModal from '@/components/toast-ui/toast-error-modal.vue';
 
 // 2026.06.08[cgnoh]: 라우터 관련
 const router = useRouter();
@@ -163,21 +186,50 @@ const onFileChange = (e) => {
   fileName.value = selectedFile.name;
 };
 
+// 2026.06.15[cgnoh]: 토스트 메시지 관련
+const toastMessage = ref();
+const toastWarnMessage = ref();
+const toastErrorMessage = ref();
+
+// 2026.06.15[cgnoh]: 모달 관련
+const modals = reactive({});
+
+// 2026.06.04[cgnoh]: 저장 토스트
+const openSaveToast = (message) => {
+  document.querySelector('body').classList.add('is-hidden');
+  modals['toastModal'] = true;
+  toastMessage.value = message;
+}
+
+// 2026.06.04[cgnoh]: 경고 토스트
+const openWarnToast = (message) => {
+  document.querySelector('body').classList.add('is-hidden');
+  modals['toastWarnModal'] = true;
+  toastWarnMessage.value = message;
+}
+
+// 2026.06.04[cgnoh]: 에러 토스트
+const openErrorToast = (message) => {
+  document.querySelector('body').classList.add('is-hidden');
+  modals['toastErrorModal'] = true;
+  toastErrorMessage.value = message;
+}
+
 // 2026.06.08[cgnoh]: 글 저장 처리
 const handleSave = async () => {
   try {
     if (!form.title.trim()) {
-      alert("제목을 입력해주세요.");
+      openWarnToast("제목을 입력해주세요.");
       return;
     }
 
     if (form.title.length > 30) {
-      alert("제목은 30자 이하만 입력 가능합니다.");
+      openWarnToast("제목은 30자 이하만 입력 가능합니다.");
       return;
     }
 
     if (!form.contents.trim()) {
-      alert("내용을 입력해주세요.");
+      openWarnToast("내용을 입력해주세요.");
       return;
     }
 
@@ -190,18 +242,18 @@ const handleSave = async () => {
     formData.append("topflag", form.topflag);
 
     if (file.value) {
-      formData.append("filename", file.value);
+      formData.append("file", file.value);
     }
 
     const res = await customerApi._appNoticeWrite(formData);
 
     if (res.code === 200) {
-      alert("등록되었습니다.");
+      openSaveToast("등록되었습니다.");
       router.push("/customer/app");
     }
   } catch (err) {
     console.error(err);
-    alert(err?.data?.message || "등록 중 오류가 발생했습니다.");
+    openErrorToast(err?.data?.message || "등록 중 오류가 발생했습니다.");
   }
 };
 

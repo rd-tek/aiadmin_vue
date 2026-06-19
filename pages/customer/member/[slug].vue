@@ -11,7 +11,7 @@
                     <div class="info-list date">{{ noticeInfo.date }}</div>
                     <div class="info-list count">조회수 : {{ noticeInfo.cnt }}</div>
                     <div class="info-list download">
-                        <a class="btn-download" aria-label="다운로드" :href="noticeInfo.download_link" download>
+                        <button type="button" class="btn-download" aria-label="다운로드">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                                 <mask id="mask0_4215_81312" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
                                     <rect width="24" height="24" fill="#D9D9D9"/>
@@ -20,8 +20,8 @@
                                     <path d="M12 15.7885L7.73075 11.5192L8.78475 10.4348L11.25 12.9V4.5H12.75V12.9L15.2153 10.4348L16.2693 11.5192L12 15.7885ZM6.30775 19.5C5.80258 19.5 5.375 19.325 5.025 18.975C4.675 18.625 4.5 18.1974 4.5 17.6923V14.9808H6V17.6923C6 17.7692 6.03208 17.8398 6.09625 17.9038C6.16025 17.9679 6.23075 18 6.30775 18H17.6923C17.7692 18 17.8398 17.9679 17.9038 17.9038C17.9679 17.8398 18 17.7692 18 17.6923V14.9808H19.5V17.6923C19.5 18.1974 19.325 18.625 18.975 18.975C18.625 19.325 18.1974 19.5 17.6923 19.5H6.30775Z" fill="#3577F1"/>
                                 </g>
                             </svg>
-                        </a> 
-                        <span class="text">{{ noticeInfo.originname }}</span>
+                        </button> 
+                        <span class="text">{{ noticeInfo.filename }}</span>
                     </div>
                 </div>
             </div>
@@ -70,12 +70,35 @@
                 <button type="button" class="btn-md-fill btn-primary-purple" @click="handleEdit">수정하기</button>
             </div>
         </div>
+
+        <!-- 토스트 알림 모달 -->
+        <toast-modal
+            :isOpen="modals.toastModal"
+            :toastMessage="toastMessage"
+            @update:isOpen="modals.toastModal = $event"
+        />
+
+        <!-- 토스트 경고 모달 -->
+        <toast-warn-modal 
+            :isOpen="modals.toastWarnModal"
+            :toastWarnMessage="toastWarnMessage"
+            @update:isOpen="modals.toastWarnModal = $event"/>
+
+        <!-- 토스트 에러 모달 -->
+        <toast-error-modal 
+            :isOpen="modals.toastErrorModal"
+            :toastErrorMessage="toastErrorMessage"
+            @update:isOpen="modals.toastErrorModal = $event"/>
+
     </div>
 </template>
 <script setup>
 import { useRoute, useRouter } from "vue-router";
 import { useIntersectionObserver } from "@vueuse/core";
 import { useCustomerApi } from "~/api/support";
+import toastModal from '@/components/toast-ui/toast-modal.vue';
+import toastWarnModal from '@/components/toast-ui/toast-warn-modal.vue';
+import toastErrorModal from '@/components/toast-ui/toast-error-modal.vue';
 
 // 2026.06.08[cgnoh]: 라우터 관련
 const route = useRoute();
@@ -105,6 +128,35 @@ const handleEdit = () => {
   router.push(`/customer/member/edit/${route.params.slug}`);
 };
 
+// 2026.06.15[cgnoh]: 토스트 메시지 관련
+const toastMessage = ref();
+const toastWarnMessage = ref();
+const toastErrorMessage = ref();
+
+// 2026.06.15[cgnoh]: 모달 관련
+const modals = reactive({});
+
+// 2026.06.04[cgnoh]: 저장 토스트
+const openSaveToast = (message) => {
+  document.querySelector('body').classList.add('is-hidden');
+  modals['toastModal'] = true;
+  toastMessage.value = message;
+}
+
+// 2026.06.04[cgnoh]: 경고 토스트
+const openWarnToast = (message) => {
+  document.querySelector('body').classList.add('is-hidden');
+  modals['toastWarnModal'] = true;
+  toastWarnMessage.value = message;
+}
+
+// 2026.06.04[cgnoh]: 에러 토스트
+const openErrorToast = (message) => {
+  document.querySelector('body').classList.add('is-hidden');
+  modals['toastErrorModal'] = true;
+  toastErrorMessage.value = message;
+}
+
 // 2026.06.08[cgnoh]: 글 삭제 처리
 const handleDelete = async () => {
   const confirmed = confirm("정말 삭제하시겠습니까?");
@@ -119,17 +171,17 @@ const handleDelete = async () => {
     console.log("delete result", res);
 
     if (res.code === 200 || res.result === "success") {
-      alert("삭제되었습니다.");
+      openSaveToast("삭제되었습니다.");
 
       router.push("/customer/member");
       return;
     }
 
-    alert(res.message || "삭제에 실패했습니다.");
+    openErrorToast(res.message || "삭제에 실패했습니다.");
   } catch (err) {
     console.error(err);
 
-    alert(
+    openWarnToast(
       err?.data?.message ||
       err?.message ||
       "삭제 중 오류가 발생했습니다."
