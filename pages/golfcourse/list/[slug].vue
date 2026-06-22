@@ -60,7 +60,7 @@
                         <td
                             v-for="hole in course.subcoursehole"
                             :key="hole.hole_no"
-                            @click="modalOpen(hole.hole_no, course.type_fk)">
+                            @click="modalOpen(hole.hole_no, course.subcourseseq)">
                         {{ hole.hole_no }}
                         </td>
                         <td>{{ course.subparcnt }}</td>
@@ -72,7 +72,7 @@
                         <td
                             v-for="hole in course.subcoursehole"
                             :key="`par-${hole.hole_no}`"
-                            @click="modalOpen(hole.hole_no, course.type_fk)"
+                            @click="modalOpen(hole.hole_no, course.subcourseseq)"
                         >
                             {{ hole.par_score }}
                         </td>

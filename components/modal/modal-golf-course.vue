@@ -21,7 +21,7 @@
                         <img
                         :src="
                             common.getImg(
-                            holeData?.fieldpath + '/' + holeData?.fieldmap,
+                            holeData?.minimap_url + '/' + holeData?.minimap_name
                             )
                         "
                         alt="img_golf_course"
@@ -35,7 +35,7 @@
                         <img
                         :src="
                             common.getImg(
-                            holeData?.greenpathl + '/' + holeData?.greenmapl,
+                            holeData?.grnmap1_url + '/' + holeData?.grnmap1_name
                             )
                         "
                         alt="img_golf_course"

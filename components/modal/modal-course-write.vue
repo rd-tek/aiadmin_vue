@@ -24,17 +24,17 @@
             </tr>
             <tr>
               <th>서브 코스명</th>
-              <td>{{ item?.subcourse.subcoursename || '' }}</td>
+              <td>{{ item?.subcoursename || '-' }}</td>
             </tr>
             <tr>
               <th>홀</th>
-              <td>2H</td>
+              <td>{{ item?.hole_no ? item.hole_no + 'H' : '-' }}</td>
             </tr>
             <tr v-for="file in fileFields" :key="file.key">
               <th>{{ file.label }}</th>
               <td>
                 <div class="input-wrap">
-                  <div class="input-text">  
+                  <div class="input-text">
                     <input
                       type="file"
                       :ref="el => setFileRef(file.key, el)"
@@ -44,6 +44,10 @@
                     <button type="button" class="btn-file" @click="triggerFile(file.key)">파일선택</button>
                     <span class="name" v-if="fileStates[file.key].fileName">
                       {{ fileStates[file.key].fileName }}
+                    </span>
+                    <!-- 기존 등록된 파일명 표시 -->
+                    <span class="name" v-else-if="item?.[file.existingKey]">
+                      {{ item[file.existingKey] }}
                     </span>
                     <span class="name placeholder" v-else>파일을 선택하거나 여기에 드롭하세요.</span>
                   </div>
@@ -70,17 +74,21 @@
     </div>
   </div>
 </template>
+
 <script setup>
-// 2026.06.16[cgnoh]: 파일 필드 정의
+import { useCourseApi } from "~/api/course";
+
+const { _courseHoleEdit } = useCourseApi();
+
+// 2026.06.16[cgnoh]: existingKey = API 응답에서 받아온 파일명 필드
 const fileFields = [
-  { key: 'holeImage',      label: '홀 이미지',      accept: 'image/*' },
-  { key: 'courseMinimap',  label: '코스 미니맵',     accept: 'image/*' },
-  { key: 'greenMinimapL',  label: '그린 미니맵(좌)', accept: 'image/*' },
-  { key: 'greenMinimapR',  label: '그린 미니맵(우)', accept: 'image/*' },
-  { key: 'holeVideo',      label: '홀 동영상',       accept: 'video/*' },
+  { key: 'holeImage',     label: '홀 이미지',      accept: 'image/*', existingKey: null },
+  { key: 'courseMinimap', label: '코스 미니맵',     accept: 'image/*', existingKey: 'minimap_filename' },
+  { key: 'greenMinimapL', label: '그린 미니맵(좌)', accept: 'image/*', existingKey: 'grnmap1_filename' },
+  { key: 'greenMinimapR', label: '그린 미니맵(우)', accept: 'image/*', existingKey: 'grnmap2_filename' },
+  { key: 'holeVideo',     label: '홀 동영상',       accept: 'video/*', existingKey: 'movie_filename' },
 ];
 
-// 2026.06.16[cgnoh]: 각 파일 필드의 상태를 key로 관리
 const fileStates = reactive(
   Object.fromEntries(
     fileFields.map(({ key }) => [
@@ -90,7 +98,21 @@ const fileStates = reactive(
   )
 );
 
-// 2026.06.16[cgnoh]: 각 input 엘리먼트를 key로 관리
+// 모달 열릴 때 fileStates 초기화
+const props = defineProps({
+  isOpen: { type: Boolean, default: false },
+  item: { type: Object }
+});
+
+watch(() => props.isOpen, (val) => {
+  if (val) {
+    // 새 홀 열릴 때 파일 상태 초기화
+    fileFields.forEach(({ key }) => {
+      fileStates[key] = { fileName: '', previewUrl: '', file: null };
+    });
+  }
+});
+
 const fileRefs = {};
 const setFileRef = (key, el) => {
   if (el) fileRefs[key] = el;
@@ -103,34 +125,46 @@ const triggerFile = (key) => {
 const onFileChange = (key, event) => {
   const file = event.target.files?.[0];
   if (!file) return;
-
   const state = fileStates[key];
   state.file = file;
   state.fileName = file.name;
-
   const reader = new FileReader();
-  reader.onload = () => {
-    state.previewUrl = reader.result;
-  };
+  reader.onload = () => { state.previewUrl = reader.result; };
   reader.readAsDataURL(file);
 };
 
-// 2026.06.16[cgnoh]: 저장 시 fileStates에서 각 파일 접근 가능
-const props = defineProps({
-    isOpen: { type: Boolean, default: false },
-    item: {
-        type: Object
-    }
-});
 const emit = defineEmits(['update:isOpen']);
 const modalClose = () => {
   emit('update:isOpen', false);
   document.querySelector('body').classList.remove('is-hidden');
 };
 
-// 2026.06.16[cgnoh]: 저장 핸들링
-const modalSave = () => {
+const modalSave = async () => {
+    const formData = new FormData();
 
+    formData.append('courseno', props.item.courseno);
+    formData.append('coursubtype', props.item.coursubtype);
+    formData.append('holeno', props.item.hole_no);
+    formData.append('contents', props.item.contents || '');
+
+    if (fileStates.courseMinimap.file) formData.append('minimap', fileStates.courseMinimap.file);
+    if (fileStates.greenMinimapL.file) formData.append('grnmap1', fileStates.greenMinimapL.file);
+    if (fileStates.greenMinimapR.file) formData.append('grnmap2', fileStates.greenMinimapR.file);
+    if (fileStates.holeVideo.file)     formData.append('movie',   fileStates.holeVideo.file);
+
+    try {
+        const res = await _courseHoleEdit(formData);
+        if (res?.code === 200) {
+            alert(res.message || '저장되었습니다.');
+            
+            modalClose();
+        } else {
+            alert(res?.message || '저장에 실패했습니다.');
+        }
+    } catch (err) {
+        console.error(err);
+        alert('저장 중 오류가 발생했습니다.');
+    }
 };
 </script>
 
