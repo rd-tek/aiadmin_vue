@@ -75,7 +75,10 @@
                                 <td>
                                     <div class="course-wrap">
                                         <div class="input-text">
-                                             <input type="text" v-model="form.subcourse.subcoursename[i]" />
+                                            <input
+                                                type="text"
+                                                v-model="form.subcourse.subcoursename[index]"
+                                            />
                                         </div>
                                         <div class="table-area type02">
                                             <div class="table-list">
@@ -84,8 +87,8 @@
                                                         <tbody>
                                                             <tr>
                                                                 <th>홀</th>
-                                                                <td v-for="(item, j) in subcourse[i]?.subcoursehole" :key="j">
-                                                                    <button type="button" @click="modalOpen(i, item)" class="link">{{ item.hole_no }}</button>
+                                                                <td v-for="(item, j) in form.subcourse.subcoursehole[i].hole" :key="j">
+                                                                    <button type="button" @click="modalOpen(form)" class="link">{{ item }}</button>
                                                                 </td>
                                                                 <td>합계</td>
                                                             </tr>
@@ -97,9 +100,7 @@
                                                                     </div>
                                                                 </td> -->
                                                                 <td v-for="(item, j) in subcourse[i]?.subcoursehole" :key="j">
-                                                                    <div class="input-text">
-                                                                        <input type="number" v-model="subcourse[i].subcoursehole[j].par_score" />
-                                                                    </div>
+                                                                    {{ item.par_score }}
                                                                 </td>
                                                                 <td>
                                                                     <div class="input-text">
@@ -115,9 +116,7 @@
                                                                     </div>
                                                                 </td> -->
                                                                 <td v-for="(item, j) in subcourse[i]?.subcoursehole" :key="j">
-                                                                    <div class="input-text">
-                                                                        <input type="number" v-model="subcourse[i].subcoursehole[j].handicap" />
-                                                                    </div>
+                                                                    {{ item.handicap }}
                                                                 </td>
                                                                 <td>
                                                                     <div class="input-text">
@@ -137,12 +136,6 @@
                         <tr>
                             <th>코스 이미지</th>
                             <td>
-                                <div v-if="previewImage || form.course_image_url" style="margin-bottom: 8px;">
-                                    <img 
-                                        :src="previewImage || common.getImg(form.course_image_url)" 
-                                        style="max-height: 80px; max-width: 200px; object-fit: contain;" 
-                                    />
-                                </div>
                                 <div class="input-wrap">
                                     <div class="input-text">
                                         <input
@@ -286,32 +279,16 @@ import { useRoute } from "vue-router";
 import { useIntersectionObserver } from "@vueuse/core";
 import { useCourseApi } from "~/api/course";
 
-import { useCommon } from "@/utils/common";
-
-const common = useCommon();
-
 // 2026.06.16[cgnoh]: 선택된 홀 정보
 const selectedItem = ref(null);
 
 // 2026.06.16[cgnoh]: 모달 관련
 const modals = reactive({ modalCourseWrite: false });
-// modalOpen 수정
-const modalOpen = async (subcourseIdx, holeItem) => {
-    selectedItem.value = {
-        coursename: form.coursename,
-        subcoursename: form.subcourse.subcoursename[subcourseIdx],
-        courseno: route.params.slug,                        
-        coursubtype: subcourse.value[subcourseIdx].type_fk, 
-        hole_no: holeItem.hole_no,
-        contents: holeItem.contents,
-        minimap_filename: holeItem.minimap_filename,
-        grnmap1_filename: holeItem.grnmap1_filename,
-        grnmap2_filename: holeItem.grnmap2_filename,
-        movie_filename: holeItem.movie_filename,
-    };
+const modalOpen = async (item) => {
+    selectedItem.value = item;
     modals['modalCourseWrite'] = true;
     document.querySelector('body').classList.add('is-hidden');
-};
+}
 
 // 2026.06.16[cgnoh]: 라우터 관련
 const route = useRoute();
@@ -409,34 +386,30 @@ const subcourse = ref({});
 const getCourseDetail = async () => {
   try {
     const res = await _courseView(route.params.slug);
+    console.log(res.subcourse)
     const info = res.coursebasicinfo || {};
     subcourse.value = res.subcourse;
+    
 
     Object.assign(form, {
-        coursename: info.coursename || "",
-        coursecode: info.coursecode || "",
-        holesum: info.holesum || 0,
-        parsum: info.parsum || 0,
-        subcourselistcnt: String(res.subcourse?.length || 1),
-        field: info.field || 0,
-        green: info.green || 0,
-        area: info.area || "",
-        country: info.country || "",
-        contents: info.contents || "",
+        coursename: info.coursename || "", // 코스명
+        coursecode: info.coursecode || "", // 코드
+        holesum: info.holesum || 0, // 홀 수
+        parsum: info.parsum || 0, // 파 수
+        subcourselistcnt: String(
+            info.subcoursecnt || res.subcourse?.length || 1
+        ), // 서브 코스 수
+        field: info.field || 0, // 난이도(필드)
+        green: info.green || 0, // 난이도(그린)
+        area: info.area || "", // 지역
+        country: info.country || "", // 국가
+        contents: info.contents || "", // 설명
         status: info.status ?? "0",
         viewflag: info.viewflag ?? "0",
-        course_image_url: info.course_image_url || "", // 코스 이미지 경로
-    });
-
-    // 서브코스명/type_fk/parsum 매핑
-    res.subcourse?.forEach((sc, i) => {
-        form.subcourse.subcoursename[i] = sc.title || "";
-        form.subcourse.type_fk[i] = sc.type_fk || "";
-        form.subcourse.subcourseparsum[i] = sc.base_par || "";
     });
 
     subCourseList.value = res.subcourse || [];
-
+    
   } catch (err) {
     console.error(err);
   }
@@ -446,47 +419,64 @@ const getCourseDetail = async () => {
 const handleSave = async () => {
     const formData = new FormData();
 
-    formData.append("coursename", form.coursename);
-    formData.append("coursecode", form.coursecode);
-    formData.append("holesum", form.holesum);
-    formData.append("subcourselistcnt", form.subcourselistcnt);
-    formData.append("status", form.status);
+    formData.append("coursename", form.coursename); // 코스명
+    formData.append("coursecode", form.coursecode); // 코드
+    formData.append("holesum", form.holesum); // 홀 수
+    formData.append("subcourselistcnt", form.subcourselistcnt); // 파 수
+    formData.append("status", form.status); // 
     formData.append("viewflag", form.viewflag);
-    formData.append("field", form.field);
-    formData.append("green", form.green);
-    formData.append("area", form.area);
-    formData.append("country", form.country);
-    formData.append("contents", form.contents);
+    formData.append("field", form.field); // 난이도(필드)
+    formData.append("green", form.green); // 난이도(그린)
+    formData.append("area", form.area); // 지역
+    formData.append("country", form.country); // 나라
+    formData.append("contents", form.contents); // 설명
     formData.append("parsum", form.parsum);
-
+    
     if (form.filename instanceof File) {
-        formData.append("filename", form.filename);
+    formData.append("filename", form.filename);
     }
 
-    for (let i = 0; i < Number(form.subcourselistcnt); i++) {
-        formData.append("type_fk[]", form.subcourse.type_fk[i]);
-        formData.append("subcoursename[]", form.subcourse.subcoursename[i]);
-        formData.append("subcourseparsum[]", form.subcourse.subcourseparsum[i]);
+    // 서브코스
+    for (
+        let i = 0;
+        i < Number(form.subcourselistcnt);
+        i++
+    ) {
+    formData.append(
+        "type_fk[]",
+        form.subcourse.type_fk[i]
+    );
 
-        for (let j = 0; j < 9; j++) {
-            formData.append(`hole[${i}][${j}]`, subcourse.value[i].subcoursehole[j].hole_no);
-            formData.append(`par[${i}][${j}]`, subcourse.value[i].subcoursehole[j].par_score);
-            formData.append(`handicap[${i}][${j}]`, subcourse.value[i].subcoursehole[j].handicap);
-        }
+    formData.append(
+        "subcoursename[]",
+        form.subcourse.subcoursename[i]
+    );
+
+    formData.append(
+        "subcourseparsum[]",
+        form.subcourse.subcourseparsum[i]
+    );
+
+    // 9홀 데이터
+    for (let j = 0; j < 9; j++) {
+        formData.append(
+        `hole[${i}][${j}]`,
+        form.subcourse.subcoursehole[i].hole[j]
+        );
+
+        formData.append(
+        `par[${i}][${j}]`,
+        form.subcourse.subcoursehole[i].par[j]
+        );
+
+        formData.append(
+        `handicap[${i}][${j}]`,
+        form.subcourse.subcoursehole[i].handicap[j]
+        );
+    }
     }
 
-    try {
-        const res = await _courseEdit(route.params.slug, formData);
-        if (res?.code === 200) {
-            alert(res.message || '저장되었습니다.');
-            await getCourseDetail(); // 저장 후 데이터 갱신
-        } else {
-            alert(res?.message || '저장에 실패했습니다.');
-        }
-    } catch (err) {
-        console.error(err);
-        alert('저장 중 오류가 발생했습니다.');
-    }
+    await _courseEdit(route.params.slug, formData);
 };
 
 // 2026.06.16[cgnoh]: 인터렉션 관련

@@ -482,7 +482,7 @@ import { useSwingApi } from "~/api/swing";
 
 // 2026.06.17[cgnoh]: 라우터 관련
 const route = useRoute();
-const swingPk = computed(() => route.params.id);
+const swingPk = computed(() => route.params.slug);
 const { _swingView } = useSwingApi();
 const swingInfo = ref({});
 
