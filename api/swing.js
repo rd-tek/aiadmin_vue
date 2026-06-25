@@ -47,11 +47,12 @@ export const useSwingApi = () => {
   };
 
   // 댓글 등록
-  const _swingReplyWrite = async (swingno, comment) => {
+  const _swingReplyWrite = async (swingno, comment, top_comment_pk = 0) => {
     return await apiFetch(`/postact/swingreplywrite/${swingno}`, {
       method: "POST",
       body: {
         comment,
+        top_comment_pk,
       },
     });
   };
