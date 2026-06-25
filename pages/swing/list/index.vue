@@ -37,7 +37,7 @@
                 <div class="img-area">
                   <div class="image" :style="{ backgroundImage: `url(${item.fit_preview_path})` }"></div>
                 </div>
-                <nuxt-link :to="`/swing/list/${item.swing_pk}`" class="info-area">
+                <nuxt-link :to="`/swing/list/${item.fit_shotdata_pk}`" class="info-area">
                   <div class="label" :class="{ 'color-green': item.view_flag === '1' }">{{ item.view_flag === '1' ? '공개' : '비공개' }}</div>
                   <button type="button" class="title">{{ item.title || '-' }}</button>
                   <div class="desc">
@@ -313,6 +313,8 @@ const getSwingList = async () => {
     const res = await _swingList({
       pageno: pageNo.value,
       pagesize: pageSize,
+      startdate: formatApiDate(startDate.value),  
+      enddate: formatApiDate(endDate.value),        
     });
 
     if (res.code === 200) {

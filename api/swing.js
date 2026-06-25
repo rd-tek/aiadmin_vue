@@ -12,8 +12,8 @@ export const useSwingApi = () => {
   };
 
   // 스윙 상세
-  const _swingView = async (swingno) => {
-    return await apiFetch(`/swing/swingview/${swingno}`, {
+  const _swingView = async (fit_shotdata_pk) => {
+    return await apiFetch(`/swing/swingview/${fit_shotdata_pk}`, {
       method: "GET",
     });
   };
@@ -47,19 +47,18 @@ export const useSwingApi = () => {
   };
 
   // 댓글 등록
-  const _swingReplyWrite = async (swingno, nickname, text) => {
-    return await apiFetch(`/swing/swingreplywrite/${swingno}`, {
+  const _swingReplyWrite = async (swingno, comment) => {
+    return await apiFetch(`/postact/swingreplywrite/${swingno}`, {
       method: "POST",
       body: {
-        nickname,
-        text,
+        comment,
       },
     });
   };
 
   // 댓글 삭제
-  const _swingReplyDelete = async (swingno, replyno) => {
-    return await apiFetch(`/postact/swingreplydrop/${swingno}/${replyno}`, {
+  const _swingReplyDelete = async (comment_pk) => {
+    return await apiFetch(`/postact/swingreplydrop/${comment_pk}`, {
       method: "DELETE",
     });
   };

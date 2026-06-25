@@ -1,0 +1,10 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.000
+Hello. This is a sample subtitle in English.
+
+00:00:03.500 --> 00:00:06.000
+You can use this in your Nuxt.js project.
+
+00:00:06.500 --> 00:00:10.000
+Subtitle files show text during video playback.
