@@ -30,7 +30,7 @@
                                         required
                                     />
                                 </div>
-                            </td>
+                            </td> 
                         </tr>
                         <tr>
                             <th>홀 수</th>
@@ -95,7 +95,7 @@
                                                             <tr>
                                                                 <th>파</th>
                                                                 <!-- <td v-for="(item, j) in form.subcourse.subcoursehole[i].par" :key="j">
-                                                                    <div class="input-text">
+                                                                     <div class="input-text">
                                                                         <input type="text" :value="item" disabled>
                                                                     </div>
                                                                 </td> -->

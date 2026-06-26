@@ -1,81 +1,199 @@
 <template>
-    <div class="membership-member detail">
-      <div class="table-wrap">
-        <div class="table type02" :class="{ 'is-move': tableMove }" ref="tableRef">
-          <table>
-            <colgroup>
-                <col width="18%">
-                <col width="*">
-            </colgroup>
-            <tbody>
-                <tr>
-                    <th>상태</th>
+    <div class="membership-member write">
+      <div class="write-wrap">
+        <div class="table-wrap">
+          <div class="table type02" :class="{ 'is-move': tableMove }" ref="tableRef">
+            <table>
+              <colgroup>
+                  <col width="18%">
+                  <col width="*">
+              </colgroup>
+              <tbody>
+                  <tr>
+                      <th>상태 <span class="required"></span></th>
+                      <td>
+                        <div class="select-default m-w-100">
+                          <select v-model="ownerinfo.status">
+                            <option value="1">정상</option>
+                            <option value="2">정지</option>
+                          </select>
+                        </div>
+                      </td>
+                  </tr> 
+                  <tr>
+                      <th>회원 ID <span class="required"></span></th>
+                      <td>
+                        <div class="input-text">
+                          <input type="text" v-model="ownerinfo.id">
+                        </div>
+                      </td>
+                  </tr>
+                  <tr>
+                    <th>비밀번호</th>
                     <td>
-                      <div class="select-default m-w-100">
-                        <select v-model="ownerinfo.status">
-                          <option value="1">정상</option>
-                          <option value="2">정지</option>
+                      <div class="input-text">
+                        <input type="text">
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                      <th>매장명<span class="required"></span></th>
+                      <td>
+                        <div class="input-text">
+                          <input type="text" v-model="ownerinfo.shopname">
+                        </div>
+                      </td>
+                  </tr>
+                  <tr>
+                    <th>이메일 <span class="required"></span></th>
+                    <td>
+                      <div class="input-text">
+                        <input type="text" v-model="ownerinfo.email">
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>인증</th>
+                    <td>{{ ownerinfo.auth === '1' ? '인증' : '미인증' }}</td>
+                  </tr>
+                  <tr>
+                    <th>매장 타입 <span class="required"></span></th>
+                    <td>
+                      <div class="select-default">
+                        <select>
+                          <option>합계</option>
+                          <option>프랜차이즈</option>
+                          <option>직영점</option>
                         </select>
                       </div>
                     </td>
-                </tr>
-                <tr>
-                    <th>아이디</th>
-                    <td>{{ ownerinfo.id || '-' }}</td>
-                </tr>
-                <tr>
-                    <th>닉네임</th>
-                    <td>{{ ownerinfo.shopname || '-' }}</td>
-                </tr>
-                <tr>
-                    <th>이름</th>
-                    <td>{{ ownerinfo.firstname }} {{ ownerinfo.lastname }}</td>
-                </tr>
-                <tr>
-                    <th>핸드폰</th>
-                    <td>{{ ownerinfo.handphone || '-' }}</td>
-                </tr>
-                <tr>
-                    <th>이메일</th>
+                  </tr>
+                  <tr>
+                    <th>세팅 <span class="required"></span></th>
                     <td>
-                      <span :class="{ 'text-underline color-blue': ownerinfo.email }">{{ ownerinfo.email || '-' }}</span>
+                      <div class="input-wrap">
+                        <div class="select-wrap flex-start">
+                          <div class="select-default">
+                              <select>
+                                  <option value="" disabled>페어웨이</option>
+                                  <option value="1">M</option>
+                                  <option value="2">Yard</option>
+                                  <option value="3">Feet</option>
+                              </select>
+                          </div>
+                          <div class="select-default">
+                              <select>
+                                  <option value="" disabled>Green</option>
+                                  <option value="1">M</option>
+                                  <option value="2">Yard</option>
+                                  <option value="3">Feet</option>
+                              </select>
+                          </div>
+                          <div class="select-default">
+                              <select>
+                                  <option value="" disabled>Speed</option>
+                                  <option value="1">km/h</option>
+                                  <option value="2">mile/h</option>
+                                  <option value="3">m/s</option>
+                              </select>
+                          </div>
+                        </div>
+                      </div>
                     </td>
-                </tr>
-                <tr>
-                    <th>인증</th>
-                    <td>{{ ownerinfo.auth === '1' ? '인증' : '미인증' }}</td>
-                </tr>
-                <tr>
+                  </tr>
+                  <tr>
                     <th>이메일 수신</th>
-                    <td>{{ ownerinfo.emailagree === '1' ? '동의' : '미동의' }}</td>
-                </tr>
-                <tr>
-                    <th>성별</th>
-                    <td>{{ ownerinfo.gender === 'M' ? '남성' : '여성' }}</td>
-                </tr>
-                <tr>
-                    <th>손잡이</th>
-                    <td>{{ ownerinfo.handrl === 'R' ? '오른손' : '왼손' }}</td>
-                </tr>
-                <tr>
-                    <th>티높이</th>
-                    <td>{{ ownerinfo.teeheight }}mm</td>
-                </tr>
-                <tr>
-                  <th>세팅</th>
-                  <td>
-                    <div class="select-wrap flex-column">
-                      <div class="select-default">Fairway : <b>{{ ownerinfo.fieldunit }}</b></div>
-                      <div class="select-default">Green : <b>{{ ownerinfo.greenunit }}</b></div>
-                      <div class="select-default">Speed : <b>{{ ownerinfo.speedunit }}</b></div>
-                    </div>
-                  </td>
-                </tr>
-            </tbody>
-          </table>
-          <div class="btn-wrap">
-            <button type="button" class="btn-md-line" @click="handleList">목록보기</button>
-            <button type="button" class="btn-primary-purple btn-md-fill" @click="handleSave">저장</button>
+                    <td>
+                      <div class="check-box">
+                          <input type="checkbox" id="chk_02" name="chk_02" v-model="ownerinfo.emailagree">
+                          <label for="chk_02">
+                              <span class="check-box-item">
+                                  <i class="item-line" />
+                              </span>
+                              <span class="check-box-txt">동의</span>
+                          </label>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                      <th>대표자 <span class="required"></span></th>
+                      <td>
+                        <div class="input-text">
+                          <input type="text" v-model="ownerinfo.firstname">
+                        </div>
+                      </td>
+                  </tr>
+                  <tr>
+                    <th>주소 <span class="required"></span></th>
+                    <td>
+                        <div class="input-wrap mb-10">
+                            <div class="input-text">
+                                <input type="text" v-model="ownerinfo.zipcode">
+                            </div>
+                            <button type="button" class="btn-md-line"  @click="openAddressSearch">주소찾기</button>
+                        </div>
+                        <div class="input-text mb-10 m-w-100">
+                            <input type="text" v-model="ownerinfo.address1">
+                        </div>
+                        <div class="input-text m-w-100">
+                            <input type="text" v-model="ownerinfo.address2">
+                        </div>
+                    </td>
+                  </tr>
+                  <tr>
+                      <th>전화번호 <span class="required"></span></th>
+                      <td>
+                        <div class="input-text">
+                          <input type="text" v-model="ownerinfo.phone">
+                        </div>
+                      </td>
+                  </tr>
+                  <tr>
+                    <th>팩스</th>
+                    <td>
+                      <div class="input-text">
+                        <input type="text" v-model="ownerinfo.fax">
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>홈페이지</th>
+                    <td>
+                      <div class="input-text">
+                        <input type="text" v-model="ownerinfo.website">
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>장비 수</th>
+                    <td>
+                      <div class="input-text">
+                        <input type="text" v-model="ownerinfo.roomcnt">
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>기타정보</th>
+                    <td>
+                      <div class="input-text">
+                        <input type="text" v-model="ownerinfo.etcinfo">
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>라커 수</th>
+                    <td>
+                      <div class="input-text">
+                        <input type="text" v-model="ownerinfo.lockercnt">
+                      </div>
+                    </td>
+                  </tr>
+              </tbody>
+            </table>
+            <div class="btn-wrap">
+              <button type="button" class="btn-md-line" @click="handleList">목록보기</button>
+              <button type="button" class="btn-primary-purple btn-md-fill" @click="handleSave">저장</button>
+            </div>
           </div>
         </div>
       </div>
@@ -199,6 +317,45 @@ const handleSave = async () => {
     console.error(err);
     openErrorToast("저장 중 오류가 발생했습니다.");
   }
+};
+
+// 2026.06.04[cgnoh]: 카카오 주소 검색
+const loadKakaoPostcode = () => {
+  return new Promise((resolve) => {
+    if (window.daum?.Postcode) return resolve();
+    const script  = document.createElement("script");
+    script.src    = "https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js";
+    script.onload = resolve;
+    document.head.appendChild(script);
+  });
+};
+
+// 2026.06.04[cgnoh]: 주소 검색 핸들링
+const openAddressSearch = async () => {
+  await loadKakaoPostcode();
+
+  new window.daum.Postcode({
+    oncomplete: async (data) => {
+      var roadAddr      = data.roadAddress;
+      var extraRoadAddr = "";
+
+      if (data.bname !== "" && /[동|로|가]$/g.test(data.bname)) {
+        extraRoadAddr += data.bname;
+      }
+      if (data.buildingName !== "" && data.apartment === "Y") {
+        extraRoadAddr += extraRoadAddr !== "" ? ", " + data.buildingName : data.buildingName;
+      }
+      if (extraRoadAddr !== "") {
+        extraRoadAddr = " (" + extraRoadAddr + ")";
+      }
+
+      form.value.zipcode  = data.zonecode;
+      form.value.address1 = roadAddr;
+      form.value.address2 = data.jibunAddress;
+
+      await geocodeAddress(roadAddr || data.jibunAddress);
+    },
+  }).open();
 };
 
 onMounted(async () => {
