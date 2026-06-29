@@ -61,12 +61,13 @@ const form = ref({ ...defaultForm });
 const route = useRoute(); 
 const routeTitleMap = useRouteTitleMap();
 const pageTitle = computed(() => {
-  const name = route.name?.toString() ?? '';
-  const key = Object.keys(routeTitleMap).find(k =>
-    name.startsWith(k)
-  );
+  const name = route.name?.toString() ?? "";
 
-  return routeTitleMap[key] ?? '';
+  const key = Object.keys(routeTitleMap)
+    .sort((a, b) => b.length - a.length)
+    .find(k => name.startsWith(k));
+
+  return routeTitleMap[key] ?? "대시보드";
 });
 
 // 2026.03.04[cgnoh]: GNB 토글
