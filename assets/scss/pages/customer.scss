@@ -361,6 +361,23 @@
                                     }
                                 }
 
+                                .input-file {
+                                    display: flex;
+                                    align-items: center;
+                                    width: 100%;
+                                    position: relative;
+
+                                    .name {
+                                        position: absolute;
+                                        left: 12px;
+                                        top: 50%;
+                                        transform: translateY(-50%);
+                                        text-overflow: ellipsis;
+                                        overflow: hidden;
+                                        width: 88%;
+                                    }
+                                }
+
                                 .btn-file {
                                     min-width: 88px;
                                     height: 40px;
@@ -443,11 +460,14 @@
                 }
 
                 .info {
-                    display: block;
+                    display: flex;
+                    align-items: center;
+                    flex-wrap: wrap;
+                    gap: 10px;
 
                     &-list {
                         display: inline-block;
-                        margin-right: 16px;
+                        margin-right: 6px;
 
                         &:first-child {
                             padding-right: 0;
@@ -471,10 +491,13 @@
                             margin-right: 10px;
                         }
 
+                        &.name {
+                            margin: 0;
+                        }
+
                         &.download {
                             display: flex;
                             align-items: center;
-                            margin-top: 10px;
                         }
                     }
                 }
@@ -541,8 +564,20 @@
                 }
             }
 
+            .table {
+                .btn-wrap {
+                    padding: 20px 0 0 0;
+
+                    a, button {
+                        height: 40px;
+                        line-height: 38px;
+                    }
+                }
+            }
+
             .btn-wrap {
                 flex-direction: column;
+                margin: 0;
 
                 &.column-reverse {
                     flex-direction: column-reverse;
@@ -655,6 +690,7 @@
 
                 .btn-group {
                     width: 100%;
+                    margin-bottom: 20px;
 
                     a, button {
                         position: initial;

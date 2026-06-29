@@ -262,9 +262,20 @@ const handleList = () => {
   router.push("/customer/inquiry");
 };
 
+// 2026.03.04[cgnoh]: 페이지 메타 정보
 definePageMeta({
   layout: "default",
 });
+
+useHead({
+  htmlAttrs: {
+    lang: 'ko'
+  },
+  title: '고객문의',
+  meta: [
+    { name: 'description', content: '고객문의 페이지 입니다.' }
+  ]
+})
 </script>
 <style lang="scss" scoped>
 @use '@/assets/scss/pages/customer.scss';

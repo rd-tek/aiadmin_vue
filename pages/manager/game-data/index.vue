@@ -920,6 +920,16 @@ onMounted(() => {
 definePageMeta({
   layout: "default",
 });
+
+useHead({
+  htmlAttrs: {
+    lang: 'ko'
+  },
+  title: '게임데이터 관리',
+  meta: [
+    { name: 'description', content: '게임데이터 관리 페이지 입니다.' }
+  ]
+})
 </script>
 <style lang="scss" scoped>
 @use '@/assets/scss/pages/game-data.scss';

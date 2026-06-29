@@ -206,6 +206,16 @@ onMounted(() => {
 definePageMeta({
   layout: "default",
 });
+
+useHead({
+  htmlAttrs: {
+    lang: 'ko'
+  },
+  title: '관리자 리스트',
+  meta: [
+    { name: 'description', content: '관리자 리스트 페이지 입니다.' }
+  ]
+})
 </script>
 <style lang="scss" scoped>
 @use '@/assets/scss/pages/manager.scss';

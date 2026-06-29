@@ -113,6 +113,16 @@ const handleList = () => {
 definePageMeta({
   layout: "publish-default",
 });
+
+useHead({
+  htmlAttrs: {
+    lang: 'ko'
+  },
+  title: '일반회원',
+  meta: [
+    { name: 'description', content: '일반회원 페이지 입니다.' }
+  ]
+})
 </script>
 <style lang="scss" scoped>
 @use '@/assets/scss/pages/membership.scss';

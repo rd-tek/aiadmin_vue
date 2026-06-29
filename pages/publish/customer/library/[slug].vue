@@ -64,6 +64,16 @@ useIntersectionObserver(detailRef, ([{ isIntersecting }]) => {
 definePageMeta({
   layout: "publish-default",
 });
+
+useHead({
+  htmlAttrs: {
+    lang: 'ko'
+  },
+  title: '자료실',
+  meta: [
+    { name: 'description', content: '자료실 페이지 입니다.' }
+  ]
+})
 </script>
 <style lang="scss" scoped>
 @use '@/assets/scss/pages/customer.scss';

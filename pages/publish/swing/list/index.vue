@@ -89,12 +89,12 @@
           </li>
         </ul>
       </div>
-    </div>
 
-    <modal-swing-info
+      <modal-swing-info
       :isOpen="modals.modalSwingInfo"
       @update:isOpen="modals.modalSwingInfo = $event"/>
 
+    </div>
 </template>
 <script setup>
 import { useRouter } from "vue-router";
@@ -153,6 +153,16 @@ const modalOpen = () => {
 definePageMeta({
   layout: "publish-default",
 });
+
+useHead({
+  htmlAttrs: {
+    lang: 'ko'
+  },
+  title: '스윙영상',
+  meta: [
+    { name: 'description', content: '스윙영상 페이지 입니다.' }
+  ]
+})
 </script>
 <style lang="scss" scoped>
 @use '@/assets/scss/pages/swing-list.scss';

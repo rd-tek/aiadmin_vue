@@ -101,6 +101,7 @@ const handleLogin = async () => {
   }
 }
 
+// 2026.03.04[cgnoh]: 페이지 메타 정보
 definePageMeta({
   layout: "login",
 });
@@ -114,7 +115,6 @@ useHead({
     { name: 'description', content: '로그인 페이지 입니다.' }
   ]
 })
-
 </script>
 <style lang="scss" scoped>
 @use "@/assets/scss/pages/login.scss";

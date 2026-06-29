@@ -11,7 +11,7 @@
                     <div class="info-list date">{{ noticeInfo.date }}</div>
                     <div class="info-list count">조회수 : {{ noticeInfo.cnt }}</div>
                     <div class="info-list download">
-                        <a class="btn-download" aria-label="다운로드" :href="noticeInfo.download_link" download>
+                        <button type="button" class="btn-download" aria-label="다운로드">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                                 <mask id="mask0_4215_81312" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
                                     <rect width="24" height="24" fill="#D9D9D9"/>
@@ -20,8 +20,8 @@
                                     <path d="M12 15.7885L7.73075 11.5192L8.78475 10.4348L11.25 12.9V4.5H12.75V12.9L15.2153 10.4348L16.2693 11.5192L12 15.7885ZM6.30775 19.5C5.80258 19.5 5.375 19.325 5.025 18.975C4.675 18.625 4.5 18.1974 4.5 17.6923V14.9808H6V17.6923C6 17.7692 6.03208 17.8398 6.09625 17.9038C6.16025 17.9679 6.23075 18 6.30775 18H17.6923C17.7692 18 17.8398 17.9679 17.9038 17.9038C17.9679 17.8398 18 17.7692 18 17.6923V14.9808H19.5V17.6923C19.5 18.1974 19.325 18.625 18.975 18.975C18.625 19.325 18.1974 19.5 17.6923 19.5H6.30775Z" fill="#3577F1"/>
                                 </g>
                             </svg>
-                        </a> 
-                        <span class="text">{{ noticeInfo.originname }}</span>
+                        </button> 
+                        <span class="text">{{ noticeInfo.filename }}</span>
                     </div>
                 </div>
             </div>
@@ -231,6 +231,16 @@ onMounted(() => {
 definePageMeta({
   layout: "default",
 });
+
+useHead({
+  htmlAttrs: {
+    lang: 'ko'
+  },
+  title: '공지사항(매장)',
+  meta: [
+    { name: 'description', content: '공지사항(매장) 페이지 입니다.' }
+  ]
+})
 </script>
 <style lang="scss" scoped>
 @use '@/assets/scss/pages/customer.scss';

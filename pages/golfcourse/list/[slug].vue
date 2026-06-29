@@ -8,7 +8,7 @@
             <div class="view-area">
                 <div class="img-area" :style="{
                     backgroundImage: `url('${common.getImg(
-                        courseData.imgurl,
+                        courseData.path + '/' + courseData.imgurl,
                     )}')`,
                     }">
                     <span class="label">T</span>
@@ -41,7 +41,7 @@
                 </div>
             </div>
             <div class="table-area">
-                <divsubcourseseq
+                <div
                 class="table-list"
                 v-for="(course, idx) in subCourseList"
                 :key="course.subcourseno"
@@ -60,7 +60,7 @@
                         <td
                             v-for="hole in course.subcoursehole"
                             :key="hole.hole_no"
-                            @click="modalOpen(hole.hole_no, course.subcourseseq)">
+                            @click="modalOpen(hole.hole_no, hole.par_score)">
                         {{ hole.hole_no }}
                         </td>
                         <td>{{ course.subparcnt }}</td>
@@ -72,7 +72,7 @@
                         <td
                             v-for="hole in course.subcoursehole"
                             :key="`par-${hole.hole_no}`"
-                            @click="modalOpen(hole.hole_no, course.subcourseseq)"
+                            @click="modalOpen(hole.hole_no, hole.par_score)"
                         >
                             {{ hole.par_score }}
                         </td>
@@ -81,7 +81,7 @@
                     </tbody>
                     </table>
                 </div>
-                </divsubcourseseq>
+                </div>
             </div>
             <div class="btn-wrap">
                 <nuxt-link to="/golfcourse/list" class="btn-md-line">목록보기</nuxt-link>
@@ -153,13 +153,13 @@ const getCourseHoleDetail = async (params) => {
   try {
     const res = await _courseHoleView(
       params.courseno,
-      params.hole_no,
+      params.hole_pk,
       params.subcourseseq
     );
 
     holeData.value = {
       ...res.courseholeview,
-      hole: params.hole_no,
+      hole: params.hole_pk,
       coursubtype: params.subcourseseq,
     };
     eventList.value = res.eventlist;
@@ -184,14 +184,14 @@ const handleEdit = () => {
 
 // 2026.06.18[cgnoh]: 모달 관련
 const modals = reactive({});
-const modalOpen = async (hole_no, subcourseseq) => {
+const modalOpen = async (hole_pk, subcourseseq) => {
   modals.modalGolfCourse = true;
 
   document.body.classList.add("is-hidden");
 
   await getCourseHoleDetail({
     courseno: route.params.slug,
-    hole_no,
+    hole_pk,
     subcourseseq,
   });
 };
@@ -204,6 +204,16 @@ onMounted(() => {
 definePageMeta({
   layout: "default",
 });
+
+useHead({
+  htmlAttrs: {
+    lang: 'ko'
+  },
+  title: '코스관리',
+  meta: [
+    { name: 'description', content: '코스관리 페이지 입니다.' }
+  ]
+})
 </script>
 <style lang="scss" scoped>
 @use '@/assets/scss/pages/golf-course.scss';

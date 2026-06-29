@@ -124,6 +124,16 @@ const handleSave = () => {
 definePageMeta({
   layout: "publish-default",
 });
+
+useHead({
+  htmlAttrs: {
+    lang: 'ko'
+  },
+  title: '코스관리',
+  meta: [
+    { name: 'description', content: '코스관리 페이지 입니다.' }
+  ]
+})
 </script>
 <style lang="scss" scoped>
 @use '@/assets/scss/pages/golf-course.scss';

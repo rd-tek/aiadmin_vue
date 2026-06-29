@@ -167,18 +167,18 @@
           </div>
         </div>
       </div>
+
+      <!-- 회원 정보 모달 -->
+      <modal-member-info
+        :isOpen="modals.modalMemberInfo"
+        @update:isOpen="modals.modalMemberInfo = $event"/>
+
+      <!-- 장비 정보 모달 -->
+      <modal-machine-info
+        :isOpen="modals.modalMachineInfo"
+        @update:isOpen="modals.modalMachineInfo = $event"/>
+
     </div>
-
-    <!-- 회원 정보 모달 -->
-    <modal-member-info
-      :isOpen="modals.modalMemberInfo"
-      @update:isOpen="modals.modalMemberInfo = $event"/>
-
-    <!-- 장비 정보 모달 -->
-    <modal-machine-info
-      :isOpen="modals.modalMachineInfo"
-      @update:isOpen="modals.modalMachineInfo = $event"/>
-
 </template>
 <script setup>
 import { useIntersectionObserver } from "@vueuse/core";
@@ -268,6 +268,16 @@ const leave = (el) => {
 definePageMeta({
   layout: "publish-default",
 });
+
+useHead({
+  htmlAttrs: {
+    lang: 'ko'
+  },
+  title: '매장회원',
+  meta: [
+    { name: 'description', content: '매장회원 페이지 입니다.' }
+  ]
+})
 </script>
 <style lang="scss" scoped>
 @use '@/assets/scss/pages/membership.scss';

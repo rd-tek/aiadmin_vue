@@ -282,9 +282,20 @@ onMounted(() => {
   getNoticeDetail();
 });
 
+// 2026.03.04[cgnoh]: 페이지 메타 정보
 definePageMeta({
   layout: "default",
 });
+
+useHead({
+  htmlAttrs: {
+    lang: 'ko'
+  },
+  title: '자료실',
+  meta: [
+    { name: 'description', content: '자료실 페이지 입니다.' }
+  ]
+})
 </script>
 <style lang="scss" scoped>
 @use '@/assets/scss/pages/customer.scss';

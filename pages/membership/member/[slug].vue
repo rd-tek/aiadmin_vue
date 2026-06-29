@@ -181,9 +181,9 @@ const openErrorToast = (message) => {
 // 2026.06.04[cgnoh]: 저장 핸들링
 const handleSave = async () => {
   try {
-    const res = await membersApi._playeredit(
-      playerInfo.value.player_pk,
-      playerInfo.value
+    const res = await membersApi._ownerwrite(
+      ownerinfo.value.player_pk,
+      ownerinfo.value
     );
     if (res?.success || res?.code === 200) {
       openSaveToast('저장되었습니다.');
@@ -205,6 +205,17 @@ onMounted(async () => {
 definePageMeta({
   layout: "default",
 });
+
+useHead({
+  htmlAttrs: {
+    lang: 'ko'
+  },
+  title: '일반회원',
+  meta: [
+    { name: 'description', content: '일반회원 페이지 입니다.' }
+  ]
+})
+
 </script>
 <style lang="scss" scoped>
 @use '@/assets/scss/pages/membership.scss';

@@ -197,9 +197,20 @@ onMounted(() => {
   getMainData();
 });
 
+// 2026.03.04[cgnoh]: 페이지 메타 정보
 definePageMeta({
   layout: "default",
 });
+
+useHead({
+  htmlAttrs: {
+    lang: 'ko'
+  },
+  title: '대시보드',
+  meta: [
+    { name: 'description', content: '대시보드 페이지 입니다.' }
+  ]
+})
 </script>
 <style lang="scss" scoped>
 @use '@/assets/scss/pages/dashboard.scss';

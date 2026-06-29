@@ -81,15 +81,17 @@
                         </div>
                         <div class="input-wrap">
                             <div class="input-text">
-                                <input
-                                    type="file"
-                                    ref="fileInput"
-                                    @change="onFileChange"
-                                    placeholder="파일을 선택하거나 여기에 드롭하세요."  
-                                />
+                                <div class="input-file">
+                                    <input
+                                        type="file"
+                                        ref="fileInput"
+                                        @change="onFileChange"
+                                        placeholder="파일을 선택하거나 여기에 드롭하세요."  
+                                    />
+                                    <span class="name" v-if="fileName">{{ fileName }}</span>
+                                    <span class="name placeholder" v-else>파일을 선택하거나 여기에 드롭하세요.</span>
+                                </div>
                                 <button type="button" class="btn-file" @click="triggerFile">파일선택</button>
-                                <span class="name" v-if="fileName">{{ fileName }}</span>
-                                <span class="name placeholder" v-else>파일을 선택하거나 여기에 드롭하세요.</span>
                             </div>
                         </div>
                         <div class="desc">
@@ -282,9 +284,20 @@ onMounted(() => {
   getNoticeDetail();
 });
 
+// 2026.03.04[cgnoh]: 페이지 메타 정보
 definePageMeta({
   layout: "default",
 });
+
+useHead({
+  htmlAttrs: {
+    lang: 'ko'
+  },
+  title: '공지사항(회원)',
+  meta: [
+    { name: 'description', content: '공지사항(회원) 페이지 입니다.' }
+  ]
+})
 </script>
 <style lang="scss" scoped>
 @use '@/assets/scss/pages/customer.scss';

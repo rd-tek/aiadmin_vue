@@ -224,6 +224,16 @@ const handleWrite = () => {
 definePageMeta({
   layout: "default",
 });
+
+useHead({
+  htmlAttrs: {
+    lang: 'ko'
+  },
+  title: '공지사항(매장)',
+  meta: [
+    { name: 'description', content: '공지사항(매장) 페이지 입니다.' }
+  ]
+})
 </script>
 <style lang="scss" scoped>
 @use '@/assets/scss/pages/customer.scss';
