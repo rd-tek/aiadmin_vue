@@ -71,7 +71,7 @@
               <div class="table-body-flex">
                 <div class="table-body-col col-1 align-left">{{ item.no }}</div>
                 <div class="table-body-col" @click="handleMobList(index)">
-                  <span>{{ item.id }}</span>
+                  <span class="text-overflow">{{ item.id }}</span>
                   <button type="button" class="btn-arrow" :class="{ 'is-active': mobListIndex === index }">
                     <img
                       src="/public/images/icon/icon_arrow_down.png"
@@ -104,7 +104,7 @@
                 <div class="table-body-mob" v-if="mobListIndex === index">
                   <dl class="list">
                     <dt class="tit">지역</dt>
-                    <dd class="cnt">{{ item.address4 || '=' }}</dd>
+                    <dd class="cnt">{{ item.address4 || '-' }}</dd>
                   </dl>
                   <dl class="list">
                     <dt class="tit">매장</dt>

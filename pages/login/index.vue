@@ -60,14 +60,14 @@
         </div>
       </form>
     </div>
+
+    <!-- 토스트 에러 모달 -->
+    <toast-error-modal 
+      :isOpen="modals.toastErrorModal"
+      :toastErrorMessage="toastErrorMessage"
+      @update:isOpen="modals.toastErrorModal = $event"/>
+
   </div>
-
-  <!-- 토스트 에러 모달 -->
-  <toast-error-modal 
-    :isOpen="modals.toastErrorModal"
-    :toastErrorMessage="toastErrorMessage"
-    @update:isOpen="modals.toastErrorModal = $event"/>
-
 </template>
 <script setup>
 import { useRouter } from "vue-router";

@@ -1466,7 +1466,7 @@ table {
                         padding: 14px;
                         border-bottom: 1px solid #E6EDFF;
                         height: 74px;
-                        word-break: keep-all;
+                        word-break: break-word;
                         line-height: 1.2;
 
                         .required {
@@ -3707,6 +3707,7 @@ table {
 
                     input, select {
                         width: 100%;
+                        text-overflow: ellipsis;
                     }
                 }
             }
