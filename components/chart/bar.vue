@@ -13,30 +13,14 @@ import {
 } from "vue";
 
 const props = defineProps({
-  labels: {
-    type: Array,
-    default: () => [],
-  },
-
-  values1: {
-    type: Array,
-    default: () => [],
-  },
-
-  values2: {
-    type: Array,
-    default: () => [],
-  },
-
-  values3: {
-    type: Array,
-    default: () => [],
-  },
-
-  height: {
-    type: String,
-    default: "300px",
-  },
+  labels: { type: Array, default: () => [] },
+  values1: { type: Array, default: () => [] },
+  values2: { type: Array, default: () => [] },
+  values3: { type: Array, default: () => [] },
+  height: { type: String, default: "300px" },
+  name1: { type: String, default: '데이터 1' },
+  name2: { type: String, default: '데이터 2' },
+  name3: { type: String, default: '데이터 3' },
 });
 
 const chartRef = ref(null);
@@ -44,7 +28,6 @@ const chartRef = ref(null);
 let chart = null;
 let resizeObserver = null;
 
-// 옵션
 const getOption = () => ({
   tooltip: {
     trigger: "axis",
@@ -61,140 +44,92 @@ const getOption = () => ({
   xAxis: {
     type: "category",
     data: props.labels,
-
-    axisTick: {
-      show: false,
-    },
-
-    axisLine: {
-      show: false,
-    },
-
-    axisLabel: {
-      color: "#A3AED0",
-    },
+    axisTick: { show: false },
+    axisLine: { show: false },
+    axisLabel: { color: "#A3AED0" },
   },
 
   yAxis: {
+    minInterval: 1,
+    min: 0,
     type: "value",
-
-    axisLabel: {
-      color: "#A3AED0",
-    },
-
+    axisLabel: { color: "#A3AED0" },
     splitLine: {
-      lineStyle: {
-        color: "rgba(163, 174, 208, 0.2)",
-      },
+      lineStyle: { color: "rgba(163, 174, 208, 0.2)" },
     },
   },
 
   series: [
-    {
+    ...((props.values1?.length) ? [{
+      name: props.name1,
       type: "bar",
       stack: "total",
       data: props.values1,
       barWidth: "40%",
+      itemStyle: { color: "#4318FF" },
+    }] : []),
 
-      itemStyle: {
-        color: "#4318FF",
-      },
-    },
-
-    {
+    ...((props.values2?.length) ? [{
+      name: props.name2,
       type: "bar",
       stack: "total",
       data: props.values2,
       barWidth: "40%",
+      itemStyle: { color: "#6AD2FF" },
+    }] : []),
 
-      itemStyle: {
-        color: "#6AD2FF",
-      },
-    },
-
-    {
+    ...((props.values3?.length) ? [{
+      name: props.name3,
       type: "bar",
       stack: "total",
       data: props.values3,
       barWidth: "40%",
-
       itemStyle: {
         color: "rgba(163, 174, 208, .3)",
         borderRadius: [6, 6, 0, 0],
       },
-    },
+    }] : []),
   ],
 });
 
-// 초기화
 const initChart = async () => {
   await nextTick();
-
   if (!chartRef.value) return;
-
   chart = echarts.init(chartRef.value);
-
   chart.setOption(getOption());
-
-  // 부모 크기 감지
   resizeObserver = new ResizeObserver(() => {
-    chart?.resize({
-      animation: {
-        duration: 300,
-      },
-    });
+    chart?.resize({ animation: { duration: 300 } });
   });
-
   resizeObserver.observe(chartRef.value);
 };
 
-// 업데이트
 const updateChart = () => {
   if (!chart) return;
-
   chart.setOption(getOption());
-
   chart.resize();
 };
 
-// window resize
 const handleResize = () => {
   nextTick(() => {
-    setTimeout(() => {
-      chart?.resize();
-    }, 100);
+    setTimeout(() => { chart?.resize(); }, 100);
   });
 };
 
 onMounted(() => {
   initChart();
-
   window.addEventListener("resize", handleResize);
-
 });
 
 onBeforeUnmount(() => {
   window.removeEventListener("resize", handleResize);
-
   resizeObserver?.disconnect();
-
   chart?.dispose();
 });
 
-// 데이터 변경 감지
 watch(
-  () => [
-    props.labels,
-    props.values1,
-    props.values2,
-    props.values3,
-  ],
-  () => {
-    updateChart();
-  },
-  {
-    deep: true,
-  }
+  () => [props.labels, props.values1, props.values2, props.values3],
+  () => { updateChart(); },
+  { deep: true }
 );
 </script>
 

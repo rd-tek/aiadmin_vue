@@ -12,7 +12,8 @@
               <chart-line
                 :labels="dashboardData.playerlist.map(v => v.date)"
                 :values1="dashboardData.playerlist.map(v => v.cnt)"
-                :values2="dashboardData.ownerlist.map(v => v.cnt)"
+                :values2="[]"
+                name1="월누적"
                 height="250px"
               />
             </div>
@@ -26,11 +27,11 @@
             </p>
             <div class="chart" v-if="dashboardData !== ''">
               <chart-bar
-                :labels="dashboardData.playerlist.map(v => v.date)"
-                :values1="dashboardData.playerlist.map(v => v.cnt)"
-                :values2="dashboardData.ownerlist.map(v => v.cnt)"
-                height="250px"
-              />
+  :labels="dashboardData.ownerlist.map(v => v.date)"
+  :values1="dashboardData.ownerlist.map(v => v.cnt)"
+  name1="월누적"
+  height="250px"
+/>
             </div>
             <div class="no-info" v-else>데이터가 없습니다.</div>
           </div>
@@ -44,11 +45,11 @@
             </p>
             <div class="chart" v-if="dashboardData !== ''">
               <chart-line
-                :labels="dashboardData.playerlist.map(v => v.date)"
-                :values1="dashboardData.gamestoplist.map(v => v.cnt)"
-                :values2="dashboardData.gameendlist.map(v => v.cnt)"
-                height="250px"
-              />
+  :labels="dashboardData.gamestoplist.map(v => v.date)"
+  :values1="dashboardData.gamestoplist.map(v => v.cnt)"
+  name1="월누적"
+  height="250px"
+/>
             </div>
             <div class="no-info" v-else>데이터가 없습니다.</div>
           </div>
@@ -60,11 +61,11 @@
             </p>
             <div class="chart" v-if="dashboardData !== ''">
               <chart-bar
-                :labels="dashboardData.playerlist.map(v => v.date)"
-                :values1="dashboardData.gamestoplist.map(v => v.cnt)"
-                :values2="dashboardData.gameendlist.map(v => v.cnt)"
-                height="250px"
-              />
+  :labels="dashboardData.gameendlist.map(v => v.date)"
+  :values1="dashboardData.gameendlist.map(v => v.cnt)"
+    name1="월누적"
+  height="250px"
+/>
             </div>
             <div class="no-info" v-else>데이터가 없습니다.</div>
           </div>
@@ -78,11 +79,11 @@
             </p>
             <div class="chart" v-if="dashboardData !== ''">
               <chart-line
-                :labels="dashboardData.playerlist.map(v => v.date)"
-                :values1="dashboardData.tournamentlist.map(v => v.cnt)"
-                :values2="dashboardData.eventwinninglist.map(v => v.cnt)"
-                height="250px"
-              />
+  :labels="dashboardData.tournamentlist.map(v => v.date)"
+  :values1="dashboardData.tournamentlist.map(v => v.cnt)"
+  name1="월누적"
+  height="250px"
+/>
             </div>
             <div class="no-info" v-else>데이터가 없습니다.</div>
           </div>
@@ -94,11 +95,11 @@
             </p>
             <div class="chart" v-if="dashboardData !== ''">
               <chart-bar
-                :labels="dashboardData.playerlist.map(v => v.date)"
-                :values1="dashboardData.tournamentlist.map(v => v.cnt)"
-                :values2="dashboardData.eventwinninglist.map(v => v.cnt)"
-                height="250px"
-              />
+  :labels="dashboardData.eventwinninglist.map(v => v.date)"
+  :values1="dashboardData.eventwinninglist.map(v => v.cnt)"
+  name1="월누적"
+  height="250px"
+/>
             </div>
             <div class="no-info" v-else>데이터가 없습니다.</div>
           </div>
