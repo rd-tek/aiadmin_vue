@@ -83,7 +83,7 @@ const handleGnb = () => {
 
 // 2026.03.04[cgnoh]: 달력 상태
 const isFocused = ref(false);
-const month = ref(new Date());
+const month = useMonth();
 const formatMonth = (date) => {
   const year = date.getFullYear();
   const month =  `${date.getMonth() + 1}`.padStart(2, "0");

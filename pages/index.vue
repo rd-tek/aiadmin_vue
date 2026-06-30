@@ -113,7 +113,7 @@ import { useMainApi } from "~/api/main";
 
 // 2026.06.18[cgnoh]: api 관련
 const { _getMain } = useMainApi();
-
+const month = useMonth();
 // 2026.06.18[cgnoh]: 대시보드 데이터 조회
 const dashboardData = ref({
   
@@ -161,14 +161,21 @@ const dashboardData = ref({
 });
 
 // 2026.06.18[cgnoh]: 메인 데이터 조회
-const getMainData = async () => {
-  try {
-    const today = new Date();
+const getMainData = async (date = month.value) => {
 
-    const regdate =
-      `${today.getFullYear()}-` +
-      `${String(today.getMonth() + 1).padStart(2, "0")}-` +
-      `${String(today.getDate()).padStart(2, "0")}`;
+  let d
+  if (date?.year !== undefined) {
+    d = new Date(date.year, date.month, 1)
+  } else {
+    d = date instanceof Date ? date : new Date(date)
+  }
+
+  const year = d.getFullYear()
+  const mon = `${d.getMonth() + 1}`.padStart(2, '0')
+  const regdate = `${year}-${mon}-01`
+
+  try {
+    
 
     const res = await _getMain({
       regdate,
@@ -192,6 +199,10 @@ useIntersectionObserver(
   },
   { threshold: 0 }
 );
+
+watch(month, (newVal) => {
+  getMainData(newVal)
+})
 
 onMounted(() => {
   getMainData();

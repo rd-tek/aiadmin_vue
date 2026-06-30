@@ -171,67 +171,58 @@
                 <div class="radio-wrap">
                   <div class="radio-list">
                     <div class="radio-box">
-                        <input 
-                          type="radio"
-                          id="radio_3"
-                          name="gameStatus"
-                          :checked="searchForm.gamestatus0"
-                          @change="setGameStatus(0)"
-                        >
-                        <label for="radio_3">
-                            <span class="check-box-item">
-                              <i class="item-line" />
-                            </span>
-                            <span class="check-box-txt">전체</span>
-                        </label>
+                      <input 
+                        type="checkbox"
+                        id="check_0"
+                        :checked="searchForm.gamestatus0"
+                        @change="setGameStatus(0)"
+                      >
+                      <label for="check_0">
+                        <span class="check-box-item"><i class="item-line" /></span>
+                        <span class="check-box-txt">전체</span>
+                      </label>
                     </div> 
                   </div>
                   <div class="radio-list">
                     <div class="radio-box">
-                          <input
-                            type="radio"
-                            id="radio_4"
-                            name="gameStatus"
-                            @change="setGameStatus(1)"
-                          >
-                        <label for="radio_4">
-                            <span class="check-box-item">
-                              <i class="item-line" />
-                            </span>
-                            <span class="check-box-txt">진행</span>
-                        </label>
+                      <input 
+                        type="checkbox"
+                        id="check_1"
+                        :checked="searchForm.gamestatus1"
+                        @change="setGameStatus(1)"
+                      >
+                      <label for="check_1">
+                        <span class="check-box-item"><i class="item-line" /></span>
+                        <span class="check-box-txt">진행</span>
+                      </label>
                     </div> 
                   </div>
                   <div class="radio-list">
                     <div class="radio-box">
-                          <input
-                            type="radio"
-                            id="radio_5"
-                            name="gameStatus"
-                            @change="setGameStatus(2)"
-                          >
-                        <label for="radio_5">
-                            <span class="check-box-item">
-                              <i class="item-line" />
-                            </span>
-                            <span class="check-box-txt">중단</span>
-                        </label>
+                      <input 
+                        type="checkbox"
+                        id="check_2"
+                        :checked="searchForm.gamestatus2"
+                        @change="setGameStatus(2)"
+                      >
+                      <label for="check_2">
+                        <span class="check-box-item"><i class="item-line" /></span>
+                        <span class="check-box-txt">중단</span>
+                      </label>
                     </div> 
                   </div>
                   <div class="radio-list">
                     <div class="radio-box">
-                          <input
-                            type="radio"
-                            id="radio_6"
-                            name="gameStatus"
-                            @change="setGameStatus(3)"
-                          >
-                        <label for="radio_6">
-                            <span class="check-box-item">
-                              <i class="item-line" />
-                            </span>
-                            <span class="check-box-txt">완료</span>
-                        </label>
+                      <input 
+                        type="checkbox"
+                        id="check_3"
+                        :checked="searchForm.gamestatus3"
+                        @change="setGameStatus(3)"
+                      >
+                      <label for="check_3">
+                        <span class="check-box-item"><i class="item-line" /></span>
+                        <span class="check-box-txt">완료</span>
+                      </label>
                     </div> 
                   </div>
                 </div>
@@ -297,8 +288,8 @@
                   <div class="label" 
                       :class="{ 
                           'color-blue': item.status === '6', 
-                          'color-grey': item.status === '1', 
-                          'color-red': item.status === '5' }">{{ item.status === '6' ? '완료' : item.status === '1' ? '대기' : item.status === '5' ? '중단' : '-' }}</div>
+                          'color-grey': item.status === '2', 
+                          'color-red': item.status === '5' }">{{ item.status === '6' ? '완료' : item.status === '2' ? '진행' : item.status === '5' ? '중단' : '-' }}</div>
                   </div>
                   <div class="game-data-item">
                   <div class="teebox">
@@ -633,30 +624,19 @@ const getGameList = async (resetPage = false) => {
   }
 };
 
-const setGameStatus = (type) => {
-  searchForm.gamestatus0 = false;
-  searchForm.gamestatus1 = false;
-  searchForm.gamestatus2 = false;
-  searchForm.gamestatus3 = false;
-
-  switch (type) {
-    case 0:
-      searchForm.gamestatus0 = true;
-      break;
-
-    case 1:
-      searchForm.gamestatus1 = true;
-      break;
-
-    case 2:
-      searchForm.gamestatus2 = true;
-      break;
-
-    case 3:
-      searchForm.gamestatus3 = true;
-      break;
+const setGameStatus = (index) => {
+  if (index === 0) {
+    searchForm.gamestatus0 = !searchForm.gamestatus0
+    if (searchForm.gamestatus0) {
+      searchForm.gamestatus1 = false
+      searchForm.gamestatus2 = false
+      searchForm.gamestatus3 = false
+    }
+  } else {
+    searchForm[`gamestatus${index}`] = !searchForm[`gamestatus${index}`]
+    searchForm.gamestatus0 = false
   }
-};
+}
 
 const formatApiDate = (date) => {
   if (!date) return "";
