@@ -177,15 +177,19 @@
                             <td>
                                 <div class="input-wrap">
                                     <div class="input-text">
-                                        <input
-                                            type="file"
-                                            ref="fileInput"
-                                            @change="onFileChange"
-                                            placeholder="파일을 선택하거나 여기에 드롭하세요."  
-                                        />
+                                        <div class="input-file">
+                                            <input
+                                                type="file"
+                                                ref="fileInput"
+                                                @change="onFileChange"
+                                                placeholder="파일을 선택하거나 여기에 드롭하세요."  
+                                            />
+                                            <span class="name" v-if="fileName">{{ fileName }}</span>
+                                            <span class="name placeholder" v-else>파일을 선택하거나 여기에 드롭하세요.</span>
+                                        </div>
                                         <button type="button" class="btn-file" @click="triggerFile">파일선택</button>
-                                        <span class="name" v-if="fileName">{{ fileName }}</span>
-                                        <span class="name placeholder" v-else>파일을 선택하거나 여기에 드롭하세요.</span>
+                                        <!-- <span class="name" v-if="fileName">{{ fileName }}</span>
+                                        <span class="name placeholder" v-else>파일을 선택하거나 여기에 드롭하세요.</span> -->
                                     </div>
                                 </div>
                                 <div class="desc">
