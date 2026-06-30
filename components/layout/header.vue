@@ -87,7 +87,7 @@ const month = useMonth();
 const formatMonth = (date) => {
   const year = date.getFullYear();
   const month =  `${date.getMonth() + 1}`.padStart(2, "0");
-  return `${year}.${month}`;
+  return `${year}.${month}`; 
 }
 
 // 2026.03.04[cgnoh]: 타이핑 애니메이션
