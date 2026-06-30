@@ -357,7 +357,7 @@ const checkDuplicate = (type, field) => {
     }
   }
 
-  membersApi._availabilityCheck(type, value, (success, data) => {
+  membersApi._availabilityCheck({type, value}, (success, data) => {
     if (success) {
       switch (type) {
         case 1:

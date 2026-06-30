@@ -21,12 +21,15 @@
                       </td>
                   </tr> 
                   <tr>
-                      <th>회원 ID <span class="required"></span></th>
-                      <td>
+                    <th>회원 ID <span class="required"></span></th>
+                    <td>
+                      <div class="input-wrap">
                         <div class="input-text">
                           <input type="text" v-model="ownerinfo.id">
                         </div>
-                      </td>
+                        
+                      </div>
+                    </td>
                   </tr>
                   <tr>
                     <th>비밀번호</th>
@@ -39,16 +42,22 @@
                   <tr>
                       <th>매장명<span class="required"></span></th>
                       <td>
-                        <div class="input-text">
-                          <input type="text" v-model="ownerinfo.shopname">
+                        <div class="input-wrap">
+                          <div class="input-text">
+                            <input type="text" v-model="ownerinfo.shopname">
+                          </div>
+                          <button type="button" class="btn-md-line" @click="checkDuplicate(2, ownerinfo.shopname)">중복체크</button>
                         </div>
                       </td>
                   </tr>
                   <tr>
                     <th>이메일 <span class="required"></span></th>
                     <td>
-                      <div class="input-text">
-                        <input type="text" v-model="ownerinfo.email">
+                      <div class="input-wrap">
+                        <div class="input-text">
+                          <input type="text" v-model="ownerinfo.email">
+                        </div>
+                        <button type="button" class="btn-md-line" @click="checkDuplicate(3, ownerinfo.email)">중복체크</button>
                       </div>
                     </td>
                   </tr>
@@ -249,11 +258,13 @@ const getDetail = async () => {
       console.error(res.message);
       return;
     }
-
+    
     ownerinfo.value = {
       ...res.ownerinfo,
       ownerno,
+      emailagree: res.ownerinfo.emailagree === "1",
     };
+    
 
     console.log("ownerinfo", ownerinfo.value);
   } catch (err) {
@@ -317,6 +328,56 @@ const handleSave = async () => {
     console.error(err);
     openErrorToast("저장 중 오류가 발생했습니다.");
   }
+};
+
+// 2026.06.04[cgnoh]: 중복 체크 핸들링
+const checkDuplicate = (type, field) => {
+  const value = field?.trim();
+  const ownerno = route?.params?.slug ?? null;
+  if (!value) {
+    openWarnToast("값을 입력해주세요.");
+    return;
+  }
+
+  // 아이디만 정규식 검사
+  if (type === 1) {
+    const idRegex = /^[a-zA-Z0-9_]+$/;
+
+    if (!idRegex.test(value)) {
+      openErrorToast(
+        "ID 항목은 알파벳, 숫자, 언더바(_)만 입력 가능합니다."
+      );
+      return;
+    }
+  }
+
+  // 이메일 형식 검사
+  if (type === 3) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(value)) {
+      openErrorToast("올바른 이메일 형식이 아닙니다.");
+      return;
+    }
+  }
+
+  membersApi._availabilityCheck({type, value, ownerno}, (success, data) => {
+    if (success) {
+      switch (type) {
+        case 1:
+          openSaveToast("사용 가능한 회원 ID입니다.");
+          break;
+        case 2:
+          openSaveToast("사용 가능한 매장명입니다.");
+          break;
+        case 3:
+          openSaveToast("사용 가능한 이메일입니다.");
+          break;
+      }
+    } else {
+      openErrorToast(data?.message || "이미 사용 중입니다.");
+    }
+  });
 };
 
 // 2026.06.04[cgnoh]: 카카오 주소 검색

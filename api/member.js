@@ -86,30 +86,28 @@ export const useMembersApi = () => {
   };
 
   // 중복체크
-  const _availabilityCheck = async (type, name, result) => {
+  const _availabilityCheck = async (params, result) => {
+    const { type, value, ownerno = null } = params;
     let url = "";
     let body = {};
 
     if (type === 1) {
       url = "/ownership/ajax_owner_id_check";
-      body = { owner_id: name };
+      body = { shopno: ownerno, owner_id: value };
     }
 
     if (type === 2) {
       url = "/ownership/ajax_nickname_check";
-      body = { nickname: name };
+      body = { shopno: ownerno, nickname: value };
     }
 
     if (type === 3) {
       url = "/ownership/ajax_email_check";
-      body = { email: name };
+      body = { shopno: ownerno, email: value };
     }
 
     try {
-      const response = await apiFetch(url, {
-        method: "POST",
-        body,
-      });
+      const response = await apiFetch(url, { method: "POST", body });
 
       if (response?.code === 200) {
         result(true, response);
