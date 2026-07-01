@@ -87,11 +87,10 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th>세팅</th>
+                                <th>세팅 <span class="required"></span></th>
                                 <td>
-                                    <div class="input-wrap flex-column">
-                                        <span>페어웨이</span>
-                                        <div class="select-wrap flex-column">
+                                    <div class="input-wrap ">
+                                        <div class="select-wrap flex-start">
                                             <div class="select-default">
                                                 <select v-model="form.fieldunit">
                                                     <option value="" disabled>페어웨이</option>
