@@ -160,7 +160,7 @@ const router = useRouter();
 
 // 2026.06.16[cgnoh]: 등록하기 핸들링
 const handleSave = () => {
-  router.push(`/golfcourse/edit`)
+  router.push(`/golfcourse/list/edit`)
 }
 
 // 2026.06.16[cgnoh]: 페이지 관련 변수

@@ -178,7 +178,7 @@ useIntersectionObserver(detailRef, ([{ isIntersecting }]) => {
 
 // 2026.06.18[cgnoh]: 수정 페이지 이동
 const handleEdit = () => {
-    router.push(`/golfcourse/edit/${route.params.slug}`);
+    router.push(`/golfcourse/list/edit/${route.params.slug}`);
 };
 
 

@@ -231,7 +231,7 @@ const changePage = async (page) => {
 
 // 2026.06.17[cgnoh]: 등록하기 이동
 const handleRegister = () => {
-  router.push(`/manager/write`)
+  router.push(`/manager/list/write`)
 }
 
 // 2026.06.17[cgnoh]: 아코디언 관련
