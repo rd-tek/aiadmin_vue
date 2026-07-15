@@ -75,6 +75,21 @@
                     }
                 }
 
+                &.is-coaching {
+                    &:hover, &.is-active {
+                        & > svg {
+                            &::v-deep(path) {
+                                stroke: initial;
+                                fill: #4318FF;
+                            }
+                        }
+
+                        .name {
+                            color: #4318FF;
+                        }
+                    }
+                }
+
                 &.is-active {
                         .btn-arrow {
                             svg {

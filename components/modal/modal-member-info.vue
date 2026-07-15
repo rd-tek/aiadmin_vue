@@ -22,7 +22,7 @@
               <tbody>
                   <tr>
                       <th>닉네임</th>
-                      <td>{{ item.playerinfo.nickname }}</td>
+                      <td>{{ item.playerinfo.nickname || '-' }}</td>
                       <th>성별</th>
                       <td>{{ item.playerinfo.gender === 'M' ? '남' : item.playerinfo.gender === 'F' ? '여' : '-' }}</td>
                   </tr>

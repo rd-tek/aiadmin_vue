@@ -7,7 +7,7 @@
             <ul class="gnb">
                 <li class="gnb-list" v-for="(item, i) in gnbMenu" :key="i">
                     <div class="gnb-list-link" 
-                        :class="{ 'is-active': gnbIndex === i, 'is-fill': item.path === 'customer' || item.path === 'golfcourse' || item.path === 'swing' }" 
+                        :class="{ 'is-active': gnbIndex === i, 'is-fill': item.path === 'customer' || item.path === 'golfcourse' || item.path === 'swing', 'is-coaching': item.path === 'coaching' }" 
                         @click="handleAccordion(item, i)">
                         <component :is="iconMap[item.path]" />
                         <span class="name">{{ item.name }}</span>
@@ -59,6 +59,7 @@ import svgCustomer from '@/components/svg/customer.vue'
 import svgCourse from '@/components/svg/course.vue'
 import svgSettings from '@/components/svg/settings.vue'
 import svgVideo from '@/components/svg/video.vue'
+import svgCoaching from '@/components/svg/coaching.vue'
 
 // 2026.03.04[cgnoh]: 라우터 설정
 const router = useRouter();
@@ -74,6 +75,7 @@ const iconMap = {
   golfcourse: svgCourse,
   manager: svgSettings,
   swing: svgVideo,
+  coaching: svgCoaching
 }
 
 // 2026.03.04[cgnoh]: GNB 메뉴
@@ -152,6 +154,16 @@ const gnbMenu = [
             }
         ]
     },
+    {
+        name: '코칭',
+        path: 'coaching',
+        children: [
+            {
+                name: '골프',
+                path: 'coaching/golf'
+            }
+        ]
+    }
 ]
 
 const handleHome = () => {

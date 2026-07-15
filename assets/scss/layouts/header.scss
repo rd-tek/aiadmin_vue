@@ -55,22 +55,13 @@ header {
       display: none;
     }
   }
-
-  .right-area {
-    &::v-deep(.datepicker) {
-      input {
-        height: 40px;
-      }
-    }
-  }
 }
 
 @media screen and (max-width: 768px) {
   header {
     flex-direction: column;
     align-items: flex-start;
-    margin-bottom: 20px;
-    background: #fff;
+    margin-bottom: 0;
 
     .left-area {
       align-items: center;
@@ -78,14 +69,17 @@ header {
       width: 100%;
       padding: 16px 24px;
       border-bottom: 1px solid #E5E7E8;
+      background: #fff;
+      justify-content: space-between;
 
       .btn-open {
-        position: absolute;
-        left: 24px;
-        top: 50%;
-        transform: translateY(-50%);
+        // position: absolute;
+        // left: 24px;
+        // top: 50%;
+        // transform: translateY(-50%);
+        z-index: 1;
       }
-
+      
       .nickname {
         white-space: nowrap;
         z-index: 1;
@@ -97,17 +91,13 @@ header {
         width: 100%;
         text-align: center;
         margin: 0;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
         
         .text {
           font-size: 20px;
           line-height: 1.35;
-
-          .name {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-          }
         }
 
         .sub {
@@ -119,7 +109,6 @@ header {
     .right-area {
       width: 100%;
       padding: 28px 20px 0;
-      background-color: #F4F7FE;
     }
   }
 }

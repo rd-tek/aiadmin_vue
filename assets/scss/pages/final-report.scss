@@ -1,6 +1,4 @@
 .board {
-    padding-top: 70px;
-
     &-wrap {
         max-width: 1320px;
         margin: 0 auto;
@@ -19,6 +17,7 @@
             .text {
                 display: inline-block;
                 line-height: normal;
+                font-weight: 700;
             }
 
             .label {
@@ -392,6 +391,7 @@
                     .btn-callback {
                         border: 1px solid #CDCFD1;
                         line-height: 34px;
+                        justify-content: center;
                     }
                 }
 
@@ -460,7 +460,7 @@
                         .check-box {
                             width: 100%;
 
-                            input[type=checkbox] {
+                            input[type=radio], input[type=checkbox] {
                                 & + label {
                                     width: 100%;
                                     display: flex;
@@ -491,10 +491,7 @@
                         border-radius: 16px;
                         background: #FFF;
                         box-shadow: 0px 1px 8px 0px rgba(110, 110, 110, 0.30);
-
-                        &.radar-chart {
-                            min-width: 400px;
-                        }
+                        width: 50%;
 
                         &-list {
                             margin-bottom: 30px;
@@ -877,6 +874,10 @@
                     .chart-area {
                         flex-direction: column;
                         padding: 30px 0;
+
+                        .chart-box {
+                            width: 100%;
+                        }
                     }
 
                     .btn-area {
@@ -895,6 +896,7 @@
                         margin: 0;
                         height: 46px;
                         line-height: 46px;
+                        width: 100%;
                     }
                 }
             }

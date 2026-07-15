@@ -359,6 +359,7 @@
                             &-title {
                                 font-size: 14px;
                                 line-height: 1.4;
+                                cursor: default;
                             }
 
                             &-list {
@@ -448,6 +449,10 @@
                                     .txt {
                                         line-height: 1.4;
                                         color: #52575C;
+
+                                        &.is-active {
+                                            color: #F8AD15;
+                                        }
                                     }
                                 }
                             }
@@ -464,7 +469,6 @@
         border-left: 1px solid #E5E7E8;
         width: calc(100% - 384px);
         max-width: calc(100px - 384px);
-
 
         .gnb {
             height: 56px;
@@ -485,6 +489,7 @@
                 .text {
                     display: inline-block;
                     line-height: normal;
+                    font-weight: 700;
                 }
 
                 .label {
@@ -1455,7 +1460,7 @@
                         &:before {
                             content: '';
                             display: none;
-                            background: url('/public/images/default/img_reply.png') no-repeat;
+                            background: url('/images/icon/icon_reply.png') no-repeat;
                             background-size: auto 100%;
                             width: 16px;
                             height: 27px;
@@ -1536,6 +1541,7 @@
 
                         .btn-wrap {
                             display: flex;
+                            justify-content: flex-start;
                             gap: 8px;
                             margin-top: 18px;
 
@@ -1549,6 +1555,7 @@
                                 background: #fff;
                                 height: 32px;
                                 width: 70px;
+                                min-width: auto;
                                 overflow: hidden;
                                 position: relative;
                                 z-index: 0;
@@ -1726,6 +1733,16 @@
         .mob-show {
             display: none;
         }
+
+        .final-report {
+            padding: 0;
+
+            .board-wrap {
+                max-width: 100%;
+                margin: 0;
+                padding: 0;
+            }
+        }
      }
 
      &-btn {
@@ -1751,6 +1768,7 @@
                 position: relative;
                 z-index: 0;
                 overflow: hidden;
+                min-width: auto;
 
                 &-out {
                     display: inline-flex;
@@ -1952,8 +1970,6 @@
 
 @media screen and (max-width: 1024px) {
     .academy {
-        margin-top: 60px;
-
         &-wrap {
             &:has(.final-report) {
                 margin: 0;
@@ -2377,7 +2393,7 @@
                             &:before {
                                 content: '';
                                 display: none;
-                                background: url('/public/images/default/img_reply.png') no-repeat;
+                                background: url('/images/icon/icon_reply.png') no-repeat;
                                 background-size: auto 100%;
                                 width: 16px;
                                 height: 27px;
@@ -2412,6 +2428,7 @@
                                 display: flex;
                                 gap: 8px;
                                 margin-top: 18px;
+
 
                                 button {
                                     display: inline-flex;
@@ -2722,6 +2739,7 @@
                         align-items: center;
                         gap: 10px;
                         height: 86px;
+                        cursor: pointer;
 
                         &.is-active {
                             .text {
