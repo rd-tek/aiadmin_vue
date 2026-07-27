@@ -139,7 +139,12 @@
 </template>
 <script setup>
 import { useRouteQuery } from "@vueuse/router";
+import { useCoachingApi } from "~/api/coaching";
+import toastModal from '@/components/toast-ui/toast-modal.vue';
+import toastWarnModal from '@/components/toast-ui/toast-warn-modal.vue';
+import toastErrorModal from '@/components/toast-ui/toast-error-modal.vue';
 
+const coachingApi = useCoachingApi();
 const selectedPk = ref(null);
 // 👇 defineProps 수정
 const props = defineProps({

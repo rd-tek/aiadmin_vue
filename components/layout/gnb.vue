@@ -60,6 +60,7 @@ import svgCustomer from '@/components/svg/customer.vue'
 import svgCourse from '@/components/svg/course.vue'
 import svgSettings from '@/components/svg/settings.vue'
 import svgVideo from '@/components/svg/video.vue'
+import svgCoaching from '@/components/svg/coaching.vue'
 
 // 2026.03.04[cgnoh]: 스토어 관련
 const authStore = useAuthStore();
@@ -78,6 +79,7 @@ const iconMap = {
   golfcourse: svgCourse,
   manager: svgSettings,
   swing: svgVideo,
+  coaching: svgCoaching,
 }
 
 // 2026.03.04[cgnoh]: GNB 메뉴
@@ -153,6 +155,16 @@ const gnbMenu = [
             {
                 name: '게임데이터 관리',
                 path: 'manager/game-data'
+            }
+        ]
+    },
+    {
+        name: '코칭',
+        path: 'coaching',
+        children: [
+            {
+                name: '골프',
+                path: 'coaching/golf'
             }
         ]
     },
