@@ -31,13 +31,16 @@ export const useRouteTitleMap = () => ({
   "customer-inquiry-edit": "고객문의 수정",
   "customer-inquiry-write": "고객문의 등록",
 
-  "golfcourse": "코스관리",
+  golfcourse: "코스관리",
   "golfcourse-list": "코스관리 상세",
   "golfcourse-edit": "코스관리 등록",
   "golfcourse-edit-slug": "코스관리 수정",
 
   "swing-list": "스윙영상리스트",
   "swing-list-slug": "스윙영상리스트 상세",
+
+  "coaching-golf": "코칭",
+  "coaching-golf-slug": "코칭 상세",
 
   "manager-list": "관리자 리스트",
   "manager-list-slug": "관리자 리스트 상세",
@@ -47,6 +50,6 @@ export const useRouteTitleMap = () => ({
   "manager-game-data-game-score": "게임데이터 관리(스코어보드)",
   "manager-game-data-game-oneshot": "게임데이터 관리(원샷정보)",
   "manager-game-data-game-info": "게임데이터 관리(게임정보)",
-})
+});
 
-export default useRouteTitleMap
+export default useRouteTitleMap;

@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 데이터 편집 UI -->
-    <div class="editor">
+    <div class="editor" v-if="!readonly">
       <div v-for="(val, i) in dataValues" :key="i" class="editor-item">
         <label>{{ indicators[i].name }}</label>
         <select v-model.number="dataValues[i]">
@@ -28,6 +28,10 @@ const props = defineProps({
   analysis: {
     type: Object,
     default: () => ({}),
+  },
+  readonly: {
+    type: Boolean,
+    default: false,
   },
 });
 

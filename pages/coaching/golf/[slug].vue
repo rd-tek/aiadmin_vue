@@ -22,7 +22,7 @@
                   id="mask0_867_3907"
                   style="mask-type: alpha"
                   maskUnits="userSpaceOnUse"
-                  x="0" 
+                  x="0"
                   y="0"
                   width="24"
                   height="24"
@@ -40,8 +40,8 @@
             <span class="text">{{ academyView.enroll_cnt }}</span>
           </button>
           <div class="state type01">
-            <nuxt-link :to="'/coaching/golf/final-report/' + enroll_pk || 0" class="state-list color-teal"
-              >최종 코칭 리포트</nuxt-link
+            <a class="state-list color-teal" @click="handleFinalReport"
+              >최종 코칭 리포트</a
             >
           </div>
         </div>
@@ -82,7 +82,10 @@
             @click="handleMobAccordion(item)"
           >
             <span class="circle">
-              <img src="/public/images/icon/icon_check_white.png" alt="icon_check_white" />
+              <img
+                src="/public/images/icon/icon_check_white.png"
+                alt="icon_check_white"
+              />
             </span>
             <span class="text">
               <span
@@ -186,7 +189,9 @@
                               <button
                                 type="button"
                                 class="btn-arrow"
-                                :class="{ 'is-active': mobListIndex === index__ }"
+                                :class="{
+                                  'is-active': mobListIndex === index__,
+                                }"
                               >
                                 <img
                                   src="/public/images/icon/icon_arrow_down.png"
@@ -254,7 +259,12 @@
                             </div>
                           </transition>
                         </div>
-                        <div class="no-info" v-if="item_.result_list.length === 0">내역이 없습니다.</div>
+                        <div
+                          class="no-info"
+                          v-if="item_.result_list.length === 0"
+                        >
+                          내역이 없습니다.
+                        </div>
                       </div>
                     </div>
                     <!-- <div class="btn-wrap">
@@ -372,7 +382,10 @@
                           <!-- 더보기 (원글) -->
                           <div
                             class="more-area"
-                            v-if="inputShow !== th.top.comment_pk"
+                            v-if="
+                              inputShow !== th.top.comment_pk &&
+                              th.top.is_candelete
+                            "
                           >
                             <transition name="fade">
                               <div
@@ -504,7 +517,10 @@
                             <!-- 더보기 (대댓글) -->
                             <div
                               class="more-area"
-                              v-if="replyInputShow !== reply.comment_pk"
+                              v-if="
+                                replyInputShow !== reply.comment_pk &&
+                                reply.is_candelete
+                              "
                             >
                               <transition name="fade">
                                 <div
@@ -839,13 +855,12 @@
                       <div
                         class="profile-image"
                         :style="{
-                        backgroundImage: `url(${
-                          swingView.binary_filepath
-                            ? common.getImg(swingView.binary_filepath)
-                            : '/images/button/btn_profile.png'
-                        })`,
-                      }"
-  
+                          backgroundImage: `url(${
+                            swingView.binary_filepath
+                              ? common.getImg(swingView.binary_filepath)
+                              : '/images/button/btn_profile.png'
+                          })`,
+                        }"
                       ></div>
                       <div class="text">
                         <button
@@ -1079,167 +1094,164 @@
                       <div class="cont-section">
                         <div class="table-area">
                           <div class="table" ref="tableRef">
-                                <ul class="row">
-                                  <li class="row-list">
-                                    <p class="tit">클럽 정보</p>
-                                    <div class="info">
-                                      {{ swingView.fit_club_code }}
-                                    </div>
-                                  </li>
-                                  <li class="row-list">
-                                    <p class="tit">볼속도</p>
-                                    <div class="info">
-                                      {{
-                                        common.suffix(
-                                          common.toFixed(swingView.ballspeed),
-                                          "km/h",
-                                        )
-                                      }}
-                                    </div>
-                                  </li>
+                            <ul class="row">
+                              <li class="row-list">
+                                <p class="tit">클럽 정보</p>
+                                <div class="info">
+                                  {{ swingView.fit_club_code }}
+                                </div>
+                              </li>
+                              <li class="row-list">
+                                <p class="tit">볼속도</p>
+                                <div class="info">
+                                  {{
+                                    common.suffix(
+                                      common.toFixed(swingView.ballspeed),
+                                      "km/h",
+                                    )
+                                  }}
+                                </div>
+                              </li>
 
-                                  <li class="row-list">
-                                    <p class="tit">백스핀</p>
-                                    <div class="info">
-                                      {{
-                                        common.suffix(swingView.backspin, "rpm")
-                                      }}
-                                    </div>
-                                  </li>
+                              <li class="row-list">
+                                <p class="tit">백스핀</p>
+                                <div class="info">
+                                  {{ common.suffix(swingView.backspin, "rpm") }}
+                                </div>
+                              </li>
 
-                                  <li class="row-list">
-                                    <p class="tit">캐리</p>
-                                    <div class="info">
-                                      {{
-                                        common.suffix(
-                                          common.toFixed(swingView.carry),
-                                          "m",
-                                        )
-                                      }}
-                                    </div>
-                                  </li>
+                              <li class="row-list">
+                                <p class="tit">캐리</p>
+                                <div class="info">
+                                  {{
+                                    common.suffix(
+                                      common.toFixed(swingView.carry),
+                                      "m",
+                                    )
+                                  }}
+                                </div>
+                              </li>
 
-                                  <li class="row-list">
-                                    <p class="tit">클럽속도</p>
-                                    <div class="info">
-                                      {{
-                                        common.suffix(
-                                          common.toFixed(swingView.headspeed),
-                                          "km/h",
-                                        )
-                                      }}
-                                    </div>
-                                  </li>
+                              <li class="row-list">
+                                <p class="tit">클럽속도</p>
+                                <div class="info">
+                                  {{
+                                    common.suffix(
+                                      common.toFixed(swingView.headspeed),
+                                      "km/h",
+                                    )
+                                  }}
+                                </div>
+                              </li>
 
-                                  <li class="row-list">
-                                    <p class="tit">볼방향</p>
-                                    <div class="info">
-                                      {{
-                                        common.suffix(
-                                          common.toFixed(swingView.balldirection),
-                                          "deg",
-                                        )
-                                      }}
-                                    </div>
-                                  </li>
+                              <li class="row-list">
+                                <p class="tit">볼방향</p>
+                                <div class="info">
+                                  {{
+                                    common.suffix(
+                                      common.toFixed(swingView.balldirection),
+                                      "deg",
+                                    )
+                                  }}
+                                </div>
+                              </li>
 
-                                  <li class="row-list">
-                                    <p class="tit">사이드스핀</p>
-                                    <div class="info">
-                                      {{
-                                        common.suffix(swingView.sidespin, "rpm")
-                                      }}
-                                    </div>
-                                  </li>
+                              <li class="row-list">
+                                <p class="tit">사이드스핀</p>
+                                <div class="info">
+                                  {{ common.suffix(swingView.sidespin, "rpm") }}
+                                </div>
+                              </li>
 
-                                  <li class="row-list">
-                                    <p class="tit">비거리</p>
-                                    <div class="info">
-                                      {{
-                                        common.suffix(
-                                          common.toFixed(swingView.distance),
-                                          "m",
-                                        )
-                                      }}
-                                    </div>
-                                  </li>
+                              <li class="row-list">
+                                <p class="tit">비거리</p>
+                                <div class="info">
+                                  {{
+                                    common.suffix(
+                                      common.toFixed(swingView.distance),
+                                      "m",
+                                    )
+                                  }}
+                                </div>
+                              </li>
 
-                                  <li class="row-list">
-                                    <p class="tit">체공시간</p>
-                                    <div class="info">
-                                      {{ common.suffix(swingView.duration, "s") }}
-                                    </div>
-                                  </li>
+                              <li class="row-list">
+                                <p class="tit">체공시간</p>
+                                <div class="info">
+                                  {{ common.suffix(swingView.duration, "s") }}
+                                </div>
+                              </li>
 
-                                  <li class="row-list">
-                                    <p class="tit">탈출각</p>
-                                    <div class="info">
-                                      {{
-                                        common.suffix(
-                                          common.toFixed(swingView.launchangle),
-                                          "deg",
-                                        )
-                                      }}
-                                    </div>
-                                  </li>
+                              <li class="row-list">
+                                <p class="tit">탈출각</p>
+                                <div class="info">
+                                  {{
+                                    common.suffix(
+                                      common.toFixed(swingView.launchangle),
+                                      "deg",
+                                    )
+                                  }}
+                                </div>
+                              </li>
 
-                                  <li class="row-list">
-                                    <p class="tit">미트율</p>
-                                    <div class="info">
-                                      {{
-                                        common.suffix(
-                                          common.toFixed(swingView.smashfactor),
-                                          "%",
-                                        )
-                                      }}
-                                    </div>
-                                  </li>
+                              <li class="row-list">
+                                <p class="tit">미트율</p>
+                                <div class="info">
+                                  {{
+                                    common.suffix(
+                                      common.toFixed(swingView.smashfactor),
+                                      "%",
+                                    )
+                                  }}
+                                </div>
+                              </li>
 
-                                  <li class="row-list">
-                                    <p class="tit">수직최고점</p>
-                                    <div class="info">
-                                      {{
-                                        common.suffix(
-                                          common.toFixed(swingView.peakvertical),
-                                          "m",
-                                        )
-                                      }}
-                                    </div>
-                                  </li>
-                                </ul>
-                              </div>
+                              <li class="row-list">
+                                <p class="tit">수직최고점</p>
+                                <div class="info">
+                                  {{
+                                    common.suffix(
+                                      common.toFixed(swingView.peakvertical),
+                                      "m",
+                                    )
+                                  }}
+                                </div>
+                              </li>
+                            </ul>
+                          </div>
                         </div>
                       </div>
                       <div class="cont-section">
-                            <div class="col-wrap">
-                              <div class="col-list">
-                                <div class="col-list-title">
-                                  궤적 상단 뷰
-                                </div>
-                                <div class="col-list-cont">
-                                  <EChart2
-                                    :raw="swingView?.fit_ball_trajectory || []"
-                                  />
-                                </div>
-                              </div>
-                              <div class="col-list">
-                                <div class="col-list-title">
-                                  궤적 측면 뷰
-                                </div>
-                                <div class="col-list-cont">
-                                  <EChart3
-                                    :raw="swingView?.fit_ball_trajectory || []"
-                                  />
-                                </div>
-                              </div>
-                              <div class="col-list">
-                                <div class="col-list-title">클럽 패스</div>
-                                <div class="col-list-cont">
-                                  <div class="image" :style="{ backgroundImage: `url(${getFitImagePath()})` }"></div>
-                                </div>
-                              </div>
+                        <div class="col-wrap">
+                          <div class="col-list">
+                            <div class="col-list-title">궤적 상단 뷰</div>
+                            <div class="col-list-cont">
+                              <EChart2
+                                :raw="swingView?.fit_ball_trajectory || []"
+                              />
                             </div>
                           </div>
+                          <div class="col-list">
+                            <div class="col-list-title">궤적 측면 뷰</div>
+                            <div class="col-list-cont">
+                              <EChart3
+                                :raw="swingView?.fit_ball_trajectory || []"
+                              />
+                            </div>
+                          </div>
+                          <div class="col-list">
+                            <div class="col-list-title">클럽 패스</div>
+                            <div class="col-list-cont">
+                              <div
+                                class="image"
+                                :style="{
+                                  backgroundImage: `url(${getFitImagePath()})`,
+                                }"
+                              ></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -1269,7 +1281,15 @@
           </ul>
           <h2 class="title">{{ academyView.title }}</h2>
           <div class="profile">
-            <div class="profile-image" :class="{ 'no-data': !academyView.expert_master?.binary_filepath }" :style="{ backgroundImage: `url(${common.getImg(academyView.expert_master?.binary_filepath)})` }"></div>
+            <div
+              class="profile-image"
+              :class="{
+                'no-data': !academyView.expert_master?.binary_filepath,
+              }"
+              :style="{
+                backgroundImage: `url(${common.getImg(academyView.expert_master?.binary_filepath)})`,
+              }"
+            ></div>
             <div class="text">
               <span>
                 {{ academyView.expert_master?.nickname }}
@@ -1347,7 +1367,11 @@
                             alt="icon_check_white"
                           />
                         </span>
-                        <span class="txt" :class="{ 'is-active' : currentStepData.title == depth.title  }"
+                        <span
+                          class="txt"
+                          :class="{
+                            'is-active': currentStepData.title == depth.title,
+                          }"
                           >{{ depth.title }} ({{
                             depth.mission_list?.[0]?.success_cnt
                           }}/{{
@@ -1361,10 +1385,7 @@
               </a>
             </li>
             <li class="accordion-list">
-              <nuxt-link
-                :to="'/coaching/golf/final-report/' + enroll_pk || 0"
-                class="accordion-list-link"
-              >
+              <a class="accordion-list-link" @click="handleFinalReport">
                 <span class="text" :class="{ 'is-active': accordionLastIndex }">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -1393,7 +1414,7 @@
                   </svg>
                   <span>최종 코칭 리포트</span>
                 </span>
-              </nuxt-link>
+              </a>
             </li>
           </ul>
         </div>
@@ -1480,7 +1501,10 @@
                       <div class="table-body-col">
                         <strong>{{ item__.measured_value }}m</strong>
                       </div>
-                      <div class="table-body-col"  @click="handleMobList(index__)">
+                      <div
+                        class="table-body-col"
+                        @click="handleMobList(index__)"
+                      >
                         <span
                           class="color"
                           :class="{ point: item__.passed_yn == '1' }"
@@ -1492,7 +1516,8 @@
                           :class="{ 'is-active': mobListIndex === index__ }"
                         >
                           <img
-                            src="/public/images/icon/icon_arrow_down.png" alt="icon_arrow_down"
+                            src="/public/images/icon/icon_arrow_down.png"
+                            alt="icon_arrow_down"
                           />
                         </button>
                       </div>
@@ -1519,12 +1544,16 @@
                       @before-enter="beforeEnter"
                       @enter="enter"
                       @before-leave="beforeLeave"
-                      @leave="leave">
-                      <div class="table-body-mob" v-if="mobListIndex === index__">
+                      @leave="leave"
+                    >
+                      <div
+                        class="table-body-mob"
+                        v-if="mobListIndex === index__"
+                      >
                         <dl class="list">
                           <dt class="tit">클럽</dt>
                           <dd class="cnt">{{ item__.metric_code }}</dd>
-                        </dl> 
+                        </dl>
                         <dl class="list">
                           <dt class="tit">날짜</dt>
                           <dd class="cnt">
@@ -1532,7 +1561,7 @@
                               common.dateformat(item__.regdate)
                             }}</span>
                           </dd>
-                        </dl> 
+                        </dl>
                         <dl class="list align-center">
                           <dt class="tit">스윙영상</dt>
                           <dd class="cnt">
@@ -1544,9 +1573,8 @@
                               영상보기
                             </button>
                           </dd>
-                        </dl> 
+                        </dl>
                       </div>
-                      
                     </transition>
                   </div>
                   <div class="no-info" v-if="item_.result_list.length === 0">
@@ -1634,7 +1662,12 @@
                   </div>
 
                   <!-- 더보기 (원글) -->
-                  <div class="more-area" v-if="inputShow !== th.top.comment_pk">
+                  <div
+                    class="more-area"
+                    v-if="
+                      inputShow !== th.top.comment_pk && th.top.is_candelete
+                    "
+                  >
                     <transition name="fade">
                       <div
                         class="tooltip-container"
@@ -1763,7 +1796,10 @@
                     <!-- 더보기 (대댓글) -->
                     <div
                       class="more-area"
-                      v-if="replyInputShow !== reply.comment_pk"
+                      v-if="
+                        replyInputShow !== reply.comment_pk &&
+                        reply.is_candelete
+                      "
                     >
                       <transition name="fade">
                         <div
@@ -1989,86 +2025,45 @@
             <div class="swing-wrap" v-if="!isMobile">
               <div class="head">
                 <ul class="category">
-                  <li class="category-list">
-                            Step {{ targetStep?.seq }}
-                          </li>
+                  <li class="category-list">Step {{ targetStep?.seq }}</li>
                   <li class="category-list">{{ targetStep?.title }}</li>
                 </ul>
                 <h2 class="title">
-                          <span class="title-depth"
-                            ><span class="text"
-                              >{{ targetStep?.title }}
-                            </span></span
-                          >
-                          <span class="title-depth">
-                            <span class="text"
-                              >#{{
-                                targetStep?.mission_list
-                                  ?.find(
-                                    (m) =>
-                                      Number(m.mission_pk) ===
-                                      Number(selectedMission),
-                                  )
-                                  ?.result_list?.find(
-                                    (r) =>
-                                      Number(r.result_pk) ===
-                                      Number(selectedResult),
-                                  )?.attempt_no || ""
-                              }}</span
-                            >
-                            <span class="date"
-                              >({{
-                                targetStep?.mission_list
-                                  ?.find(
-                                    (m) =>
-                                      Number(m.mission_pk) ===
-                                      Number(selectedMission),
-                                  )
-                                  ?.result_list?.find(
-                                    (r) =>
-                                      Number(r.result_pk) ===
-                                      Number(selectedResult),
-                                  )?.regdate || ""
-                              }})</span
-                            >
-                            <span class="label">
-                              <span
-                                class="label-list"
-                                :class="{
-                                  'is-green':
-                                    targetStep?.mission_list
-                                      ?.find(
-                                        (m) =>
-                                          Number(m.mission_pk) ===
-                                          Number(selectedMission),
-                                      )
-                                      ?.result_list?.find(
-                                        (r) =>
-                                          Number(r.result_pk) ===
-                                          Number(selectedResult),
-                                      )?.passed_yn == '1',
-                                }"
-                                v-if="
-                                  targetStep?.mission_list
-                                    ?.find(
-                                      (m) =>
-                                        Number(m.mission_pk) ===
-                                        Number(selectedMission),
-                                    )
-                                    ?.result_list?.find(
-                                      (r) =>
-                                        Number(r.result_pk) ===
-                                        Number(selectedResult),
-                                    )?.passed_yn == '1'
-                                "
-                                >성공
-                              </span>
-                              <span class="label-list" v-else>실패</span>
-                            </span>
-                          </span>
-                        </h2>
-                <div class="date is-mob-show">
-                          ({{
+                  <span class="title-depth"
+                    ><span class="text">{{ targetStep?.title }} </span></span
+                  >
+                  <span class="title-depth">
+                    <span class="text"
+                      >#{{
+                        targetStep?.mission_list
+                          ?.find(
+                            (m) =>
+                              Number(m.mission_pk) === Number(selectedMission),
+                          )
+                          ?.result_list?.find(
+                            (r) =>
+                              Number(r.result_pk) === Number(selectedResult),
+                          )?.attempt_no || ""
+                      }}</span
+                    >
+                    <span class="date"
+                      >({{
+                        targetStep?.mission_list
+                          ?.find(
+                            (m) =>
+                              Number(m.mission_pk) === Number(selectedMission),
+                          )
+                          ?.result_list?.find(
+                            (r) =>
+                              Number(r.result_pk) === Number(selectedResult),
+                          )?.regdate || ""
+                      }})</span
+                    >
+                    <span class="label">
+                      <span
+                        class="label-list"
+                        :class="{
+                          'is-green':
                             targetStep?.mission_list
                               ?.find(
                                 (m) =>
@@ -2077,10 +2072,39 @@
                               )
                               ?.result_list?.find(
                                 (r) =>
-                                  Number(r.result_pk) === Number(selectedResult),
-                              )?.regdate || ""
-                          }})
-                        </div>
+                                  Number(r.result_pk) ===
+                                  Number(selectedResult),
+                              )?.passed_yn == '1',
+                        }"
+                        v-if="
+                          targetStep?.mission_list
+                            ?.find(
+                              (m) =>
+                                Number(m.mission_pk) ===
+                                Number(selectedMission),
+                            )
+                            ?.result_list?.find(
+                              (r) =>
+                                Number(r.result_pk) === Number(selectedResult),
+                            )?.passed_yn == '1'
+                        "
+                        >성공
+                      </span>
+                      <span class="label-list" v-else>실패</span>
+                    </span>
+                  </span>
+                </h2>
+                <div class="date is-mob-show">
+                  ({{
+                    targetStep?.mission_list
+                      ?.find(
+                        (m) => Number(m.mission_pk) === Number(selectedMission),
+                      )
+                      ?.result_list?.find(
+                        (r) => Number(r.result_pk) === Number(selectedResult),
+                      )?.regdate || ""
+                  }})
+                </div>
                 <div class="profile">
                   <div
                     class="profile-image"
@@ -2097,407 +2121,608 @@
                       type="button"
                       class="btn-more"
                       @click="showMemberInfoModal(swingView?.player_pk)"
-                      
                     >
-                      수강생 {{swingView.nickname}} 
+                      수강생 {{ swingView.nickname }}
                     </button>
                   </div>
                 </div>
                 <div class="form-box">
-                          <!-- 스텝 -->
-                          <select v-model="selectedStep">
-                            <option
-                              v-for="v in targetClass?.step_list ?? []"
-                              :key="v.step_pk"
-                              :value="Number(v.step_pk)"
-                            >
-                              {{ v.title }}
-                            </option>
-                          </select>
+                  <!-- 스텝 -->
+                  <select v-model="selectedStep">
+                    <option
+                      v-for="v in targetClass?.step_list ?? []"
+                      :key="v.step_pk"
+                      :value="Number(v.step_pk)"
+                    >
+                      {{ v.title }}
+                    </option>
+                  </select>
 
-                          <!-- 미션 (선택된 스텝 기준) -->
-                          <select v-model="selectedMission">
-                            <option
-                              v-for="m in targetClass?.step_list?.find(
-                                (s) => Number(s.step_pk) === Number(selectedStep),
-                              )?.mission_list ?? []"
-                              :key="m.mission_pk"
-                              :value="Number(m.mission_pk)"
-                            >
-                              {{ m.title }}
-                            </option>
-                          </select>
+                  <!-- 미션 (선택된 스텝 기준) -->
+                  <select v-model="selectedMission">
+                    <option
+                      v-for="m in targetClass?.step_list?.find(
+                        (s) => Number(s.step_pk) === Number(selectedStep),
+                      )?.mission_list ?? []"
+                      :key="m.mission_pk"
+                      :value="Number(m.mission_pk)"
+                    >
+                      {{ m.title }}
+                    </option>
+                  </select>
 
-                          <!-- 결과 (선택된 미션 기준) -->
-                          <select v-model="selectedResult" @change="resultChange">
-                            <option
-                              v-for="(r, i) in targetClass?.step_list
-                                ?.find(
-                                  (s) =>
-                                    Number(s.step_pk) === Number(selectedStep),
-                                )
-                                ?.mission_list?.find(
-                                  (m) =>
-                                    Number(m.mission_pk) ===
-                                    Number(selectedMission),
-                                )?.result_list ?? []"
-                              :key="r.result_pk"
-                              :value="Number(r.result_pk)"
-                            >
-                              #{{ i + 1 }}번째 시도 ({{ r.measured_value
-                              }}{{ r.unit }})
-                            </option>
-                          </select>
-                          <button type="button" class="btn-default btn-sm-fill">
-                            이동
-                          </button>
-                        </div>
+                  <!-- 결과 (선택된 미션 기준) -->
+                  <select v-model="selectedResult" @change="resultChange">
+                    <option
+                      v-for="(r, i) in targetClass?.step_list
+                        ?.find(
+                          (s) => Number(s.step_pk) === Number(selectedStep),
+                        )
+                        ?.mission_list?.find(
+                          (m) =>
+                            Number(m.mission_pk) === Number(selectedMission),
+                        )?.result_list ?? []"
+                      :key="r.result_pk"
+                      :value="Number(r.result_pk)"
+                    >
+                      #{{ i + 1 }}번째 시도 ({{ r.measured_value }}{{ r.unit }})
+                    </option>
+                  </select>
+                  <button type="button" class="btn-default btn-sm-fill">
+                    이동
+                  </button>
+                </div>
               </div>
               <div class="cont">
-                        <div class="col-1">
-                          <div class="cont-section">
-                            <div class="cont-box">
-                              <div class="cont-box-list">
-                                <div
-                                  class="video-area"
-                                  v-if="swingView?.video_file?.[0]"
-                                >
-                                  <videoPlayer
-                                    ref="player1"
-                                    :videoinfo="swingView?.video_file?.[0]"
-                                  />
-                                </div>
-                                <div class="no-data" v-else />
-                              </div>
-                              <div class="cont-box-list">
-                                <div
-                                  class="video-area"
-                                  v-if="swingView?.video_file?.[1]"
-                                >
-                                  <videoPlayer
-                                    ref="player2"
-                                    :videoinfo="swingView?.video_file?.[1]"
-                                  />
-                                </div>
-                                <div class="no-data" v-else />
-                              </div>
-                            </div>
-                            <ul class="tab type03 box">
-                              <li
-                                class="tab-list"
-                                :class="{ 'is-active': currentTab == 'address' }"
-                                @click="
-                                  onClickStage(swingView?.fit_address, 'address')
-                                "
-                              >
-                                <span class="icon">
-                                  <svg-address />
-                                </span>
-                                <span class="text">address</span>
-                              </li>
-                              <li
-                                class="tab-list"
-                                :class="{
-                                  'is-active': currentTab == 'backswing',
-                                }"
-                                @click="
-                                  onClickStage(
-                                    swingView?.fit_takeback,
-                                    'backswing',
-                                  )
-                                "
-                              >
-                                <span class="icon">
-                                  <svg-back-swing />
-                                </span>
-                                <span class="text">backswing</span>
-                              </li>
-
-                              <li
-                                class="tab-list"
-                                :class="{ 'is-active': currentTab == 'topswing' }"
-                                @click="
-                                  onClickStage(
-                                    swingView?.fit_top_swing,
-                                    'topswing',
-                                  )
-                                "
-                              >
-                                <span class="icon">
-                                  <svg-top-swing />
-                                </span>
-                                <span class="text">topswing</span>
-                              </li>
-
-                              <li
-                                class="tab-list"
-                                :class="{
-                                  'is-active': currentTab == 'downswing',
-                                }"
-                                @click="
-                                  onClickStage(
-                                    swingView?.fit_down_swing,
-                                    'downswing',
-                                  )
-                                "
-                              >
-                                <span class="icon">
-                                  <svg-down-swing />
-                                </span>
-                                <span class="text">downswing</span>
-                              </li>
-
-                              <li
-                                class="tab-list"
-                                :class="{ 'is-active': currentTab == 'impact' }"
-                                @click="
-                                  onClickStage(swingView?.fit_impact, 'impact')
-                                "
-                              >
-                                <span class="icon">
-                                  <svg-impact />
-                                </span>
-                                <span class="text">impact</span>
-                              </li>
-                              <li
-                                class="tab-list"
-                                :class="{
-                                  'is-active': currentTab == 'follow-through',
-                                }"
-                                @click="
-                                  onClickStage(
-                                    swingView?.fit_follow,
-                                    'follow-through',
-                                  )
-                                "
-                              >
-                                <span class="icon">
-                                  <svg-follow-through />
-                                </span>
-                                <span class="text">follow-through</span>
-                              </li>
-                              <li
-                                class="tab-list"
-                                :class="{ 'is-active': currentTab == 'finish' }"
-                                @click="
-                                  onClickStage(swingView?.fit_finish, 'finish')
-                                "
-                              >
-                                <span class="icon">
-                                  <svg-finish />
-                                </span>
-                                <span class="text">finish</span>
-                              </li>
-                            </ul>
-                            <div class="cont-wrap">
-                              <div class="title">Step Balance</div>
-                              <div class="cont-box">
-                                <div class="foot-area">
-                                  <span></span>
-                                  <span class="foot-area-list"
-                                    ><span class="point teal">L</span
-                                    >{{ animated.Left }}</span
-                                  >
-                                  <span></span>
-                                  <span class="foot-area-list"
-                                    ><span class="point yellow">B</span
-                                    >{{ animated.Back }}</span
-                                  >
-                                  <span>
-                                    <img
-                                      src="/public/images/default/img_human_footprints.png"
-                                      alt="img_human_footprints"
-                                    />
-                                  </span>
-                                  <span class="foot-area-list"
-                                    ><span class="point yellow">F</span
-                                    >{{ animated.Front }}</span
-                                  >
-                                  <span></span>
-                                  <span class="foot-area-list"
-                                    ><span class="point teal">R</span
-                                    >{{ animated.Right }}</span
-                                  >
-                                  <span></span>
-                                </div>
-                                <EChart
-                                    :list="swingView?.shotweight_info?.list || []"
-                                    :totalFrames="Number(swingView?.fit_total_frames || 0)"
-                                    :playTime="Number(swingView?.fit_play_time || 0)"
-                                    @seek="onSeek"
-                                    @balance="onBalance"   
-                                  />
-                              </div>
-                            </div>
-                          </div>
+                <div class="col-1">
+                  <div class="cont-section">
+                    <div class="cont-box">
+                      <div class="cont-box-list">
+                        <div
+                          class="video-area"
+                          v-if="swingView?.video_file?.[0]"
+                        >
+                          <videoPlayer
+                            ref="player1"
+                            :videoinfo="swingView?.video_file?.[0]"
+                          />
                         </div>
-                        <div class="col-2">
-                          <div class="cont-section">
-                            <div class="table-area">
-                              <div class="table" ref="tableRef">
-                                <ul class="row">
-                                  <li class="row-list">
-                                    <p class="tit">클럽 정보</p>
-                                    <div class="info">
-                                      {{ swingView.fit_club_code }}
-                                    </div>
-                                  </li>
-                                  <li class="row-list">
-                                    <p class="tit">볼속도</p>
-                                    <div class="info">
-                                      {{
-                                        common.suffix(
-                                          common.toFixed(swingView.ballspeed),
-                                          "km/h",
-                                        )
-                                      }}
-                                    </div>
-                                  </li>
+                        <div class="no-data" v-else />
+                      </div>
+                      <div class="cont-box-list">
+                        <div
+                          class="video-area"
+                          v-if="swingView?.video_file?.[1]"
+                        >
+                          <videoPlayer
+                            ref="player2"
+                            :videoinfo="swingView?.video_file?.[1]"
+                          />
+                        </div>
+                        <div class="no-data" v-else />
+                      </div>
+                    </div>
+                    <ul class="tab type03 box">
+                      <li
+                        class="tab-list"
+                        :class="{ 'is-active': currentTab == 'address' }"
+                        @click="onClickStage(swingView?.fit_address, 'address')"
+                      >
+                        <span class="icon">
+                          <svg-address />
+                        </span>
+                        <span class="text">address</span>
+                      </li>
+                      <li
+                        class="tab-list"
+                        :class="{
+                          'is-active': currentTab == 'backswing',
+                        }"
+                        @click="
+                          onClickStage(swingView?.fit_takeback, 'backswing')
+                        "
+                      >
+                        <span class="icon">
+                          <svg-back-swing />
+                        </span>
+                        <span class="text">backswing</span>
+                      </li>
 
-                                  <li class="row-list">
-                                    <p class="tit">백스핀</p>
-                                    <div class="info">
-                                      {{
-                                        common.suffix(swingView.backspin, "rpm")
-                                      }}
-                                    </div>
-                                  </li>
+                      <li
+                        class="tab-list"
+                        :class="{ 'is-active': currentTab == 'topswing' }"
+                        @click="
+                          onClickStage(swingView?.fit_top_swing, 'topswing')
+                        "
+                      >
+                        <span class="icon">
+                          <svg-top-swing />
+                        </span>
+                        <span class="text">topswing</span>
+                      </li>
 
-                                  <li class="row-list">
-                                    <p class="tit">캐리</p>
-                                    <div class="info">
-                                      {{
-                                        common.suffix(
-                                          common.toFixed(swingView.carry),
-                                          "m",
-                                        )
-                                      }}
-                                    </div>
-                                  </li>
+                      <li
+                        class="tab-list"
+                        :class="{
+                          'is-active': currentTab == 'downswing',
+                        }"
+                        @click="
+                          onClickStage(swingView?.fit_down_swing, 'downswing')
+                        "
+                      >
+                        <span class="icon">
+                          <svg-down-swing />
+                        </span>
+                        <span class="text">downswing</span>
+                      </li>
 
-                                  <li class="row-list">
-                                    <p class="tit">클럽속도</p>
-                                    <div class="info">
-                                      {{
-                                        common.suffix(
-                                          common.toFixed(swingView.headspeed),
-                                          "km/h",
-                                        )
-                                      }}
-                                    </div>
-                                  </li>
-
-                                  <li class="row-list">
-                                    <p class="tit">볼방향</p>
-                                    <div class="info">
-                                      {{
-                                        common.suffix(
-                                          common.toFixed(swingView.balldirection),
-                                          "deg",
-                                        )
-                                      }}
-                                    </div>
-                                  </li>
-
-                                  <li class="row-list">
-                                    <p class="tit">사이드스핀</p>
-                                    <div class="info">
-                                      {{
-                                        common.suffix(swingView.sidespin, "rpm")
-                                      }}
-                                    </div>
-                                  </li>
-
-                                  <li class="row-list">
-                                    <p class="tit">비거리</p>
-                                    <div class="info">
-                                      {{
-                                        common.suffix(
-                                          common.toFixed(swingView.distance),
-                                          "m",
-                                        )
-                                      }}
-                                    </div>
-                                  </li>
-
-                                  <li class="row-list">
-                                    <p class="tit">체공시간</p>
-                                    <div class="info">
-                                      {{ common.suffix(swingView.duration, "s") }}
-                                    </div>
-                                  </li>
-
-                                  <li class="row-list">
-                                    <p class="tit">탈출각</p>
-                                    <div class="info">
-                                      {{
-                                        common.suffix(
-                                          common.toFixed(swingView.launchangle),
-                                          "deg",
-                                        )
-                                      }}
-                                    </div>
-                                  </li>
-
-                                  <li class="row-list">
-                                    <p class="tit">미트율</p>
-                                    <div class="info">
-                                      {{
-                                        common.suffix(
-                                          common.toFixed(swingView.smashfactor),
-                                          "%",
-                                        )
-                                      }}
-                                    </div>
-                                  </li>
-
-                                  <li class="row-list">
-                                    <p class="tit">수직최고점</p>
-                                    <div class="info">
-                                      {{
-                                        common.suffix(
-                                          common.toFixed(swingView.peakvertical),
-                                          "m",
-                                        )
-                                      }}
-                                    </div>
-                                  </li>
-                                </ul>
-                              </div>
+                      <li
+                        class="tab-list"
+                        :class="{ 'is-active': currentTab == 'impact' }"
+                        @click="onClickStage(swingView?.fit_impact, 'impact')"
+                      >
+                        <span class="icon">
+                          <svg-impact />
+                        </span>
+                        <span class="text">impact</span>
+                      </li>
+                      <li
+                        class="tab-list"
+                        :class="{
+                          'is-active': currentTab == 'follow-through',
+                        }"
+                        @click="
+                          onClickStage(swingView?.fit_follow, 'follow-through')
+                        "
+                      >
+                        <span class="icon">
+                          <svg-follow-through />
+                        </span>
+                        <span class="text">follow-through</span>
+                      </li>
+                      <li
+                        class="tab-list"
+                        :class="{ 'is-active': currentTab == 'finish' }"
+                        @click="onClickStage(swingView?.fit_finish, 'finish')"
+                      >
+                        <span class="icon">
+                          <svg-finish />
+                        </span>
+                        <span class="text">finish</span>
+                      </li>
+                    </ul>
+                    <div class="cont-wrap">
+                      <div class="title">Step Balance</div>
+                      <div class="cont-box">
+                        <div class="foot-area">
+                          <span></span>
+                          <span class="foot-area-list"
+                            ><span class="point teal">L</span
+                            >{{ animated.Left }}</span
+                          >
+                          <span></span>
+                          <span class="foot-area-list"
+                            ><span class="point yellow">B</span
+                            >{{ animated.Back }}</span
+                          >
+                          <span>
+                            <img
+                              src="/public/images/default/img_human_footprints.png"
+                              alt="img_human_footprints"
+                            />
+                          </span>
+                          <span class="foot-area-list"
+                            ><span class="point yellow">F</span
+                            >{{ animated.Front }}</span
+                          >
+                          <span></span>
+                          <span class="foot-area-list"
+                            ><span class="point teal">R</span
+                            >{{ animated.Right }}</span
+                          >
+                          <span></span>
+                        </div>
+                        <EChart
+                          :list="swingView?.shotweight_info?.list || []"
+                          :totalFrames="
+                            Number(swingView?.fit_total_frames || 0)
+                          "
+                          :playTime="Number(swingView?.fit_play_time || 0)"
+                          @seek="onSeek"
+                          @balance="onBalance"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-2">
+                  <div class="cont-section">
+                    <div class="table-area">
+                      <div class="table" ref="tableRef">
+                        <ul class="row">
+                          <li class="row-list">
+                            <p class="tit">클럽 정보</p>
+                            <div class="info">
+                              {{ swingView.fit_club_code }}
                             </div>
-                          </div>
-                          <div class="cont-section">
-                            <div class="col-wrap">
-                              <div class="col-list">
-                                <div class="col-list-title">
-                                  궤적 상단 뷰
-                                </div>
-                                <div class="col-list-cont">
-                                  <EChart2
-                                    :raw="swingView?.fit_ball_trajectory || []"
-                                  />
-                                </div>
-                              </div>
-                              <div class="col-list">
-                                <div class="col-list-title">
-                                  궤적 측면 뷰
-                                </div>
-                                <div class="col-list-cont">
-                                  <EChart3
-                                    :raw="swingView?.fit_ball_trajectory || []"
-                                  />
-                                </div>
-                              </div>
-                              <div class="col-list">
-                                <div class="col-list-title">클럽 패스</div>
-                                <div class="col-list-cont">
-                                  <div class="image" :style="{ backgroundImage: `url(${getFitImagePath()})` }"></div>
-                                </div>
-                              </div>
+                          </li>
+                          <li class="row-list">
+                            <p class="tit">볼속도</p>
+                            <div class="info">
+                              {{
+                                common.suffix(
+                                  common.toFixed(swingView.ballspeed),
+                                  "km/h",
+                                )
+                              }}
                             </div>
-                          </div>
+                          </li>
+
+                          <li class="row-list">
+                            <p class="tit">백스핀</p>
+                            <div class="info">
+                              {{ common.suffix(swingView.backspin, "rpm") }}
+                            </div>
+                          </li>
+
+                          <li class="row-list">
+                            <p class="tit">캐리</p>
+                            <div class="info">
+                              {{
+                                common.suffix(
+                                  common.toFixed(swingView.carry),
+                                  "m",
+                                )
+                              }}
+                            </div>
+                          </li>
+
+                          <li class="row-list">
+                            <p class="tit">클럽속도</p>
+                            <div class="info">
+                              {{
+                                common.suffix(
+                                  common.toFixed(swingView.headspeed),
+                                  "km/h",
+                                )
+                              }}
+                            </div>
+                          </li>
+
+                          <li class="row-list">
+                            <p class="tit">볼방향</p>
+                            <div class="info">
+                              {{
+                                common.suffix(
+                                  common.toFixed(swingView.balldirection),
+                                  "deg",
+                                )
+                              }}
+                            </div>
+                          </li>
+
+                          <li class="row-list">
+                            <p class="tit">사이드스핀</p>
+                            <div class="info">
+                              {{ common.suffix(swingView.sidespin, "rpm") }}
+                            </div>
+                          </li>
+
+                          <li class="row-list">
+                            <p class="tit">비거리</p>
+                            <div class="info">
+                              {{
+                                common.suffix(
+                                  common.toFixed(swingView.distance),
+                                  "m",
+                                )
+                              }}
+                            </div>
+                          </li>
+
+                          <li class="row-list">
+                            <p class="tit">체공시간</p>
+                            <div class="info">
+                              {{ common.suffix(swingView.duration, "s") }}
+                            </div>
+                          </li>
+
+                          <li class="row-list">
+                            <p class="tit">탈출각</p>
+                            <div class="info">
+                              {{
+                                common.suffix(
+                                  common.toFixed(swingView.launchangle),
+                                  "deg",
+                                )
+                              }}
+                            </div>
+                          </li>
+
+                          <li class="row-list">
+                            <p class="tit">미트율</p>
+                            <div class="info">
+                              {{
+                                common.suffix(
+                                  common.toFixed(swingView.smashfactor),
+                                  "%",
+                                )
+                              }}
+                            </div>
+                          </li>
+
+                          <li class="row-list">
+                            <p class="tit">수직최고점</p>
+                            <div class="info">
+                              {{
+                                common.suffix(
+                                  common.toFixed(swingView.peakvertical),
+                                  "m",
+                                )
+                              }}
+                            </div>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="cont-section">
+                    <div class="col-wrap">
+                      <div class="col-list">
+                        <div class="col-list-title">궤적 상단 뷰</div>
+                        <div class="col-list-cont">
+                          <EChart2
+                            :raw="swingView?.fit_ball_trajectory || []"
+                          />
                         </div>
                       </div>
+                      <div class="col-list">
+                        <div class="col-list-title">궤적 측면 뷰</div>
+                        <div class="col-list-cont">
+                          <EChart3
+                            :raw="swingView?.fit_ball_trajectory || []"
+                          />
+                        </div>
+                      </div>
+                      <div class="col-list">
+                        <div class="col-list-title">클럽 패스</div>
+                        <div class="col-list-cont">
+                          <div
+                            class="image"
+                            :style="{
+                              backgroundImage: `url(${getFitImagePath()})`,
+                            }"
+                          ></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </template>
+
+        <!-- 최종 코칭 리포트 -->
+        <template v-else-if="finalReport">
+          <div class="board final-report">
+            <div class="board-wrap">
+              <ul class="tab type06">
+                <li
+                  class="tab-list"
+                  :class="{ 'is-active': finalReportTab === index }"
+                  v-for="(item, index) in [
+                    '리포트',
+                    '원포인트레슨',
+                    '추천 운동',
+                  ]"
+                  :key="index"
+                  @click="finalReportTab = index"
+                >
+                  {{ item }}
+                </li>
+              </ul>
+
+              <template v-if="!finalReportLoaded">
+                <div class="cont">
+                  <p class="desc">불러오는 중입니다.</p>
+                </div>
+              </template>
+              <template v-else-if="!finalReportView.analysis">
+                <div class="cont">
+                  <p class="desc">아직 등록된 코칭 리포트가 없습니다.</p>
+                </div>
+              </template>
+              <template v-else>
+                <!-- 리포트 -->
+                <div class="cont" v-if="finalReportTab === 0">
+                  <div class="title" id="report">
+                    <h2 class="text">코칭 결과 분석</h2>
+                  </div>
+                  <div class="section">
+                    <div class="top-area">
+                      <div class="title">
+                        {{ finalReportView.analysis.nickname }}님의 코칭
+                        결과입니다
+                      </div>
+                      <span class="sub">(Driver 기준)</span>
+                    </div>
+                    <p class="desc-area">
+                      {{ finalReportView.analysis.coaching_result }}
+                    </p>
+                    <div class="chart-area">
+                      <div class="chart-box">
+                        <p class="title">코칭 구질분석</p>
+                        <div class="chart">
+                          <chart-radar
+                            :analysis="finalReportView.analysis"
+                            :readonly="true"
+                          />
+                        </div>
+                      </div>
+                      <div class="chart-box">
+                        <div
+                          class="chart-box-list"
+                          v-for="m in finalReportMetricRows"
+                          :key="m.key"
+                        >
+                          <p class="title">{{ m.label }}</p>
+                          <ul class="progress">
+                            <li class="progress-list">
+                              <div class="progress-num">
+                                <span class="num">{{ m.mine }}</span>
+                                <span class="text">나의평균</span>
+                              </div>
+                              <div class="progress-bar">
+                                <div
+                                  class="progress-bar-inner is-orange"
+                                  :style="{
+                                    width:
+                                      getFinalReportBarWidth(m.mine, m.others) +
+                                      '%',
+                                  }"
+                                ></div>
+                              </div>
+                            </li>
+                            <li class="progress-list">
+                              <div class="progress-num">
+                                <span class="num">{{ m.others }}</span>
+                                <span class="text">전체평균</span>
+                              </div>
+                              <div class="progress-bar">
+                                <div
+                                  class="progress-bar-inner is-cyan"
+                                  :style="{
+                                    width:
+                                      getFinalReportBarWidth(m.others, m.mine) +
+                                      '%',
+                                  }"
+                                ></div>
+                              </div>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 원포인트레슨 -->
+                <div class="cont" v-else-if="finalReportTab === 1">
+                  <div class="title" id="lesson">
+                    <h2 class="text">원포인트레슨</h2>
+                  </div>
+                  <div class="section">
+                    <div class="table-area">
+                      <table class="type01">
+                        <colgroup>
+                          <col width="10%" />
+                          <col width="10%" />
+                          <col width="*" />
+                        </colgroup>
+                        <thead>
+                          <tr>
+                            <th>구분동작</th>
+                            <th>평가</th>
+                            <th>내용</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr
+                            v-for="(label, idx) in finalReportLessonLabels"
+                            :key="idx"
+                          >
+                            <td>
+                              <span class="color-point">{{
+                                finalReportView.analysis[
+                                  `lesson${idx + 1}_title`
+                                ] || label
+                              }}</span>
+                            </td>
+                            <td>
+                              <div class="border-box">
+                                {{
+                                  finalReportView.analysis[
+                                    `lessonlevel${idx + 1}`
+                                  ]
+                                }}
+                              </div>
+                            </td>
+                            <td>
+                              <div class="text-area">
+                                {{
+                                  finalReportView.analysis[`lesson${idx + 1}`]
+                                }}
+                              </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <span class="color-point">{{
+                                finalReportView.analysis.lessontotal_title ||
+                                "총평"
+                              }}</span>
+                            </td>
+                            <td></td>
+                            <td>
+                              <div class="text-area">
+                                {{ finalReportView.analysis.lessontotal }}
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 추천운동 -->
+                <div class="cont" v-else-if="finalReportTab === 2">
+                  <div class="title" id="recommend">
+                    <h2 class="text">추천운동</h2>
+                  </div>
+                  <div
+                    class="section"
+                    v-if="finalReportView.recommendations?.length"
+                  >
+                    <div
+                      class="table-area"
+                      v-for="item in finalReportView.recommendations"
+                      :key="item.recommend_exercise_pk"
+                    >
+                      <div
+                        class="img-area"
+                        :style="{
+                          backgroundImage: `url(${item.thumbnail_url ? common.getImg(item.thumbnail_url) : '/images/default/img_recommend_01.png'})`,
+                        }"
+                      />
+                      <table class="type02">
+                        <colgroup>
+                          <col width="10%" />
+                          <col width="*" />
+                        </colgroup>
+                        <tbody>
+                          <tr>
+                            <th>제목</th>
+                            <td>{{ item.title }}</td>
+                          </tr>
+                          <tr>
+                            <th>목적</th>
+                            <td>{{ item.objective }}</td>
+                          </tr>
+                          <tr>
+                            <th>내용</th>
+                            <td>{{ item.content }}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <div class="section" v-else>
+                    <p class="desc">추천운동이 없습니다.</p>
+                  </div>
+                </div>
+              </template>
             </div>
           </div>
         </template>
@@ -2509,13 +2734,23 @@
           <img src="/public/images/icon/icon_exit_to.png" alt="icon_exit_to" />
           <span class="text">나가기</span>
         </button>
-        <button type="button" class="btn btn-prev" @click="prevPage" aria-label="이전">
+        <button
+          type="button"
+          class="btn btn-prev"
+          @click="prevPage"
+          aria-label="이전"
+        >
           <img
             src="/public/images/icon/icon_arrow_backward.png"
             alt="icon_arrow_backward"
           />
         </button>
-        <button type="button" class="btn btn-next" @click="nextPage" aria-label="다음">
+        <button
+          type="button"
+          class="btn btn-next"
+          @click="nextPage"
+          aria-label="다음"
+        >
           <img
             src="/public/images/icon/icon_arrow_forward.png"
             alt="icon_arrow_forward"
@@ -2537,9 +2772,9 @@
 
   <!-- 토스트 알림 모달 -->
   <toast-modal
-      :isOpen="modals.toastModal"
-      :toastMessage="toastMessage"
-      @update:isOpen="modals.toastModal = $event"
+    :isOpen="modals.toastModal"
+    :toastMessage="toastMessage"
+    @update:isOpen="modals.toastModal = $event"
   />
 
   <!-- 토스트 경고 모달 -->
@@ -2555,7 +2790,6 @@
     :toastErrorMessage="toastErrorMessage"
     @update:isOpen="modals.toastErrorModal = $event"
   />
-
 </template>
 
 <script setup>
@@ -2569,16 +2803,19 @@ import EChart2 from "~/components/chart/EChart2.vue";
 import EChart3 from "~/components/chart/EChart3.vue";
 import VideoPlayer from "~/components/video/videoPlayer.vue";
 import { useWindowSize } from "@vueuse/core";
-import { useHead } from '#app'
-import toastModal from '@/components/toast-ui/toast-modal.vue';
-import toastWarnModal from '@/components/toast-ui/toast-warn-modal.vue';
-import toastErrorModal from '@/components/toast-ui/toast-error-modal.vue';
+import { useHead } from "#app";
+import toastModal from "@/components/toast-ui/toast-modal.vue";
+import toastWarnModal from "@/components/toast-ui/toast-warn-modal.vue";
+import toastErrorModal from "@/components/toast-ui/toast-error-modal.vue";
+
+definePageMeta({
+  layout: "publish-detail",
+});
 
 const common = useCommon();
 const route = useRoute();
 const router = useRouter();
 const coachingApi = useCoachingApi();
-
 
 const enroll_pk = Number(route.params.slug);
 const finalReport = ref(false);
@@ -2646,24 +2883,26 @@ const _coachingView = async () => {
   }
 };
 
-// 매장 스태프는 댓글/문의 등록·수정·삭제 권한이 없어 백엔드 쓰기 API(qnawrite/qnamodify/qnadrop)가
-// 존재하지 않습니다. 아래 관련 함수들은 조회용 UI를 그대로 두되 실제 쓰기 동작 없이
-// 안내 토스트만 띄우는 no-op으로 남겨둡니다.
 const modals = reactive({});
 
-const _qnaDrop = (comment_pk) => {
+const _qnaDrop = async (comment_pk) => {
   tooltipShow.value = -1;
   replyTooltipShow.value = -1;
-  handleWarnToast("삭제 기능은 지원되지 않습니다.");
+  try {
+    await coachingApi._qnadrop(comment_pk);
+    await _qnaList();
+  } catch (err) {
+    handleErrorToast(err.message);
+  }
 };
 
 // 토스트 확인 모달
 const toastMessage = ref();
 const handleToast = (message) => {
-  document.querySelector('body').classList.add('is-hidden');
-  modals['toastModal'] = true;
+  document.querySelector("body").classList.add("is-hidden");
+  modals["toastModal"] = true;
   toastMessage.value = message;
-}
+};
 
 // 토스트 에러 모달
 const toastErrorMessage = ref();
@@ -2686,7 +2925,6 @@ const modalOpen = (modalName) => {
   document.querySelector("body").classList.add("is-hidden");
 };
 
-
 const membersApi = useMembersApi();
 const selectedPlayerItem = ref(null);
 // NOTE: this must NOT be named `modalMemberInfo` — that identifier collides with the
@@ -2695,7 +2933,7 @@ const selectedPlayerItem = ref(null);
 // so the real ModalMemberInfo component was being replaced by this function and
 // invoked as its render fn during SSR, crashing on `document.querySelector`).
 const showMemberInfoModal = async (player_fk) => {
-  if (typeof document === 'undefined') return;
+  if (typeof document === "undefined") return;
   try {
     const res = await membersApi._commonPlayerinfo(player_fk);
     const basic = res?.playerbasicinfo || {};
@@ -2764,11 +3002,75 @@ const currentStepData = computed(() => {
 
 // 최종 코칭 리포트 클릭 이벤트
 const accordionLastIndex = ref(false);
+const finalReportView = ref({ analysis: null, stats: {}, recommendations: [] });
+const finalReportLoaded = ref(false);
+const finalReportTab = ref(0);
+
+const _resultAnalysisView = async () => {
+  try {
+    const res = await coachingApi._resultanalysisview(enroll_pk);
+    finalReportView.value = {
+      analysis: res.analysis,
+      stats: res.stats,
+      recommendations: res.recommendations || [],
+    };
+  } catch (err) {
+    handleErrorToast(err.message);
+  } finally {
+    finalReportLoaded.value = true;
+  }
+};
+
 const handleFinalReport = (e) => {
   finalReport.value = true;
   accordionLastIndex.value = true;
   swingPage.value = false;
+  finalReportTab.value = 0;
+
+  if (!finalReportLoaded.value) {
+    _resultAnalysisView();
+  }
 };
+
+const finalReportMetricRows = computed(() => {
+  const mine = finalReportView.value.stats?.mine || {};
+  const others = finalReportView.value.stats?.others || {};
+  return [
+    {
+      key: "fit_distance",
+      label: "평균 비거리(m)",
+      mine: mine.fit_distance ?? 0,
+      others: others.fit_distance ?? 0,
+    },
+    {
+      key: "fit_carry",
+      label: "평균 캐리(m)",
+      mine: mine.fit_carry ?? 0,
+      others: others.fit_carry ?? 0,
+    },
+    {
+      key: "fit_ball_speed",
+      label: "평균 볼속도(km/h)",
+      mine: mine.fit_ball_speed ?? 0,
+      others: others.fit_ball_speed ?? 0,
+    },
+  ];
+});
+
+const getFinalReportBarWidth = (value, other) => {
+  const max = Math.max(Number(value) || 0, Number(other) || 0, 1);
+  return Math.round(((Number(value) || 0) / max) * 100);
+};
+
+const finalReportLessonLabels = [
+  "Address",
+  "Back Swing",
+  "Top Swing",
+  "Down Swing",
+  "Impact",
+  "Follow Throw",
+  "Finish",
+];
 
 // 트랜지션 효과
 const beforeEnter = (el) => {
@@ -2801,8 +3103,8 @@ const handleMobList = (index) => {
 // 모바일 탭 클릭 이벤트
 const tabIndex = ref(-1);
 const handleMobAccordion = (item) => {
-  tabIndex.value = (tabIndex.value === item.step_pk) ? -1 : item.step_pk
-  swingPage.value = false
+  tabIndex.value = tabIndex.value === item.step_pk ? -1 : item.step_pk;
+  swingPage.value = false;
 };
 
 // 최종 코칭 리포트(원포인트레슨) 리스트
@@ -2850,8 +3152,6 @@ const onePointLessonList = ref([
 ]);
 
 // 미션 조건 테이블 리스트
-
-
 
 // 좋아요 클릭 이벤트 관련
 const isLike = ref(false);
@@ -2947,14 +3247,38 @@ const comments = ref([
     replies: [],
   },
 ]);
-// 매장 스태프는 문의 댓글 등록 권한이 없습니다(백엔드에 qnawrite 없음). 조회 전용 UI만 남기고
-// 등록 동작은 안내 토스트만 띄우는 no-op으로 둡니다.
-const submitComment = () => {
-  handleWarnToast("댓글 등록 기능은 지원되지 않습니다.");
+const submitComment = async () => {
+  if (!commentText.value?.trim()) return;
+  try {
+    await coachingApi._qnawrite({
+      enroll_pk,
+      class_pk: currentClass.value,
+      step_pk: currentStep.value,
+      content: commentText.value,
+    });
+    commentText.value = "";
+    await _qnaList();
+  } catch (err) {
+    handleErrorToast(err.message);
+  }
 };
 
-const handleReplySubmit = (comment_pk) => {
-  handleWarnToast("답글 등록 기능은 지원되지 않습니다.");
+const handleReplySubmit = async (comment_pk) => {
+  if (!replyNewText.value?.trim()) return;
+  try {
+    await coachingApi._qnawrite({
+      enroll_pk,
+      class_pk: currentClass.value,
+      step_pk: currentStep.value,
+      content: replyNewText.value,
+      parent_comment_fk: comment_pk,
+    });
+    replyNewText.value = "";
+    inputComment.value = -1;
+    await _qnaList();
+  } catch (err) {
+    handleErrorToast(err.message);
+  }
 };
 
 // 코칭 페이지 가기 클릭 이벤트
@@ -3268,12 +3592,17 @@ watch(
 );
 
 const commentEditText = ref("");
-// 매장 스태프는 문의 댓글 수정 권한이 없습니다(백엔드에 qnamodify 없음). 조회 전용 UI만 남기고
-// 수정 동작은 안내 토스트만 띄우는 no-op으로 둡니다.
-const handleEditSubmit = (comment_pk) => {
-  handleWarnToast("댓글 수정 기능은 지원되지 않습니다.");
-  inputShow.value = -1;
-  replyInputShow.value = -1;
+const handleEditSubmit = async (comment_pk) => {
+  if (!commentEditText.value?.trim()) return;
+  try {
+    await coachingApi._qnamodify(comment_pk, commentEditText.value);
+    await _qnaList();
+  } catch (err) {
+    handleErrorToast(err.message);
+  } finally {
+    inputShow.value = -1;
+    replyInputShow.value = -1;
+  }
 };
 
 const getFitImagePath = () => {
@@ -3414,7 +3743,6 @@ const threads = computed(() => {
   return result;
 });
 
-
 // 동영상 플레이어 ref
 const player1 = ref(null);
 const player2 = ref(null);
@@ -3445,15 +3773,15 @@ const onSeek = (time) => {
 
 const onBalance = ({ pct /*, raw*/ }) => {
   // 퍼센트 반영 (정수 반올림)
-  animated.Left.value  = Math.round(pct.L || 0)
-  animated.Right.value = Math.round(pct.R || 0)
-  animated.Front.value = Math.round(pct.F || 0)
-  animated.Back.value  = Math.round(pct.B || 0)
+  animated.Left.value = Math.round(pct.L || 0);
+  animated.Right.value = Math.round(pct.R || 0);
+  animated.Front.value = Math.round(pct.F || 0);
+  animated.Back.value = Math.round(pct.B || 0);
 
   // 원시값을 쓰고 싶으면 위 대신 raw.* 사용
   // animated.Left.value  = Math.round(raw.L || 0)
   // ...
-}
+};
 
 const nickname = ref("");
 // 애니메이션 관련
@@ -3481,8 +3809,6 @@ onMounted(async () => {
   };
 
   requestAnimationFrame(animate);
-
-
 });
 
 const onClickHandler = (page) => {
@@ -3542,16 +3868,15 @@ watch(
 
 useHead({
   htmlAttrs: {
-    lang: 'ko'
+    lang: "ko",
   },
-  title: '코칭',
-  meta: [
-    { name: 'description', content: '코칭 상세 페이지 입니다.' }
-  ]
-})
+  title: "코칭",
+  meta: [{ name: "description", content: "코칭 상세 페이지 입니다." }],
+});
 </script>
 <style lang="scss" scoped>
 @use "@/assets/scss/pages/coaching-detail.scss";
 @use "@/assets/scss/pages/swing.scss";
+@use "@/assets/scss/pages/final-report.scss";
 @use "@/assets/scss/components/modal.scss";
 </style>

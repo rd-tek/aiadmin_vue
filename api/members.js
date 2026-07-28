@@ -220,9 +220,9 @@ export const useMembersApi = () => {
 
   const _commonPlayerinfo = async (playerPk) => {
     try {
-      const res = await apiFetch(
-        `/common/playerinfo?player=${playerPk}&type=player_pk`,
-      );
+      const res = await apiFetch(`/common/playerinfo/${playerPk}`, {
+        method: "GET",
+      });
       return res?.code === 200 ? res : null;
     } catch (error) {
       console.error("_commonPlayerinfo error:", error);
