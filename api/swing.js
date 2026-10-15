@@ -37,11 +37,12 @@ export const useSwingApi = () => {
   };
 
   // 댓글 리스트
-  const _swingReplyList = async (swingno, pageno = 1) => {
+  const _swingReplyList = async (swingno, pageno = 1, pagesize = 100) => {
     return await apiFetch(`/swing/swingreplylist/${swingno}`, {
       method: "GET",
       query: {
         pageno,
+        pagesize,
       },
     });
   };
@@ -53,6 +54,16 @@ export const useSwingApi = () => {
       body: {
         comment,
         top_comment_pk,
+      },
+    });
+  };
+
+  // 댓글 수정 (관리자가 쓴 댓글만)
+  const _swingReplyModify = async (comment_pk, comment) => {
+    return await apiFetch(`/postact/swingreplymodify/${comment_pk}`, {
+      method: "PUT",
+      body: {
+        comment,
       },
     });
   };
@@ -83,6 +94,7 @@ export const useSwingApi = () => {
     _swingDelete,
     _swingReplyList,
     _swingReplyWrite,
+    _swingReplyModify,
     _swingReplyDelete,
     _swingTitleWrite,
   };

@@ -295,11 +295,16 @@
                           <div class="tooltip-container" v-if="tooltipShow === index" :ref="(el) => setTooltipRef(el, index)">
                             <div class="tooltip-body">
                               <div class="cont">
-                                <div class="cont-list">
-                                  <button type="button" class="btn-edit" @click="handleEdit(index)">수정</button>
-                                </div>
-                                <div class="cont-list">
-                                  <button type="button" class="btn-delete" @click="handleDelete(index)">삭제</button>
+                                <template v-if="item.is_candelete">
+                                  <div class="cont-list">
+                                    <button type="button" class="btn-edit" @click="handleEdit(index)">수정</button>
+                                  </div>
+                                  <div class="cont-list">
+                                    <button type="button" class="btn-delete" @click="handleDelete(index)">삭제</button>
+                                  </div>
+                                </template>
+                                <div class="cont-list" v-else>
+                                  <span class="text">관리자가 작성한 댓글만 수정·삭제할 수 있습니다.</span>
                                 </div>
                               </div>
                             </div>
@@ -374,11 +379,16 @@
                             <div class="tooltip-container" v-if="tooltipDepthShow === k" :ref="(el) => setTooltipDepthRef(el, k)">
                               <div class="tooltip-body">
                                 <div class="cont">
-                                  <div class="cont-list">
-                                    <button type="button" class="btn-edit" @click="handleReplyEdit(index, k)">수정</button>
-                                  </div>
-                                  <div class="cont-list">
-                                    <button type="button" class="btn-delete" @click="handleReplyDelete(index, k)">삭제</button>
+                                  <template v-if="reply.is_candelete">
+                                    <div class="cont-list">
+                                      <button type="button" class="btn-edit" @click="handleReplyEdit(index, k)">수정</button>
+                                    </div>
+                                    <div class="cont-list">
+                                      <button type="button" class="btn-delete" @click="handleReplyDelete(index, k)">삭제</button>
+                                    </div>
+                                  </template>
+                                  <div class="cont-list" v-else>
+                                    <span class="text">관리자가 작성한 댓글만 수정·삭제할 수 있습니다.</span>
                                   </div>
                                 </div>
                               </div>
@@ -483,8 +493,47 @@ import { useSwingApi } from "~/api/swing";
 // 2026.06.17[cgnoh]: 라우터 관련
 const route = useRoute();
 const swingPk = computed(() => route.params.slug);
-const { _swingView } = useSwingApi();
+const {
+  _swingView,
+  _swingReplyList,
+  _swingReplyWrite,
+  _swingReplyModify,
+  _swingReplyDelete,
+} = useSwingApi();
 const swingInfo = ref({});
+
+// 2026.10.15: 댓글 목록 조회 — 평면 목록(is_top/top_pk)을 댓글+답글 트리로 묶는다
+const getCommentList = async () => {
+  const res = await _swingReplyList(swingPk.value, 1, 100);
+  if (res.code !== 200) return;
+
+  const rows = res.swingreplylist || [];
+  const toItem = (r) => ({
+    comment_pk: Number(r.comment_pk),
+    nickname: r.nickname,
+    date: r.timezone_date || r.date,
+    text: r.text,
+    is_candelete: !!r.is_candelete,
+    delete_flag: Number(r.delete_flag) === 1,
+  });
+
+  const tops = [];
+  const byPk = {};
+  rows.forEach((r) => {
+    if (Number(r.is_top) === 1) {
+      const item = { ...toItem(r), replies: [] };
+      byPk[item.comment_pk] = item;
+      tops.push(item);
+    }
+  });
+  rows.forEach((r) => {
+    if (Number(r.is_top) === 1) return;
+    const parent = byPk[Number(r.top_pk)];
+    if (parent) parent.replies.push(toItem(r));
+  });
+
+  commentList.value = tops;
+};
 
 // 2026.06.17[cgnoh]: 상세 조회
 const getDetail = async () => {
@@ -555,8 +604,12 @@ const handleEdit = (index) => {
 }
 
 // 2026.06.17[cgnoh]: 댓글 삭제
-const handleDelete = (index) => {
-  commentList.value.splice(index, 1);
+const handleDelete = async (index) => {
+  const target = commentList.value[index];
+  if (!target?.comment_pk) return;
+
+  const res = await _swingReplyDelete(target.comment_pk);
+  if (res.code === 200) await getCommentList();
 
   tooltipShow.value = -1;
 
@@ -602,31 +655,37 @@ const handleReplyEdit = (parentIndex, replyIndex) => {
 };
 
 // 2026.06.17[cgnoh]: 답글 삭제
-const handleReplyDelete = (parentIndex, replyIndex) => {
-  commentList.value[parentIndex].replies.splice(replyIndex, 1);
+const handleReplyDelete = async (parentIndex, replyIndex) => {
+  const target = commentList.value[parentIndex]?.replies[replyIndex];
+  if (!target?.comment_pk) return;
+
+  const res = await _swingReplyDelete(target.comment_pk);
+  if (res.code === 200) await getCommentList();
+
   tooltipDepthShow.value = -1;
 };
 
 // 2026.06.17[cgnoh]: 글 등록하기
 const commentText = ref('')
-const handleSubmit = () => {
+const handleSubmit = async () => {
   if (!commentText.value.trim()) return;
 
-  commentList.value.push({
-    nickname: '나',
-    date: new Date().toLocaleDateString(),
-    text: commentText.value,
-    replies: []
-  });
+  const res = await _swingReplyWrite(swingPk.value, commentText.value);
+  if (res.code !== 200) return;
 
   commentText.value = '';
+  await getCommentList();
 };
 
 // 2026.06.17[cgnoh]: 답글 등록하기
-const handleSave = (index) => {
+const handleSave = async (index) => {
   if (!editText.value.trim()) return;
 
-  commentList.value[index].text = editText.value;
+  const target = commentList.value[index];
+  if (!target?.comment_pk) return;
+
+  const res = await _swingReplyModify(target.comment_pk, editText.value);
+  if (res.code === 200) await getCommentList();
 
   // 초기화
   editingId.value = -1;
@@ -635,12 +694,14 @@ const handleSave = (index) => {
 }
 
 // 2026.06.17[cgnoh]: 수정답글 등록하기
-const handleReplySave = (parentIndex, replyIndex) => {
+const handleReplySave = async (parentIndex, replyIndex) => {
   if (!replyText.value.trim()) return;
 
-  commentList.value[parentIndex]
-    .replies[replyIndex]
-    .text = replyText.value;
+  const target = commentList.value[parentIndex]?.replies[replyIndex];
+  if (!target?.comment_pk) return;
+
+  const res = await _swingReplyModify(target.comment_pk, replyText.value);
+  if (res.code === 200) await getCommentList();
 
   editingReplyId.value = {
     parentIndex: -1,
@@ -656,21 +717,8 @@ const onClickStage = (tabName) => {
   currentTab.value = tabName;
 };
 
-// 2026.06.17[cgnoh]: 댓글 리스트
-const commentList = ref([
-  {
-    nickname: '홍길동',
-    date: '2025.01.12',
-    text: '답글 내용입니다.',
-    replies: [
-      {
-        nickname: '홍길동',
-        date: '2025.01.12',
-        text: '답글 내용입니다.'
-      }
-    ]
-  }
-]);
+// 2026.06.17[cgnoh]: 댓글 리스트 (서버 조회)
+const commentList = ref([]);
 
 // 2026.06.17[cgnoh]: 툴팁 핸들링
 const tooltipShow = ref(-1);
@@ -702,21 +750,23 @@ const handleReplyCancel = () => {
 };
 
 // 2026.06.17[cgnoh]: 답글 등록
-const handleReplySubmit = (parentIndex) => {
+const handleReplySubmit = async (parentIndex) => {
   if (!replyText.value.trim()) return;
 
-  commentList.value[parentIndex].replies.push({
-    nickname: '나',
-    date: new Date().toLocaleDateString(),
-    text: replyText.value,
-  });
+  const parent = commentList.value[parentIndex];
+  if (!parent?.comment_pk) return;
+
+  const res = await _swingReplyWrite(swingPk.value, replyText.value, parent.comment_pk);
+  if (res.code !== 200) return;
 
   replyText.value = '';
   replyBoxFor.value = -1;
+  await getCommentList();
 };
 
 onMounted(() => {
   getDetail();
+  getCommentList();
 });
 
 // 2026.03.04[cgnoh]: 페이지 메타 정보
