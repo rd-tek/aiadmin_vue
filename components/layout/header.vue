@@ -1,7 +1,7 @@
 <template>
   <header>
     <div class="left-area">
-      <button type="button" class="btn-open" @click="handleGnb">
+      <button type="button" class="btn-open" @click="handleGnb" aria-label="메뉴 열기">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
           <path d="M7 1V19M12 7L15 10L12 13M3 1H17C18.1046 1 19 1.89543 19 3V17C19 18.1046 18.1046 19 17 19H3C1.89543 19 1 18.1046 1 17V3C1 1.89543 1.89543 1 3 1Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
@@ -11,36 +11,42 @@
           <transition name="title-slide" mode="out-in">
             <span
               :key="route.fullPath"
-              class="name"
+              class="name" role="heading" aria-level="1"
             >
               {{ pageTitle }}
             </span>
           </transition>
         </span>
         <span class="sub">
-          {{ typedText }}<span class="cursor">|</span>
+          <client-only>
+            <span class="greet">안녕하세요, <b>{{ displayName }}</b>님</span><span class="dot" aria-hidden="true">·</span><span class="today">{{ todayText }}</span>
+          </client-only>
         </span>
       </div>
+      <!-- 2026-10-21: 화면 크기 — 모바일(≤768) 상단바: 메뉴 버튼 옆 아이콘 --><font-size-control compact pop-align="left" class="header-fs header-fs--mob" />
+      <!-- 2026-10-20: 모바일 이름 = PC 인사말과 같은 관리자 이름 -->
       <div class="nickname">
-        <client-only>
-          {{ form.id }} 님
-        </client-only>
+        <client-only>{{ displayName }}님</client-only>
       </div>
     </div>
-    <div class="right-area" v-if="route.path === '/'">
-      <div class="datepicker" 
-          :class="{ active: isFocused }">
-      <client-only>
-        <VueDatePicker 
-          v-model="month"
-          :format="formatMonth" 
-          month-picker
-          auto-apply
-          @open="isFocused = true"
-          @closed="isFocused = false"
-        />
-      </client-only>
-      </div>
+    <!-- 2026-10-21: 오른쪽 영역 항상 표시 — 화면 크기(정부24 방식)는 헤더 오른쪽 끝 고정, 달력은 대시보드에서만 -->
+    <div class="right-area" :class="{ 'is-empty': route.path !== '/' }">
+      <template v-if="route.path === '/'">
+        <div class="datepicker" 
+            :class="{ active: isFocused }">
+        <client-only>
+          <VueDatePicker 
+            v-model="month"
+            :format="formatMonth" 
+            month-picker
+            auto-apply
+            @open="isFocused = true"
+            @closed="isFocused = false"
+          />
+        </client-only>
+        </div>
+      </template>
+      <font-size-control class="header-fs header-fs--pc" />
     </div>
   </header>
 </template>
@@ -90,48 +96,14 @@ const formatMonth = (date) => {
   return `${year}.${month}`; 
 }
 
-// 2026.03.04[cgnoh]: 타이핑 애니메이션
-const fullText = `"안녕하세요. ${form.value.id || '관리자'}님"`;
-const typedText = ref("");
-
-let typingInterval = null;
-let deletingInterval = null;
-
-const startTyping = () => {
-  let index = 0;
-
-  typingInterval = setInterval(() => {
-    typedText.value += fullText[index];
-    index++;
-
-    if (index === fullText.length) {
-      clearInterval(typingInterval);
-      setTimeout(startDeleting, 1000);
-    }
-  }, 80);
-};
-
-const startDeleting = () => {
-  deletingInterval = setInterval(() => {
-    typedText.value = typedText.value.slice(0, -1);
-
-    if (typedText.value.length === 0) {
-      clearInterval(deletingInterval);
-      setTimeout(startTyping, 500);
-    }
-  }, 50);
-};
-
-// 2026.03.04[cgnoh]: 컴포넌트 라이프사이클
-onMounted(() => {
-  startTyping();
+// 2026.10.15: 반복 타이핑 애니메이션 → 고정 인사말 + 오늘 날짜(KST)
+const adminName = useCookie('aiadmin_name'); // 2026-10-20: 로그인한 관리자 이름(api/auth.js, 앱 전용 쿠키)
+const displayName = computed(() => adminName.value || form.value.id || '관리자');
+const todayText = computed(() => {
+  const d = new Date();
+  const w = ['일', '월', '화', '수', '목', '금', '토'][d.getDay()];
+  return `${d.getFullYear()}년 ${d.getMonth() + 1}월 ${d.getDate()}일 (${w})`;
 });
-
-onBeforeUnmount(() => {
-  clearInterval(typingInterval);
-  clearInterval(deletingInterval);
-});
-
 </script>
 <style lang="scss" scoped>
 @use '@/assets/scss/layouts/header.scss';

@@ -6,25 +6,25 @@
   >
     <div class="modal-container">
       <div class="modal-header">
-        <p class="title">회원 정보</p>
+        <p class="title">스윙 영상 정보</p>
         <button type="button" class="btn-close" @click="modalClose" aria-label="닫기">
-          <img src="/images/icon/icon_close_grey.png" alt="icon_close_grey" />
+          <img src="/images/icon/icon_close_grey.png" alt="" />
         </button>
       </div>
       <div class="modal-body">
         <div class="form">
             <div class="form-list">
-                <label for="">제목</label>
+                <label for="modal-modal-swing-info-title">제목</label>
                 <div class="form-list-box">
                     <div class="input-text">
-                        <input type="text" v-model="form.title" placeholder="제목을 입력해주세요." />
+                        <input id="modal-modal-swing-info-title" type="text" v-model="form.title" placeholder="제목을 입력해주세요." />
                     </div>
                 </div>
             </div>
             <div class="form-list">
-                <label for="">내용</label>
+                <label for="modal-modal-swing-info-content-1">내용</label>
                 <div class="form-list-box">
-                    <textarea v-model="form.content"></textarea>
+                    <textarea id="modal-modal-swing-info-content-1" v-model="form.content"></textarea>
                 </div>
             </div>
             <div class="form-list">

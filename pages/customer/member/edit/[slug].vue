@@ -12,7 +12,7 @@
                     <th>상태</th>
                     <td>
                       <div class="select-default">
-                        <select v-model="form.type">
+                        <select aria-label="상태 선택" v-model="form.type">
                             <option value="1">공지</option>
                             <option value="2">뉴스</option>
                         </select>
@@ -23,7 +23,8 @@
                     <th>제목</th>
                     <td>
                         <div class="input-text">
-                            <input
+                            <input aria-label="제목"
+                                maxlength="100"
                                 type="text"
                                 v-model="form.title"
                                 placeholder="제목을 입력해주세요."
@@ -73,17 +74,15 @@
                 <tr>
                     <th>내용</th>
                     <td>
-                        <div class="textarea">
-                            <textarea
-                                v-model="form.contents"
-                                placeholder="내용을 입력해주세요."
-                            ></textarea>
-                        </div>
+                        <!-- 2026-10-13: 웹 에디터(Tiptap) — 상세 화면은 v-html 로 렌더 -->
+                        <client-only>
+                            <rich-editor v-model="form.contents" placeholder="내용을 입력해주세요." />
+                        </client-only>
                         <div class="input-wrap">
                             <div class="input-text">
                                 <div class="input-file">
                                     <input
-                                        type="file"
+                                        type="file" style="display: none"
                                         ref="fileInput"
                                         @change="onFileChange"
                                         placeholder="파일을 선택하거나 여기에 드롭하세요."  
@@ -143,6 +142,7 @@
     </div>
 </template>
 <script setup>
+import RichEditor from "@/components/editor/rich-editor.client.vue";
 import { useRoute, useRouter } from "vue-router";
 import { useCustomerApi } from "~/api/support";
 import toastModal from '@/components/toast-ui/toast-modal.vue';
@@ -271,7 +271,7 @@ const handleSave = async () => {
     openSaveToast("수정되었습니다.");
     router.push(`/customer/member/${noticeno.value}`);
   } catch (err) {
-    openErrorToast(res.message || "수정에 실패했습니다.");
+    openErrorToast(err?.data?.message || "수정에 실패했습니다.");
   }
 };
 

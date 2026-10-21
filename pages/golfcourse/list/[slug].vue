@@ -8,7 +8,7 @@
             <div class="view-area">
                 <div class="img-area" :style="{
                     backgroundImage: `url('${common.getImg(
-                        courseData.path + '/' + courseData.imgurl,
+                        courseData.imgurl,
                     )}')`,
                     }">
                     <span class="label">T</span>
@@ -36,7 +36,7 @@
                     </div>
                     <div class="info-area-list">
                         <div class="info-area-tit">거리</div>
-                        <div class="info-area-cnt">{{courseData.distance || '-' }}m</div>
+                        <div class="info-area-cnt">{{common.n2(courseData.distance) || '-' }}m</div>
                     </div>
                 </div>
             </div>
@@ -60,7 +60,7 @@
                         <td
                             v-for="hole in course.subcoursehole"
                             :key="hole.hole_no"
-                            @click="modalOpen(hole.hole_no, hole.par_score)">
+                            @click="modalOpen(hole.hole_no, idx + 1)">
                         {{ hole.hole_no }}
                         </td>
                         <td>{{ course.subparcnt }}</td>
@@ -72,7 +72,7 @@
                         <td
                             v-for="hole in course.subcoursehole"
                             :key="`par-${hole.hole_no}`"
-                            @click="modalOpen(hole.hole_no, hole.par_score)"
+                            @click="modalOpen(hole.hole_no, idx + 1)"
                         >
                             {{ hole.par_score }}
                         </td>
@@ -130,12 +130,12 @@ const subCourseList = ref([]);
 const getCourseDetail = async () => {
     try {
         const res = await _courseView(route.params.slug);
-        console.log(res, 'res')
         const info = res.coursebasicinfo || {};
         courseData.value = {
             coursename: info.coursename || "", // 코스이름
             coursecode: info.coursecode || "", // 코스코드
-            imgurl: info.course_image_url || "", // 이미지 url
+            // 2026-09-14: course_image_url이 "/"(사진없음)이면 기본이미지로. getImg가 s3BucketUrl 베이스를 붙이므로 path 접두 불필요
+            imgurl: (info.course_image_url && info.course_image_url !== "/") ? info.course_image_url : "",
             field: info.field || 0, // 코스 난이도
             green: info.green || 0, // 그린 난이도 
             hole: info.holesum || 0, // 홀
@@ -183,6 +183,8 @@ const handleEdit = () => {
 
 
 // 2026.06.18[cgnoh]: 모달 관련
+// 2026-09-16: subcourseseq(=백엔드 coursubtype)는 par_score가 아니라 코스타입코드(1=1~9,2=10~18).
+//   서브코스는 type_fk ASC로 정렬되고 type_code=type_fk-1 이므로 idx+1이 코스타입코드와 일치(근거: tg_coursetype, courseholeview_get CT.type_code)
 const modals = reactive({});
 const modalOpen = async (hole_pk, subcourseseq) => {
   modals.modalGolfCourse = true;
@@ -209,7 +211,7 @@ useHead({
   htmlAttrs: {
     lang: 'ko'
   },
-  title: '코스관리',
+  title: '코스 상세',
   meta: [
     { name: 'description', content: '코스관리 페이지 입니다.' }
   ]

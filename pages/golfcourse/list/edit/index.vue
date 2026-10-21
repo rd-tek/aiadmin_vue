@@ -12,7 +12,7 @@
                             <th>코스명</th>
                             <td>
                                 <div class="input-text">
-                                    <input 
+                                    <input aria-label="코스명" 
                                         type="text" 
                                         v-model="form.coursename"
                                         placeholder="코스명을 입력해주세요." 
@@ -24,7 +24,7 @@
                             <th>코드</th>
                             <td>
                                 <div class="input-text">
-                                    <input 
+                                    <input aria-label="코드" 
                                         type="text" 
                                         v-model="form.coursecode"
                                         placeholder="코드명을 입력해주세요." 
@@ -36,7 +36,7 @@
                             <th>홀 수</th>
                             <td>
                                 <div class="input-text">
-                                    <input 
+                                    <input aria-label="홀 수" 
                                         type="text" 
                                         v-model="holesum"
                                         placeholder="홀 수를 입력해주세요." 
@@ -48,7 +48,7 @@
                             <th>파 수</th>
                             <td>
                                 <div class="input-text">
-                                    <input 
+                                    <input aria-label="파 수" 
                                         type="text" 
                                         v-model="form.parsum"
                                         placeholder="파 수를 입력해주세요." 
@@ -60,7 +60,7 @@
                             <th>서브 코스 수</th>
                             <td>
                                 <div class="select-default">
-                                    <select v-model="form.subcourselistcnt">
+                                    <select aria-label="서브 코스 수 선택" v-model="form.subcourselistcnt">
                                         <option value="1">1</option>
                                         <option value="2">2</option>
                                         <option value="3">3</option>
@@ -74,7 +74,7 @@
                             <td>
                                 <div class="course-wrap">
                                     <div class="input-text">
-                                        <input type="text" value="Hill course">
+                                        <input aria-label="서브 코스 1" type="text" value="Hill course">
                                     </div>
                                     <div class="table-area type02">
                                         <div class="table-list">
@@ -90,12 +90,12 @@
                                                             <th>파</th>
                                                             <td v-for="(item, index) in form.subcourse.subcoursehole[0].par" :key="index">
                                                                 <div class="input-text">
-                                                                    <input type="text" :value="item" disabled>
+                                                                    <input :aria-label="`${index + 1}번 홀 파`" type="text" :value="item" disabled>
                                                                 </div>
                                                             </td>
                                                             <td>
                                                                 <div class="input-text">
-                                                                    <input type="text" value="-" disabled>
+                                                                    <input aria-label="파 합계" type="text" value="-" disabled>
                                                                 </div>
                                                             </td>
                                                         </tr>
@@ -103,12 +103,12 @@
                                                             <th>핸디캡</th>
                                                             <td v-for="(item, index) in form.subcourse.subcoursehole[0].handicap" :key="index">
                                                                 <div class="input-text">
-                                                                    <input type="text" :value="item" disabled>
+                                                                    <input :aria-label="`${index + 1}번 홀 핸디캡`" type="text" :value="item" disabled>
                                                                 </div>
                                                             </td>
                                                             <td>
                                                                 <div class="input-text">
-                                                                    <input type="text" value="-" disabled>
+                                                                    <input aria-label="핸디캡 합계" type="text" value="-" disabled>
                                                                 </div>
                                                             </td>
                                                         </tr>
@@ -125,7 +125,7 @@
                             <td>
                                 <div class="course-wrap">
                                     <div class="input-text">
-                                        <input type="text" value="Hill course">
+                                        <input aria-label="서브 코스 2" type="text" value="Hill course">
                                     </div>
                                     <div class="table-area type02">
                                         <div class="table-list">
@@ -141,12 +141,12 @@
                                                             <th>파</th>
                                                             <td v-for="(item, index) in form.subcourse.subcoursehole[1].par" :key="index">
                                                                 <div class="input-text">
-                                                                    <input type="text" :value="item" disabled>
+                                                                    <input :aria-label="`${index + 1}번 홀 파`" type="text" :value="item" disabled>
                                                                 </div>
                                                             </td>
                                                             <td>
                                                                 <div class="input-text">
-                                                                    <input type="text" value="-" disabled>
+                                                                    <input aria-label="파 합계" type="text" value="-" disabled>
                                                                 </div>
                                                             </td>
                                                         </tr>
@@ -154,12 +154,12 @@
                                                             <th>핸디캡</th>
                                                             <td v-for="(item, index) in form.subcourse.subcoursehole[1].handicap" :key="index">
                                                                 <div class="input-text">
-                                                                    <input type="text" :value="item" disabled>
+                                                                    <input :aria-label="`${index + 1}번 홀 핸디캡`" type="text" :value="item" disabled>
                                                                 </div>
                                                             </td>
                                                             <td>
                                                                 <div class="input-text">
-                                                                    <input type="text" value="-" disabled>
+                                                                    <input aria-label="핸디캡 합계" type="text" value="-" disabled>
                                                                 </div>
                                                             </td>
                                                         </tr>
@@ -178,7 +178,7 @@
                                 <div class="input-wrap">
                                     <div class="input-text">
                                         <div class="input-file">
-                                            <input
+                                            <input aria-label="코스 이미지 파일 선택"
                                                 type="file"
                                                 ref="fileInput"
                                                 @change="onFileChange"
@@ -231,27 +231,16 @@
                                 <div class="select-wrap">
                                     <div class="select-list">
                                         <span class="label">필드</span>
-                                        <div class="select-default">
-                                            <select v-model="form.field" required>
-                                                <option value="1">1</option>
-                                                <option value="2">2</option>
-                                                <option value="3">3</option>
-                                                <option value="4">4</option>
-                                                <option value="5">5</option>
-                                            </select>
-                                        </div>
+                                        <!-- 2026-09-16: 등록/수정 옵션 일치 — 난이도 1~5 select → 클릭 별점 UI (수정폼과 동일) -->
+                                        <ul class="star">
+                                            <li class="star-list type-yellow" :class="{ 'is-active': index <= Number(form.field) }" v-for="index in 5" :key="index" @click="form.field = index" style="cursor:pointer"></li>
+                                        </ul>
                                     </div>
                                     <div class="select-list">
                                         <span class="label">그린</span>
-                                        <div class="select-default">
-                                            <select v-model="form.green" required>
-                                                <option value="1">1</option>
-                                                <option value="2">2</option>
-                                                <option value="3">3</option>
-                                                <option value="4">4</option>
-                                                <option value="5">5</option>
-                                            </select>
-                                        </div>
+                                        <ul class="star">
+                                            <li class="star-list type-teal" :class="{ 'is-active': index <= Number(form.green) }" v-for="index in 5" :key="index" @click="form.green = index" style="cursor:pointer"></li>
+                                        </ul>
                                     </div>
                                 </div>
                             </td>
@@ -260,7 +249,7 @@
                             <th>지역</th>
                             <td>
                                 <div class="input-text">
-                                    <input 
+                                    <input aria-label="지역" 
                                         type="text" 
                                         v-model="form.area"
                                         placeholder="지역을 입력해주세요." 
@@ -272,8 +261,18 @@
                             <th>국가</th>
                             <td>
                                 <div class="select-default m-w-100">
-                                    <select v-model="form.country" required>
-                                        <option value="7">대한민국</option>
+                                    <select aria-label="국가 선택" v-model="form.country" required>
+                                        <!-- 2026-09-16: 등록/수정 옵션 일치 — 국가 정본=tm_country(country_pk→국가) 전체 목록 -->
+                                        <option value="1">미국</option>
+                                        <option value="2">호주</option>
+                                        <option value="3">중국</option>
+                                        <option value="4">일본</option>
+                                        <option value="5">대한민국</option>
+                                        <option value="6">캐나다</option>
+                                        <option value="7">영국</option>
+                                        <option value="8">프랑스</option>
+                                        <option value="9">기타</option>
+                                        <option value="10">뉴질랜드</option>
                                     </select>
                                 </div>
                             </td>
@@ -282,7 +281,7 @@
                             <th>설명</th>
                             <td>
                                 <div class="text-area">
-                                    <textarea 
+                                    <textarea aria-label="설명" 
                                         v-model="form.contents" 
                                         required 
                                         placeholder="내용을 입력해주세요." />
@@ -371,7 +370,7 @@ const form = reactive({
     field: "1", // 필드
     green: "1", // 그린
     area: "", // 지역
-    country: "7", // 국가
+    country: "5", // 국가 (2026-09-16: tm_country 정본상 대한민국=5. 기존 7은 전체목록에서 영국이라 기본값 정정)
     contents: "", // 설명
 });
 
@@ -511,7 +510,37 @@ useIntersectionObserver(tableRef, ([{ isIntersecting }]) => {
 definePageMeta({
   layout: "default",
 });
+
+// 2026-10-06: 탭 타이틀 (형제 페이지와 같은 useHead 형식, 직전 페이지 타이틀 잔존 방지)
+useHead({
+  htmlAttrs: { lang: 'ko' },
+  title: '코스 등록',
+  meta: [{ name: 'description', content: '코스관리 등록 페이지 입니다.' }]
+});
 </script>
 <style lang="scss" scoped>
 @use '@/assets/scss/pages/golf-course.scss';
+
+/* 2026-09-16: 등록/수정 옵션 일치 — 난이도 별점 아이콘(수정폼과 동일). golf-course.scss는 .info-area-cnt 하위로만 스코프돼 등록폼 .select-list엔 미적용이라 재정의 */
+.star {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  .star-list {
+    background-image: url('/images/icon/icon_star_grey.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 22px;
+    height: 22px;
+
+    &.type-teal.is-active {
+      background-image: url('/images/icon/icon_star_teal.png');
+    }
+
+    &.type-yellow.is-active {
+      background-image: url('/images/icon/icon_star_yellow.png');
+    }
+  }
+}
 </style>

@@ -4,20 +4,20 @@
         <div class="col-2 flex-end">
             <div class="col d-flex">
                 <div class="d-flex">
-                    <select v-model="searchForm.searchtype">
+                    <select aria-label="검색 구분 선택" v-model="searchForm.searchtype">
                       <option value="1">제목</option>
                       <option value="2">내용</option>
                     </select>
-                    <input type="text" v-model="searchForm.searchname" placeholder="검색어" @input="handleSearch">
+                    <input aria-label="검색어 입력" type="text" v-model="searchForm.searchname" placeholder="검색어" @input="handleSearch">
                 </div>
                 <button type="button" class="btn" @click="handleSearch">검색</button>
             </div>
         </div>
       </div>
       <div class="top-area">
-        <div class="total">전체 <span class="num">{{ tableList.length }}</span></div>
+        <div class="total">전체 <span class="num">{{ totalCount.toLocaleString() }}</span></div>
         <div class="select-default"> 
-            <select v-model.number="searchForm.pagesize" @change="handleSearch">
+            <select aria-label="목록 표시 개수 선택" v-model.number="searchForm.pagesize" @change="handleSearch">
                 <option value="10">10개씩 보기</option>
                 <option value="20">20개씩 보기</option>
                 <option value="30">30개씩 보기</option>
@@ -52,7 +52,7 @@
                   <span class="label" :class="{ 'color-purple': item.type === '1', 'color-blue': item.type === '2' }">{{ item.type === '1' ? '공지' : '뉴스' }}</span>
                 </div>
                 <div class="table-body-col align-left">
-                  <nuxt-link :to="`/customer/member/${item.noticeno}`" class="link" :class="{ 'line-through': item.note === '삭제' }">{{ item.title }}</nuxt-link>
+                  <nuxt-link :to="`/customer/member/${item.noticeno}`" class="link" :class="{ 'line-through': item.deleteflag === '1' }">{{ item.title }}</nuxt-link>
                 </div>
                 <div class="table-body-col col-1 is-mob">
                   <span class="color-grey">{{ item.date }}</span>
@@ -93,7 +93,7 @@
                 :disabled="searchForm.pageno <= 1"
                 @click="handlePageChange(searchForm.pageno - 1)"
               >
-                <img src="/images/icon/icon_prev.png" alt="icon_prev"/>
+                <img src="/images/icon/icon_prev.png" alt=""/>
               </button>
             </li>
             <li v-for="page in paginationPages" :key="page">
@@ -107,7 +107,7 @@
                 {{ page }}
               </button>
               <button v-else type="button" class="paginate-buttons" aria-label="더보기">
-                <img src="/images/icon/icon_more_horiz.png" alt="icon_more_horiz" />
+                <img src="/images/icon/icon_more_horiz.png" alt="" />
               </button>
             </li>
             <li>
@@ -118,7 +118,7 @@
                 :disabled="searchForm.pageno >= totalPages"
                 @click="handlePageChange(searchForm.pageno + 1)"
               >
-                <img src="/images/icon/icon_next.png" alt="icon_next"/>
+                <img src="/images/icon/icon_next.png" alt=""/>
               </button>
             </li>
           </ul>
@@ -236,4 +236,15 @@ useHead({
 </script>
 <style lang="scss" scoped>
 @use '@/assets/scss/pages/customer.scss';
+
+/* 2026-09-11: 등록일(4번째 컬럼)이 col-1(.1)로 좁아 datetime 3줄 깨짐 → 폭 확보 + nowrap(데스크톱) */
+@media screen and (min-width: 769px) {
+  .table-head-col:nth-child(4),
+  .table-body-col:nth-child(4) {
+    flex: 0 0 158px;
+  }
+  .table-body-col:nth-child(4) .color-grey {
+    white-space: nowrap;
+  }
+}
 </style>

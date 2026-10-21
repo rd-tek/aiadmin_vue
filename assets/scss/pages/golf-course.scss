@@ -446,7 +446,7 @@
                                     display: inline-flex;
                                     align-items: center;
                                     justify-content: center;
-                                    border: 1px solid #EF2B49;
+                                    border: 1px solid #D81E3C;
                                     border-radius: 4px;
                                     width: 20px;
                                     height: 20px;
@@ -630,7 +630,7 @@
                                         display: inline-flex;
                                         align-items: center;
                                         justify-content: center;
-                                        border: 1px solid #EF2B49;
+                                        border: 1px solid #D81E3C;
                                         border-radius: 4px;
                                         width: 40px;
                                         height: 40px;
@@ -688,23 +688,29 @@
                 }
             }
 
+            /* 2026-09-16: 코스 이미지 파일행 정렬 — 파일input이 빈 박스로 남고 파일명이 절대배치로 버튼과 겹치던 문제(특히 모바일) 정리 */
             .input-wrap {
                 display: flex;
                 gap: 10px;
 
                 .input-text {
                     display: flex;
+                    align-items: center;
+                    flex-wrap: wrap;
                     gap: 10px;
+                    flex: 1 1 auto; // 2026-10-07: 파일 입력칸이 행 폭을 채우도록(원본과 같은 길이)
+                    min-width: 0;
                 }
 
                 input[type=file] {
+                    position: absolute;
+                    width: 1px;
+                    height: 1px;
+                    padding: 0;
+                    opacity: 0;
+                    overflow: hidden;
                     font-size: 0;
-                    text-indent: -9999px;
                     cursor: pointer;
-
-                    &:focus {
-                        border: 1px solid #4318FF;
-                    }
                 }
 
                 .input-file {
@@ -712,6 +718,22 @@
                     align-items: center;
                     width: 100%;
                     position: relative;
+                    /* 2026-10-07(UI 검토): 09-16 에 file input 을 1px 로 숨기면서 입력칸 모양이 사라져
+                       '파일을 선택하거나…' 문구가 버튼 위에 작게 떠 있던 문제 → 원래처럼 입력칸(테두리 박스) 안에 표시,
+                       박스 전체 클릭 시 파일 선택 */
+                    flex: 1 1 240px;
+                    min-width: 0;
+                    height: 40px;
+                    border: 1px solid #CDCFD1;
+                    border-radius: 4px;
+                    background: #fff;
+                    font-size: 14px;
+
+                    input[type=file] {
+                        inset: 0;
+                        width: 100%;
+                        height: 100%;
+                    }
 
                     .name {
                         position: absolute;
@@ -721,6 +743,8 @@
                         text-overflow: ellipsis;
                         overflow: hidden;
                         width: 88%;
+                        white-space: nowrap;
+                        pointer-events: none;
                     }
                 }
 
@@ -760,16 +784,18 @@
                     }
 
                     & + .name {
-                        position: absolute;
-                        left: 12px;
-                        top: 50%;
-                        transform: translateY(-50%);
+                        position: static;
+                        transform: none;
+                        white-space: nowrap;
+                        font-size: 14px;
+                        color: #52575C;
                     }
                 }
 
                 .placeholder {
                     color: #72777A;
                     pointer-events: none;
+                    white-space: normal;
                 }
             }
 
@@ -964,7 +990,7 @@
                                         display: inline-flex;
                                         align-items: center;
                                         justify-content: center;
-                                        border: 1px solid #EF2B49;
+                                        border: 1px solid #D81E3C;
                                         border-radius: 4px;
                                         width: 20px;
                                         height: 20px;
@@ -1228,6 +1254,11 @@
             }
 
             .table-area {
+                /* 2026-09-16: 모바일에서 서브코스 홀 테이블(9홀+합계)이 잘려 안 보이던 문제 → 가로 스크롤 허용 */
+                .table-list .table-wrap {
+                    overflow-x: auto;
+                    -webkit-overflow-scrolling: touch;
+                }
                 .table-wrap {
                     .table {
                         border-collapse: collapse;
@@ -1356,6 +1387,34 @@
                         }
                     }
                 }
+            }
+
+            /* 2026-09-16: 모바일 좌측 라벨(th) 개행 방지 — 라벨 컬럼 폭 확보 + 줄바꿈 금지.
+               테이블 구조(display)는 그대로 둬서 서브코스 홀 테이블 렌더링에 영향 없게 함(메인 폼 테이블 th만 타겟). */
+            > .table-wrap > .table.type02 > table {
+                > colgroup > col:first-child {
+                    width: 80px; /* 2026-10-07(UI 검토): 116px→80px — 라벨열이 넓어 입력칸이 오른쪽으로 잘리던 문제(폼 폭 축소) */
+                }
+
+                > tbody > tr > th {
+                    white-space: normal; word-break: keep-all; /* 2026-10-07: 어절 단위로만 줄바꿈 */
+                    font-size: 13px;
+                    /* 2026-09-16: 좌측 여백 확보(라벨이 카드 안쪽 여백에 딱 붙지 않도록) */
+                    padding: 16px 10px 16px 8px;
+                    min-width: 0;
+                    vertical-align: middle; /* 2026-10-07: 원본처럼 세로 가운데 */
+                    text-align: left;
+                }
+            }
+
+            /* 2026-09-16: 코스 이미지 행 — 긴 안내 placeholder가 우측으로 넘쳐 개행/오버플로우되던 문제.
+               모바일에선 파일선택 버튼 + 하단 안내문(.desc)로 충분하므로 placeholder는 숨김(선택된 파일명 .name은 유지). */
+            .input-wrap .input-text .placeholder {
+                display: none;
+            }
+            .input-wrap .input-text .name {
+                white-space: normal;
+                word-break: break-all;
             }
 
             .table-wrap {

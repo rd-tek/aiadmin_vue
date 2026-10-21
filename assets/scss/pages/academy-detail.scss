@@ -138,7 +138,7 @@
 
                       .btn-del {
                           font-size: 14px;
-                          color: #9B9FA3;
+                          color: #6e6e6e;
                           text-decoration: underline;
                           text-underline-offset: 3px;
                       }
@@ -221,7 +221,7 @@
           }
 
           .select-default {
-              color: #9B9FA3;
+              color: #6e6e6e;
               
               select {
                   height: 46px;
@@ -262,7 +262,7 @@
           margin-bottom: 40px;
 
           .required {
-              color: #EF2B49;
+              color: #D81E3C;
           }
       }
 
@@ -535,7 +535,7 @@
                                       display: block;
                                       width: 12px;
                                       height: 12px;
-                                      background-image: url('/public/images/icon/icon_index.png');
+                                      background-image: url('/images/icon/icon_index.png');
                                       background-repeat: no-repeat;
                                       background-position: center;
                                       background-size: cover;
@@ -705,7 +705,7 @@
 
                               select {
                                 &:invalid {
-                                  color: #9B9FA3;
+                                  color: #6e6e6e;
                                 }
                               }
                           }
@@ -715,7 +715,7 @@
                               font-size: 16px;
 
                               &::placeholder {
-                                  color: #9B9FA3;
+                                  color: #6e6e6e;
                               }
                           }
                           
@@ -736,7 +736,7 @@
                       }
 
                       .required {
-                          color: #EF2B49;
+                          color: #D81E3C;
                           margin-top: 12px;
                           line-height: 1.2;
                           font-size: 14px;
@@ -798,12 +798,12 @@
                       }
 
                       select {
-                          background-image: url('/public/images/icon/icon_arrow_down_teal_02.png');
+                          background-image: url('/images/icon/icon_arrow_down_teal_02.png');
                           background-size: 12px auto;
                           background-position: right 16px center;
 
                           &:invalid {
-                              color: #9B9FA3;
+                              color: #6e6e6e;
                           }
 
                           option {
@@ -1120,7 +1120,7 @@
       .sub {
         font-size: 18px;
         font-weight: 700;
-        color: #FF7519;
+        color: #E85D00;
         line-height: 1.33;
         border-bottom: 1px solid #676D73;
         padding-bottom: 18px;

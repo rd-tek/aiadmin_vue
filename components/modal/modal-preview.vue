@@ -8,7 +8,7 @@
       <div class="modal-header">
         <p class="title">추천운동 등록</p>
         <button type="button" class="btn-close" @click="modalClose" aria-label="닫기">
-          <img src="/images/icon/icon_close_grey.png" alt="icon_close_grey" />
+          <img src="/images/icon/icon_close_grey.png" alt="" />
         </button>
       </div>
       <div class="modal-body">
@@ -106,7 +106,7 @@
                     </ul>
                   </div>
                   <div class="chart-box-list">
-                    <p class="title">평균 볼속도(km/h )</p>
+                    <p class="title">평균 볼속도(m/s)</p>
                     <ul class="progress">
                       <li class="progress-list">
                         <div class="progress-num">
@@ -170,7 +170,7 @@
                             </div>
                           </td>
                           <td>
-                            <textarea
+                            <textarea aria-label="Address"
                               disabled
                             ></textarea>
                           </td>
@@ -186,7 +186,7 @@
                             </div>
                           </td>
                           <td>
-                            <textarea
+                            <textarea aria-label="Back Swing"
                               disabled
                             ></textarea>
                           </td>
@@ -202,7 +202,7 @@
                             </div>
                           </td>
                           <td>
-                            <textarea
+                            <textarea aria-label="Top Swing"
                               disabled
                             ></textarea>
                           </td>
@@ -218,7 +218,7 @@
                             </div>
                           </td>
                           <td>
-                            <textarea
+                            <textarea aria-label="Down Swing"
                               disabled
                             ></textarea>
                           </td>
@@ -234,7 +234,7 @@
                             </div>
                           </td>
                           <td>
-                            <textarea
+                            <textarea aria-label="Impact"
                               disabled
                             ></textarea>
                           </td>
@@ -250,7 +250,7 @@
                             </div>
                           </td>
                           <td>
-                            <textarea
+                            <textarea aria-label="Follow Throw"
                               disabled
                             ></textarea>
                           </td>
@@ -266,7 +266,7 @@
                             </div>
                           </td>
                           <td>
-                            <textarea
+                            <textarea aria-label="Finish"
                               disabled
                             ></textarea>
                           </td>
@@ -276,13 +276,9 @@
                           <td>
                             <span class="color-point">총평</span>
                           </td>
+                          <td><!-- 2026-10-13: 총평은 평가 점수 없음(4앱 통일) --></td>
                           <td>
-                            <div class="border-box">
-                              0/7
-                            </div>
-                          </td>
-                          <td>
-                            <textarea
+                            <textarea aria-label="총평"
                               disabled
                             ></textarea>
                           </td>
@@ -315,7 +311,7 @@
                               </span>
                             </div>
                             <div class="text-area">
-                              <textarea
+                              <textarea aria-label="Address"
                               ></textarea>
                             </div>
                             <div class="no-info">
@@ -335,7 +331,7 @@
                               </span>
                             </div>
                             <div class="text-area">
-                              <textarea
+                              <textarea aria-label="Back Swing"
                               ></textarea>
                             </div>
                             <div class="no-info">내역이 없습니다.</div>
@@ -353,7 +349,7 @@
                               </span>
                             </div>
                             <div class="text-area">
-                              <textarea
+                              <textarea aria-label="Top Swing"
                               ></textarea>
                             </div>
                             <div class="no-info">
@@ -373,7 +369,7 @@
                               </span>
                             </div>
                             <div class="text-area">
-                              <textarea></textarea>
+                              <textarea aria-label="Down Swing"></textarea>
                             </div>
                             <div class="no-info">내역이 없습니다.</div>
                           </td>
@@ -390,7 +386,7 @@
                               </span>
                             </div>
                             <div class="text-area">
-                              <textarea></textarea>
+                              <textarea aria-label="Impact"></textarea>
                             </div>
                             <div class="no-info">내역이 없습니다.</div>
                           </td>
@@ -407,7 +403,7 @@
                               </span>
                             </div>
                             <div class="text-area">
-                              <textarea></textarea>
+                              <textarea aria-label="Follow Throw"></textarea>
                             </div>
                             <div class="no-info">내역이 없습니다.</div>
                           </td>
@@ -424,7 +420,7 @@
                               </span>
                             </div>
                             <div class="text-area">
-                              <textarea
+                              <textarea aria-label="Finish"
                                 :value="form.analysis?.lesson7"
                               ></textarea>
                             </div>
@@ -438,12 +434,9 @@
                               <span class="info-area-list">
                                 <span class="color-point">총평</span>
                               </span>
-                              <span class="info-area-list">
-                                <span class="border-box">-</span>
-                              </span>
                             </div>
                             <div class="text-area">
-                              <textarea></textarea>
+                              <textarea aria-label="총평"></textarea>
                             </div>
                             <div class="no-info">내역이 없습니다.</div>
                           </td>
@@ -536,9 +529,12 @@ watch(
   width,
   (newWidth) => {
     isMobile.value = newWidth <= 1024;
-  },
-  { immediate: true },
+  }
 );
+// 2026-10-06: SSR(width=Infinity)과 첫 클라 렌더를 일치시키고 마운트 후 반영 (hydration mismatch 방지)
+onMounted(() => {
+  isMobile.value = window.innerWidth <= 1024;
+});
 
 const tabList = ref([
   {
@@ -635,20 +631,19 @@ onMounted(() => {
   //   }
 });
 
+// 2026-09-17: 익명 리스너 누수 수정 (named handler + 언마운트 시 제거)
+const handleEscKey = (e) => {
+  if (e.key === "Escape") {
+    modalClose();
+  }
+};
+
 onMounted(() => {
-  window.addEventListener("keydown", (e) => {
-    if(e.key === "Escape") {
-      modalClose();
-    }
-  });
+  window.addEventListener("keydown", handleEscKey);
 })
 
 onUnmounted(() => {
-    window.addEventListener("keydown", (e) => {
-    if(e.key === "Escape") {
-      modalClose();
-    }
-  });
+  window.removeEventListener("keydown", handleEscKey);
 });
 
 </script>

@@ -36,8 +36,8 @@
                       <span>{{ data.par || '-' }}</span>
                       <button type="button" class="btn-arrow" :class="{ 'is-active': mobHoleListIndex === index }">
                         <img
-                          src="/public/images/icon/icon_arrow_down.png"
-                          alt="icon_arrow_down"
+                          src="/images/icon/icon_arrow_down.png"
+                          alt="펼치기"
                         />
                       </button>
                     </div>
@@ -48,7 +48,7 @@
                       {{ data.score || '-' }}
                     </div>
                     <div class="table-body-col is-mob">
-                      <span class="color-grey">{{ data.date || '-' }}</span>
+                      <span class="color-grey u-date">{{ data.date || '-' }}</span>
                     </div>
                     <div class="table-body-col is-mob">
                       <span :class="{ 'color-grey': data.flag === '1', 'color-red': data.flag === '2' }">{{ data.flag === '1' ? 'O' : 'X' }}</span>
@@ -71,7 +71,7 @@
                       <dl class="list">
                         <dt class="tit">날짜</dt>
                         <dd class="cnt">
-                          <span class="color-grey">{{ data.date || '-' }}</span>
+                          <span class="color-grey u-date">{{ data.date || '-' }}</span>
                         </dd>
                       </dl>
                       <dl class="list">
@@ -121,8 +121,8 @@
                     <span>{{ item.total.shopname }}</span>
                     <button type="button" class="btn-arrow" :class="{ 'is-active': mobGameListIndex === index }">
                       <img
-                        src="/public/images/icon/icon_arrow_down.png"
-                        alt="icon_arrow_down"
+                        src="/images/icon/icon_arrow_down.png"
+                        alt="펼치기"
                       />
                     </button>
                   </div>
@@ -142,7 +142,7 @@
                     {{ item.total.totalmulligan }}
                   </div>
                   <div class="table-body-col is-mob">
-                    <span class="color-grey">{{ item.total.date }}</span>
+                    <span class="color-grey u-date">{{ item.total.date }}</span>
                   </div>
                 </div>
                 <transition
@@ -174,7 +174,7 @@
                     <dl class="list">
                       <dt class="tit">날짜</dt>
                       <dd class="cnt">
-                        <span class="color-grey">{{ item.total.date }}</span>
+                        <span class="color-grey u-date">{{ item.total.date }}</span>
                       </dd>
                     </dl>
                   </div>
@@ -224,7 +224,6 @@ const handleScoreboard = async () => {
   scoreboardList.value = res.playerlist;
   scoreboardGameList.value = res.playerlist;
 
-  console.log(res);
 };
 
 // 2026.06.17[cgnoh]: 게밍 조회 인터렉션
@@ -302,6 +301,8 @@ onMounted(() => {
 
 // 2026.03.04[cgnoh]: 페이지 메타 정보
 definePageMeta({
+  // 2026-10-20: 번호(숫자)만 상세로 — 그 외 주소는 404 (예: /academy/test 가 상세로 들어가 오류 창이 뜨던 것)
+  validate: (route) => /^\d+$/.test(String(route.params.slug ?? '')),
   layout: "default",
 });
 

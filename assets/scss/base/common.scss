@@ -59,7 +59,7 @@ input {
     }
 
     &:disabled {
-        color: #959595;
+        color: #6e6e6e;
         background: #F6F6F5;
         border: 1px solid var(--colorGrey3);
     }
@@ -95,7 +95,7 @@ textarea {
     }
 
     &:disabled {
-        color: #959595;
+        color: #6e6e6e;
         background: #F6F6F5;
         border: 1px solid var(--colorGrey3);
     }
@@ -113,7 +113,7 @@ textarea {
             display: inline-block;
             width: 24px;
             height: 24px;
-            background-image: url('/public/images/icon/icon_search.png');
+            background-image: url('/images/icon/icon_search.png');
             background-position: center center;
             background-repeat: no-repeat;
             background-size: 24px auto;
@@ -129,7 +129,7 @@ textarea {
             display: inline-block;
             width: 24px;
             height: 24px;
-            background-image: url('/public/images/icon/icon_circle_close_grey.png');
+            background-image: url('/images/icon/icon_circle_close_grey.png');
             background-position: center center;
             background-repeat: no-repeat;
             background-size: 24px auto;
@@ -148,7 +148,7 @@ select {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    background-image: url('/public/images/icon/icon_arrow_down.png');
+    background-image: url('/images/icon/icon_arrow_down.png');
     background-size: 24px auto;
     background-repeat: no-repeat;
     background-position: right 8px center;
@@ -170,7 +170,7 @@ select {
     }
 
     &:disabled {
-        color: #959595;
+        color: #6e6e6e;
         background-color: #F6F6F5;
         border: 1px solid var(--colorGrey3);
         opacity: 1;
@@ -417,7 +417,7 @@ select {
             &:disabled {
                 & + label {
                     .check-box-txt {
-                        color: #959595;
+                        color: #6e6e6e;
                     }
                 }
 
@@ -946,10 +946,10 @@ button, a {
         &:disabled {
             background: #fff;
             border: 1px solid #CDCFD1;
-            color: #9B9FA3;
+            color: #6e6e6e;
 
             &:hover {
-                color: #9B9FA3;
+                color: #6e6e6e;
                 
                 &:before {
                     background: #fff;
@@ -1013,12 +1013,12 @@ button, a {
     }
 
     &[class*=btn-primary-orange] {
-        background: #FF7519;
+        background: #E85D00;
 
         &.btn-lg-line,  &.btn-md-line, &.btn-sm-line {
             background: #fff;
-            border: 1px solid #FF7519;
-            color: #FF7519;
+            border: 1px solid #E85D00;
+            color: #E85D00;
         }
 
         &:hover {
@@ -1556,7 +1556,7 @@ table {
                         }
 
                         .color-red {
-                            color: #EF2B49;
+                            color: #D81E3C;
                         }
                     
                         .align-left {
@@ -1877,11 +1877,11 @@ table {
             }
 
             .color-green {
-                color: #00B34A;
+                color: #00843C;
             }
 
             .color-red {
-                color: #EF2B49;
+                color: #D81E3C;
             }
 
             .color-grey {
@@ -2262,7 +2262,7 @@ table {
             z-index: 0;
 
             .num {
-                color: #FF7519;
+                color: #E85D00;
                 font-size: 14px;
             }
 
@@ -2271,7 +2271,7 @@ table {
                 display: block;
                 height: 2px;
                 width: 100%;
-                background: #FF7519;
+                background: #E85D00;
                 position: absolute;
                 bottom: 0;
                 left: 50%;
@@ -2281,7 +2281,7 @@ table {
             }
 
             &.is-active {
-                color: #FF7519;
+                color: #E85D00;
                 font-weight: 700;
 
                 &:after {
@@ -2413,7 +2413,7 @@ table {
             width: 100%;
             cursor: pointer;
             background: #fff;
-            color: #9B9FA3;
+            color: #6e6e6e;
             position: relative;
             z-index: 0;
             overflow: hidden;
@@ -2539,7 +2539,7 @@ table {
             width: auto;
             cursor: pointer;
             background: #F8F9FA;
-            color: #9B9FA3;
+            color: #6e6e6e;
             position: relative;
             z-index: 0;
             overflow: hidden;
@@ -2588,7 +2588,7 @@ table {
             width: 54px;
             cursor: pointer;
             background: #fff;
-            color: #9B9FA3;
+            color: #6e6e6e;
             position: relative;
             z-index: 0;
             overflow: hidden;
@@ -2625,7 +2625,7 @@ table {
                 left: 0;
                 width: 100%;
                 height: 100%;
-                border: 1px solid #FF7519;
+                border: 1px solid #E85D00;
                 z-index: -1;
                 transform: scaleX(0);
                 transition: transform 0.3s ease-in-out;
@@ -2633,7 +2633,7 @@ table {
             }
 
             &.is-active {
-                color: #FF7519;
+                color: #E85D00;
 
                 &:before {
                     transform: scaleX(1);
@@ -2723,45 +2723,45 @@ table {
 
     &.success {
         input {
-            border:  1px solid #00B34A;
+            border:  1px solid #00843C;
         }
 
         i {
             &:before, &:after {
-                background-color: #00B34A;
+                background-color: #00843C;
             }
         }
 
         .focus-border {
             &:before, &:after {
-                background-color: #00B34A;
+                background-color: #00843C;
             }
         }
 
         .icon {
-            background-image: url('/public/images/icon/icon_done.png'); 
+            background-image: url('/images/icon/icon_done.png'); 
         }
     }
     
     &.error {
         input {
-            border:  1px solid #ef2b49;
+            border:  1px solid #D81E3C;
         }
 
         i {
             &:before, &:after {
-                background-color: #ef2b49;
+                background-color: #D81E3C;
             }
         }
 
         .focus-border {
             &:before, &:after {
-                background-color: #ef2b49;
+                background-color: #D81E3C;
             }
         }
 
         .icon {
-            background-image: url('/public/images/icon/icon_error.png'); 
+            background-image: url('/images/icon/icon_error.png'); 
         }
     }
 }
@@ -2936,7 +2936,7 @@ table {
 
     .toast-modal-footer {
         .btn-primary-red {
-            background:#EF2B49;
+            background:#D81E3C;
 
             &:before {
                 background: #C85264;
@@ -3431,11 +3431,11 @@ table {
             }
 
             &.color-green { 
-                background: #00B34A;
+                background: #00843C;
             }
 
             &.color-red {
-                background: #EF2B49;
+                background: #D81E3C;
             }
 
             &.color-grey {
@@ -3479,16 +3479,16 @@ table {
             }
 
             &.border-green {
-                color: #00B34A;
+                color: #00843C;
                 background-color: rgba(0, 179, 74, 0.05);
-                border: 1px solid #00B34A;
+                border: 1px solid #00843C;
             }
         }
     }
 }
 
 .no-data {
-    background-image: url('/public/images/default/img_logo.png');
+    background-image: url('/images/default/img_logo.png');
     background-repeat: no-repeat;
     background-position: center;
     background-size: 200px auto;
@@ -3730,11 +3730,11 @@ table {
                             }
 
                             .color-red {
-                                color: #EF2B49;
+                                color: #D81E3C;
                             }
 
                             .color-green {
-                                 color: #00B34A;
+                                 color: #00843C;
                             }
 
                             .color-purple {
@@ -3891,4 +3891,577 @@ table {
             }
         }
     }
+}
+
+/* ============================================================
+   2026-09-11: 리스트/셀 한글 개행 보호 + 배지 정렬 (aishop 정책 이식)
+   - 한글 라벨/텍스트가 단어 중간에 깨지지 않도록 keep-all
+   - 배지묶음(.state.type01) 가로 wrap 정렬
+   ============================================================ */
+.table-body-col:not(.col-1):not(.col-2) {
+    word-break: keep-all;
+    overflow-wrap: anywhere;
+}
+.row-list .label-list,
+.row-list-item .text,
+.table-body-col .link,
+.table-body-col .class-name {
+    word-break: keep-all;
+    overflow-wrap: anywhere;
+}
+/* 고정 라벨(코스난이도/그린난이도 등)은 어절 없는 한글이라 keep-all로 통짜 유지 */
+.diff-list .text,
+.row-list .diff .text {
+    word-break: keep-all;
+    white-space: nowrap;
+}
+.state.type01 {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+
+    .state-list + .state-list {
+        margin-left: 0;
+    }
+}
+
+/* 2026-09-14: 경미 개행/오버플로 2건 수정 (동적검토 §6-2) */
+/* (1) 모바일에서 페이지네이션(페이지 많을 때 < 1 2 3 4 5 ... 7 >)이 화면폭을 넘어
+   가로 스크롤이 생기던 것 방지 → 좁은 폭에서 줄바꿈 허용. 긴 아이디/닉네임도 셀 내 줄바꿈. */
+@media (max-width: 768px) {
+    /* 2026-09-16: 페이지 수가 많을 때 페이지네이션이 여러 줄로 개행되던 문제 →
+       줄바꿈 대신 한 줄 가로 스크롤(터치 관성)로 정리. 버튼 간격도 축소. */
+    .pagination-container {
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 4px;
+
+        &::-webkit-scrollbar {
+            height: 0;
+        }
+
+        &.type02 {
+            gap: 6px;
+
+            & > li {
+                flex-shrink: 0;
+
+                &:first-child {
+                    margin-right: 6px;
+                }
+
+                &:last-child {
+                    margin-left: 6px;
+                }
+            }
+        }
+
+        & > li,
+        .paginate-buttons {
+            flex-shrink: 0;
+        }
+    }
+    .table-body-col .link {
+        word-break: break-all;
+    }
+    /* 2026-09-16: 상세/등록 폼 공통 — 좌측 라벨열(.table.type02 > table + colgroup 18%)이 좁아
+       라벨이 개행되던 문제를 전 페이지 공통으로 처리(컬럼 폭 확보 + 줄바꿈 금지).
+       라벨 셀은 tbody의 th만 대상(데이터 테이블 헤더는 thead라 미영향, 서브코스 홀 테이블은 .table.type02 자체가 table이라 미영향). */
+    .table.type02 > table > colgroup > col:first-child {
+        width: 80px; /* 2026-10-07(UI 검토): 104px→80px — 라벨열이 넓어 입력칸이 오른쪽으로 잘리던 문제(폼 폭 축소) */
+    }
+    .table.type02 > table > tbody > tr > th {
+        white-space: normal; word-break: keep-all; /* 2026-10-07: 어절 단위로만 줄바꿈 */
+        font-size: 13px;
+        vertical-align: middle; /* 2026-10-07: 원본처럼 세로 가운데 */
+    }
+}
+/* (2) .no-wrap 완성: 클래스명대로 한 줄 유지 + 말줄임.
+   원 정의(common.scss ~1804)는 overflow/text-overflow만 있고 white-space 누락이라 실제로 줄바꿈됐음.
+   flex 셀이 콘텐츠보다 좁게 줄어들도록 min-width:0 동반. */
+.table-body-col:has(> .no-wrap) {
+    min-width: 0;
+}
+.table-body-col > .no-wrap {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 2026-10-07: 화면에 보이지 않는 제목 등 스크린리더 전용 텍스트 */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* 2026-10-07(UI 검토): 글자 확대(가+) 상태에서 목록 상태 배지('진행/중')와 검색 버튼('검/색') 글자가
+   세로로 쪼개지던 문제 → 배지·필터 버튼은 줄바꿈 금지 */
+.state-list,
+.filter-box button,
+.filter-box .btn {
+    white-space: nowrap;
+}
+/* 2026-10-08(UI 寃??: ?좎쭨쨌?쒓컙 ?쒓린 以꾨컮轅?蹂댄샇.
+   09-11 ??overflow-wrap:anywhere(? ???쒓? 媛쒗뻾 ?뺤콉)???좎??섎릺, ?좎쭨 ?붿냼(.u-date)?먮쭔
+   '怨듬갚?먯꽌留?以꾨컮轅????곸슜 ??'2026.09.2/2' 泥섎읆 ?좎쭨 ?섎굹媛 履쇨컻吏吏 ?딆쓬.
+   ?좎쭨? ?쒓컙 ?ъ씠, 湲곌컙??'~' ?욌뮘 怨듬갚?먯꽌??以꾨컮轅?媛??
+   flex ?? ?좎쭨 ???⑹뼱由????꾨옒濡?以꾩? ?딄쾶(min-content) ?댁꽌 ?섎┝(????留됱쓬. */
+.u-date {
+    white-space: nowrap; // 하이픈(2026-06-18) 뒤 줄바꿈까지 막기 위해 nowrap. 기간은 날짜별 span 으로 나눠 '~' 앞뒤만 줄바꿈
+}
+.table-body-col:has(> .u-date) { // 날짜가 칸의 직속일 때만(제목 칸 안의 보조 날짜는 제외 — 긴 제목 말줄임 유지)
+    min-width: max-content;
+}
+/* 2026-10-08(UI 검토): 전화번호·사업자번호 등 하이픈 숫자 표기 줄바꿈 금지('041-450-/8070' 방지). .u-date 와 같은 방식 */
+.u-tel {
+    white-space: nowrap;
+}
+/* 2026-10-08(UI 검토): 모바일(≤480) 검색행 — 구분 셀렉트·검색어 입력·검색 버튼이 한 줄에 몰려
+   입력칸이 좁아지고(글자 확대 시 수십 px) 안내문구가 잘리던 문제 → 셀렉트 / 입력 / 버튼을 각각 전체 폭으로 쌓음 */
+@media screen and (max-width: 480px) {
+    .filter-box .col.d-flex:has(input[aria-label="검색어 입력"]) {
+        flex-wrap: wrap;
+        gap: 8px;
+
+        > .select-default,
+        > .d-flex,
+        > button,
+        > .btn {
+            flex: 1 1 100%;
+            min-width: 0;
+            margin-left: 0;
+        }
+
+        > .d-flex {
+            flex-wrap: wrap;
+            gap: 8px;
+
+            > select,
+            > .select-default,
+            > input,
+            > .input-text,
+            > button {
+                flex: 1 1 100%;
+                width: 100% !important;
+                min-width: 0 !important;
+                margin-left: 0 !important;
+            }
+
+            > .input-text input,
+            > .select-default select {
+                width: 100% !important;
+                min-width: 0 !important;
+            }
+        }
+    }
+}
+
+/* 2026-10-08(UI 검토): 모바일(≤480) 등록·수정 폼(.table.type02) — 라벨열(80px)+입력열 2단 구성이라
+   글자 확대(가+) 시 입력칸이 100px 남짓으로 줄어 안내문구·선택값이 잘리던 문제 → 라벨을 입력칸 위로 쌓아 입력칸 전체폭.
+   (서브코스 홀 표처럼 .table.type02 자체가 table 인 경우는 대상 아님) */
+@media screen and (max-width: 480px) {
+    .table.type02 > table:not(:has(> thead)):not(:has([rowspan])):not(:has(table)) { // 2026-10-08: rowspan·중첩 표가 있는 복합 폼(대회 수정 등)은 제외 // 머리글(thead) 있는 데이터 표(스코어카드 등)는 제외
+        > colgroup {
+            display: none;
+        }
+
+        > tbody > tr {
+            display: block;
+            height: auto !important;
+
+            > th,
+            > td {
+                display: block;
+                height: auto !important;
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+            > th {
+                padding: 14px 4px 6px !important;
+                border-bottom: 0;
+                background: transparent;
+                text-align: left;
+            }
+
+            > td {
+                padding: 0 4px 14px !important;
+                white-space: normal; // 2026-10-08 2차: 첨부 안내문구('* 파일 총 용량은…')가 nowrap 상속으로 카드 밖에서 잘림
+            }
+        }
+    }
+
+    /* 2026-10-08(UI 2차 검토): 첨부 안내 placeholder '파일을 선택하거나 여기에 …' 말줄임 → 두 줄 허용 */
+    .input-text .name.placeholder {
+        white-space: normal;
+        overflow: visible;
+        text-overflow: clip;
+        word-break: keep-all;
+        line-height: 1.3;
+    }
+
+    /* 2026-10-08(UI 2차 검토): 검색영역 기간(시작 ~ 종료) — 반폭 날짜칸에 '2025.08...' 처럼 날짜가 잘림 → 한 줄씩 */
+    .filter-box .d-flex:has(> .dp__main + .wave) {
+        flex-wrap: wrap;
+        row-gap: 4px;
+
+        > .dp__main {
+            flex: 1 1 100%;
+            min-width: 0;
+        }
+
+        > .wave {
+            flex: 1 1 100%;
+            text-align: center;
+            line-height: 1;
+        }
+    }
+}
+
+/* 2026-10-08(UI 2차 검토): 공지·자료실·고객문의 수정 화면 첨부 줄 — '파일선택' 버튼 위에 안내문구가 겹쳐 찍힘
+   (공지사항(회원) 수정만 문구 왼쪽·버튼 오른쪽 구조) → 같은 배치로 맞춤 */
+.input-text:has(> .btn-file + .name) {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    > .btn-file {
+        order: 2;
+        flex: 0 0 auto;
+        margin-left: auto;
+    }
+
+    > .name {
+        order: 1;
+        position: static !important;
+        transform: none !important;
+        flex: 1 1 auto;
+        min-width: 0;
+        padding-left: 12px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    @media screen and (max-width: 480px) {
+        > .name.placeholder {
+            white-space: normal;
+            overflow: visible;
+            text-overflow: clip;
+            word-break: keep-all;
+            line-height: 1.3;
+        }
+    }
+}
+
+/* 2026-10-08(UI 2차 검토): 스윙영상 목록 카드 '작성자 | 일시 | 매장' — 줄이 바뀌면 구분선이 줄 끝에 매달림('16:40:00 |')
+   → 구분선을 항목 앞으로 옮기고 줄 첫 항목의 구분선은 잘라 숨김 */
+/* 2026-10-20: 목록 카드에만 적용 — 상세(.swing-list.detail)의 댓글 본문까지 왼쪽으로 밀려 첫 글자가 잘리던 것 */
+.swing-list:not(.detail) .info-area .desc {
+    display: flex;
+    flex-wrap: wrap;
+    row-gap: 2px;
+    margin-left: -11px;
+    clip-path: inset(-4px 0 -4px 11px);
+
+    > .desc-list {
+        position: relative;
+        margin: 0 !important;
+        padding: 0 10px 0 11px !important;
+
+        &::after {
+            display: block !important;
+            left: 0 !important;
+            right: auto !important;
+        }
+    }
+}
+
+/* 2026-10-08(UI 2차 검토): 코스리스트 카드 코드(C_0091) 앞에 짝 없는 구분선 — 모바일에서 앞 항목(홀 수)이 숨겨져 구분선만 남음 */
+.golf-course.list .row-list .label > .label-list:first-child {
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+
+    &::before {
+        display: none !important;
+    }
+}
+
+/* 2026-10-08(UI 2차 검토): 모바일(≤480) — 게임정보 비교표(라벨 120px 고정 + 플레이어 값 2열)가 글자 확대 시 값 열이 좁아 '14701470' 처럼 겹침
+   → 라벨 열 38%로 줄이고 값 열이 나눠 갖게 / 스윙영상 목록 카드 내용(이미지·버튼)이 카드 밖으로 32px 넘침 → 카드 폭 안으로 */
+@media screen and (max-width: 480px) {
+    .game-data .table.type04 {
+        table-layout: fixed;
+        width: 100%;
+
+        col:first-child {
+            width: 30% !important;
+        }
+
+        td + td {
+            border-left: 1px solid #EEF2FA; // 두 플레이어 값 열 구분(값이 칸을 꽉 채워도 붙어 보이지 않게)
+        }
+
+        td .u-date {
+            font-size: 0.8em; // 날짜(nowrap)가 값 칸(약 80px)보다 넓어 옆 칸과 겹치던 것 방지
+            letter-spacing: -0.02em;
+        }
+
+        th {
+            word-break: keep-all;
+            white-space: normal;
+            padding-left: 6px !important;
+            padding-right: 6px !important;
+        }
+
+        td {
+            padding-left: 4px !important;
+            padding-right: 4px !important;
+            word-break: keep-all;
+            overflow-wrap: anywhere;
+        }
+    }
+
+    .swing-list .row-list .img-area,
+    .swing-list .row-list .img-area > .image {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100%;
+    }
+}
+
+/* 2026-10-08(UI 2차 검토): 모바일 스코어보드 — 닉네임 칸이 좁아 'UncleLa/rry' 처럼 영문이 글자 단위로 꺾임 → 닉네임 칸을 넓게(머리글·본문 같은 비율) */
+@media screen and (max-width: 768px) {
+    .game-data .table.type03.mob-type02 > .table-head > .table-head-col:first-child,
+    .game-data .table.type03.mob-type02 .table-body-flex > .table-body-col:first-child {
+        flex: 2 1 0;
+        min-width: 0;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .swing-list .row-list > .row-list-item {
+        min-width: 0;
+        max-width: 100%;
+
+        [class*="btn-"] {
+            min-width: 0 !important;
+            max-width: 100%;
+        }
+    }
+}
+
+/* 2026-10-08(UI 2차 검토): 코칭 리포트 차트 카드 min-width:284px 가 글자 확대 시 화면 밖으로 넘침(95px) → 모바일에서 해제(aishop 동일) */
+@media screen and (max-width: 480px) {
+    .chart-area > .chart-box {
+        min-width: 0 !important;
+        max-width: 100%;
+    }
+}
+
+/* 2026-10-08(최종 재검토): 공지·자료실 상세 상단 작성일시 — 1024 가+ 에서 '2023-11-/27' 처럼 날짜 안에서 꺾임 → 날짜·시간 사이에서만 줄바꿈 */
+.detail-wrap .info .info-list.date {
+    word-break: keep-all !important;
+    overflow-wrap: normal !important;
+    min-width: max-content; // flex 줄에서 날짜 칸이 날짜 폭 아래로 줄지 않게
+}
+
+/* 2026-10-09(제안 적용): 코스관리 등록·수정 서브코스 홀 표(9홀+합계, 칸마다 입력) — 768 이하에서 가로 스크롤인데
+   스크롤된다는 표시가 없어 칸이 잘린 것처럼 보임. 표 특성(홀 번호·파·핸디캡 대응)상 스크롤 유지가 자연스러워
+   ① 왼쪽 머리칸(홀/파/핸디캡) 고정 ② 오른쪽 가장자리 흐림(더 있음 표시) ③ ≤480 에서는 바깥 폼 라벨을 위로 올려 표 폭 확보 */
+@media screen and (max-width: 1024px) {
+    .golf-course .table-area .table-list {
+        position: relative;
+
+        &::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 28px;
+            pointer-events: none;
+            background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.95));
+        }
+
+        .table-wrap > .table > tbody > tr > th {
+            position: sticky;
+            left: 0;
+            z-index: 1;
+            box-shadow: 4px 0 6px -4px rgba(0, 0, 0, 0.18);
+        }
+
+        /* 2026-10-12(회귀 점검): 고정 머리칸(약 60px) 때문에 Shift+Tab·포커스 이동으로 왼쪽 입력칸이 스크롤될 때
+           머리칸 밑으로 숨어 보이지 않던 문제 → 스크롤 여백을 머리칸·오른쪽 흐림 폭만큼 둠 */
+        .table-wrap {
+            scroll-padding-left: 64px;
+            scroll-padding-right: 28px;
+        }
+    }
+}
+
+@media screen and (max-width: 480px) {
+    // 코스 상세 정보(코스난이도 별 5개 등) — 375 가+ 에서 라벨칸 고정폭 때문에 별이 카드 밖으로 넘침 → 확대 상태에서만 라벨을 위로
+    html:has(> body[style*="zoom"]) .golf-course.detail .info-area-list {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        justify-content: flex-start !important;
+        gap: 6px !important;
+        height: auto !important;
+        min-height: 0 !important;
+        padding: 12px 0 !important;
+
+        > * {
+            width: auto !important;
+            height: auto !important;
+            min-height: 0 !important;
+            padding: 0 !important;
+            line-height: 1.4 !important;
+            text-align: left !important;
+            margin: 0 !important;
+        }
+    }
+
+    .golf-course > .table-wrap > .table.type02 > table {
+        > colgroup {
+            display: none;
+        }
+
+        > tbody > tr {
+            display: block;
+            height: auto !important;
+
+            > th,
+            > td {
+                display: block;
+                width: 100%;
+                height: auto !important;
+                box-sizing: border-box;
+            }
+
+            > th {
+                padding: 14px 4px 6px !important;
+                background: transparent;
+                text-align: left;
+            }
+
+            > td {
+                padding: 0 4px 14px !important;
+                white-space: normal;
+            }
+        }
+    }
+}
+
+/* 2026-10-08(UI 2차 검토): 게임데이터 검색 하단 버튼 2개(min-width 148px) — 글자 확대 시 화면 밖으로 넘침(34px) → 반반 */
+@media screen and (max-width: 480px) {
+    .game-data .btn-wrap > * {
+        flex: 1 1 0;
+        min-width: 0 !important;
+    }
+}
+
+/* 2026-10-08(UI 2차 검토): 모바일(≤480) 검색영역 셀렉트 2개 줄 — 글자 확대 시 둘째 셀렉트가 화면 밖으로 밀림(가로 넘침 43px) → 반반 나눠 줄어들게 */
+@media screen and (max-width: 480px) {
+    .filter-box .col.d-flex:has(> .select-default + .select-default):not(:has(input)) {
+        gap: 8px;
+
+        > .select-default {
+            flex: 1 1 0;
+            min-width: 0;
+            margin-left: 0;
+
+            select {
+                width: 100%;
+                min-width: 0;
+            }
+        }
+    }
+}
+
+/* 2026-10-08(UI 2차 검토): 모바일 목록 펼치기 화살표(오른쪽 20px)가 긴 아이디(XGAU_Balcatta 등) 위에 겹침 → 화살표 자리 비움 */
+@media screen and (max-width: 768px) {
+    .table.type03.mob-type02 .table-body-col:has(> .btn-arrow) {
+        padding-right: 44px;
+
+        > :not(.btn-arrow) {
+            min-width: 0;
+        }
+    }
+
+    /* 상단바 바로 아래에 검색영역·카드가 여백 0으로 붙던 페이지 → 20px (대시보드는 자체 여백, 코칭 상세는 상단바 없음) */
+    .container > div:first-child:not(.dashboard):not(.academy) {
+        margin-top: 20px;
+    }
+
+    // 대시보드: 상단바 아래 월 선택칸과 첫 그래프 카드가 붙음(간격 1px) → 16px
+    .container > .dashboard:first-child {
+        margin-top: 16px;
+    }
+}
+
+/* 2026-10-08(UI 2차 검토): 글자 확대 상태 — 게임데이터 검색 시작/종료 '날짜 + 시각' 칸이 좁아 '2026.10.0', '오:' 로 잘림 → 좁으면 줄바꿈 */
+html:has(> body[style*="zoom"]) .datepicker:has(> .dp__main + .dp__main) {
+    flex-wrap: wrap;
+    row-gap: 8px;
+
+    > .dp__main {
+        flex: 1 1 10.5em;
+        min-width: 0;
+    }
+}
+
+/* 2026-10-08(UI 2차 검토): 글자 확대 상태(데스크톱 폭) — 열 6개 이상 목록표가 화면 폭에 눌려 '기획/팀', '2026-06-/25', '장/비/수' 처럼
+   글자 단위로 꺾임 → 확대 전과 같은 열 비율(최소 900px)을 유지하고 표 안에서 가로 스크롤 */
+@media screen and (min-width: 769px) {
+    html:has(> body[style*="zoom"]) .table.type03:has(> .table-head > .table-head-col:nth-child(6)) {
+        overflow-x: auto;
+
+        > .table-head,
+        > .table-body {
+            min-width: 900px;
+        }
+
+        .table-head-col {
+            word-break: keep-all;
+        }
+    }
+}
+/* 2026-10-08(UI 2차 검토): 글자 확대(body zoom) 상태에서 화면 밖 고정 요소가 가로 스크롤을 만들던 문제 → 확대 상태에서만 루트 가로 넘침 숨김 */
+html:has(> body[style*="zoom"]) {
+    overflow-x: hidden;
+}
+
+/* 2026-10-21: 웹 에디터(Tiptap) 내용 표시 — 아카데미 소개 등 (utils/common.js richHtml) */
+.rich-content {
+  line-height: 1.7;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+  p { margin: 0 0 6px; }
+  p:last-child { margin-bottom: 0; }
+  h2 { font-size: 1.25em; font-weight: 700; margin: 12px 0 6px; }
+  h3 { font-size: 1.12em; font-weight: 700; margin: 10px 0 6px; }
+  h4 { font-size: 1em; font-weight: 700; margin: 8px 0 4px; }
+  ul { list-style: disc; padding-left: 20px; margin: 4px 0 8px; }
+  ol { list-style: decimal; padding-left: 20px; margin: 4px 0 8px; }
+  li > p { margin: 0; }
+  blockquote { border-left: 3px solid #CDCFD1; padding: 4px 12px; margin: 8px 0; color: #52575C; }
+  hr { border: 0; border-top: 1px solid #E5E7E8; margin: 12px 0; }
+  a { text-decoration: underline; text-underline-offset: 2px; }
+  img { max-width: 100%; height: auto; border-radius: 6px; }
+  strong, b { font-weight: 700; }
+  em, i { font-style: italic; }
+  u { text-decoration: underline; }
+  s { text-decoration: line-through; }
 }

@@ -11,11 +11,11 @@
                 }
 
                 .color-green {
-                    color: #00B34A;
+                    color: #00843C;
                 }
 
                 .color-red {
-                    color: #EF2B49;
+                    color: #D81E3C;
                 }
 
                 .color-purple {
@@ -412,4 +412,11 @@
             }
         }
     }    
+}
+/* 2026-10-13: 매장회원 등록/수정 — 입력칸 260px 로 짧던 문제 → 400px(좁은 화면은 칸 너비), 단일 선택상자도 같은 폭 */
+@media screen and (min-width: 769px) {
+    .membership-member.write .table.type02 td .input-text input:not([type="checkbox"]):not([type="radio"]),
+    .membership-member.write .table.type02 td > .select-default select {
+        min-width: 400px;
+    }
 }

@@ -8,7 +8,7 @@
       <div class="modal-header">
         <p class="title">회원 정보</p>
         <button type="button" class="btn-close" @click="modalClose" aria-label="닫기">
-          <img src="/images/icon/icon_close_grey.png" alt="icon_close_grey" />
+          <img src="/images/icon/icon_close_grey.png" alt="" />
         </button>
       </div>
       <div class="modal-body">

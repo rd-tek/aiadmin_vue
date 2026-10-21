@@ -12,7 +12,7 @@
                     <th>상태</th>
                     <td>
                       <div class="select-default">
-                        <select v-model="form.type">
+                        <select aria-label="상태 선택" v-model="form.type">
                             <option value="1">공지</option>
                             <option value="2">뉴스</option>
                         </select>
@@ -23,10 +23,10 @@
                     <th>제목</th>
                     <td>
                         <div class="input-text">
-                            <input
+                            <input aria-label="제목"
                                 type="text"
                                 v-model="form.title"
-                                maxlength="30"
+                                maxlength="100"
                                 placeholder="제목을 입력해주세요."
                             >
                         </div>
@@ -74,12 +74,10 @@
                 <tr>
                     <th>내용</th>
                     <td>
-                        <div class="textarea">
-                            <textarea
-                                v-model="form.contents"
-                                placeholder="내용을 입력해주세요."
-                            ></textarea>
-                        </div>
+                        <!-- 2026-10-13: 웹 에디터(Tiptap) — 상세 화면은 v-html 로 렌더 -->
+                        <client-only>
+                            <rich-editor v-model="form.contents" placeholder="내용을 입력해주세요." />
+                        </client-only>
                         <div class="input-wrap">
                             <div class="input-text">
                                 <input
@@ -88,11 +86,11 @@
                                     style="display:none"
                                     @change="onFileChange"
                                 >
-                                <input
+                                <input aria-label="첨부파일명"
                                     type="text"
                                     :value="fileName"
                                     readonly
-                                    placeholder="선택해 주세요."
+                                    placeholder="미선택"
                                 >
                                 <button
                                     type="button"
@@ -145,6 +143,7 @@
     </div>
 </template>
 <script setup>
+import RichEditor from "@/components/editor/rich-editor.client.vue";
 import { useRouter } from "vue-router";
 import { useCustomerApi } from "~/api/support";
 import toastModal from '@/components/toast-ui/toast-modal.vue';

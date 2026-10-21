@@ -1,10 +1,12 @@
 <template>
-  <div>
+  <!-- 2026-09-18: 루트 div 에 width:100% 부여. 부모 .chart 가 display:flex 라 폭 지정이 없으면
+       자식 .chart-wrap(width:100%)이 0 으로 접혀 레이더 캔버스가 안 그려졌음(구질분석 빈칸). -->
+  <div style="width: 100%">
     <!-- 데이터 편집 UI -->
     <div class="editor" v-if="!readonly">
       <div v-for="(val, i) in dataValues" :key="i" class="editor-item">
         <label>{{ indicators[i].name }}</label>
-        <select v-model.number="dataValues[i]">
+        <select :aria-label="indicators[i].name" v-model.number="dataValues[i]">
           <option disabled value="">선택</option>
           <option v-for="opt in options" :key="opt" :value="opt">
             {{ opt }}
@@ -22,7 +24,7 @@
 
 <script setup>
 import * as echarts from "echarts";
-import { ref, watch, onMounted, onBeforeUnmount } from "vue";
+import { ref, watch, onMounted, onBeforeUnmount, nextTick } from "vue";
 
 const props = defineProps({
   analysis: {
@@ -76,6 +78,7 @@ const getOption = () => ({
   radar: {
     axisName: { color: "#696D6E", fontSize: 12, fontWeight: "500" },
     alignTicks: false,
+    radius: "70%", // 2026-10-08(UI 2차 검토): 기본 75% 는 모바일(높이 50vw)에서 위쪽 축 이름이 잘림 → radarChart.vue 와 같은 70%
     indicator: indicators.value,
     axisLine: { lineStyle: { color: "#E4EAF0", width: 1, type: "dashed" } },
     splitLine: { lineStyle: { color: ["#E4EAF0"], width: 1, type: "dashed" } },
@@ -147,12 +150,6 @@ onBeforeUnmount(() => {
 watch(
   dataValues,
   (vals) => {
-    // 🔥 1) max 자동 조정 부분은 제거
-    // indicators.value = indicators.value.map((ind, i) => ({
-    //   ...ind,
-    //   max: Math.max(ind.max, vals[i]) * 1.1
-    // }))
-
     // 2) 차트 갱신만
     if (chart) {
       chart.setOption({
@@ -190,29 +187,33 @@ watch(
 );
 </script>
 <style scoped>
+/* 2026-10-20: 5개 항목 한 줄(같은 폭) — 기존 flex-wrap 으로 4+1 줄바꿈 */
 .editor {
-  display: flex;
-  gap: 10px;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
   margin-bottom: 20px;
-  flex-wrap: wrap;
 }
 .editor-item {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: stretch;
+  min-width: 0;
 }
 .editor-item label {
   font-size: 12px;
   margin-bottom: 4px;
 }
 .editor-item select {
-  width: 100px;
+  width: 100%;
+  min-width: 0;
   padding: 4px;
 }
 
 .chart-wrap {
   width: 100%;
   height: 50vw;
+  min-height: 220px; /* 2026-10-08(UI 2차 검토): 375 폭에서 납작해져 축 이름이 잘리던 문제 */
   max-height: 400px;
 }
 

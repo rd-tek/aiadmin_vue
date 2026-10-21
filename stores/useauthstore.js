@@ -33,6 +33,19 @@ export const useAuthStore = defineStore("auth", {
     },
 
     logout() {
+      // 2026-10-12(회귀 점검): 서버 토큰 폐기(POST /login/logout → jwt_revoked). 백엔드는 구현돼 있었으나
+      //   화면 로그아웃이 호출하지 않아 로그아웃 후에도 같은 토큰이 만료 때까지 유효했음. 실패해도 로컬 정리는 계속.
+      try {
+        const token = useCookie("aiadmintoken").value;
+        if (token && import.meta.client) {
+          fetch(useRuntimeConfig().public.apiBase + "/login/logout", {
+            method: "POST",
+            headers: { Authorization: `Bearer ${token}`, Accept: "application/json" },
+          }).catch(() => {});
+        }
+      } catch (e) {
+        /* 무시 */
+      }
       this.status = "ready";
       this.isAuthenticated = false;
       this.searchData = {};
@@ -41,6 +54,7 @@ export const useAuthStore = defineStore("auth", {
       // 쿠키 전부 제거
       const keys = [
         "aiadmintoken",
+        "aiadmin_name", // 2026-10-20: 헤더 관리자 이름
         "nickname",
         "expert_pk",
         "is_initialize",

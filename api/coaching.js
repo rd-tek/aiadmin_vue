@@ -233,6 +233,7 @@ export const useCoachingApi = () => {
           success: true,
           analysis: res.analysis,
           stats: res.stats,
+          stats_clubs: res.stats_clubs || [], // 2026-10-13
           recommendations: res.recommendations,
           message: res.message,
         };

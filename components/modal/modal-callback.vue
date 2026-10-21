@@ -8,7 +8,7 @@
       <div class="modal-header">
         <p class="title">불러오기</p>
         <button type="button" class="btn-close" @click="modalClose" aria-label="닫기">
-          <img src="/images/icon/icon_close_grey.png" alt="icon_close_grey" />
+          <img src="/images/icon/icon_close_grey.png" alt="" />
         </button>
       </div>
       <div class="modal-body">
@@ -21,7 +21,7 @@
               :key="index"
             >
               <div class="input-text">
-                <input
+                <input aria-label="저장 제목"
                   type="text"
                   placeholder="저장 제목을 입력하세요."
                   v-model="item.edit_title"
@@ -36,7 +36,7 @@
               </div>
               <div class="radio-wrap">
                 <div class="radio-box">
-                  <input
+                  <input aria-label="선택"
                     type="radio"
                     :id="`radio_${index}`"
                     :name="`radio_${index}`"
@@ -51,7 +51,7 @@
                 </div>
                 <div class="form-box">
                   <div class="text-area">
-                    <textarea
+                    <textarea aria-label="저장 내용"
                       placeholder="내용을 입력하세요" 
                       v-model="item.result_txt"
                       readonly
@@ -89,10 +89,10 @@
               next-button-class="paginate-buttons"
             >
               <template #prev-button>
-                <img src="/images/icon/icon_prev.png" alt="icon_prev" />
+                <img src="/images/icon/icon_prev.png" alt="이전 페이지" />
               </template>
               <template #next-button>
-                <img src="/images/icon/icon_next.png" alt="icon_next" />
+                <img src="/images/icon/icon_next.png" alt="다음 페이지" />
               </template>
             </VueAwesomePaginate>
           </client-only>
@@ -302,20 +302,19 @@ watch(
   },
 );
 
+// 2026-09-17: 익명 리스너 누수 수정 (named handler + 언마운트 시 제거)
+const handleEscKey = (e) => {
+  if (e.key === "Escape") {
+    modalClose();
+  }
+};
+
 onMounted(() => {
-  window.addEventListener("keydown", (e) => {
-    if(e.key === "Escape") {
-      modalClose();
-    }
-  });
+  window.addEventListener("keydown", handleEscKey);
 })
 
 onUnmounted(() => {
-    window.addEventListener("keydown", (e) => {
-    if(e.key === "Escape") {
-      modalClose();
-    }
-  });
+  window.removeEventListener("keydown", handleEscKey);
 });
 </script>
 

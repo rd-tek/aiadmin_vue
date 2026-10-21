@@ -5,15 +5,15 @@
         <div class="col d-flex">
           <div class="d-flex">
             <div class="select-default">
-              <select v-model="searchData.searchtype">
-                <option value="title">커리큘럼</option>
+              <select aria-label="검색 구분 선택" v-model="searchData.searchtype">
+                <option value="title">아카데미</option>
               </select>
             </div>
             <div class="input-text">
-              <input
+              <input aria-label="검색어 입력"
                 type="text"
                 v-model="searchData.searchname"
-                placeholder="검색어를 입력해 주세요."
+                placeholder="검색어 입력"
                 @keyup.enter="handleSearch"
               />
             </div>
@@ -32,14 +32,14 @@
         :class="{ 'is-active': isRecent }"
         @click="handleRecent"
       >
-        <span>{{ isRecent ? `오래된순` : `등록일순` }}</span>
-        <img src="/public/images/icon/icon_filter.png" alt="icon_filter" />
+        <span>{{ isRecent ? `최신순` : `오래된순` }}</span>
+        <img src="/images/icon/icon_filter.png" alt="" />
       </button>
     </div>
     <div class="table type03 mob-type01">
       <div class="table-head">
         <div class="table-head-col is-mob">No</div>
-        <div class="table-head-col is-mob">아카데미/클래스</div>
+        <div class="table-head-col is-mob">아카데미</div>
         <div class="table-head-col">닉네임</div>
         <div class="table-head-col is-mob">매장</div>
         <div class="table-head-col is-mob">일시</div>
@@ -92,8 +92,8 @@
                 :class="{ 'is-active': mobListIndex === index }"
               >
                 <img
-                  src="/public/images/icon/icon_arrow_down.png"
-                  alt="icon_arrow_down"
+                  src="/images/icon/icon_arrow_down.png"
+                  alt="펼치기"
                 />
               </button>
             </div>
@@ -106,7 +106,7 @@
           >
             <div class="table-body-mob" v-if="mobListIndex === index">
               <dl class="list">
-                <dt class="tit">클래스</dt>
+                <dt class="tit">아카데미</dt>
                 <dd class="cnt">
                   <nuxt-link
                     :to="{ path: `/coaching/golf/${item.enroll_pk}` }"
@@ -129,7 +129,7 @@
           </transition>
         </div>
         <div class="no-info" v-if="coachingData.list.length === 0">
-          내역이 없습니다.
+          데이터가 없습니다.
         </div>
       </div>
       <ul class="pagination-container type02">
@@ -141,7 +141,7 @@
             @click="changePage(searchData.pageno - 1)"
             aria-label="이전"
           >
-            <img src="/images/icon/icon_prev.png" alt="icon_prev" />
+            <img src="/images/icon/icon_prev.png" alt="" />
           </button>
         </li>
         <li v-for="page in visiblePages" :key="page">
@@ -162,7 +162,7 @@
             @click="changePage(searchData.pageno + 1)"
             aria-label="다음"
           >
-            <img src="/images/icon/icon_next.png" alt="icon_next" />
+            <img src="/images/icon/icon_next.png" alt="" />
           </button>
         </li>
       </ul>
@@ -197,7 +197,7 @@ useIntersectionObserver(
   coachingRef,
   ([entry]) => {
     if (entry.isIntersecting) {
-      coachingMove.value = true;
+      if (import.meta.client) coachingMove.value = true;
     }
   },
   {
@@ -361,4 +361,31 @@ useHead({
 </script>
 <style lang="scss" scoped>
 @use "@/assets/scss/pages/coaching.scss";
+
+/* 2026-09-14: 컬럼 폭을 실측 자연폭(px)에 비례 재분배해 개행 최소화 (데스크톱 한정).
+   컬럼: No/아카데미·클래스/닉네임/매장/일시/상태 — 긴 제목(아카데미)에 폭 집중 */
+@media (min-width: 769px) {
+  .table-head-col, .table-body-flex > .table-body-col { min-width: 0; }
+  .table-head-col:nth-child(1), .table-body-flex > .table-body-col:nth-child(1) { flex: 32 1 0; }
+  .table-head-col:nth-child(2), .table-body-flex > .table-body-col:nth-child(2) { flex: 290 1 0; }
+  .table-head-col:nth-child(3), .table-body-flex > .table-body-col:nth-child(3) { flex: 66 1 0; }
+  .table-head-col:nth-child(4), .table-body-flex > .table-body-col:nth-child(4) { flex: 114 1 0; }
+  .table-head-col:nth-child(5), .table-body-flex > .table-body-col:nth-child(5) { flex: 84 1 0; }
+  .table-head-col:nth-child(6), .table-body-flex > .table-body-col:nth-child(6) { flex: 52 1 0; }
+}
+
+/* 2026-10-08(UI 2차 검토): 모바일 상태 칸 — 펼치기 화살표가 칸 오른쪽 끝에 겹쳐 놓여 글자 확대 시 '진행중' 배지를 덮음
+   → 화살표 자리만큼 칸 오른쪽 여백(머리글 '상태'도 같게), 칸 사이 8px (aishop 코칭 목록과 동일) */
+@media screen and (max-width: 768px) {
+  .coaching .table-body-col:has(> .btn-arrow) { padding-right: 26px; }
+  .coaching .table-head-col:last-child { padding-right: 26px; }
+  .coaching .table-body-flex, .coaching .table-head { column-gap: 8px; }
+}
+
+/* 2026-10-20: 아카데미명 왼쪽 정렬(길이가 제각각), 매장명 한 줄 */
+@media screen and (min-width: 769px) {
+  .table-head-col:nth-child(2), .table-body-flex > .table-body-col:nth-child(2) { justify-content: flex-start; text-align: left; padding-left: 24px; }
+  .table-body-flex > .table-body-col:nth-child(2) .item-wrap { width: 100%; justify-content: flex-start; text-align: left; }
+  .table-body-flex > .table-body-col:nth-child(4) { white-space: nowrap; }
+}
 </style>

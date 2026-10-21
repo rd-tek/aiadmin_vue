@@ -139,13 +139,31 @@
 @media screen and (max-width: 768px) {
     .manager-list {
         &.detail {
+            /* 2026-09-16: 모바일 상단/좌우 여백 정리 */
+            padding: 16px;
+
+            /* 2026-09-16: 좌측 라벨(th)이 좁은 컬럼(18%)에서 개행되던 문제 → 컬럼 폭 확보 + 줄바꿈 금지 */
+            .table.type02 > table {
+                > colgroup > col:first-child {
+                    width: 80px; /* 2026-10-07(UI 검토): 100px→80px — 라벨열이 넓어 입력칸이 오른쪽으로 잘리던 문제(폼 폭 축소) */
+                }
+
+                > tbody > tr > th {
+                    white-space: normal; word-break: keep-all; /* 2026-10-07: 어절 단위로만 줄바꿈 */
+                    font-size: 13px;
+                    padding: 16px 10px 16px 8px;
+                    vertical-align: middle; /* 2026-10-07: 원본처럼 세로 가운데 */
+                    text-align: left;
+                }
+            }
+
             table {
                 tbody {
                     tr {
                         td {
                             .select-default {
                                 width: 100%;
-                                
+
                                 select {
                                     width: 100%;
                                 }

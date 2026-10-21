@@ -130,7 +130,7 @@
                             padding: 0 8px;
 
                             &.color-green {
-                                background: #00B34A;
+                                background: #00843C;
                             }
                         }
 
@@ -268,10 +268,31 @@
                 &-list {
                     flex: 1;
                     background: #ccc;
-                    height: 100%;
+                    border-radius: 10px;
+                    overflow: hidden;
+                    // 2026-09-21: 상세 영상이 회색박스로만 보이던 문제(.video-js 높이 0) 수정 —
+                    //   컨테이너에 16/9 확정 비율을 주고 videoPlayer(.video-wrapper/.video-js)가 꽉 채우게 함.
+                    //   기존 height:100%(부모 flex 높이 미확정→붕괴) + video{aspect-ratio}(video.js 재구성으로 무효) 제거.
+                    aspect-ratio: 16 / 9;
 
-                    video {
-                        aspect-ratio: 16/9;
+                    &::v-deep(.video-wrapper) {
+                        width: 100%;
+                        height: 100%;
+                        aspect-ratio: auto;
+                    }
+
+                    &::v-deep(.video-js),
+                    &::v-deep(video) {
+                        width: 100%;
+                        height: 100%;
+                        padding-top: 0;
+                    }
+
+                    .no-data {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        height: 100%;
                     }
                 }
             }
@@ -331,7 +352,7 @@
                             }
 
                             &.yellow {
-                                color: #f8ad15;
+                                color: #B45309; /* 2026-10-13: 밑줄 대신 진한 오렌지(대비 5.0:1) */
                             }
                         }
                     }
@@ -490,7 +511,7 @@
                             &:before {
                                 content: '';
                                 display: block;
-                                background: url('/public/images/default/img_reply.png') no-repeat;
+                                background: url('/images/default/img_reply.png') no-repeat;
                                 background-size: auto 100%;
                                 width: 16px;
                                 height: 27px;
@@ -792,6 +813,12 @@
                     }
                 }
 
+                /* 2026-09-16: 모바일에서 두 스윙 영상을 좌우 나열 대신 세로로 쌓아 각 영상을 전체폭으로 크게 표시 */
+                .video-area {
+                    flex-direction: column;
+                    gap: 16px;
+                }
+
                 &-box {
                     display: block;
 
@@ -896,13 +923,82 @@
     .swing-list {
         &.detail {
             .cont {
+                /* 2026-09-16: 모바일에서도 발 그림(foot-area)과 체중 그래프를 한 줄로 나란히 표시 (aimember 스윙 정본 참고).
+                   foot-area는 내용 폭만 차지하도록 compact 처리, 차트가 남은 폭을 사용. */
                 .step-balance {
-                    flex-direction: column;
+                    flex-direction: row;
+                    align-items: center;
+                    gap: 10px;
+                    padding: 12px;
+
+                    .foot-area {
+                        grid-template-columns: repeat(3, auto);
+                        gap: 4px 6px;
+                        height: auto;
+                        flex: 0 0 auto;
+
+                        &-list {
+                            padding: 2px 4px;
+                            font-size: 11px;
+                            white-space: nowrap;
+
+                            .point {
+                                margin-right: 2px;
+                            }
+                        }
+
+                        img {
+                            width: 28px;
+                            min-width: 28px;
+                            height: 28px;
+                        }
+                    }
 
                     .chart {
-                        width: 100%;
+                        flex: 1 1 auto;
+                        min-width: 0;
+                        width: auto;
                     }
                 }
+            }
+        }
+    }
+}
+/* 2026-10-13: 스윙 상세 — 영상(4:3)이 16:9 틀에 들어가 좌우 검은 여백이 생기던 문제 → 틀을 4:3 으로, 영상은 틀을 가득 채움 */
+.swing-list.detail .video-area-list {
+    aspect-ratio: 4 / 3 !important;
+    background: #111 !important;
+
+    &::v-deep(video) {
+        object-fit: cover;
+    }
+}
+
+/* 2026-10-13: 스윙 상세 수치표 — 행 높이·글자 크기 과대, 정렬 어색 → 카드형 2열, 라벨/값 간격 축소, 열 구분선 */
+.swing-list.detail .table-section-wrap {
+    border-top: 2px solid #1b1d1f;
+
+    .row {
+        grid-auto-rows: 1fr;
+
+        &-item {
+            gap: 8px !important;
+            padding: 20px 20px !important;
+            justify-content: center;
+
+            &:nth-child(odd) {
+                border-right: 1px solid #eceef1;
+            }
+
+            .tit {
+                font-size: 14px !important;
+                color: #7a8088 !important;
+            }
+
+            .info {
+                font-size: 22px !important;
+                font-variant-numeric: tabular-nums;
+                letter-spacing: -0.2px;
             }
         }
     }

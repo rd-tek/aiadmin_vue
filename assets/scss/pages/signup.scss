@@ -35,7 +35,7 @@
                 margin-bottom: 18px;
 
                 .required {
-                    color: #EF2B49;
+                    color: #D81E3C;
                 }
             }
 
@@ -215,7 +215,7 @@
                             }
 
                             .required {
-                                color: #EF2B49;
+                                color: #D81E3C;
                                 margin-top: 4px;
                                 line-height: 2;
                                 font-size: 14px;
@@ -239,7 +239,7 @@
                                 width: 100%;
 
                                 &:focus {
-                                    border: 1px solid #FF7519;
+                                    border: 1px solid #E85D00;
                                 }
                             }
 
@@ -276,12 +276,12 @@
                                 font-size: 16px;
 
                                 &::placeholder {
-                                    color: #9B9FA3;
+                                    color: #6e6e6e;
                                 }
                             }
 
                             select {
-                                background-image: url('/public/images/icon/icon_arrow_down_teal_02.png');
+                                background-image: url('/images/icon/icon_arrow_down_teal_02.png');
                                 background-size: 12px auto;
                                 background-position: right 16px center;
                             }

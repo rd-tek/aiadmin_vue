@@ -290,8 +290,9 @@ const render = () => {
   const { labels, values, getAt, hasFB } = seriesData.value
   chartInstance.setOption(buildOption(labels, values, { getAt, hasFB }), true)
 
-  // ✅ 차트 애니메이션과 동일한 6초에 맞춰 부모 animated 업데이트
-  startBalanceLoop()
+  // 2026-09-16: 독립 6초 자동루프 제거 — 발 밸런스 값은 부모(영상 재생 위치)와 연동해 구동.
+  //   초기값만 프레임 0으로 한 번 전달해 로드 직후 빈값 방지.
+  emitBalanceAt(0)
 
   // 클릭 → 프레임 인덱스/시간 emit
   chartInstance.off('click')
@@ -310,11 +311,41 @@ const render = () => {
   // 스크롤 방지
   const dom = chartRef.value
   const prevent = (e) => e.preventDefault()
-  dom.addEventListener('wheel', prevent, { passive: false })
-  dom.addEventListener('mousewheel', prevent, { passive: false })
 }
 
 const resizeChart = () => { chartInstance && chartInstance.resize() }
+
+/* -------------------- 2026-09-16: 프레임별 밸런스 조회/연동 -------------------- */
+// 프레임 인덱스 → { L,R,F,B } 퍼센트 (합 100 기준)
+const balanceAt = (idx) => {
+  const { getAt, labels } = seriesData.value
+  const len = labels.length
+  if (!len) return { L: 0, R: 0, F: 0, B: 0 }
+  const i = Math.max(0, Math.min(len - 1, Math.round(idx || 0)))
+  const g = getAt(i) || {}
+  const L = Number(g.L ?? 0), R = Number(g.R ?? 0), F = Number(g.F ?? 0), B = Number(g.B ?? 0)
+  const lr = L + R, fb = F + B
+  return {
+    L: lr > 0 ? (L / lr) * 100 : 0,
+    R: lr > 0 ? (R / lr) * 100 : 0,
+    F: fb > 0 ? (F / fb) * 100 : 0,
+    B: fb > 0 ? (B / fb) * 100 : 0,
+  }
+}
+const emitBalanceAt = (idx) => {
+  const len = seriesData.value.labels.length
+  if (!len) return
+  const i = Math.max(0, Math.min(len - 1, Math.round(idx || 0)))
+  emit('balance', { index: i, pct: balanceAt(i) })
+}
+// 재생 진행률(0~1)로 밸런스 값 갱신 — 부모 RAF가 영상 currentTime 기준으로 호출
+const setProgress = (p01) => {
+  const len = seriesData.value.labels.length
+  if (!len) return
+  emitBalanceAt(Math.max(0, Math.min(1, p01)) * (len - 1))
+}
+const getFrameCount = () => seriesData.value.labels.length
+defineExpose({ setProgress, balanceAt, getFrameCount })
 
 onMounted(() => {
   render()

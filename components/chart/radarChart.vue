@@ -6,7 +6,7 @@
 
 <script setup>
 import * as echarts from 'echarts'
-import { onMounted, watch, ref } from 'vue'
+import { onMounted, onBeforeUnmount, watch, ref } from 'vue'
 
 const props = defineProps({
   analysis: {
@@ -104,7 +104,16 @@ onMounted(() => {
   })
   renderChart()
 
-  window.addEventListener('resize', () => chart?.resize())
+  window.addEventListener('resize', onRadarResize)
+})
+
+// 2026-09-16: 익명 resize 리스너 누수 수정 (named handler + 언마운트 시 제거)
+const onRadarResize = () => chart?.resize()
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', onRadarResize)
+  chart?.dispose()
+  chart = null
 })
 
 watch(() => props.analysis, () => renderChart(), { deep: true })

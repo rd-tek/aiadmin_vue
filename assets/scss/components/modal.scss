@@ -34,7 +34,7 @@
                     .required {
                         &:after {
                             content: '*';
-                            color: #EF2B49;
+                            color: #D81E3C;
                         }
                     }
                 }
@@ -87,7 +87,7 @@
                     }
 
                     .color-red {
-                        color: #EF2B49;
+                        color: #D81E3C;
                     }
                 }
             }
@@ -142,7 +142,7 @@
         position: absolute;
         top: 50%;
         left: 50%;
-        transform: translate(-50%,-60%);
+        transform: translate(-50%,-50%);
         width: 600px;
         max-width: calc(100% - 40px);
         border-radius: 16px;
@@ -150,6 +150,10 @@
         box-shadow: 0px 20px 24px -4px rgba(10, 13, 18, 0.10), 0px 8px 8px -4px rgba(10, 13, 18, 0.04);
         background: #fff;
         transition: all ease .4s;
+        // 2026-09-17: 내용 높이에 맞춰 컨테이너를 잡고(헤더·푸터 고정, 본문만 스크롤) 화면 넘칠 때만 스크롤 → 불필요 팝업 스크롤 제거
+        max-height: 90svh;
+        display: flex;
+        flex-direction: column;
     }
 
     &-header {
@@ -159,6 +163,7 @@
         justify-content: space-between;
         padding: 20px 32px;
         position: relative;
+        flex-shrink: 0;
 
         &:after {
             content: '';
@@ -191,8 +196,9 @@
 
     &-body {
         padding: 30px 32px;
-        max-height: calc(90vh - 200px);
-        overflow: hidden;
+        // 2026-09-17: 고정 max-height(90svh-200px) 매직넘버 제거 → flex 로 남은 공간만 차지, 넘칠 때만 스크롤
+        flex: 1 1 auto;
+        min-height: 0;
         overflow-y: auto;
 
         .content {
@@ -202,6 +208,7 @@
     }
 
     &-footer {
+        flex-shrink: 0;
         padding: 24px;
 
         .btn-wrap {
@@ -239,7 +246,7 @@
                     .sub {
                         font-size: 14px;
                         font-weight: 400;
-                        color: #00B34A;
+                        color: #00843C;
                         margin-left: 6px;
                     }
                 }
@@ -332,23 +339,30 @@
                         padding: 16px 10px;
                         height: 72px;
 
+                        /* 2026-09-16: 홀 정보 팝업 파일행 정렬 — 파일input이 빈 박스로 남고 파일명이 절대배치로 개행되던 문제 정리.
+                           세로 스택(컨트롤 → 미리보기), 파일명은 버튼 옆 인라인 */
                         .input-wrap {
                             display: flex;
-                            gap: 8px;
+                            flex-direction: column;
+                            align-items: flex-start;
+                            gap: 10px;
 
                             .input-text {
                                 display: flex;
+                                align-items: center;
+                                flex-wrap: wrap;
                                 gap: 10px;
                             }
 
                             input[type=file] {
+                                position: absolute;
+                                width: 1px;
+                                height: 1px;
+                                padding: 0;
+                                opacity: 0;
+                                overflow: hidden;
                                 font-size: 0;
-                                text-indent: -9999px;
                                 cursor: pointer;
-
-                                &:focus {
-                                    border: 1px solid #4318FF;
-                                }
                             }
 
                             .btn-file {
@@ -387,16 +401,30 @@
                                 }
 
                                 & + .name {
-                                    position: absolute;
-                                    left: 12px;
-                                    top: 50%;
-                                    transform: translateY(-50%);
+                                    position: static;
+                                    transform: none;
+                                    white-space: nowrap;
+                                    font-size: 14px;
+                                    color: #52575C;
                                 }
                             }
 
                             .placeholder {
                                 color: #72777A;
                                 pointer-events: none;
+                                white-space: normal;
+                            }
+
+                            /* 미리보기 이미지: 좌측 정렬 + 적당한 크기 */
+                            .hole-img-preview {
+                                width: 100%;
+                                img {
+                                    max-width: 220px;
+                                    max-height: 200px;
+                                    border: 1px solid #eee;
+                                    border-radius: 6px;
+                                    display: block;
+                                }
                             }
                         }
 
@@ -692,7 +720,7 @@
                                 }
 
                                 .color-red {
-                                    color: #EF2B49;
+                                    color: #D81E3C;
                                 }
                             }
                         }
@@ -747,11 +775,11 @@
                             }
 
                             &.is-complete {
-                                    background: #00B34A;
+                                    background: #00843C;
                             }
 
                             &.is-stop {
-                                background: #EF2B49;
+                                background: #D81E3C;
                             }
 
                             &.is-wait {
@@ -1061,7 +1089,7 @@
                         width: 68px;
                         height: 26px;
                         color: #fff;
-                        background: #00B34A;
+                        background: #00843C;
                         font-size: 15px;
                         padding: 4px 8px;
                         border-radius: 4px;
@@ -1181,8 +1209,7 @@
 
                         &-body {
                             padding: 0 30px 30px 30px;
-                            max-height: 520px;
-                            overflow-y: auto;
+                            // 2026-09-17: 내부 테이블 520px 자체 스크롤 제거 → modal-body 단일 스크롤(중복 스크롤바 방지)
 
                             &::-webkit-scrollbar {
                                 width: 8px;
@@ -1249,10 +1276,10 @@
                                 }
 
                                 .color {
-                                    color: #9B9FA3;
+                                    color: #6e6e6e;
 
                                     &.point {
-                                        color: #00B34A;
+                                        color: #00843C;
                                         font-weight: 700;
                                     }
                                 }
@@ -1278,7 +1305,7 @@
                             &.btn-like {
                                 .icon {
                                     &:before {
-                                        background: #EF2B49;
+                                        background: #D81E3C;
                                     }
                                 }
                             }
@@ -1293,7 +1320,7 @@
 
                             &.is-active {
                                 path {
-                                    fill: #EF2B49;
+                                    fill: #D81E3C;
                                     stroke: none;
                                 }
                             }

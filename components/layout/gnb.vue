@@ -2,7 +2,7 @@
     <nav class="nav-wrap" :class="{ close: !isOpen }" ref="navWrap">
         <div class="nav-wrap-top">
             <button type="button" class="logo" @click="handleHome">
-                <img src="/public/images/default/img_logo_black.png" alt="logo">
+                <img src="/images/default/img_logo_black.png" alt="X-COACH">
             </button>
             <ul class="gnb">
                 <li class="gnb-list" v-for="(item, i) in gnbMenu" :key="i">
@@ -11,7 +11,7 @@
                         @click="handleAccordion(item, i)">
                         <component :is="iconMap[item.path]" />
                         <span class="name">{{ item.name }}</span>
-                        <button type="button" class="btn-arrow" :class="{ 'is-active': setDepthList.includes(i) }" v-if="item.children">
+                        <button :aria-label="`${item.name} 하위 메뉴 ${gnbIndex === i ? '접기' : '펼치기'}`" :aria-expanded="gnbIndex === i" type="button" class="btn-arrow" :class="{ 'is-active': setDepthList.includes(i) }" v-if="item.children">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                                 <path fill-rule="evenodd" clip-rule="evenodd" d="M6.39935 9.39886C6.7313 9.06692 7.26949 9.06692 7.60143 9.39886L12.0004 13.7978L16.3994 9.39886C16.7313 9.06692 17.2695 9.06692 17.6014 9.39886C17.9334 9.73081 17.9334 10.269 17.6014 10.6009L12.6014 15.6009C12.2695 15.9329 11.7313 15.9329 11.3993 15.6009L6.39935 10.6009C6.0674 10.269 6.0674 9.73081 6.39935 9.39886Z" fill="#CDCFD1"/>
                             </svg>
@@ -129,7 +129,7 @@ const gnbMenu = [
         path: 'golfcourse',
         children: [
             {
-                name: '코스리스트',
+                name: '코스 목록', // 2026-10-20: '리스트' → '목록'
                 path: 'golfcourse/list'
             }
         ]
@@ -139,7 +139,7 @@ const gnbMenu = [
         path: 'swing',
         children: [
             {
-                name: '스윙영상리스트',
+                name: '스윙영상 목록', // 2026-10-20: '리스트' → '목록'
                 path: 'swing/list'
             }
         ]
@@ -149,7 +149,7 @@ const gnbMenu = [
         path: 'manager',
         children: [
             {
-                name: '관리자 리스트',
+                name: '관리자', // 2026-10-20: 메뉴명 '관리자 리스트' → '관리자'
                 path: 'manager/list'
             },
             {

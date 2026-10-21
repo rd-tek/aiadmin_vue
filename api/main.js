@@ -13,21 +13,7 @@ export const useMainApi = () => {
     });
   };
 
-  /**
-   * 파일 업로드 테스트
-   */
-  const _saveFileTest = async (formData) => {
-    return await apiFetch("http://127.0.0.1/test.php", {
-      method: "POST",
-      body: formData,
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-  };
-
   return {
     _getMain,
-    _saveFileTest,
   };
 };

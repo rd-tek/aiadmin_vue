@@ -125,8 +125,6 @@ const renderChart = () => {
 
   // 차트 영역에서의 기본 스크롤 방지 (기존 dataZoom 설정을 존중)
   const dom = chartRef.value
-  dom.addEventListener('wheel', (e) => e.preventDefault(), { passive: false })
-  dom.addEventListener('mousewheel', (e) => e.preventDefault(), { passive: false })
 }
 
 const resize = () => { chartInstance && chartInstance.resize() }

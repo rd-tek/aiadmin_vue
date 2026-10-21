@@ -12,7 +12,7 @@
                     <th>상태</th>
                     <td>
                       <div class="select-default">
-                        <select v-model="form.type">
+                        <select aria-label="상태 선택" v-model="form.type">
                             <option value="1">공지</option>
                             <option value="2">뉴스</option>
                         </select>
@@ -23,7 +23,7 @@
                     <th>제목</th>
                     <td>
                         <div class="input-text">
-                            <input
+                            <input aria-label="제목"
                                 type="text"
                                 v-model="form.title"
                                 placeholder="제목을 입력해주세요."
@@ -32,7 +32,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <th>게시</th>
+                    <th>처리 상태</th>
                     <td>
                         <div class="checkbox">
                             <div class="checkbox-list">
@@ -47,7 +47,7 @@
                                         <span class="check-box-item">
                                             <i class="item-line" />
                                         </span>
-                                        <span class="check-box-txt">게시</span>
+                                        <span class="check-box-txt">처리 완료</span>
                                     </label>
                                 </div>
                             </div>
@@ -74,7 +74,7 @@
                     <th>내용</th>
                     <td>
                         <div class="textarea">
-                            <textarea
+                            <textarea aria-label="내용"
                                 v-model="form.contents"
                                 placeholder="내용을 입력해주세요."
                             ></textarea>
@@ -82,7 +82,7 @@
                         <div class="input-wrap">
                             <div class="input-text">
                                 <input
-                                    type="file"
+                                    type="file" style="display: none"
                                     ref="fileInput"
                                     @change="onFileChange"
                                     placeholder="파일을 선택하거나 여기에 드롭하세요."  
@@ -176,7 +176,7 @@ const getNoticeDetail = async () => {
   try {
     const res = await customerApi._inquiryView(noticeno.value);
 
-    const notice = res.noticeview || {};
+    const notice = res.inquiryview || {};
 
     form.type = notice.type || "1";
     form.title = notice.title || "";
@@ -249,27 +249,14 @@ const handleSave = async () => {
       return;
     }
 
-    const formData = new FormData();
-
-    formData.append("type", form.type);
-    formData.append("title", form.title);
-    formData.append("contents", form.contents);
-    formData.append("status", form.status);
-    formData.append("topflag", form.topflag);
-
-    if (file.value) {
-    formData.append("file", file.value);
-    }
-
-    const res = await customerApi._playerNoticeModify(
-    noticeno.value,
-    formData
-    );
+    // 2026-09-17: 문의(inquiry)는 백엔드에 콘텐츠 수정 API가 없고 노출상태(viewflag)만 변경 가능.
+    // 기존 _playerNoticeModify 는 잘못된 엔드포인트로 동일 pk의 회원공지를 덮어쓸 위험이 있어 정본 inquiryedit 로 교체.
+    const res = await customerApi._inquiryStatus(noticeno.value, form.status);
 
     openSaveToast("수정되었습니다.");
     router.push(`/customer/inquiry/${noticeno.value}`);
   } catch (err) {
-    openErrorToast(res.message || "수정에 실패했습니다.");
+    openErrorToast(err?.data?.message || "수정에 실패했습니다.");
   }
 };
 

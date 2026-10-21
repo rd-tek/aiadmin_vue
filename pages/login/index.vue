@@ -2,19 +2,19 @@
   <div class="login index">
     <div class="login-wrap">
       <nuxt-link to="/" class="logo">
-        <img src="/images/default/img_bi.png" alt="bi" />
+        <img src="/images/default/img_bi.png" alt="X-COACH" />
       </nuxt-link>
-      <div class="title is-mob-show">관리자 로그인</div>
+      <div role="heading" aria-level="1" class="title is-mob-show">관리자 로그인</div>
       <form class="form" @submit.prevent="handleLogin">
         <div class="form-input">
           <div class="input-text">
-            <input
+            <input id="login-index-id"
               type="text"
               v-model="form.id"
               required
               autocomplete="username"
             />
-            <label>아이디</label>
+            <label for="login-index-id">아이디</label>
             <span class="focus-border">
               <i></i>
             </span>
@@ -22,13 +22,13 @@
         </div>
         <div class="form-input">
           <div class="input-text">
-            <input
+            <input id="login-index-password-1"
               type="password"
               v-model="form.password"
               required
               autocomplete="current-password"
             />
-            <label>비밀번호</label>
+            <label for="login-index-password-1">비밀번호</label>
             <span class="focus-border">
               <i></i>
             </span>

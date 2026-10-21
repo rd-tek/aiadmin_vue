@@ -12,9 +12,9 @@
                     <th>상태</th>
                     <td>
                       <div class="select-default m-w-100">
-                        <select v-model="playerInfo.status">
+                        <select aria-label="상태 선택" v-model="playerInfo.status">
                           <option value="1">정상</option>
-                          <option value="2">정지</option>
+                          <option value="2">탈퇴</option>
                         </select>
                       </div>
                     </td>
@@ -29,7 +29,7 @@
                 </tr>
                 <tr>
                     <th>이름</th>
-                    <td>{{ playerInfo.firstname }} {{ playerInfo.lastname || '-' }}</td>
+                    <td>{{ [playerInfo.firstname, playerInfo.lastname].filter(v => v && v !== 'null' && v !== 'undefined').join(' ') || '-' }}</td>
                 </tr>
                 <tr>
                     <th>핸드폰</th>
@@ -65,9 +65,9 @@
                   <th>세팅</th>
                   <td>
                     <div class="select-wrap flex-column">
-                      <div class="select-default">Fairway : <b>{{ playerInfo.fieldunit }}</b></div>
-                      <div class="select-default">Green : <b>{{ playerInfo.greenunit }}</b></div>
-                      <div class="select-default">Speed : <b>{{ playerInfo.speedunit }}</b></div>
+                      <div class="select-default">Fairway : <b>{{ distUnit(playerInfo.fieldunit) }}</b></div>
+                      <div class="select-default">Green : <b>{{ distUnit(playerInfo.greenunit) }}</b></div>
+                      <div class="select-default">Speed : <b>{{ speedUnit(playerInfo.speedunit) }}</b></div>
                     </div>
                   </td>
                 </tr>
@@ -118,6 +118,10 @@ const route = useRoute();
 
 // 2026.06.12[cgnoh]: 회원 정보 조회
 const playerInfo = ref({});
+
+// 2026-09-14: 세팅 단위 코드→라벨 (정본=매장 등록 폼 select 옵션: field/green 1=M/2=Yard/3=Feet, speed 1=km/h/2=mile/h/3=m/s)
+const distUnit = (v) => ({ "1": "M", "2": "Yard", "3": "Feet" }[String(v)] ?? "-");
+const speedUnit = (v) => ({ "1": "km/h", "2": "mile/h", "3": "m/s" }[String(v)] ?? "-");
 
 // 2026.06.12[cgnoh]: 상세 정보 조회
 const getDetail = async () => {
@@ -181,9 +185,9 @@ const openErrorToast = (message) => {
 // 2026.06.04[cgnoh]: 저장 핸들링
 const handleSave = async () => {
   try {
-    const res = await membersApi._ownerwrite(
-      ownerinfo.value.player_pk,
-      ownerinfo.value
+    const res = await membersApi._playeredit(
+      playerInfo.value.player_pk,
+      playerInfo.value
     );
     if (res?.success || res?.code === 200) {
       openSaveToast('저장되었습니다.');

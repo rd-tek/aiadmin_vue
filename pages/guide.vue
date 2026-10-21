@@ -2,7 +2,7 @@
     <div class="publish-guide">
         <div class="progress-bar" :style="{ width: scrollProgress + '%' }"></div>
         <div class="top">
-            <a href="/guide"><img src="/images/default/img_logo.png" alt="x-coach"></a>
+            <a href="/guide"><img src="/images/default/img_logo.png" alt="X-COACH"></a>
             <p>Design style guide v.1</p>
        </div>
        <nav :class="{ 'is-active' : handleMenu }">
@@ -854,7 +854,7 @@
                                 </td>
                                 <td>
                                     <div class="cont">
-                                        <img src="/public/images/default/img_coach_01.png" alt="img_coach_01">
+                                        <img src="/images/default/img_coach_01.png" alt="img_coach_01">
                                         <div class="cont-desc">
                                             <p class="cont-desc-title">골프 인사이드</p>
                                             <ul class="cont-desc-wrap">
@@ -878,7 +878,7 @@
                     <div class="table-area" style="overflow: hidden;">
                         <button type="button" class="btn-more" :class="{ 'is-active' : showMore }" @click="showMore = !showMore">
                             <span>스윙정보</span>
-                            <img src="/public/images/icon/icon_arrow_down.png" alt="icon_arrow_down">
+                            <img src="/images/icon/icon_arrow_down.png" alt="icon_arrow_down">
                         </button>
                         <transition 
                             @before-enter="beforeEnter"
@@ -1431,7 +1431,6 @@ const handleConfirmToast = (message) => {
 }
 
 const handleConfirm = (confirm) => {
-    console.log(confirm)
 }
 
 const toastOpen1 = () => {

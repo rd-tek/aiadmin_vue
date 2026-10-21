@@ -10,6 +10,16 @@ export function useCommon() {
     } else return 0;
   };
 
+  // 2026-10-13: 화면 숫자는 소수점 2자리까지(반올림 없이 자름). 숫자가 아니거나 비어 있으면 그대로 반환
+  const n2 = (v) => {
+    if (v === null || v === undefined || v === "" || typeof v === "boolean") return v;
+    if (typeof v === "string" && !/^\s*-?\d+(\.\d+)?\s*$/.test(v)) return v;
+    const n = Number(v);
+    if (!isFinite(n)) return v;
+    if (Number.isInteger(n)) return typeof v === "string" && !v.includes(".") ? v : n;
+    return Math.trunc(n * 100 + (n >= 0 ? 1e-9 : -1e-9)) / 100;
+  };
+
   const toFixed = (value, text) =>
     value ? Number(value).toFixed(2) : text || 0;
 
@@ -167,22 +177,25 @@ export function useCommon() {
 
   const greenspeed = (status) => {
     const map = {
-      0: "매우 빠름",
-      1: "빠름",
-      2: "보통",
-      3: "느림",
-      4: "매우 느림",
+      1: "없음",
+      2: "매우 빠름",
+      3: "빠름",
+      4: "보통",
+      5: "느림",
+      6: "매우 느림",
+      7: "수동",
     };
     return map[status] || "-";
   };
 
   const greengravity = (status) => {
     const map = {
-      0: "매우 높음",
-      1: "높음",
-      2: "중간",
-      3: "낮음",
-      4: "매우 낮음",
+      1: "없음",
+      2: "매우 높음",
+      3: "높음",
+      4: "중간",
+      5: "낮음",
+      6: "매우 낮음",
     };
     return map[status] || "-";
   };
@@ -201,7 +214,8 @@ export function useCommon() {
   };
 
   const suffix = (value, text) => {
-    if (value == "0") {
+    // 2026-09-16: null/undefined/"" 도 "-" 로 처리 (기존엔 "null점"/"undefined원" 출력됨)
+    if (value === null || value === undefined || value === "" || value == "0") {
       return "-";
     } else return value + text;
   };
@@ -449,8 +463,49 @@ export function useCommon() {
         return "-";
     }
   };
+  // 2026-10-21: 웹 에디터(Tiptap) HTML 표시용 — 허용 태그만 남김(스크립트·이벤트 속성 제거), 태그 없는 기존 평문은 줄바꿈 유지
+  const RICH_TAGS = ["p", "br", "strong", "b", "em", "i", "u", "s", "ul", "ol", "li", "h2", "h3", "h4", "blockquote", "hr", "a", "img"];
+  const escHtml = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  const richHtml = (v) => {
+    const s = String(v ?? "");
+    if (!s) return "";
+    if (!/<\/?[a-z][\s\S]*>/i.test(s)) return escHtml(s).replace(/\r?\n/g, "<br>");
+    return s
+      .replace(/<(script|style|iframe|object|embed|form)[\s\S]*?<\/\1\s*>/gi, "")
+      .replace(/<\/?([a-z0-9]+)([^>]*)>/gi, (m, tag, attrs) => {
+        const t = tag.toLowerCase();
+        if (!RICH_TAGS.includes(t)) return "";
+        if (m.startsWith("</")) return "</" + t + ">";
+        let keep = "";
+        if (t === "a") {
+          const h = attrs.match(/href\s*=\s*"([^"]*)"/i);
+          if (h && /^(https?:|mailto:|tel:)/i.test(h[1])) keep = ' href="' + h[1].replace(/"/g, "&quot;") + '" target="_blank" rel="noopener noreferrer"';
+        }
+        if (t === "img") {
+          const h = attrs.match(/src\s*=\s*"([^"]*)"/i);
+          if (!h || !/^https?:\/\//i.test(h[1])) return "";
+          keep = ' src="' + h[1].replace(/"/g, "&quot;") + '" alt=""';
+        }
+        const al = attrs.match(/text-align:\s*(left|center|right)/i);
+        if (al && /^(p|h2|h3|h4)$/.test(t)) keep += ' style="text-align:' + al[1].toLowerCase() + '"';
+        return "<" + t + keep + ">";
+      });
+  };
+  // 목록 카드 요약 등: 태그를 걷어낸 글자만
+  const plainText = (v) =>
+    String(v ?? "")
+      .replace(/<br\s*\/?>/gi, " ")
+      .replace(/<\/(p|li|h[2-4]|blockquote)>/gi, " ")
+      .replace(/<[^>]+>/g, "")
+      .replace(/&nbsp;/g, " ").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"').replace(/&amp;/g, "&")
+      .replace(/\s+/g, " ")
+      .trim();
+
   return {
+    richHtml,
+    plainText,
     comma,
+    n2,
     toFixed,
     transToValue,
     GMTtuUTCTIME,

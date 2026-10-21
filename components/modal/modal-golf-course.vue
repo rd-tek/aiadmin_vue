@@ -6,25 +6,24 @@
   >
     <div class="modal-container">
       <div class="modal-header">
-        <p class="title">코스 홀 정보 등록/수정</p>
+        <p class="title">코스홀 정보</p>
         <button type="button" class="btn-close" @click="modalClose" aria-label="닫기">
-          <img src="/images/icon/icon_close_grey.png" alt="icon_close_grey" />
+          <img src="/images/icon/icon_close_grey.png" alt="" />
         </button>
       </div>
       <div class="modal-body">
         <div class="content">
-            <p class="top-area">Hole {{ holeData.hole }}. Par {{ holeData.coursubtype }}.</p>
+            <!-- 2026-09-16: Par는 coursubtype(코스타입코드)가 아니라 실제 par_score -->
+            <p class="top-area">Hole {{ holeData.hole }}. Par {{ holeData.par_score }}.</p>
             <div class="box">
                 <div class="box-list">
                     <p class="box-list-tit">코스 미니맵</p>
                     <div class="box-list-cnt">
                         <img
                         :src="
-                            common.getImg(
-                            holeData?.minimap_url + '/' + holeData?.minimap_name
-                            )
+                            (holeData?.minimap_url && holeData?.minimap_name) ? common.getImg(holeData?.minimap_url + '/' + holeData?.minimap_name) : null
                         "
-                        alt="img_golf_course"
+                        alt="골프 코스 사진"
                         loading="lazy"
                         />
                     </div>
@@ -34,11 +33,9 @@
                     <div class="box-list-cnt">
                         <img
                         :src="
-                            common.getImg(
-                            holeData?.grnmap1_url + '/' + holeData?.grnmap1_name
-                            )
+                            (holeData?.grnmap1_url && holeData?.grnmap1_name) ? common.getImg(holeData?.grnmap1_url + '/' + holeData?.grnmap1_name) : null
                         "
-                        alt="img_golf_course"
+                        alt="골프 코스 사진"
                         loading="lazy"
                         />
                     </div>

@@ -4,11 +4,11 @@
         <div class="col-2 flex-end">
             <div class="col d-flex">
                 <div class="d-flex">
-                  <select v-model="searchForm.searchtype">
+                  <select aria-label="검색 구분 선택" v-model="searchForm.searchtype">
                       <option value="1">골프코스 이름</option>
                       <option value="2">골프코스 코드</option>
                   </select>
-                  <input type="text" v-model="searchForm.searchname" placeholder="검색어를 입력해 주세요." @input="handleSearch">
+                  <input aria-label="검색어 입력" type="text" v-model="searchForm.searchname" placeholder="검색어 입력" @input="handleSearch">
                 </div>
                 <button type="button" class="btn" @click="handleSearch">검색</button>
             </div>
@@ -76,7 +76,7 @@
               :disabled="currentPage === 1"
               @click="changePage(currentPage - 1)"
             >
-              <img src="/images/icon/icon_prev.png" alt="prev" />
+              <img src="/images/icon/icon_prev.png" alt="이전" />
             </button>
           </li>
 
@@ -101,7 +101,7 @@
               :disabled="currentPage === totalPages"
               @click="changePage(currentPage + 1)"
             >
-              <img src="/images/icon/icon_next.png" alt="next" />
+              <img src="/images/icon/icon_next.png" alt="다음" />
             </button>
           </li>
         </ul>
@@ -148,7 +148,8 @@ const getCourseList = async () => {
 
     if (res.code === 200) {
       rowList.value = res.courselist || [];
-      totalCount.value = Number(res.totalCount || 0);
+      // 2026-09-14: API 응답 필드는 courselistcnt (totalCount 아님) → 페이지네이션 총계 수정
+      totalCount.value = Number(res.courselistcnt || 0);
     }
   } catch (err) {
     console.error("코스 목록 조회 실패", err);
@@ -189,8 +190,9 @@ const changePage = async (page) => {
 
 // 2026.06.16[cgnoh]: 페이지 번호 계산
 const visiblePages = computed(() => {
-  const current = pageNo.value;
-  const total = totalPage.value;
+  // 2026-09-14: 실제 상태 변수 사용 (pageNo/totalPage는 갱신 안 되는 죽은 ref였음)
+  const current = currentPage.value;
+  const total = totalPages.value;
 
   let start = Math.max(1, current - 2);
   let end = Math.min(total, start + 4);
@@ -212,7 +214,7 @@ useIntersectionObserver(
     rowListRef,
     ([{ isIntersecting }]) => {
         if (isIntersecting) {
-            rowListMove.value = true;
+            if (import.meta.client) rowListMove.value = true;
         }
     },
     {
@@ -233,7 +235,7 @@ useHead({
   htmlAttrs: {
     lang: 'ko'
   },
-  title: '코스관리',
+  title: '코스 목록',
   meta: [
     { name: 'description', content: '코스관리 페이지 입니다.' }
   ]

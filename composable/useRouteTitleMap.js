@@ -32,19 +32,24 @@ export const useRouteTitleMap = () => ({
   "customer-inquiry-write": "고객문의 등록",
 
   golfcourse: "코스관리",
-  "golfcourse-list": "코스관리 상세",
-  "golfcourse-edit": "코스관리 등록",
-  "golfcourse-edit-slug": "코스관리 수정",
+  // 2026-10-08(UI 2차 검토): 목록 페이지 제목이 '코스관리 상세'로 나오던 문제 → 메뉴명(코스리스트)과 같게, 하위 페이지는 접두 일치로 구분
+  "golfcourse-list": "코스 목록", // 2026-10-20: 메뉴명과 같게(리스트 → 목록)
+  "golfcourse-list-slug": "코스 상세",
+  "golfcourse-list-edit": "코스 등록",
+  "golfcourse-list-edit-slug": "코스 수정",
+  "golfcourse-edit": "코스 등록",
+  "golfcourse-edit-slug": "코스 수정",
 
-  "swing-list": "스윙영상리스트",
-  "swing-list-slug": "스윙영상리스트 상세",
+  "swing-list": "스윙영상 목록", // 2026-10-20: 메뉴명과 같게(리스트 → 목록)
+  "swing-list-slug": "스윙영상 상세",
 
   "coaching-golf": "코칭",
   "coaching-golf-slug": "코칭 상세",
 
-  "manager-list": "관리자 리스트",
-  "manager-list-slug": "관리자 리스트 상세",
-  "manager-write": "관리자 리스트 등록",
+  "manager-list": "관리자", // 2026-10-20: 제목에서 "리스트" 제거
+  "manager-list-slug": "관리자 상세",
+  "manager-write": "관리자 등록",
+  "manager-list-write": "관리자 등록", // 2026-10-12(회귀 점검): 목록의 [등록하기](/manager/list/write) 제목이 "관리자 리스트"로 보이던 문제
 
   "manager-game-data": "게임데이터 관리",
   "manager-game-data-game-score": "게임데이터 관리(스코어보드)",

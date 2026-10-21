@@ -25,7 +25,7 @@
   // Primary Color
   --colorPrimary1: #034B5E; 
   --colorPrimary2: #298097;
-  --colorPrimary2: #F8AD15;
+  --colorPrimary3: #F8AD15; /* 2026-09-11: 중복 --colorPrimary2 오타 정정(청록 덮어쓰던 겨자색 → Primary3로 분리). 둘 다 미사용 변수 */
 
   // Greyscale Color
   --colorGrey1: #F8F9FA; // Background
@@ -40,8 +40,8 @@
   --colorGrey10: #000000; // Text-Title
 
   // Indication Color
-  --colorIndic1: #00B34A;  // Positive
-  --colorIndic2: #EF2B49;  // Nagative
+  --colorIndic1: #00843C;  // Positive
+  --colorIndic2: #D81E3C;  // Nagative
   --colorIndic3: #FFC107;  // Warning
 
   // Accent Color
@@ -49,7 +49,7 @@
   --colorAccent2: #0033A1; // Indigo
   --colorAccent3: #552BB6; // Purple
   --colorAccent4: #CE2F92; // Pink
-  --colorAccent5: #FF7519; // Orange
+  --colorAccent5: #E85D00; // Orange
   --colorAccent6: #008086; // Teal
   --colorAccent7: #22BBBB; // Cyan
   --colorAccent8: #CDEA35; // Lime

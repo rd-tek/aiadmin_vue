@@ -6,9 +6,9 @@
   >
     <div class="modal-container">
       <div class="modal-header">
-        <p class="title">코스 홀 정보 등록/수정</p>
+        <p class="title">코스 홀 정보</p>
         <button type="button" class="btn-close" @click="modalClose" aria-label="닫기">
-          <img src="/images/icon/icon_close_grey.png" alt="icon_close_grey" />
+          <img src="/images/icon/icon_close_grey.png" alt="" />
         </button>
       </div>
       <div class="modal-body">
@@ -35,7 +35,7 @@
               <td>
                 <div class="input-wrap">
                   <div class="input-text">
-                    <input
+                    <input :aria-label="file.label + ' 파일 선택'"
                       type="file"
                       :ref="el => setFileRef(file.key, el)"
                       @change="onFileChange(file.key, $event)"
@@ -51,6 +51,10 @@
                     </span>
                     <span class="name placeholder" v-else>파일을 선택하거나 여기에 드롭하세요.</span>
                   </div>
+                  <!-- 2026-09-14: 홀 이미지 미리보기 (새로 선택한 파일 또는 기존 등록 이미지) — 스타일은 modal.scss .hole-img-preview -->
+                  <div class="hole-img-preview" v-if="file.urlKey && (fileStates[file.key].previewUrl || item?.[file.urlKey])">
+                    <img :src="fileStates[file.key].previewUrl || common.getImg((item[file.urlKey] || '') + '/' + (item[file.existingKey] || ''))" alt="hole preview" />
+                  </div>
                 </div>
               </td>
             </tr>
@@ -58,7 +62,7 @@
               <th>홀 소개</th>
               <td>
                 <div class="text-area">
-                  <textarea :value="item?.contents" placeholder="한글 100자 3줄까지 입력가능합니다."></textarea>
+                  <textarea aria-label="홀 소개" :value="item?.contents" placeholder="한글 100자 3줄까지 입력가능합니다."></textarea>
                 </div>
               </td>
             </tr>
@@ -77,16 +81,17 @@
 
 <script setup>
 import { useCourseApi } from "~/api/course";
+import { useCommon } from "@/utils/common";
 
 const { _courseHoleEdit } = useCourseApi();
+const common = useCommon();
 
-// 2026.06.16[cgnoh]: existingKey = API 응답에서 받아온 파일명 필드
+// 2026.06.16[cgnoh]: existingKey = API 응답 파일명(*_name→매핑됨), urlKey = 이미지 URL(*_url) — 2026-09-14 이미지 미리보기 추가
 const fileFields = [
-  { key: 'holeImage',     label: '홀 이미지',      accept: 'image/*', existingKey: null },
-  { key: 'courseMinimap', label: '코스 미니맵',     accept: 'image/*', existingKey: 'minimap_filename' },
-  { key: 'greenMinimapL', label: '그린 미니맵(좌)', accept: 'image/*', existingKey: 'grnmap1_filename' },
-  { key: 'greenMinimapR', label: '그린 미니맵(우)', accept: 'image/*', existingKey: 'grnmap2_filename' },
-  { key: 'holeVideo',     label: '홀 동영상',       accept: 'video/*', existingKey: 'movie_filename' },
+  { key: 'courseMinimap', label: '코스 미니맵',     accept: 'image/*', existingKey: 'minimap_filename', urlKey: 'minimap_url' },
+  { key: 'greenMinimapL', label: '그린 미니맵(좌)', accept: 'image/*', existingKey: 'grnmap1_filename', urlKey: 'grnmap1_url' },
+  { key: 'greenMinimapR', label: '그린 미니맵(우)', accept: 'image/*', existingKey: 'grnmap2_filename', urlKey: 'grnmap2_url' },
+  { key: 'holeVideo',     label: '홀 동영상',       accept: 'video/*', existingKey: 'movie_filename', urlKey: null },
 ];
 
 const fileStates = reactive(

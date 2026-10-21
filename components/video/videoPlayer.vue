@@ -12,7 +12,6 @@
         preload="auto"
         muted
         :poster="poster || defaultPoster"
-        crossorigin="anonymous"
       ></video>
 
       <div v-if="!hasSrc" class="no-data" />
@@ -22,14 +21,40 @@
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount, watch, computed, nextTick } from 'vue'
-import videojs from 'video.js'
-import 'video.js/dist/video-js.css'
+// 2026-09-17: video.js 정적 import 제거 (빌드 시 SSR 'global/window' 크래시 방지, aishop 참고) → 브라우저에서만 동적 import
+let videojs = null
+const loadVideojs = async () => {
+  if (!videojs) {
+    await import('video.js/dist/video-js.css')
+    videojs = (await import('video.js')).default
+  }
+  return videojs
+}
 
 const props = defineProps({
   videoinfo: { type: Object, required: true }, // { fit_video_path, fit_video_type }
   autoplay:  { type: Boolean, default: true },
   poster:    { type: String,  default: '' },
 })
+
+// 2026-10-21: 재생 위치·상태를 부모에 알림 → 구분동작·Step Balance 동기화
+const emit = defineEmits(['time', 'state'])
+let timeRaf = null
+const stopTimeLoop = () => { if (timeRaf) { cancelAnimationFrame(timeRaf); timeRaf = null } }
+const emitTime = () => { try { emit('time', Number(player?.currentTime?.() || 0)) } catch {} }
+const startTimeLoop = () => {
+  stopTimeLoop()
+  const loop = () => { emitTime(); timeRaf = requestAnimationFrame(loop) }
+  timeRaf = requestAnimationFrame(loop)
+}
+const bindSyncEvents = () => {
+  if (!player) return
+  player.on('play', () => { emit('state', 'play'); startTimeLoop() })
+  player.on('pause', () => { stopTimeLoop(); emitTime(); emit('state', 'pause') })
+  player.on('ended', () => { stopTimeLoop(); emitTime(); emit('state', 'ended') })
+  player.on('seeked', emitTime)
+  player.on('loadedmetadata', emitTime)
+}
 
 const defaultPoster = '/images/default/img_coach_09.png'
 const videoRef = ref(null)
@@ -46,8 +71,22 @@ const srcType = computed(() => {
   return 'video/mp4'
 })
 
-const initPlayer = () => {
+/**
+ * 2026-09-17: 실제 영상 비율을 래퍼에 전달 (aimember 참고).
+ *   영상이 4:3(1280x960)인데 박스가 16:9 로 고정돼 좌우 여백이 많던 문제 →
+ *   loadedmetadata 에서 실제 해상도를 읽어 --video-ratio 로 심는다.
+ */
+const applyRatio = () => {
+  const el = videoRef.value
+  if (!el || !el.videoWidth || !el.videoHeight) return
+  const wrap = el.closest('.video-wrapper')
+  if (wrap) wrap.style.setProperty('--video-ratio', el.videoWidth + ' / ' + el.videoHeight)
+}
+
+const initPlayer = async () => {
   if (!videoRef.value || !hasSrc.value) return
+  await loadVideojs()
+  if (!videoRef.value) return
 
   player = videojs(videoRef.value, {
     controls: true,
@@ -59,6 +98,7 @@ const initPlayer = () => {
 
   // ✅ 음소거 보장 (정책 우회)
   player.muted(true)
+  bindSyncEvents()
 
   // ✅ 메타데이터 이후에 pendingSeek 수행
   const flushPendingSeek = () => {
@@ -68,6 +108,7 @@ const initPlayer = () => {
     }
   }
   player.one('loadedmetadata', flushPendingSeek)
+  player.on('loadedmetadata', applyRatio)
 
   // ✅ 자동재생 시도(여러 타이밍에서 안전하게)
   const tryPlay = () => {
@@ -85,7 +126,7 @@ const initPlayer = () => {
 onMounted(async () => {
   if (hasSrc.value) {
     await nextTick()
-    initPlayer()
+    await initPlayer()
   }
 })
 
@@ -94,7 +135,7 @@ watch(srcUrl, async (newUrl) => {
 
   if (!player) {
     await nextTick()
-    initPlayer()
+    await initPlayer()
     return
   }
 
@@ -120,6 +161,7 @@ watch(srcUrl, async (newUrl) => {
 })
 
 onBeforeUnmount(() => {
+  stopTimeLoop()
   try { player?.dispose() } catch(_) {}
   player = null
 })
@@ -144,8 +186,9 @@ const setCurrentTime = (sec) => {
 const play = async () => { try { await player?.play() } catch {} }
 const pause = () => { player?.pause?.() }
 const getPlayer = () => player
+const getCurrentTime = () => Number(player?.currentTime?.() || 0)
 
-defineExpose({ setCurrentTime, play, pause, getPlayer })
+defineExpose({ setCurrentTime, play, pause, getPlayer, getCurrentTime })
 </script>
 
 <style scoped lang="scss">

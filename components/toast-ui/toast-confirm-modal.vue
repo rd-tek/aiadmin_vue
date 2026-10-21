@@ -12,7 +12,7 @@
                 <div class="toast-modal-body">
                     <div class="img-area">
                         <div class="img-area-inner">
-                            <img src="/images/imoji/imoji_01.png" alt="imoji_01">
+                            <img src="/images/imoji/imoji_01.png" alt="">
                         </div>
                     </div>
                     <div class="cont-area">

@@ -38,15 +38,18 @@ header {
         color: #72777A;
         line-height: 1.5;
 
-        .cursor {
-          display: inline-block;
-          margin-left: 2px;
-          animation: blink 1s infinite;
+        b {
+          color: #35383B;
+          font-weight: 600;
         }
 
-        @keyframes blink {
-          0%, 50%, 100% { opacity: 1; }
-          25%, 75% { opacity: 0; }
+        .dot {
+          margin: 0 8px;
+          color: #CDCFD1;
+        }
+
+        .today {
+          font-variant-numeric: tabular-nums;
         }
       }
     }
@@ -110,5 +113,65 @@ header {
       width: 100%;
       padding: 28px 20px 0;
     }
+  }
+}
+
+/* 2026-10-08(UI 검토): 모바일(≤768) 헤더 글자크기 위젯 — 별도 줄을 만들지 않고 버튼 1개(가±)로 접어
+   왼쪽 사이드바 버튼 옆에 둠(누르면 팝오버로 가−/가/가+). 헤더 높이는 원본과 동일.
+   가운데 정렬 제목이 좌측(사이드바·가±)·우측(닉네임)과 겹치지 않도록 제목 좌우 안쪽 여백 + 말줄임,
+   닉네임은 최대 64px 말줄임(원본에서도 긴 아이디면 제목과 겹치던 부분). */
+@media screen and (max-width: 768px) {
+  header {
+    .left-area {
+      .header-fs {
+        order: 1;
+        margin-left: -4px; // 사이드바 버튼과 간격 12px(부모 gap 16 - 4)
+        margin-right: auto;
+        z-index: 2;
+      }
+
+      .nickname {
+        order: 2;
+        max-width: 64px;
+        overflow: hidden;
+        // 2026-10-20: 한 줄 말줄임('X-GOL...') → 작은 글씨 두 줄까지
+        white-space: normal;
+        word-break: keep-all;
+        overflow-wrap: anywhere;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        font-size: 12px;
+        line-height: 1.25;
+        text-align: right;
+      }
+
+      .title {
+        padding: 0 92px; // 좌: 사이드바+가± 끝(88px) / 우: 닉네임 최대 64px+여백 → 가운데 191px
+        box-sizing: border-box;
+        pointer-events: none;
+
+        .text,
+        .text .name {
+          display: block; // .name 이 inline-block 이면 말줄임(…)이 적용되지 않음
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      }
+    }
+  }
+}
+
+/* 2026-10-21: 화면 크기(정부24 방식) — PC 헤더 오른쪽 끝 고정, 모바일은 상단바 메뉴 버튼 옆 아이콘 */
+header {
+  .right-area { display: flex; align-items: center; gap: 12px; }
+  .left-area .header-fs--mob { display: none; }
+}
+@media screen and (max-width: 768px) {
+  header {
+    .right-area.is-empty { display: none; }
+    .right-area .header-fs--pc { display: none; }
+    .left-area .header-fs--mob { display: inline-flex; }
   }
 }

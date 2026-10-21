@@ -97,18 +97,6 @@ const initChart = () => {
     }
 
     chartInstance.setOption(option)
-    
-    // passive 이벤트 리스너로 마우스 휠 이벤트 처리
-    const chartDom = chartRef.value
-    if (chartDom) {
-      chartDom.addEventListener('wheel', (e) => {
-        e.preventDefault()
-      }, { passive: false })
-      
-      chartDom.addEventListener('mousewheel', (e) => {
-        e.preventDefault()
-      }, { passive: false })
-    }
   }
 }
 

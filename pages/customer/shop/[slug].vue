@@ -10,8 +10,8 @@
                     <div class="info-list name">{{ noticeInfo.regname }}</div>
                     <div class="info-list date">{{ noticeInfo.date }}</div>
                     <div class="info-list count">조회수 : {{ noticeInfo.cnt }}</div>
-                    <div class="info-list download">
-                        <button type="button" class="btn-download" aria-label="다운로드">
+                    <div class="info-list download" v-if="noticeInfo.filename">
+                        <button type="button" class="btn-download" :aria-label="`${noticeInfo.originname || '첨부파일'} 다운로드`" :disabled="!noticeInfo.download_link" @click="handleDownload">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                                 <mask id="mask0_4215_81312" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
                                     <rect width="24" height="24" fill="#D9D9D9"/>
@@ -21,7 +21,7 @@
                                 </g>
                             </svg>
                         </button> 
-                        <span class="text">{{ noticeInfo.filename }}</span>
+                        <span class="text">{{ noticeInfo.originname || noticeInfo.filename }}</span>
                     </div>
                 </div>
             </div>
@@ -33,12 +33,12 @@
                     <span class="tit">이전글</span>
                     <span class="cnt">
                         <nuxt-link
-                            v-if="prevPost"
+                            v-if="prevPost?.notice_shop_pk"
                             :to="`/customer/shop/${prevPost.notice_shop_pk}`"
                             >
                             {{ prevPost.title }}
                         </nuxt-link>
-                        <span v-if="prevPost == ''" class="no-link">
+                        <span v-if="!prevPost?.notice_shop_pk" class="no-link">
                             이전 글이 없습니다.
                         </span>
                     </span>
@@ -47,12 +47,12 @@
                     <span class="tit">다음글</span>
                     <span class="cnt">
                         <nuxt-link
-                            v-if="nextPost"
+                            v-if="nextPost?.notice_shop_pk"
                             :to="`/customer/shop/${nextPost.notice_shop_pk}`"
                             >
                             {{ nextPost.title }}
                         </nuxt-link>
-                        <span v-if="nextPost == ''" class="no-link">
+                        <span v-if="!nextPost?.notice_shop_pk" class="no-link">
                             다음 글이 없습니다.
                         </span>
                     </span>
@@ -136,6 +136,32 @@ const handleEdit = () => {
   router.push(`/customer/shop/edit/${route.params.slug}`);
 };
 
+// 2026-10-12(회귀 점검): 첨부 다운로드 버튼에 동작이 없던 문제(원래부터). 백엔드 download_link 는 관리자 인증(Bearer)이
+//   필요해 새 창으로 열면 401 → 토큰을 실어 받아 원래 파일명(originname)으로 저장.
+const handleDownload = async () => {
+  const link = noticeInfo.value?.download_link;
+  if (!link) return;
+  try {
+    const token = useCookie("aiadmintoken").value;
+    const res = await fetch(link, { headers: token ? { Authorization: `Bearer ${token}` } : {} });
+    if (!res.ok) {
+      let msg = "";
+      try { msg = (await res.json())?.message || ""; } catch (e) {}
+      return openErrorToast(msg || "파일을 내려받지 못했습니다.");
+    }
+    const url = URL.createObjectURL(await res.blob());
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = noticeInfo.value.originname || "download";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 3000);
+  } catch (e) {
+    openErrorToast("파일을 내려받지 못했습니다.");
+  }
+};
+
 // 2026.06.15[cgnoh]: 토스트 메시지 관련
 const toastMessage = ref();
 const toastWarnMessage = ref();
@@ -170,7 +196,7 @@ const openErrorToast = (message) => {
 const confirmResolver = ref(null);
 const handleConfirm = () => {
     modals['toastConfirmModal'] = false;
-    document.querySelector('body').classList.add('is-hidden');
+    document.querySelector('body').classList.remove('is-hidden');
     confirmResolver.value(true);
     confirmResolver.value = null;
 }
@@ -195,7 +221,6 @@ const handleDelete = async () => {
       route.params.slug,
     );
 
-    console.log("delete result", res);
 
     if (res.code === 200 || res.result === "success") {
       openSaveToast("삭제되었습니다.");

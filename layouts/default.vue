@@ -33,9 +33,14 @@ const handleClose = () => {
 
 // 2026.05.19[cgnoh]: 반응형 이벤트
 const { width } = useWindowSize();
+// 2026-10-06: immediate 제거 — SSR(width=Infinity → 열림)과 첫 클라이언트 렌더를 일치시키고(hydration class mismatch 방지)
+//   마운트 직후 실제 폭으로 반영. 이후 리사이즈 동작은 기존과 동일.
 watch(width, (w) => {
   isOpen.value = w > 1300
-}, { immediate: true });
+});
+onMounted(() => {
+  isOpen.value = window.innerWidth > 1300;
+});
 </script>
 <style lang="scss" scoped>
 #wrapper {

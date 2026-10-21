@@ -12,7 +12,7 @@
                     <th>상태</th>
                     <td>
                       <div class="select-default">
-                        <select v-model="form.type">
+                        <select aria-label="상태 선택" v-model="form.type">
                             <option value="1">공지</option>
                             <option value="2">뉴스</option>
                         </select>
@@ -23,7 +23,7 @@
                     <th>제목</th>
                     <td>
                         <div class="input-text">
-                            <input
+                            <input aria-label="제목"
                                 type="text"
                                 v-model="form.title"
                                 maxlength="30"
@@ -33,7 +33,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <th>게시</th>
+                    <th>처리 상태</th>
                     <td>
                         <div class="checkbox">
                             <div class="checkbox-list">
@@ -48,7 +48,7 @@
                                         <span class="check-box-item">
                                             <i class="item-line" />
                                         </span>
-                                        <span class="check-box-txt">게시</span>
+                                        <span class="check-box-txt">처리 완료</span>
                                     </label>
                                 </div>
                             </div>
@@ -75,7 +75,7 @@
                     <th>내용</th>
                     <td>
                         <div class="textarea">
-                            <textarea
+                            <textarea aria-label="내용"
                                 v-model="form.contents"
                                 placeholder="내용을 입력해주세요."
                             ></textarea>
@@ -88,11 +88,11 @@
                                     style="display:none"
                                     @change="onFileChange"
                                 >
-                                <input
+                                <input aria-label="첨부파일명"
                                     type="text"
                                     :value="fileName"
                                     readonly
-                                    placeholder="선택해 주세요."
+                                    placeholder="미선택"
                                 >
                                 <button
                                     type="button"
@@ -219,17 +219,17 @@ const openErrorToast = (message) => {
 const handleSave = async () => {
   try {
     if (!form.title.trim()) {
-      toastWarnMessage("제목을 입력해주세요.");
+      openWarnToast("제목을 입력해주세요.");
       return;
     }
 
     if (form.title.length > 30) {
-      toastWarnMessage("제목은 30자 이하만 입력 가능합니다.");
+      openWarnToast("제목은 30자 이하만 입력 가능합니다.");
       return;
     }
 
     if (!form.contents.trim()) {
-      toastWarnMessage("내용을 입력해주세요.");
+      openWarnToast("내용을 입력해주세요.");
       return;
     }
 

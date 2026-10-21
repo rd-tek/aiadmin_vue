@@ -2,7 +2,7 @@
     <nav class="nav-wrap" :class="{ close: !isOpen }" ref="navWrap">
         <div class="nav-wrap-top">
             <button type="button" class="logo" @click="handleHome">
-                <img src="/public/images/default/img_logo_black.png" alt="logo">
+                <img src="/images/default/img_logo_black.png" alt="logo">
             </button>
             <ul class="gnb">
                 <li class="gnb-list" v-for="(item, i) in gnbMenu" :key="i">

@@ -37,7 +37,7 @@
                 <div class="img-area">
                   <div class="image" :style="{ backgroundImage: `url(${item.fit_preview_path})` }"></div>
                 </div>
-                <nuxt-link :to="`/swing/list/${item.swing_pk}`" class="info-area">
+                <nuxt-link :to="`/swing/list/${item.fit_shotdata_pk}`" class="info-area">
                   <div class="label" :class="{ 'color-green': item.view_flag === '1' }">{{ item.view_flag === '1' ? '공개' : '비공개' }}</div>
                   <button type="button" class="title">{{ item.title || '-' }}</button>
                   <div class="desc">
@@ -45,7 +45,7 @@
                       <span class="name">{{ item.nickname || '-' }}</span>
                     </span>
                     <span class="desc-list">
-                      <span class="date">{{ item.regdate || '-' }}</span>
+                      <span class="date"><template v-for="(dtp, dti) in String(item.regdate || '-').split(' ')" :key="dti"><span class="u-date">{{ dtp }}</span>{{ ' ' }}</template></span>
                     </span>
                     <span class="desc-list">
                       <span class="location">{{ item.shopname || '-' }}</span>
@@ -62,12 +62,17 @@
         </template>
         <div class="row-list is-move" v-else>
           <div class="row-list-item">
-            <div class="no-data">데이터가 없습니다.</div>
+            <!-- 2026-10-20: 빈 결과 안내 — 기간을 알려 주고, 짧은 기간이면 최근 6개월로 넓혀 보기 -->
+            <div class="no-data">
+              선택한 기간({{ periodText }})에 등록된 스윙영상이 없습니다.
+              <button type="button" class="btn-sm-line widen-btn" v-if="canWiden" @click="widenToSixMonths">최근 6개월 보기</button>
+            </div>
           </div>
         </div>
         <ul
           class="pagination-container type02"
-        >
+          v-if="totalCount > 0"
+        ><!-- 2026-10-20: 결과가 없으면 페이지 이동도 숨김 -->
           <!-- 이전 -->
           <li>
             <button
@@ -78,7 +83,7 @@
             >
               <img
                 src="/images/icon/icon_prev.png"
-                alt="prev"
+                alt="이전"
               />
             </button>
           </li>
@@ -108,7 +113,7 @@
             >
               <img
                 src="/images/icon/icon_next.png"
-                alt="next"
+                alt="다음"
               />
             </button>
           </li>
@@ -289,7 +294,7 @@ const handleDelete = async (item) => {
 
 // 2026.06.16[cgnoh]: 날짜 관련
 const startDate = ref(new Date());
-startDate.value.setMonth(startDate.value.getMonth() - 14);
+startDate.value.setMonth(startDate.value.getMonth() - 1); // 2026-10-19: 기본 기간 1개월 — 다른 목록(게임데이터·게임관리·회원조회)과 이 화면의 첫 조회값이 1개월(이전 14개월은 근거 없음)
 const endDate = ref(new Date());
 const formatDate = (date) => {
   if (!date) return "";
@@ -313,6 +318,8 @@ const getSwingList = async () => {
     const res = await _swingList({
       pageno: pageNo.value,
       pagesize: pageSize,
+      startdate: formatApiDate(startDate.value), // 2026-10-19: 날짜를 보내지 않아 기간 검색이 동작하지 않던 문제
+      enddate: formatApiDate(endDate.value),
     });
 
     if (res.code === 200) {
@@ -325,6 +332,13 @@ const getSwingList = async () => {
     console.error(err);
   }
 };
+
+// 2026-10-20: 빈 결과 안내용 기간 표기·넓혀 보기
+const fmtDot = (d) => (d ? `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')}` : '');
+const periodText = computed(() => `${fmtDot(startDate.value)} ~ ${fmtDot(endDate.value)}`);
+const sixMonthsAgo = () => { const d = new Date(); d.setMonth(d.getMonth() - 6); d.setHours(0, 0, 0, 0); return d; };
+const canWiden = computed(() => startDate.value && startDate.value > sixMonthsAgo());
+const widenToSixMonths = () => { startDate.value = sixMonthsAgo(); endDate.value = new Date(); };
 
 // 2026.06.16[cgnoh]: 검색 핸들링
 const handleSearch = () => {
@@ -339,7 +353,7 @@ useIntersectionObserver(
     rowListRef,
     ([{ isIntersecting }]) => {
         if (isIntersecting) {
-            rowListMove.value = true;
+            if (import.meta.client) rowListMove.value = true;
         }
     },
     {
@@ -378,7 +392,7 @@ useHead({
   htmlAttrs: {
     lang: 'ko'
   },
-  title: '스윙영상',
+  title: '스윙영상 목록',
   meta: [
     { name: 'description', content: '스윙영상 페이지 입니다.' }
   ]
@@ -386,4 +400,8 @@ useHead({
 </script>
 <style lang="scss" scoped>
 @use '@/assets/scss/pages/swing-list.scss';
+
+/* 2026-10-20: 빈 결과 안내 */
+.no-data .widen-btn { display: inline-flex; margin-left: 10px; vertical-align: middle; }
+@media screen and (max-width: 768px) { .no-data .widen-btn { display: flex; margin: 12px auto 0; } }
 </style>

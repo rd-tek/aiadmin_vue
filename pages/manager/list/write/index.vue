@@ -13,9 +13,9 @@
                                 <th>이름</th>
                                 <td>
                                     <div class="input-text">
-                                        <input
+                                        <input aria-label="이름"
                                             type="text"
-                                            placeholder="관리자 테스트"
+                                            placeholder="이름"
                                             v-model="form.name"
                                         />
                                     </div>
@@ -25,7 +25,7 @@
                                 <th>아이디</th>
                                 <td>
                                     <div class="input-text">
-                                        <input
+                                        <input aria-label="아이디"
                                             type="text"
                                             placeholder="아이디"
                                             v-model="form.id"
@@ -37,7 +37,7 @@
                                 <th>비밀번호</th>
                                 <td>
                                     <div class="input-text">
-                                        <input
+                                        <input aria-label="비밀번호"
                                             type="password"
                                             placeholder="비밀번호"
                                             v-model="form.password"
@@ -49,7 +49,7 @@
                                 <th>비밀번호 확인</th>
                                 <td>
                                     <div class="input-text">
-                                        <input
+                                        <input aria-label="비밀번호 확인"
                                             type="password"
                                             placeholder="비밀번호 확인"
                                             v-model="form.password_re"
@@ -61,22 +61,28 @@
                                 <th>부서</th>
                                 <td>
                                     <div class="select-default">
-                                        <select v-model="form.part">
-                                            <option value="1">개발팀</option>
-                                            <option value="2">기획팀</option>
+                                        <select aria-label="부서 선택" v-model="form.part">
+                                            <option value="1">관리부</option>
+                                            <option value="2">기술연구소</option>
+                                            <option value="3">고객지원팀</option>
+                                            <option value="4">제조부</option>
+                                            <option value="5">해외영업부</option>
                                         </select>
                                     </div>
                                 </td>
                             </tr>
                             <tr>
-                                <th>직책</th>
+                                <th>직급</th>
                                 <td>
                                     <div class="select-default">
-                                        <select v-model="form.position">
+                                        <select aria-label="직급 선택" v-model="form.position">
                                             <option value="1">사원</option>
                                             <option value="2">대리</option>
                                             <option value="3">과장</option>
-                                            <option value="4">차장</option>
+                                            <option value="4">팀장</option>
+                                            <option value="5">차장</option>
+                                            <option value="6">부장</option>
+                                            <option value="7">이사</option>
                                         </select>
                                     </div>
                                 </td>
@@ -85,7 +91,7 @@
                                 <th>핸드폰</th>
                                 <td>
                                     <div class="input-text">
-                                        <input
+                                        <input aria-label="핸드폰"
                                             type="text"
                                             placeholder="010-0000-0000"
                                             v-model="form.phone"
@@ -97,7 +103,7 @@
                                 <th>이메일</th>
                                 <td>
                                     <div class="input-text">
-                                        <input
+                                        <input aria-label="이메일"
                                             type="text"
                                             placeholder="abc@example.com"
                                             v-model="form.email"
@@ -109,10 +115,9 @@
                                 <th>상태</th>
                                 <td>
                                     <div class="input-text">
-                                        <select v-model="form.status">
-                                            <option value="1">정상</option>
-                                            <option value="2">대기</option>
-                                            <option value="3">중지</option>
+                                        <select aria-label="상태 선택" v-model="form.status">
+                                            <option value="1">사용</option>
+                                            <option value="0">대기</option>
                                         </select>
                                     </div>
                                 </td>
@@ -172,7 +177,7 @@ const form = ref({
   part: "1",
   position: "1",
   phone: "",
-  mail: "",
+  email: "",
   status: "1",
 });
 
@@ -244,6 +249,13 @@ const saveAdmin = async () => {
 
 definePageMeta({
   layout: "default",
+});
+
+// 2026-10-06: 탭 타이틀 (형제 페이지와 같은 useHead 형식, 직전 페이지 타이틀 잔존 방지)
+useHead({
+  htmlAttrs: { lang: 'ko' },
+  title: '관리자 등록',
+  meta: [{ name: 'description', content: '관리자 등록 페이지 입니다.' }]
 });
 </script>
 <style lang="scss" scoped>

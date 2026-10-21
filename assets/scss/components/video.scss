@@ -10,7 +10,7 @@
     .vjs-icon-placeholder {
       &:before {
         content: '';
-        background: url('/public/images/icon/icon_play.png') no-repeat;
+        background: url('/images/icon/icon_play.png') no-repeat;
         background-size: auto 100%;
         background-position: center;
       }
@@ -48,7 +48,7 @@
     &:before {
       content: '';
       display: block;
-      background: url('/public/images/icon/icon_settings.png') no-repeat;
+      background: url('/images/icon/icon_settings.png') no-repeat;
       background-size: 24px;
       background-position: center;
       width: 100%;
@@ -169,5 +169,20 @@
       height: 100%;
       color: #000;
     }
+  }
+}
+
+// 2026-09-17: 영상 비율 (aimember 참고)
+//   video.js fluid 는 padding-top 56.25%(16:9) 로 비율을 만들어 4:3 영상은 좌우 여백이 많아짐.
+//   래퍼가 실제 영상 비율(--video-ratio, videoPlayer.vue 가 loadedmetadata 에서 주입)로 높이를 잡고,
+//   플레이어가 그 안을 꽉 채운다. 값을 못 읽으면 16/9 로 폴백.
+.video-wrapper {
+  width: 100%;
+  aspect-ratio: var(--video-ratio, 16 / 9);
+
+  &::v-deep(.video-js) {
+    width: 100%;
+    height: 100%;
+    padding-top: 0;
   }
 }

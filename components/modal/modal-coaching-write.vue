@@ -8,7 +8,7 @@
       <div class="modal-header">
         <p class="title">코칭 제목 등록</p>
         <button type="button" class="btn-close" @click="modalClose" aria-label="닫기">
-          <img src="/images/icon/icon_close_grey.png" alt="icon_close_grey" />
+          <img src="/images/icon/icon_close_grey.png" alt="" />
         </button>
       </div>
       <div class="modal-body">
@@ -22,7 +22,7 @@
                     <th>제목</th>
                     <td>
                         <div class="input-text">
-                            <input type="text" placeholder="제목을 입력해주세요.">
+                            <input aria-label="제목" type="text" placeholder="제목을 입력해주세요.">
                         </div>
                     </td>
                 </tr>
@@ -30,7 +30,7 @@
                     <th>내용</th>
                     <td>
                         <div class="text-area">
-                            <textarea placeholder="한글 100자 3줄까지 입력가능합니다."></textarea>
+                            <textarea aria-label="내용" placeholder="한글 100자 3줄까지 입력가능합니다."></textarea>
                         </div>
                     </td>
                 </tr>

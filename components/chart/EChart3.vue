@@ -54,7 +54,7 @@ const buildOption = (pairs /* [[z,x], ...] */) => ({
       margin: 15,
       fontFamily: 'Nunito',
       opacity: 0.7,
-      formatter: (val) => `${(val ).toFixed(0)}m`, //
+      formatter: (val) => `${Number.isInteger(val) ? val : Number(val).toFixed(1)}m` /* 2026-10-13: 범위가 작을 때 0m 0m 1m 1m 처럼 눈금 중복 표시 방지 */, //
     },
     splitLine: { show: true, lineStyle: { type: 'dashed', color: '#DFE5EE' } },
   },
@@ -69,7 +69,7 @@ const buildOption = (pairs /* [[z,x], ...] */) => ({
       margin: 15,
       fontFamily: 'Nunito',
       opacity: 0.7,
-      formatter: (val) => `${(val).toFixed(0)}m`, // ✅ y값을 *100 후 m로 표시
+      formatter: (val) => `${Number.isInteger(val) ? val : Number(val).toFixed(1)}m` /* 2026-10-13: 범위가 작을 때 0m 0m 1m 1m 처럼 눈금 중복 표시 방지 */, // ✅ y값을 *100 후 m로 표시
     },
     axisTick: { show: false },
     axisLine: { show: false },
@@ -106,8 +106,6 @@ const renderChart = () => {
 
   // 차트 영역에서의 기본 스크롤 방지 (기존 dataZoom 설정을 존중)
   const dom = chartRef.value
-  dom.addEventListener('wheel', (e) => e.preventDefault(), { passive: false })
-  dom.addEventListener('mousewheel', (e) => e.preventDefault(), { passive: false })
 }
 
 const resize = () => { chartInstance && chartInstance.resize() }

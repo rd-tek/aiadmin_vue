@@ -12,7 +12,7 @@
                             <th>코스명</th>
                             <td>
                                 <div class="input-text">
-                                    <input
+                                    <input aria-label="코스명"
                                         type="text"
                                         v-model="form.coursename"
                                         required
@@ -24,7 +24,7 @@
                             <th>코드</th>
                             <td>
                                 <div class="input-text">
-                                    <input
+                                    <input aria-label="코드"
                                         type="text"
                                         v-model="form.coursecode"
                                         required
@@ -36,7 +36,7 @@
                             <th>홀 수</th>
                             <td>
                                 <div class="input-text">
-                                    <input
+                                    <input aria-label="홀 수"
                                         type="number"
                                         v-model="form.holesum"
                                         required
@@ -48,7 +48,7 @@
                             <th>파 수</th>
                             <td>
                                 <div class="input-text">
-                                    <input
+                                    <input aria-label="파 수"
                                         type="number"
                                         v-model="form.parsum"
                                         required
@@ -60,7 +60,7 @@
                             <th>서브 코스 수</th>
                             <td>
                                 <div class="select-default">
-                                    <select v-model="form.subcourselistcnt">
+                                    <select aria-label="서브 코스 수 선택" v-model="form.subcourselistcnt">
                                         <option>1</option>
                                         <option>2</option>
                                         <option>3</option>
@@ -75,9 +75,9 @@
                                 <td>
                                     <div class="course-wrap">
                                         <div class="input-text">
-                                            <input
+                                            <input aria-label="서브 코스"
                                                 type="text"
-                                                v-model="form.subcourse.subcoursename[index]"
+                                                v-model="form.subcourse.subcoursename[i]"
                                             />
                                         </div>
                                         <div class="table-area type02">
@@ -88,39 +88,33 @@
                                                             <tr>
                                                                 <th>홀</th>
                                                                 <td v-for="(item, j) in form.subcourse.subcoursehole[i].hole" :key="j">
-                                                                    <button type="button" @click="modalOpen(form)" class="link">{{ item }}</button>
+                                                                    <button type="button" @click="modalOpen(item, i)" class="link">{{ item }}</button>
                                                                 </td>
                                                                 <td>합계</td>
                                                             </tr>
                                                             <tr>
                                                                 <th>파</th>
-                                                                <!-- <td v-for="(item, j) in form.subcourse.subcoursehole[i].par" :key="j">
-                                                                     <div class="input-text">
-                                                                        <input type="text" :value="item" disabled>
+                                                                <td v-for="(item, j) in form.subcourse.subcoursehole[i]?.par" :key="j">
+                                                                    <div class="input-text">
+                                                                        <input :aria-label="`${j + 1}번 홀 파`" type="text" v-model="form.subcourse.subcoursehole[i].par[j]">
                                                                     </div>
-                                                                </td> -->
-                                                                <td v-for="(item, j) in subcourse[i]?.subcoursehole" :key="j">
-                                                                    {{ item.par_score }}
                                                                 </td>
                                                                 <td>
                                                                     <div class="input-text">
-                                                                        <input type="text" value="-" disabled>
+                                                                        <input aria-label="파 합계" type="text" :value="(form.subcourse.subcoursehole[i]?.par || []).reduce((a, b) => a + Number(b || 0), 0)" disabled>
                                                                     </div>
                                                                 </td>
                                                             </tr>
                                                             <tr>
                                                                 <th>핸디캡</th>
-                                                                <!-- <td v-for="(item, index) in form.subcourse.subcoursehole[0].handicap" :key="index">
+                                                                <td v-for="(item, j) in form.subcourse.subcoursehole[i]?.handicap" :key="j">
                                                                     <div class="input-text">
-                                                                        <input type="text" :value="item" disabled>
+                                                                        <input :aria-label="`${j + 1}번 홀 핸디캡`" type="text" v-model="form.subcourse.subcoursehole[i].handicap[j]">
                                                                     </div>
-                                                                </td> -->
-                                                                <td v-for="(item, j) in subcourse[i]?.subcoursehole" :key="j">
-                                                                    {{ item.handicap }}
                                                                 </td>
                                                                 <td>
                                                                     <div class="input-text">
-                                                                        <input type="text" value="-" disabled>
+                                                                        <input aria-label="핸디캡 합계" type="text" :value="(form.subcourse.subcoursehole[i]?.handicap || []).reduce((a, b) => a + Number(b || 0), 0)" disabled>
                                                                     </div>
                                                                 </td>
                                                             </tr>
@@ -138,7 +132,7 @@
                             <td>
                                 <div class="input-wrap">
                                     <div class="input-text">
-                                        <input
+                                        <input aria-label="코스 이미지 파일 선택"
                                             type="file"
                                             ref="fileInput"
                                             @change="onFileChange"
@@ -200,27 +194,16 @@
                                 <div class="select-wrap">
                                     <div class="select-list">
                                         <span class="label">필드</span>
-                                        <div class="select-default">
-                                            <select v-model="form.field" required>
-                                                <option value="1">1</option>
-                                                <option value="2">2</option>
-                                                <option value="3">3</option>
-                                                <option value="4">4</option>
-                                                <option value="5">5</option>
-                                            </select>
-                                        </div>
+                                        <!-- 2026-09-14: 난이도 1~5 select → 클릭 별점 UI (상세 view와 동일 마크업) -->
+                                        <ul class="star">
+                                            <li class="star-list type-yellow" :class="{ 'is-active': index <= Number(form.field) }" v-for="index in 5" :key="index" @click="form.field = index" style="cursor:pointer"></li>
+                                        </ul>
                                     </div>
                                     <div class="select-list">
                                         <span class="label">그린</span>
-                                        <div class="select-default">
-                                            <select v-model="form.green" required>
-                                                <option value="1">1</option>
-                                                <option value="2">2</option>
-                                                <option value="3">3</option>
-                                                <option value="4">4</option>
-                                                <option value="5">5</option>
-                                            </select>
-                                        </div>
+                                        <ul class="star">
+                                            <li class="star-list type-teal" :class="{ 'is-active': index <= Number(form.green) }" v-for="index in 5" :key="index" @click="form.green = index" style="cursor:pointer"></li>
+                                        </ul>
                                     </div>
                                 </div>
                             </td>
@@ -229,7 +212,7 @@
                             <th>지역</th>
                             <td>
                                 <div class="input-text">
-                                    <input 
+                                    <input aria-label="지역" 
                                         type="text" 
                                         v-model="form.area"
                                         placeholder="지역명을 입력해주세요." 
@@ -241,8 +224,18 @@
                             <th>국가</th>
                             <td>
                                 <div class="select-default m-w-100">
-                                    <select v-model="form.country" required>
+                                    <select aria-label="국가 선택" v-model="form.country" required>
+                                        <!-- 2026-09-14: 국가 정본=tm_country(country_pk→국가). 기존엔 5(대한민국) 1개뿐이라 타국가 코스 국가 미표시 -->
+                                        <option value="1">미국</option>
+                                        <option value="2">호주</option>
+                                        <option value="3">중국</option>
+                                        <option value="4">일본</option>
                                         <option value="5">대한민국</option>
+                                        <option value="6">캐나다</option>
+                                        <option value="7">영국</option>
+                                        <option value="8">프랑스</option>
+                                        <option value="9">기타</option>
+                                        <option value="10">뉴질랜드</option>
                                     </select>
                                 </div>
                             </td>
@@ -251,7 +244,7 @@
                             <th>설명</th>
                             <td>
                                 <div class="text-area">
-                                    <textarea 
+                                    <textarea aria-label="설명" 
                                         v-model="form.contents"
                                         placeholder="설명을 입력해주세요." 
                                         required />
@@ -284,8 +277,31 @@ const selectedItem = ref(null);
 
 // 2026.06.16[cgnoh]: 모달 관련
 const modals = reactive({ modalCourseWrite: false });
-const modalOpen = async (item) => {
-    selectedItem.value = item;
+// 2026-09-14: kradmin CourseEdit.showModal 참고 — 홀 클릭 시 courseholeview를 fetch해 홀 이미지/정보 표시.
+// 기존엔 form 전체를 넘겨(홀 데이터 없이) 팝업이 비어 있었음.
+const modalOpen = async (holeno, subIdx) => {
+    // coursubtype = 서브코스 type_code(tg_coursetype: 1=1-9,2=10-18...). 서브코스 순번(1-based)과 일치. kradmin은 anc(1-based) 사용.
+    const coursubtype = form.subcourse.type_fk?.[subIdx] ?? (subIdx + 1);
+    try {
+        const res = await _courseHoleView(route.params.slug, holeno, coursubtype);
+        const chv = res?.courseholeview || {};
+        selectedItem.value = {
+            ...chv,
+            courseno: route.params.slug,
+            coursubtype: coursubtype,
+            hole_no: holeno,
+            coursename: form.coursename,
+            subcoursename: form.subcourse.subcoursename[subIdx] || chv.subcoursename || "",
+            // 백엔드는 *_name/*_url 반환 → 모달 existingKey(*_filename)에 매핑
+            minimap_filename: chv.minimap_name || "",
+            grnmap1_filename: chv.grnmap1_name || "",
+            grnmap2_filename: chv.grnmap2_name || "",
+            movie_filename: chv.movie_name || "",
+        };
+    } catch (err) {
+        console.error(err);
+        selectedItem.value = { courseno: route.params.slug, coursubtype: coursubtype, hole_no: holeno, coursename: form.coursename };
+    }
     modals['modalCourseWrite'] = true;
     document.querySelector('body').classList.add('is-hidden');
 }
@@ -297,6 +313,7 @@ const route = useRoute();
 const {
   _courseView,
   _courseEdit,
+  _courseHoleView,
 } = useCourseApi();
 
 // 2026.06.16[cgnoh]: 폼 형태
@@ -386,7 +403,6 @@ const subcourse = ref({});
 const getCourseDetail = async () => {
   try {
     const res = await _courseView(route.params.slug);
-    console.log(res.subcourse)
     const info = res.coursebasicinfo || {};
     subcourse.value = res.subcourse;
     
@@ -407,6 +423,20 @@ const getCourseDetail = async () => {
         status: info.status ?? "0",
         viewflag: info.viewflag ?? "0",
     });
+
+    // 2026-09-14: form.subcourse가 미채움(서브코스명 빈값, 파/핸디캡 편집불가)이던 것 → API(res.subcourse)로 채움.
+    // 저장(handleSave)은 이미 form.subcourse.subcoursehole[i].par[j]를 전송하므로, 로드 시 채우면 편집·저장이 완성됨.
+    if (Array.isArray(res.subcourse)) {
+        form.subcourse.subcourseseq = res.subcourse.map((s) => s.subcourseseq);
+        form.subcourse.type_fk = res.subcourse.map((s) => s.type_fk);
+        form.subcourse.subcoursename = res.subcourse.map((s) => s.title || "");
+        form.subcourse.subcourseparsum = res.subcourse.map((s) => s.subparcnt);
+        form.subcourse.subcoursehole = res.subcourse.map((s) => ({
+            hole: (s.subcoursehole || []).map((h) => Number(h.hole_no)),
+            par: (s.subcoursehole || []).map((h) => Number(h.par_score)),
+            handicap: (s.subcoursehole || []).map((h) => Number(h.handicap)),
+        }));
+    }
 
     subCourseList.value = res.subcourse || [];
     
@@ -497,7 +527,41 @@ onMounted(() => {
 definePageMeta({
   layout: "default",
 });
+
+// 2026-10-06: 상세 탭 타이틀 (형제 상세와 같은 useHead 형식)
+useHead({
+  htmlAttrs: {
+    lang: 'ko'
+  },
+  title: '코스 수정',
+  meta: [
+    { name: 'description', content: '코스관리 수정 페이지 입니다.' }
+  ]
+})
 </script>
 <style lang="scss" scoped>
 @use '@/assets/scss/pages/golf-course.scss';
+
+/* 2026-09-14: 난이도 별점 아이콘 — golf-course.scss는 .info-area-cnt 하위로만 스코프돼 수정폼 난이도(.select-list)엔 미적용이라 여기 재정의 */
+.star {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  .star-list {
+    background-image: url('/images/icon/icon_star_grey.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 22px;
+    height: 22px;
+
+    &.type-teal.is-active {
+      background-image: url('/images/icon/icon_star_teal.png');
+    }
+
+    &.type-yellow.is-active {
+      background-image: url('/images/icon/icon_star_yellow.png');
+    }
+  }
+}
 </style>

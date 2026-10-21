@@ -4,7 +4,7 @@
             <div class="toast-modal-body">
                 <div class="icon-area color-yellow">
                     <i class="icon">
-                        <img src="/images/icon/icon_warn.png" alt="icon_warn" />
+                        <img src="/images/icon/icon_warn.png" alt="" />
                     </i>
                 </div>
                 <div class="cont-area">

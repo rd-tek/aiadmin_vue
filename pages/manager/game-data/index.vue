@@ -2,10 +2,15 @@
     <div class="game-data">
       <div class="game-data-wrap">
         <div class="game-data-cont">
-          <div class="game-data-grid">
-            <div class="game-data-item">
-              <div class="game-data-title">시작시간</div>
-              <div class="game-data-value">
+          <!-- 2026-10-20: 검색 필터 재배치 — 기간(빠른 선택 + 시작~종료 한 줄) / 게임 / 매장·회원 4열, 버튼 오른쪽. 입력 바인딩은 그대로 -->
+          <div class="gd-period">
+            <div class="game-data-title">기간</div>
+            <div class="gd-period-body">
+              <div class="quick-range" role="group" aria-label="빠른 기간 선택">
+                        <button v-for="r in quickRanges" :key="r.key" type="button" class="quick-range-btn" :class="{ 'is-active': quickKey === r.key }" @click="applyQuickRange(r)">{{ r.label }}</button>
+          </div>
+              <div class="gd-range">
+                <span class="gd-range-label">시작</span>
                 <div class="datepicker">
                   <client-only>
                     <VueDatePicker 
@@ -29,30 +34,8 @@
                     />
                   </client-only>
                 </div>
-              </div>
-            </div>
-            <div class="game-data-item">
-              <div class="game-data-title">코스 종류</div>
-              <div class="game-data-value">
-                <div class="select-default">
-                  <select>
-                    <option>골프 코스</option>
-                    <option>연습장</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div class="game-data-item">
-              <div class="game-data-title">회원 이름</div>
-              <div class="game-data-value">
-                <div class="input-text">
-                  <input type="text" v-model="searchForm.playername" />
-                </div>
-              </div>
-            </div>
-            <div class="game-data-item">
-              <div class="game-data-title">종료시간</div>
-              <div class="game-data-value">
+                <span class="gd-range-sep">~</span>
+                <span class="gd-range-label">종료</span>
                 <div class="datepicker">
                   <client-only>
                     <VueDatePicker 
@@ -77,168 +60,71 @@
                 </div>
               </div>
             </div>
-            <div class="game-data-item">
-              <div class="game-data-title">코스명</div>
-              <div class="game-data-value">
-                <div class="input-text">
-                  <input
-                      type="text"
-                      v-model="searchForm.coursename"
-                    />
+          </div>
+          <!-- 2026-10-21: 필터 UI 재구성 — 상태·회원유형·코스종류는 버튼형 선택(한 줄), 입력 7칸은 4열 격자 + 안내 문구, Enter 로 검색.
+               모바일은 '상세 조건'으로 입력칸을 접어 필터 길이를 줄임. 값 바인딩(searchForm)은 그대로 -->
+          <div class="gd-filter">
+            <div class="gd-segs">
+              <div class="gd-seg-field">
+                <span class="gd-label">게임 상태</span>
+                <div class="gd-seg" role="radiogroup" aria-label="게임 상태">
+                  <button v-for="(lb, i) in ['전체', '진행', '중단', '완료']" :key="'gs' + i" type="button" role="radio"
+                    class="gd-seg-btn" :class="{ 'is-active': searchForm['gamestatus' + i] }" :aria-checked="searchForm['gamestatus' + i] ? 'true' : 'false'"
+                    @click="setGameStatus(i)">{{ lb }}</button>
                 </div>
               </div>
+              <div class="gd-seg-field">
+                <span class="gd-label">회원 유형</span>
+                <div class="gd-seg" role="radiogroup" aria-label="회원 유형">
+                  <button v-for="opt in [['', '전체'], ['1', '비회원'], ['2', '회원']]" :key="'mt' + opt[0]" type="button" role="radio"
+                    class="gd-seg-btn" :class="{ 'is-active': String(searchForm.membertype ?? '') === opt[0] }" :aria-checked="String(searchForm.membertype ?? '') === opt[0] ? 'true' : 'false'"
+                    @click="searchForm.membertype = opt[0]">{{ opt[1] }}</button>
+                </div>
+              </div>
+              <div class="gd-seg-field">
+                <span class="gd-label">코스 종류</span>
+                <div class="gd-seg" role="radiogroup" aria-label="코스 종류">
+                  <button v-for="opt in [['', '전체'], ['C', '골프 코스'], ['D', '연습장']]" :key="'ct' + opt[0]" type="button" role="radio"
+                    class="gd-seg-btn" :class="{ 'is-active': String(searchForm.coursetype ?? '') === opt[0] }" :aria-checked="String(searchForm.coursetype ?? '') === opt[0] ? 'true' : 'false'"
+                    @click="searchForm.coursetype = opt[0]">{{ opt[1] }}</button>
+                </div>
+              </div>
+              <button type="button" class="gd-more" :aria-expanded="gdMoreOpen ? 'true' : 'false'" @click="gdMoreOpen = !gdMoreOpen">
+                상세 조건 <span class="gd-more-ico" :class="{ 'is-open': gdMoreOpen }" aria-hidden="true">▾</span>
+              </button>
             </div>
-            <div class="game-data-item">
-              <div class="game-data-title">회원 닉네임</div>
-              <div class="game-data-value">
-                <div class="input-text">
-                  <input
-                    type="text"
-                    v-model="searchForm.playernickname"
-                    />
-                </div>
-              </div>
-            </div>
-            <div class="game-data-item">
-              <div class="game-data-title">매장명 / 매장 번호</div>
-              <div class="game-data-value">
-                <div class="input-wrap">
-                  <div class="input-text">
-                    <input type="text" v-model="searchForm.shopname">
-                  </div>
-                  <div class="input-text">
-                    <input type="text" v-model="searchForm.shopno">
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="game-data-item">
-              <div class="game-data-title">회원유형</div>
-              <div class="game-data-value">
-                <div class="radio-wrap">
-                  <div class="radio-list">
-                    <div class="radio-box">
-                        <input type="radio" id="radio_0" name="radio_0" value="" v-model="searchForm.membertype">
-                        <label for="radio_0">
-                            <span class="check-box-item" />
-                            <span class="check-box-txt">전체</span>
-                        </label>
-                    </div> 
-                  </div>
-                  <div class="radio-list">
-                    <div class="radio-box">
-                        <input type="radio" id="radio_1" name="radio_0" value="1" v-model="searchForm.membertype"> 
-                        <label for="radio_1">
-                            <span class="check-box-item" />
-                            <span class="check-box-txt">비회원</span>
-                        </label>
-                    </div>
-                  </div>
-                  <div class="radio-list">
-                    <div class="radio-box">
-                        <input type="radio" id="radio_2" name="radio_0" value="2" v-model="searchForm.membertype">
-                        <label for="radio_2"> 
-                            <span class="check-box-item" />
-                            <span class="check-box-txt">회원</span>
-                        </label>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="game-data-item">
-              <div class="game-data-title">회원번호</div>
-              <div class="game-data-value">
-                <div class="input-text">
-                  <input type="text" v-model="searchForm.playerno">
-                </div>
-              </div>
-            </div>
-            <div class="game-data-item">
-              <div class="game-data-title">게임 번호</div>
-              <div class="game-data-value">
-                <div class="input-text">
-                  <input
-                        type="text"
-                        v-model="searchForm.gameno"
-                    />
-                </div>
-              </div>
-            </div>
-            <div class="game-data-item">
-              <div class="game-data-title">게임상태</div>
-              <div class="game-data-value">
-                <div class="radio-wrap">
-                  <div class="radio-list">
-                    <div class="radio-box">
-                        <input 
-                          type="radio"
-                          id="radio_3"
-                          name="gameStatus"
-                          :checked="searchForm.gamestatus0"
-                          @change="setGameStatus(0)"
-                        >
-                        <label for="radio_3">
-                            <span class="check-box-item">
-                              <i class="item-line" />
-                            </span>
-                            <span class="check-box-txt">전체</span>
-                        </label>
-                    </div> 
-                  </div>
-                  <div class="radio-list">
-                    <div class="radio-box">
-                          <input
-                            type="radio"
-                            id="radio_4"
-                            name="gameStatus"
-                            @change="setGameStatus(1)"
-                          >
-                        <label for="radio_4">
-                            <span class="check-box-item">
-                              <i class="item-line" />
-                            </span>
-                            <span class="check-box-txt">진행</span>
-                        </label>
-                    </div> 
-                  </div>
-                  <div class="radio-list">
-                    <div class="radio-box">
-                          <input
-                            type="radio"
-                            id="radio_5"
-                            name="gameStatus"
-                            @change="setGameStatus(2)"
-                          >
-                        <label for="radio_5">
-                            <span class="check-box-item">
-                              <i class="item-line" />
-                            </span>
-                            <span class="check-box-txt">중단</span>
-                        </label>
-                    </div> 
-                  </div>
-                  <div class="radio-list">
-                    <div class="radio-box">
-                          <input
-                            type="radio"
-                            id="radio_6"
-                            name="gameStatus"
-                            @change="setGameStatus(3)"
-                          >
-                        <label for="radio_6">
-                            <span class="check-box-item">
-                              <i class="item-line" />
-                            </span>
-                            <span class="check-box-txt">완료</span>
-                        </label>
-                    </div> 
-                  </div>
-                </div>
-              </div>
+            <div class="gd-fields" :class="{ 'is-open': gdMoreOpen }">
+              <label class="gd-field">
+                <span class="gd-label">게임 번호</span>
+                <input class="gd-input" type="text" :aria-label="'게임 번호'" placeholder="예: 1810" v-model="searchForm.gameno" @keyup.enter="getGameList" />
+              </label>
+              <label class="gd-field">
+                <span class="gd-label">코스명</span>
+                <input class="gd-input" type="text" :aria-label="'코스명'" placeholder="코스명 일부" v-model="searchForm.coursename" @keyup.enter="getGameList" />
+              </label>
+              <label class="gd-field">
+                <span class="gd-label">매장명</span>
+                <input class="gd-input" type="text" :aria-label="'매장명'" placeholder="매장명 일부" v-model="searchForm.shopname" @keyup.enter="getGameList" />
+              </label>
+              <label class="gd-field">
+                <span class="gd-label">매장 번호</span>
+                <input class="gd-input" type="text" :aria-label="'매장 번호'" placeholder="숫자" v-model="searchForm.shopno" @keyup.enter="getGameList" />
+              </label>
+              <label class="gd-field">
+                <span class="gd-label">회원번호</span>
+                <input class="gd-input" type="text" :aria-label="'회원번호'" placeholder="숫자" v-model="searchForm.playerno" @keyup.enter="getGameList" />
+              </label>
+              <label class="gd-field">
+                <span class="gd-label">회원 이름</span>
+                <input class="gd-input" type="text" :aria-label="'회원 이름'" placeholder="이름" v-model="searchForm.playername" @keyup.enter="getGameList" />
+              </label>
+              <label class="gd-field">
+                <span class="gd-label">회원 닉네임</span>
+                <input class="gd-input" type="text" :aria-label="'회원 닉네임'" placeholder="닉네임 일부" v-model="searchForm.playernickname" @keyup.enter="getGameList" />
+              </label>
             </div>
           </div>
-          <div class="btn-wrap">
+          <div class="btn-wrap gd-actions">
             <button type="button" class="btn-md-line" @click="resetSearch">초기화</button>
             <button type="button" class="btn-md-fill btn-primary-purple" @click="getGameList">검색</button>
           </div>
@@ -253,7 +139,7 @@
               <div class="game-data-list" :class="{ 'is-move': tableMove }" ref="tableRef" v-for="(item, index) in tableList" :key="index">
                   <div class="game-data-item">
                   <div class="num">{{ item.gameno || '-' }}</div>
-                  <div class="nickname">{{ item.playername || '-' }}</div>
+                  <div class="nickname">{{ item.playername || '비회원' }}</div>
                   <div class="name">({{ item.gameplayername || '-' }})</div>
                   </div>
                   <div class="game-data-item align-left">
@@ -298,7 +184,7 @@
                       :class="{ 
                           'color-blue': item.status === '6', 
                           'color-grey': item.status === '1', 
-                          'color-red': item.status === '5' }">{{ item.status === '6' ? '완료' : item.status === '1' ? '대기' : item.status === '5' ? '중단' : '-' }}</div>
+                          'color-red': item.status === '5', 'color-green': item.status === '2' }">{{ statusText[item.status] || '-' }}</div>
                   </div>
                   <div class="game-data-item">
                   <div class="teebox">
@@ -312,12 +198,12 @@
                   <div class="level">
                     {{ levelText[item.level] || '-' }}
                   </div>
-                  <div class="mulligan">멀리건: ({{ item.mulligan || '-' }})</div>
+                  <div class="mulligan">멀리건 {{ item.mulligan ?? '-' }}</div>
                   </div>
                   <div class="game-data-item">
                   <div class="btn-group">
                       <button type="button" class="btn-sm-line" @click="handleScoreboard(item.gameno)">스코어보드</button>
-                      <button type="button" class="btn-sm-line" @click="handleOneshotInfo(item.gameno)">원샷정보</button>
+                      <button type="button" class="btn-sm-line" v-if="Number(item.has_shot) !== 0" @click="handleOneshotInfo(item.gameno)">원샷정보</button>
                       <button type="button" class="btn-sm-line" @click="handleGameInfo(item.gameno)">게임정보</button>
                   </div>
                   </div>
@@ -341,7 +227,7 @@
               >
                 <img
                   src="/images/icon/icon_prev.png"
-                  alt="prev"
+                  alt="이전"
                 />
               </button>
             </li>
@@ -369,7 +255,7 @@
               >
                 <img
                   src="/images/icon/icon_next.png"
-                  alt="next"
+                  alt="다음"
                 />
               </button>
             </li>
@@ -392,8 +278,8 @@
                     <span class="no-wrap">{{ item.playername || '-' }}({{ item.gameplayername || '-' }})</span>
                     <button type="button" class="btn-arrow" :class="{ 'is-active': mobListIndex === index }">
                       <img
-                        src="/public/images/icon/icon_arrow_down.png"
-                        alt="icon_arrow_down"
+                        src="/images/icon/icon_arrow_down.png"
+                        alt="펼치기"
                       />
                     </button>
                   </div>
@@ -427,7 +313,7 @@
                           :class="{ 
                               'color-blue': item.status === '6', 
                               'color-grey': item.status === '1', 
-                              'color-red': item.status === '5' }">{{ item.status === '6' ? '완료' : item.status === '1' ? '대기' : item.status === '5' ? '중단' : '-' }}</div>
+                              'color-red': item.status === '5', 'color-green': item.status === '2' }">{{ statusText[item.status] || '-' }}</div>
                       </dd>
                     </dl>
                     <dl class="list">
@@ -440,15 +326,16 @@
                     </dl>
                     <dl class="list">
                       <dt class="tit">등급</dt>
-                      <dd class="cnt">{{ item.level || '-' }}</dd>
+                      <!-- 2026-09-16: 모바일도 데스크톱과 동일하게 라벨 매핑 적용 -->
+                      <dd class="cnt">{{ levelText[item.level] || '-' }}</dd>
                     </dl>
                     <dl class="list">
                       <dt class="tit">바람</dt>
-                      <dd class="cnt">{{ item.wind || '-' }}</dd>
+                      <dd class="cnt">{{ windText[item.wind] || '-' }}</dd>
                     </dl>
                     <dl class="list">
                       <dt class="tit">티박스</dt>
-                      <dd class="cnt">{{ item.teebox  || '-' }}</dd>
+                      <dd class="cnt">{{ teeboxText[item.teebox] || '-' }}</dd>
                     </dl>
                     <dl class="list">
                       <dt class="tit">회원유형</dt>
@@ -460,7 +347,7 @@
                     </dl>
                     <dl class="list">
                       <dt class="tit">플레이어수</dt>
-                      <dd class="cnt">{{ item.playerno || '-' }}</dd>
+                      <dd class="cnt">{{ item.cnt ? item.cnt + '명' : '-' }}</dd>
                     </dl>
                     <div class="btn-wrap">
                       <button type="button" class="btn-md-line" @click="handleScoreboard(item.gameno)">스코어보드</button>
@@ -488,7 +375,7 @@
               >
                 <img
                   src="/images/icon/icon_prev.png"
-                  alt="prev"
+                  alt="이전"
                 />
               </button>
             </li>
@@ -516,7 +403,7 @@
               >
                 <img
                   src="/images/icon/icon_next.png"
-                  alt="next"
+                  alt="다음"
                 />
               </button>
             </li>
@@ -538,20 +425,28 @@ const router = useRouter();
 const { _gameDataList } = useGameDataApi();
 
 // 2026.06.16[cgnoh]: 난이도 타입
+// 2026-09-16: 레벨 매핑 오류 수정 — level_fk=1은 '프로'(가장 어려움), 5가 '입문'.
+//   근거: kradmin levelType(1=pro,2=semi_pro,3=advanced,4=normal,5=beginner) + aishop 대회 levelLabel{1:프로,2:준프로,3:숙련,4:일반,5:입문}.
+//   기존 {1:매우쉬움...5:어려움}은 방향이 반대라 프로 게임이 '매우쉬움'으로 표기되던 문제.
+// 2026-10-13: 게임 상태 라벨(백엔드 status_fk: 1 대기, 2 진행, 5 중단, 6 완료)
+const statusText = { 1: '대기', 2: '진행', 5: '중단', 6: '완료' };
+
 const levelText = {
-  1: "매우쉬움",
-  2: "쉬움",
-  3: "보통",
+  1: "프로",
+  2: "준프로",
+  3: "숙련",
   4: "일반",
-  5: "어려움",
+  5: "입문",
 };
 
 // 2026.06.16[cgnoh]: 티박스 타입
+// 2026-09-16: 티박스 매핑 정본화 — 근거: aiadmin common.js teeboxType, aishop 대회 teeLabel {1:프로(블루),2:일반(화이트),3:레이디(레드),4:시니어(옐로우)}.
+//   기존 {1:레드,2:일반(화이트),3:블루,4:블랙}은 오매핑(tee_fk=2만 우연히 일치).
 const teeboxText = {
-  1: "레드",
+  1: "프로(블루)",
   2: "일반(화이트)",
-  3: "블루",
-  4: "블랙",
+  3: "레이디(레드)",
+  4: "시니어(옐로우)",
 };
 
 // 2026.06.16[cgnoh]: 바람 타입
@@ -560,13 +455,37 @@ const windText = {
   2: "약풍",
   3: "중풍",
   4: "강풍",
+  5: "랜덤", // 2026-10-15: windforce_fk 5 누락 → "-" 로 보이던 문제(다른 앱·대회 화면과 같은 이름)
 };
 
 // 2026.06.16[cgnoh]: 날짜 관련
-const startDate = ref(new Date());
-const endDate = ref(new Date());
-const startTime = ref(new Date());
-const endTime = ref(new Date());
+// 2026-10-13: 기본 검색 기간 — 시작·종료가 모두 '지금'이라 항상 빈 결과였던 문제 → 최근 1개월(00:00 ~ 23:59)
+const dayStart = (d) => { const x = new Date(d); x.setHours(0, 0, 0, 0); return x; };
+const dayEnd = (d) => { const x = new Date(d); x.setHours(23, 59, 0, 0); return x; };
+const monthAgo = () => { const d = new Date(); d.setMonth(d.getMonth() - 1); return d; };
+const startDate = ref(dayStart(monthAgo()));
+const endDate = ref(dayEnd(new Date()));
+const startTime = ref({ hours: 0, minutes: 0 });
+const endTime = ref({ hours: 23, minutes: 59 });
+const quickKey = ref('1m');
+const quickRanges = [
+  { key: 'today', label: '오늘', days: 0 },
+  { key: '7d', label: '7일', days: 7 },
+  { key: '1m', label: '1개월', months: 1 },
+  { key: '3m', label: '3개월', months: 3 },
+  { key: '6m', label: '6개월', months: 6 },
+  { key: '1y', label: '1년', months: 12 },
+];
+const applyQuickRange = (r) => {
+  const from = new Date();
+  if (r.months) from.setMonth(from.getMonth() - r.months); else from.setDate(from.getDate() - r.days);
+  startDate.value = dayStart(from);
+  endDate.value = dayEnd(new Date());
+  startTime.value = { hours: 0, minutes: 0 };
+  endTime.value = { hours: 23, minutes: 59 };
+  quickKey.value = r.key;
+  getGameList(true);
+};
 
 // 2026.06.16[cgnoh]: 시작 날짜 포맷
 const formatStartDate = (date) => {
@@ -589,6 +508,7 @@ const formatEndDate = (date) => {
 // 2026.06.16[cgnoh]: 시작 시간 포맷
 const formatStartTime = (date) => {
   if (!date) return "";
+  if (!(date instanceof Date)) date = new Date(2000, 0, 1, Number(date.hours || 0), Number(date.minutes || 0)); // 2026-10-13: time-picker 값({hours,minutes}) 대응
 
   const hours = date.getHours();
   const minutes = `${date.getMinutes()}`.padStart(2, "0");
@@ -601,6 +521,7 @@ const formatStartTime = (date) => {
 // 2026.06.16[cgnoh]: 종료 시간 포맷
 const formatEndTime = (date) => {
   if (!date) return "";
+  if (!(date instanceof Date)) date = new Date(2000, 0, 1, Number(date.hours || 0), Number(date.minutes || 0)); // 2026-10-13: time-picker 값({hours,minutes}) 대응
 
   const hours = date.getHours();
   const minutes = `${date.getMinutes()}`.padStart(2, "0");
@@ -621,8 +542,9 @@ const getGameList = async (resetPage = false) => {
       searchForm.pageno = 1;
     }
 
-    searchForm.startdate = formatApiDate(startDate.value);
-    searchForm.enddate = formatApiDate(endDate.value);
+    // 2026-10-13: 시간 선택값도 함께 전송(기존엔 날짜만 보내 시간 선택이 무시됨)
+    searchForm.startdate = `${formatApiDate(startDate.value)} ${formatApiTime(startTime.value, '00:00')}:00`;
+    searchForm.enddate = `${formatApiDate(endDate.value)} ${formatApiTime(endTime.value, '23:59')}:59`;
 
     const res = await _gameDataList({ ...searchForm });
 
@@ -660,6 +582,13 @@ const setGameStatus = (type) => {
   }
 };
 
+const formatApiTime = (t, def) => {
+  if (!t) return def;
+  const h = t instanceof Date ? t.getHours() : Number(t.hours ?? 0);
+  const m = t instanceof Date ? t.getMinutes() : Number(t.minutes ?? 0);
+  return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
+};
+
 const formatApiDate = (date) => {
   if (!date) return "";
 
@@ -671,6 +600,8 @@ const formatApiDate = (date) => {
 };
 
 // 2026.06.17[cgnoh]: 검색 폼
+// 2026-10-21: 모바일 '상세 조건' 펼침
+const gdMoreOpen = ref(false);
 const searchForm = reactive({
   startdate: "", // 시작날짜
   enddate: "", // 종료날짜
@@ -679,6 +610,7 @@ const searchForm = reactive({
   shopname: "", // 매장명
   shopno: "", // 매장 번호
   coursename: "", // 코스명
+  coursetype: "", // 2026-10-20: 코스 종류(cc_mode C 골프 코스 · D 연습장, 빈 값 = 전체) — 이전엔 select 가 연결되지 않아 필터가 동작하지 않았음
   membertype: "", 
   playerno: "", // 회원번호
   gameno: "", // 게임번호
@@ -822,12 +754,12 @@ const restoreSearchState = () => {
     : new Date();
 
   startTime.value = state.startTime
-    ? new Date(state.startTime)
-    : new Date();
+    ? (typeof state.startTime === 'object' && 'hours' in state.startTime ? state.startTime : new Date(state.startTime))
+    : { hours: 0, minutes: 0 };
 
   endTime.value = state.endTime
-    ? new Date(state.endTime)
-    : new Date();
+    ? (typeof state.endTime === 'object' && 'hours' in state.endTime ? state.endTime : new Date(state.endTime))
+    : { hours: 23, minutes: 59 };
 
   tableList.value = state.tableList || [];
   totalCount.value = state.totalCount || 0;
@@ -847,6 +779,7 @@ const resetSearch = () => {
     shopname: "",
     shopno: "",
     coursename: "",
+    coursetype: "",
     membertype: "",
     playerno: "",
     gameno: "",
@@ -857,10 +790,11 @@ const resetSearch = () => {
     pageno: 1,
   });
 
-  startDate.value = new Date();
-  endDate.value = new Date();
-  startTime.value = new Date();
-  endTime.value = new Date();
+  startDate.value = dayStart(monthAgo());
+  endDate.value = dayEnd(new Date());
+  startTime.value = { hours: 0, minutes: 0 };
+  endTime.value = { hours: 23, minutes: 59 };
+  quickKey.value = '1m';
 
   tableList.value = [];
   
@@ -935,4 +869,87 @@ useHead({
 </script>
 <style lang="scss" scoped>
 @use '@/assets/scss/pages/game-data.scss';
+
+/* 2026-10-13: 빠른 기간 선택 */
+.quick-range { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 4px 0 18px; }
+.quick-range-label { font-size: 14px; color: #676d73; margin-right: 6px; }
+.quick-range-btn { height: 32px; padding: 0 14px; border: 1px solid #d9dbe1; border-radius: 16px; background: #fff; font-size: 13px; color: #333; }
+.quick-range-btn:hover { border-color: #4318FF; color: #4318FF; }
+.quick-range-btn.is-active { background: #4318FF; border-color: #4318FF; color: #fff; }
+
+/* 2026-10-13: 게임 목록 카드 — 버튼 가로 배치로 카드 높이 축소, 시작 시각 한 줄, 진행 상태 색 */
+.game-data .game-data-list .game-data-item:has(> .btn-group) { flex: 0 0 auto; }
+.game-data .game-data-list .btn-group { flex-direction: row !important; flex-wrap: nowrap; justify-content: flex-end; gap: 6px !important; }
+.game-data .game-data-list .btn-group .btn-sm-line { padding: 0 10px; white-space: nowrap; }
+.game-data .game-data-list .icon-list .text { white-space: nowrap; }
+.game-data .label.color-green { background: #12a150; color: #fff; }
+
+/* 2026-10-20: 검색 필터 재배치 */
+.gd-period { display: flex; align-items: flex-start; gap: 16px; padding-bottom: 20px; margin-bottom: 20px; border-bottom: 1px solid #E5E7E8; }
+.gd-period > .game-data-title { flex: 0 0 72px; padding-top: 6px; font-size: 16px; font-weight: 500; color: #72777A; }
+.gd-period-body { display: flex; flex-direction: column; gap: 12px; min-width: 0; flex: 1; }
+.gd-period-body .quick-range { margin: 0; }
+.gd-range { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.gd-range .datepicker { display: flex; gap: 8px; }
+.gd-range .datepicker :deep(.dp__main) { width: 170px; }
+.gd-range-label { font-size: 13px; color: #72777A; }
+.gd-range-sep { color: #72777A; padding: 0 4px; }
+.gd-grid { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; column-gap: 20px; row-gap: 18px; }
+.gd-grid .gd-span2 { grid-column: span 2; }
+.gd-grid .game-data-item .input-wrap { display: flex; gap: 8px; }
+.gd-actions { justify-content: flex-end !important; margin-top: 24px; padding-top: 20px; border-top: 1px solid #E5E7E8; }
+@media screen and (max-width: 1280px) { .gd-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; } }
+@media screen and (max-width: 768px) {
+  .gd-period { flex-direction: column; gap: 8px; }
+  .gd-period > .game-data-title { flex: none; padding-top: 0; }
+  .gd-grid { grid-template-columns: 1fr !important; }
+  .gd-grid .gd-span2 { grid-column: auto; }
+  .gd-range .datepicker :deep(.dp__main) { width: 100%; }
+  .gd-actions { justify-content: center !important; }
+}
+
+/* 2026-10-20: 태블릿(769~1280px) 목록 카드 — 버튼 묶음은 아래 줄(오른쪽 정렬), 나머지 항목은 줄바꿈 없이 */
+@media screen and (min-width: 769px) and (max-width: 1280px) {
+  .game-data-list { flex-wrap: wrap; row-gap: 14px; }
+  .game-data-list > .game-data-item:last-child { flex: 0 0 100% !important; width: 100% !important; max-width: 100% !important; display: flex; justify-content: flex-end; padding: 14px 0 0 !important; border-top: 1px solid #EEF0F2; }
+  .game-data-list > .game-data-item { padding: 0 12px; }
+  .game-data-list .title, .game-data-list .label, .game-data-list .teebox, .game-data-list .wind, .game-data-list .level, .game-data-list .mulligan, .game-data-list .room-wrap { white-space: nowrap; }
+}
+
+/* 2026-10-21: 게임데이터 필터 재구성 */
+.gd-filter { display: flex; flex-direction: column; gap: 18px; }
+.gd-segs { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 16px 28px; }
+.gd-seg-field { display: flex; flex-direction: column; gap: 8px; }
+.gd-label { font-size: 14px; font-weight: 500; color: #72777A; }
+.gd-seg { display: inline-flex; padding: 3px; border-radius: 10px; background: #F2F3F4; gap: 2px; }
+.gd-seg-btn {
+  min-width: 64px; height: 36px; padding: 0 14px; border: 0; border-radius: 8px; background: transparent;
+  font-size: 14px; font-weight: 500; color: #52575C; cursor: pointer; white-space: nowrap;
+  &:hover { color: #35383B; }
+  &.is-active { background: #fff; color: #4318FF; font-weight: 700; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12); }
+}
+.gd-more { display: none; }
+.gd-fields { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px 20px; }
+.gd-field { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.gd-input {
+  width: 100%; height: 44px; padding: 0 14px; border: 1px solid #CDCFD1; border-radius: 10px;
+  font-size: 15px; color: #35383B; background: #fff; transition: border-color .15s, box-shadow .15s;
+  &::placeholder { color: #ADB0B3; }
+  &:focus { outline: none; border-color: #4318FF; box-shadow: 0 0 0 3px rgba(67, 24, 255, 0.12); }
+}
+@media screen and (max-width: 1280px) { .gd-fields { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media screen and (max-width: 768px) {
+  .gd-segs { flex-direction: column; align-items: stretch; gap: 14px; }
+  .gd-seg { display: flex; }
+  .gd-seg-btn { flex: 1; min-width: 0; padding: 0 6px; }
+  .gd-more {
+    display: flex; align-items: center; justify-content: center; gap: 6px; height: 40px;
+    border: 1px dashed #CDCFD1; border-radius: 10px; background: #fff; font-size: 14px; color: #52575C;
+  }
+  .gd-more-ico { transition: transform .2s; &.is-open { transform: rotate(180deg); } }
+  .gd-fields { grid-template-columns: 1fr; display: none; &.is-open { display: grid; } }
+  /* 날짜·시간을 한 줄에 나란히(4줄 → 2줄) */
+  .gd-range .datepicker { display: grid !important; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; }
+  .gd-range .datepicker :deep(.dp__input) { font-size: 14px; padding-left: 32px; padding-right: 26px; }
+}
 </style>

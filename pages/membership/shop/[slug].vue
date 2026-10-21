@@ -13,7 +13,7 @@
                       <th>상태 <span class="required"></span></th>
                       <td>
                         <div class="select-default m-w-100">
-                          <select v-model="ownerinfo.status">
+                          <select aria-label="상태 선택" v-model="ownerinfo.status">
                             <option value="1">정상</option>
                             <option value="2">정지</option>
                           </select>
@@ -25,9 +25,10 @@
                     <td>
                       <div class="input-wrap">
                         <div class="input-text">
-                          <input type="text" v-model="ownerinfo.id">
+                          <input aria-label="회원 ID" type="text" v-model="ownerinfo.id">
                         </div>
-                        
+                        <!-- 2026-10-20: 회원 ID 중복체크(매장명·이메일과 같은 방식, 자기 매장 ID 는 중복 아님) -->
+                        <button type="button" class="btn-md-line" @click="checkDuplicate(1, ownerinfo.id)">중복체크</button>
                       </div>
                     </td>
                   </tr>
@@ -35,7 +36,7 @@
                     <th>비밀번호</th>
                     <td>
                       <div class="input-text">
-                        <input type="text">
+                        <input aria-label="비밀번호" type="text">
                       </div>
                     </td>
                   </tr>
@@ -44,7 +45,7 @@
                       <td>
                         <div class="input-wrap">
                           <div class="input-text">
-                            <input type="text" v-model="ownerinfo.shopname">
+                            <input aria-label="매장명" type="text" v-model="ownerinfo.shopname">
                           </div>
                           <button type="button" class="btn-md-line" @click="checkDuplicate(2, ownerinfo.shopname)">중복체크</button>
                         </div>
@@ -55,7 +56,7 @@
                     <td>
                       <div class="input-wrap">
                         <div class="input-text">
-                          <input type="text" v-model="ownerinfo.email">
+                          <input aria-label="이메일" type="text" v-model="ownerinfo.email">
                         </div>
                         <button type="button" class="btn-md-line" @click="checkDuplicate(3, ownerinfo.email)">중복체크</button>
                       </div>
@@ -69,10 +70,9 @@
                     <th>매장 타입 <span class="required"></span></th>
                     <td>
                       <div class="select-default">
-                        <select>
-                          <option>합계</option>
-                          <option>프랜차이즈</option>
-                          <option>직영점</option>
+                        <select aria-label="매장 타입 선택" v-model="ownerinfo.ownertype">
+                          <option value="1">직영매장</option>
+                          <option value="2">가맹매장</option>
                         </select>
                       </div>
                     </td>
@@ -83,7 +83,7 @@
                       <div class="input-wrap">
                         <div class="select-wrap flex-start">
                           <div class="select-default">
-                              <select>
+                              <select aria-label="거리 단위 선택" v-model="ownerinfo.fieldunit">
                                   <option value="" disabled>페어웨이</option>
                                   <option value="1">M</option>
                                   <option value="2">Yard</option>
@@ -91,7 +91,7 @@
                               </select>
                           </div>
                           <div class="select-default">
-                              <select>
+                              <select aria-label="그린 거리 단위 선택" v-model="ownerinfo.greenunit">
                                   <option value="" disabled>Green</option>
                                   <option value="1">M</option>
                                   <option value="2">Yard</option>
@@ -99,7 +99,7 @@
                               </select>
                           </div>
                           <div class="select-default">
-                              <select>
+                              <select aria-label="스피드 단위 선택" v-model="ownerinfo.speedunit">
                                   <option value="" disabled>Speed</option>
                                   <option value="1">km/h</option>
                                   <option value="2">mile/h</option>
@@ -128,7 +128,7 @@
                       <th>대표자 <span class="required"></span></th>
                       <td>
                         <div class="input-text">
-                          <input type="text" v-model="ownerinfo.firstname">
+                          <input aria-label="대표자" type="text" v-model="ownerinfo.firstname">
                         </div>
                       </td>
                   </tr>
@@ -137,15 +137,15 @@
                     <td>
                         <div class="input-wrap mb-10">
                             <div class="input-text">
-                                <input type="text" v-model="ownerinfo.zipcode">
+                                <input aria-label="우편번호" type="text" v-model="ownerinfo.zipcode">
                             </div>
                             <button type="button" class="btn-md-line"  @click="openAddressSearch">주소찾기</button>
                         </div>
                         <div class="input-text mb-10 m-w-100">
-                            <input type="text" v-model="ownerinfo.address1">
+                            <input aria-label="주소" type="text" v-model="ownerinfo.address1">
                         </div>
                         <div class="input-text m-w-100">
-                            <input type="text" v-model="ownerinfo.address2">
+                            <input aria-label="상세주소" type="text" v-model="ownerinfo.address2">
                         </div>
                     </td>
                   </tr>
@@ -153,7 +153,7 @@
                       <th>전화번호 <span class="required"></span></th>
                       <td>
                         <div class="input-text">
-                          <input type="text" v-model="ownerinfo.phone">
+                          <input aria-label="전화번호" type="text" v-model="ownerinfo.phone">
                         </div>
                       </td>
                   </tr>
@@ -161,7 +161,7 @@
                     <th>팩스</th>
                     <td>
                       <div class="input-text">
-                        <input type="text" v-model="ownerinfo.fax">
+                        <input aria-label="팩스" type="text" v-model="ownerinfo.fax">
                       </div>
                     </td>
                   </tr>
@@ -169,7 +169,7 @@
                     <th>홈페이지</th>
                     <td>
                       <div class="input-text">
-                        <input type="text" v-model="ownerinfo.website">
+                        <input aria-label="홈페이지" type="text" v-model="ownerinfo.website">
                       </div>
                     </td>
                   </tr>
@@ -177,7 +177,7 @@
                     <th>장비 수</th>
                     <td>
                       <div class="input-text">
-                        <input type="text" v-model="ownerinfo.roomcnt">
+                        <input aria-label="장비 수" type="text" v-model="ownerinfo.roomcnt">
                       </div>
                     </td>
                   </tr>
@@ -185,7 +185,7 @@
                     <th>기타정보</th>
                     <td>
                       <div class="input-text">
-                        <input type="text" v-model="ownerinfo.etcinfo">
+                        <input aria-label="기타정보" type="text" v-model="ownerinfo.etcinfo">
                       </div>
                     </td>
                   </tr>
@@ -193,7 +193,7 @@
                     <th>라커 수</th>
                     <td>
                       <div class="input-text">
-                        <input type="text" v-model="ownerinfo.lockercnt">
+                        <input aria-label="라커 수" type="text" v-model="ownerinfo.lockercnt">
                       </div>
                     </td>
                   </tr>
@@ -247,12 +247,14 @@ const route = useRoute();
 const ownerinfo = ref({});
 
 // 2026.06.12[cgnoh]: 상세 정보 조회
+// 2026-10-20: ID 를 바꿨으면 중복체크 통과한 값이어야 저장
+const originId = ref("");
+const checkedId = ref("");
 const getDetail = async () => {
   try {
     const ownerno = route.params.slug;
     const res = await membersApi._ownerview(ownerno);
 
-    console.log("상세조회", res);
 
     if (res.code !== 200) {
       console.error(res.message);
@@ -266,7 +268,6 @@ const getDetail = async () => {
     };
     
 
-    console.log("ownerinfo", ownerinfo.value);
   } catch (err) {
     console.error("매장회원 상세 조회 실패:", err);
   }
@@ -311,8 +312,11 @@ const openErrorToast = (message) => {
   toastErrorMessage.value = message;
 }
 
+watch(() => ownerinfo.value?.ownerno, () => { originId.value = ownerinfo.value?.id ?? ''; checkedId.value = ''; });
 // 2026.06.04[cgnoh]: 저장 핸들링
 const handleSave = async () => {
+  const curId = (ownerinfo.value?.id ?? '').trim();
+  if (curId !== originId.value && checkedId.value !== curId) { openWarnToast('회원 ID 중복체크를 해 주세요.'); return; }
   try {
     const res = await membersApi._owneredit(
       ownerinfo.value.ownerno,
@@ -365,6 +369,7 @@ const checkDuplicate = (type, field) => {
     if (success) {
       switch (type) {
         case 1:
+          checkedId.value = value;
           openSaveToast("사용 가능한 회원 ID입니다.");
           break;
         case 2:
@@ -410,11 +415,9 @@ const openAddressSearch = async () => {
         extraRoadAddr = " (" + extraRoadAddr + ")";
       }
 
-      form.value.zipcode  = data.zonecode;
-      form.value.address1 = roadAddr;
-      form.value.address2 = data.jibunAddress;
-
-      await geocodeAddress(roadAddr || data.jibunAddress);
+      ownerinfo.value.zipcode  = data.zonecode;
+      ownerinfo.value.address1 = roadAddr;
+      ownerinfo.value.address2 = data.jibunAddress;
     },
   }).open();
 };

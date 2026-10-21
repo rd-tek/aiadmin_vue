@@ -4,7 +4,7 @@
       <div class="col-2">
         <div class="col d-flex">
           <div class="select-default">
-            <select v-model="searchForm.status" @change="handleSearch">
+            <select aria-label="상태 선택" v-model="searchForm.status" @change="handleSearch">
               <option value="0">전체</option>
               <option value="1">정상</option>
               <option value="2">탈퇴</option>
@@ -13,15 +13,15 @@
         </div>
         <div class="col d-flex flex-column">
           <div class="d-flex">
-            <select v-model="searchForm.searchtype">
+            <select aria-label="검색 구분 선택" v-model="searchForm.searchtype">
               <option value="P.player_id">아이디</option>
               <option value="P.nickname">닉네임</option>
               <option value="P.email">이메일</option>
             </select>
-            <input
+            <input aria-label="검색어 입력"
               type="text"
               v-model="searchForm.searchname"
-              placeholder="검색어를 입력해주세요."
+              placeholder="검색어 입력"
               @input="handleSearch"
             />
           </div>
@@ -34,7 +34,7 @@
         전체 <span class="num">{{ totalCount }}</span>
       </div>
       <div class="select-default">
-        <select v-model.number="searchForm.pagesize" @change="handleSearch">
+        <select aria-label="목록 표시 개수 선택" v-model.number="searchForm.pagesize" @change="handleSearch">
           <option value="10">10개씩 보기</option>
           <option value="20">20개씩 보기</option>
           <option value="30">30개씩 보기</option>
@@ -85,8 +85,8 @@
                   :class="{ 'is-active': mobListIndex === index }"
                 >
                   <img
-                    src="/public/images/icon/icon_arrow_down.png"
-                    alt="icon_arrow_down"
+                    src="/images/icon/icon_arrow_down.png"
+                    alt="펼치기"
                   />
                 </button>
               </div>
@@ -217,7 +217,7 @@
             :disabled="searchForm.pageno === 1"
             @click="prevPage"
           >
-            <img src="/images/icon/icon_prev.png" alt="icon_prev" />
+            <img src="/images/icon/icon_prev.png" alt="" />
           </button>
         </li>
 
@@ -268,7 +268,7 @@
             :disabled="searchForm.pageno === totalPage"
             @click="nextPage"
           >
-            <img src="/images/icon/icon_next.png" alt="icon_next" />
+            <img src="/images/icon/icon_next.png" alt="" />
           </button>
         </li>
       </ul>
@@ -478,4 +478,19 @@ useHead({
 </script>
 <style lang="scss" scoped>
 @use "@/assets/scss/pages/membership.scss";
+
+/* 2026-09-14: 컬럼 폭을 실측 자연폭(px)에 비례 재분배해 개행 최소화 (데스크톱 한정).
+   컬럼: No/아이디/닉네임/이메일/인증/성별/단골매장/가입일/상태 */
+@media (min-width: 769px) {
+  .table-head-col, .table-body-flex > .table-body-col { min-width: 0; }
+  .table-head-col:nth-child(1), .table-body-flex > .table-body-col:nth-child(1) { flex: 46 1 0; }
+  .table-head-col:nth-child(2), .table-body-flex > .table-body-col:nth-child(2) { flex: 187 1 0; }
+  .table-head-col:nth-child(3), .table-body-flex > .table-body-col:nth-child(3) { flex: 135 1 0; }
+  .table-head-col:nth-child(4), .table-body-flex > .table-body-col:nth-child(4) { flex: 171 1 0; }
+  .table-head-col:nth-child(5), .table-body-flex > .table-body-col:nth-child(5) { flex: 52 1 0; }
+  .table-head-col:nth-child(6), .table-body-flex > .table-body-col:nth-child(6) { flex: 44 1 0; }
+  .table-head-col:nth-child(7), .table-body-flex > .table-body-col:nth-child(7) { flex: 98 1 0; }
+  .table-head-col:nth-child(8), .table-body-flex > .table-body-col:nth-child(8) { flex: 172 1 0; }
+  .table-head-col:nth-child(9), .table-body-flex > .table-body-col:nth-child(9) { flex: 56 1 0; }
+}
 </style>

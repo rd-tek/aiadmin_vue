@@ -35,11 +35,12 @@
                     {{ item.hole }}
                   </div>
                   <div class="table-body-col" @click="handleMobOneshotList(index)">
-                    <span>{{ item.shotno }}</span>
+                    <!-- 2026-09-16: 샷번호가 0부터 시작하는 원본값 → 1부터 보이도록 +1 표기 -->
+                    <span>{{ item.shotno == null || item.shotno === '' ? '-' : Number(item.shotno) + 1 }}</span>
                     <button type="button" class="btn-arrow" :class="{ 'is-active': mobOneshotListIndex === index }">
                       <img
-                        src="/public/images/icon/icon_arrow_down.png"
-                        alt="icon_arrow_down"
+                        src="/images/icon/icon_arrow_down.png"
+                        alt="펼치기"
                       />
                     </button>
                   </div>
@@ -111,7 +112,8 @@
                     </dl>
                     <dl class="list">
                       <dt class="tit">샷 번호</dt>
-                      <dd class="cnt">{{ item.shotno }}</dd>
+                      <!-- 2026-09-16: 0부터 시작하는 원본값 → 1부터 표기 -->
+                      <dd class="cnt">{{ item.shotno == null || item.shotno === '' ? '-' : Number(item.shotno) + 1 }}</dd>
                     </dl>
                   </div>
                 </transition>
@@ -153,7 +155,6 @@ const handleGameOneShot = async () => {
   const res = await _gameOneShot(gameno);
   oneshotList.value = res.shotlist
 
-  console.log(res);
 };
 
 // 2026.06.17[cgnoh]: 원샷정보 인터렉션
@@ -195,6 +196,8 @@ onMounted(() => {
 
 // 2026.03.04[cgnoh]: 페이지 메타 정보
 definePageMeta({
+  // 2026-10-20: 번호(숫자)만 상세로 — 그 외 주소는 404 (예: /academy/test 가 상세로 들어가 오류 창이 뜨던 것)
+  validate: (route) => /^\d+$/.test(String(route.params.slug ?? '')),
   layout: "default",
 });
 

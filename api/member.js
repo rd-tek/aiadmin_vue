@@ -226,6 +226,22 @@ export const useMembersApi = () => {
     }
   };
 
+  // 2026-10-13: 매장 타석(장비) 1건 조회 — 없으면 roomno/roomcnt 만 옴 (Ownership::ownerroomview_get)
+  const _adminOwnerRoomView = async (ownerno, roomno) => {
+    return await apiFetch(`/ownership/ownerroomview/${ownerno}`, {
+      method: "GET",
+      query: { roomno },
+    });
+  };
+
+  // 2026-10-13: H/W·S/W 모델 목록(DB) — 화면에 하드코딩돼 DB 이름과 달랐음
+  const _adminOwnerRoomHwList = async () => {
+    return await apiFetch("/ownership/ownerroomhwlist", { method: "GET" });
+  };
+  const _adminOwnerRoomSwList = async () => {
+    return await apiFetch("/ownership/ownerroomswlist", { method: "GET" });
+  };
+
   // 국가 목록
   const _countrylist = async () => {
     return await apiFetch("/common/countrylist", {
@@ -288,6 +304,9 @@ export const useMembersApi = () => {
     _owneredit,
     _adminOwnerRoomWrite,
     _adminOwnerRoomEdit,
+    _adminOwnerRoomView,
+    _adminOwnerRoomHwList,
+    _adminOwnerRoomSwList,
     _countrylist,
     _stateslist,
     _citylist,

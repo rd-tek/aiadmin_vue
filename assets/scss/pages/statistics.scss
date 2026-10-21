@@ -22,7 +22,7 @@
                         width: 120px;
                         
                         &:before {
-                            background: #FF7519;
+                            background: #E85D00;
                         }
                     }
                 }
@@ -137,9 +137,9 @@
                         //         }
 
                         //         &.is-active {
-                        //             border-inline: 1px solid #FF7519;
-                        //             border-block: 1px solid #FF7519;
-                        //             color: #FF7519;
+                        //             border-inline: 1px solid #E85D00;
+                        //             border-block: 1px solid #E85D00;
+                        //             color: #E85D00;
                         //         }
                         //     }
                         // }
@@ -246,16 +246,16 @@
                                     }
 
                                     .color {
-                                        color: #9B9FA3;
+                                        color: #6e6e6e;
 
                                         &.point {
-                                            color: #00B34A;
+                                            color: #00843C;
                                             font-weight: 700;
                                         }
                                     }
 
                                     .link {
-                                        color: #FF7519;
+                                        color: #E85D00;
                                         text-decoration: underline;
                                         text-underline-offset: 3px;
                                         margin: 0 auto;
@@ -272,7 +272,7 @@
                                         font-size: 14px;
 
                                         &.color-green {
-                                            background: #00B34A;
+                                            background: #00843C;
                                         }
 
                                         &.color-grey {
@@ -1105,7 +1105,7 @@
                                                 font-size: 14px;
 
                                                 &.color-green {
-                                                    background: #00B34A;
+                                                    background: #00843C;
                                                 }
 
                                                 &.color-grey {

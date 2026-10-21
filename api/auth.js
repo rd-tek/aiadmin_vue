@@ -23,6 +23,8 @@ export const useAuthApi = () => {
           is_initialize: res.loginresult.is_initialize,
           binary_filepath: res.loginresult.binary_filepath,
         });
+        // 2026-10-20: 헤더 인사말용 관리자 이름(로그인 응답 name) — 앱 전용 쿠키(다른 앱의 nickname 쿠키와 겹치지 않게)
+        useCookie("aiadmin_name", { maxAge: 60 * 60 * 8 }).value = res.loginresult.name || "";
 
         if (form.remember_yn) {
           localStorage.setItem("remember_id", form.id);

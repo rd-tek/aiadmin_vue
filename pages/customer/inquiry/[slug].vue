@@ -9,20 +9,22 @@
                 </div>
             </div>
             <div class="desc-area">
-                <span v-html="noticeInfo.content" />
-                <span v-if="!noticeInfo.content">-</span>
+                <!-- 2026-09-22: 고객 제출 평문을 v-html 로 렌더하면 저장형 XSS(관리자 브라우저서 스크립트 실행)
+                     + 평문 줄바꿈 손실. 텍스트 보간(자동 이스케이프)+pre-wrap 로 변경. -->
+                <span v-if="noticeInfo.content" class="content-text">{{ noticeInfo.content }}</span>
+                <span v-else>-</span>
             </div>
             <div class="page-area">
                 <div class="page-area-list">
                     <span class="tit">이전글</span>
                     <span class="cnt">
                         <nuxt-link
-                            v-if="nextPost"
-                            :to="`/customer/inquiry/${nextPost.inquiry_pk}`"
+                            v-if="prevPost?.inquiry_pk"
+                            :to="`/customer/inquiry/${prevPost.inquiry_pk}`"
                             >
-                            {{ nextPost.title }}
+                            {{ prevPost.title }}
                         </nuxt-link>
-                        <span v-if="nextPost == ''" class="no-link">
+                        <span v-if="!prevPost?.inquiry_pk" class="no-link">
                             이전 글이 없습니다.
                         </span>
                     </span>
@@ -31,12 +33,12 @@
                     <span class="tit">다음글</span>
                     <span class="cnt">
                         <nuxt-link
-                            v-if="prevPost"
-                            :to="`/customer/inquiry/${prevPost.inquiry_pk}`"
+                            v-if="nextPost?.inquiry_pk"
+                            :to="`/customer/inquiry/${nextPost.inquiry_pk}`"
                             >
-                            {{ prevPost.title }}
+                            {{ nextPost.title }}
                         </nuxt-link>
-                        <span v-if="prevPost == ''" class="no-link">
+                        <span v-if="!nextPost?.inquiry_pk" class="no-link">
                             다음 글이 없습니다.
                         </span>
                     </span>
@@ -153,7 +155,7 @@ const openErrorToast = (message) => {
 const confirmResolver = ref(null);
 const handleConfirm = () => {
     modals['toastConfirmModal'] = false;
-    document.querySelector('body').classList.add('is-hidden');
+    document.querySelector('body').classList.remove('is-hidden');
     confirmResolver.value(true);
     confirmResolver.value = null;
 }
@@ -178,7 +180,6 @@ const handleDelete = async () => {
       route.params.slug,
     );
 
-    console.log("delete result", res);
 
     if (res.code === 200 || res.result === "success") {
       openSaveToast("삭제되었습니다.");
@@ -227,4 +228,7 @@ useHead({
 </script>
 <style lang="scss" scoped>
 @use '@/assets/scss/pages/customer.scss';
+
+/* 2026-09-22: 문의 본문 텍스트 렌더(줄바꿈 보존) */
+.desc-area .content-text { white-space: pre-wrap; word-break: break-word; }
 </style>

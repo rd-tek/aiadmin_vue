@@ -12,7 +12,7 @@
                     <th>상태</th>
                     <td>
                       <div class="select-default">
-                        <select>
+                        <select aria-label="상태 선택">
                           <option>공지</option>
                         </select>
                       </div>
@@ -22,7 +22,7 @@
                     <th>제목</th>
                     <td>
                         <div class="input-text">
-                            <input type="text" placeholder="제목을 입력해주세요.">
+                            <input aria-label="제목" type="text" placeholder="제목을 입력해주세요.">
                         </div>
                     </td>
                 </tr>
@@ -59,12 +59,12 @@
                     <th>내용</th>
                     <td>
                         <div class="textarea">
-                            <textarea placeholder="한글 100자 3줄 까지 입력가능 합니다."></textarea>
+                            <textarea aria-label="내용" placeholder="한글 100자 3줄 까지 입력가능 합니다."></textarea>
                         </div>
                         <div class="input-wrap">
                             <div class="input-text">
                                 <input
-                                    type="file"
+                                    type="file" style="display: none"
                                     ref="fileInput"
                                     @change="onFileChange"
                                     placeholder="파일을 선택하거나 여기에 드롭하세요."  
@@ -124,6 +124,17 @@ const onFileChange = (event) => {
 definePageMeta({
   layout: "default",
 });
+
+// 2026-10-06: 상세 탭 타이틀 (형제 상세와 같은 useHead 형식)
+useHead({
+  htmlAttrs: {
+    lang: 'ko'
+  },
+  title: '공지사항(회원) 수정',
+  meta: [
+    { name: 'description', content: '공지사항(회원) 수정 페이지 입니다.' }
+  ]
+})
 </script>
 <style lang="scss" scoped>
 @use '@/assets/scss/pages/customer.scss';

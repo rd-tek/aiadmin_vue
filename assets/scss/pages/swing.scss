@@ -119,7 +119,7 @@
                             border-radius: 12px;
 
                             &.is-green {
-                                background: #00B34A;
+                                background: #00843C;
                             }
                         }
                     }
@@ -134,7 +134,7 @@
 
                     &:after {
                         content: '▶';
-                        color: #9B9FA3;
+                        color: #6e6e6e;
                         font-size: 14px;
                         position: absolute;
                         right: 0;
@@ -274,7 +274,7 @@
                             }
 
                             &.yellow {
-                                color: #F8AD15;
+                                color: #B45309; /* 2026-10-13: 밑줄 대신 진한 오렌지(대비 5.0:1) */
                             }
                         }
                     }
@@ -322,10 +322,10 @@
 
                 &.type03 {
                     .tab-list {
-                        color: #ADB0B3;
+                        color: #6e6e6e; // 2026-10-08(UI 2차 검토): 비활성 구분동작 탭 글자 대비 1.9→5.1:1
                         border-color: #ADB0B3;
                         text-align: center;
-                        padding: 0 10px;
+                        padding: 0 6px;
 
                         &.is-active {
                             color: #fff;
@@ -337,6 +337,12 @@
 
                         .icon {
                             display: none;
+                        }
+
+                        /* 2026-09-16: 구분동작 탭 라벨(특히 Follow-Through)이 2줄로 개행되던 것 → 한 줄 유지 + 컴팩트 폰트 */
+                        .text {
+                            white-space: nowrap;
+                            font-size: 13px;
                         }
                     }
                 }

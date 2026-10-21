@@ -3,7 +3,7 @@
     <!-- 최종 코칭 리포트(모바일) -->
     <div class="mob-show">
       <div class="info-area">
-        <h2 class="title">{{ academyView.title }}</h2>
+        <h2 role="heading" aria-level="1" class="title">{{ academyView.title }}</h2>
         <ul class="label">
           <li class="label-list">{{ academyView.target_audience }}</li>
           <li class="label-list">{{ academyView.expert_master?.nickname }}</li>
@@ -72,30 +72,26 @@
             :class="{
               'is-active': tabIndex === item.step_pk,
               'is-complete':
-                item.mission_list?.[0]?.required_success_cnt ==
-                item.mission_list?.[0]?.success_cnt,
+                stepMissionDone(item),
               'is-current-complete':
-                item.mission_list?.[0]?.required_success_cnt ==
-                  item.mission_list?.[0]?.success_cnt &&
+                stepMissionDone(item) &&
                 tabIndex === item.step_pk,
             }"
             @click="handleMobAccordion(item)"
           >
             <span class="circle">
               <img
-                src="/public/images/icon/icon_check_white.png"
-                alt="icon_check_white"
+                src="/images/icon/icon_check_white.png"
+                alt=""
               />
             </span>
             <span class="text">
               <span
-                >{{ item.title }} ({{ item.mission_list?.[0]?.success_cnt }}/{{
-                  item.mission_list?.[0]?.required_success_cnt
-                }})
+                >{{ item.title }} {{ stepMissionLabel(item) }}
               </span>
               <img
                 src="/images/icon/icon_arrow_down.png"
-                alt="icon_arrow_down"
+                alt=""
                 v-if="item.step_pk"
               />
             </span>
@@ -115,7 +111,7 @@
                   <div class="cont">
                     <h3 class="tit">학습 목표</h3>
                     <p class="desc">
-                      {{ academyView.intro }}
+                      <div class="rich-content" v-html="common.richHtml(academyView.intro)"></div>
                     </p>
                   </div>
 
@@ -134,18 +130,12 @@
                               class="progress-bar-inner"
                               :style="{
                                 width:
-                                  Math.round(
-                                    ((item_.success_cnt ?? 0) /
-                                      (item_.required_success_cnt || 1)) *
-                                      100,
-                                  ) + '%',
+                                  Math.min(100, Math.round(((item_.success_cnt ?? 0) / (item_.required_success_cnt || 1)) * 100)) + '%',
                               }"
                             ></span>
                           </span>
                           <span class="progress-num"
-                            ><strong>{{ item_.success_cnt }}</strong
-                            >/{{ item_.required_success_cnt }}회(총
-                            {{ item_.attempt_cnt }}회 시도)</span
+                            >성공 <strong>{{ Number(item_.success_cnt ?? 0) }}</strong>회 / 목표 {{ item_.required_success_cnt }}회 (총 {{ Number(item_.attempt_cnt ?? 0) }}회 시도)</span
                           >
                         </div>
                       </li>
@@ -155,7 +145,7 @@
                     <div class="table">
                       <div class="table-head">
                         <div class="table-head-col col-1"></div>
-                        <div class="table-head-col">거리</div>
+                        <div class="table-head-col">{{ item_.metric_catalog?.name_ko || '기록' }}</div>
                         <div class="table-head-col">결과</div>
                         <!-- <div class="table-head-col is-mob">매장</div> -->
                         <div class="table-head-col is-mob">클럽</div>
@@ -176,7 +166,7 @@
                               #{{ item__.attempt_no }}
                             </div>
                             <div class="table-body-col">
-                              <strong>{{ item__.measured_value }}m</strong>
+                              <strong>{{ common.n2(item__.measured_value) }}{{ item__.unit_snapshot || item__.unit || item_.unit || item_.metric_catalog?.unit || '' }}</strong>
                             </div>
                             <div class="table-body-col">
                               <span
@@ -194,8 +184,8 @@
                                 }"
                               >
                                 <img
-                                  src="/public/images/icon/icon_arrow_down.png"
-                                  alt="icon_arrow_down"
+                                  src="/images/icon/icon_arrow_down.png"
+                                  alt="펼치기"
                                 />
                               </button>
                             </div>
@@ -203,10 +193,11 @@
                               {{ item.shop }}
                             </div> -->
                             <div class="table-body-col is-mob">
-                              {{ item__.metric_code }}
+                              <!-- 2026-09-16: 클럽 자리엔 클럽 이름 표기 (fit_club_code→클럽명). 기존엔 metric_code(미션 제목)가 잘못 들어감 -->
+                              {{ common.getClubcodeToClubname(String(item__.fit_club_code ?? '')) }}
                             </div>
                             <div class="table-body-col is-mob">
-                              <span class="color">{{
+                              <span class="color u-date">{{
                                 common.dateformat(item__.regdate)
                               }}</span>
                             </div>
@@ -236,7 +227,7 @@
                               </dl> -->
                               <dl class="list">
                                 <dt class="tit">클럽</dt>
-                                <dd class="cnt">{{ item__.metric_code }}</dd>
+                                <dd class="cnt">{{ common.getClubcodeToClubname(String(item__.fit_club_code ?? '')) }}</dd>
                               </dl>
                               <dl class="list">
                                 <dt class="tit">날짜</dt>
@@ -326,7 +317,7 @@
                                     ? common.getImg(th.top.member_photo_url)
                                     : '/images/button/btn_profile.png'
                                 "
-                                alt="profile"
+                                alt="프로필"
                               />
                             </div>
                             <div class="info-area">
@@ -354,7 +345,7 @@
                               <span class="text">{{ th.top.nickname }}</span>
                             </div>
                             <div class="text-area">
-                              <textarea
+                              <textarea aria-label="내용 입력"
                                 v-model="commentEditText"
                                 placeholder="내용을 입력해주세요."
                               ></textarea>
@@ -416,7 +407,7 @@
                                 </div>
                               </div>
                             </transition>
-                            <button
+                            <button aria-label="댓글 더보기 메뉴"
                               type="button"
                               class="btn-more"
                               @click="toggleTooltip(th.top)"
@@ -471,7 +462,7 @@
                                       ? common.getImg(reply.member_photo_url)
                                       : '/images/button/btn_profile.png'
                                   "
-                                  alt="profile"
+                                  alt="프로필"
                                 />
                               </div>
                               <div class="info-area">
@@ -489,7 +480,7 @@
                                 <span class="text">{{ reply.nickname }}</span>
                               </div>
                               <div class="text-area">
-                                <textarea
+                                <textarea aria-label="댓글 입력"
                                   v-model="commentEditText"
                                   placeholder="댓글을 입력해주세요."
                                 ></textarea>
@@ -553,7 +544,7 @@
                                   </div>
                                 </div>
                               </transition>
-                              <button
+                              <button aria-label="답글 더보기 메뉴"
                                 type="button"
                                 class="btn-more"
                                 @click="replyToggleTooltip(reply)"
@@ -602,7 +593,7 @@
                               <span class="text">{{ th.top.nickname }}</span>
                             </div>
                             <div class="text-area">
-                              <textarea
+                              <textarea aria-label="답글 입력"
                                 v-model="replyNewText"
                                 placeholder="답글을 입력해주세요."
                               ></textarea>
@@ -636,7 +627,7 @@
                         <span class="text">{{ nickname }}</span>
                       </div>
                       <div class="text-area">
-                        <textarea
+                        <textarea aria-label="댓글 입력"
                           v-model="commentText"
                           placeholder="댓글을 입력해주세요"
                         ></textarea>
@@ -660,7 +651,7 @@
                 <!-- <div class="header">
                   <button type="button" class="btn-back" @click="goBack" aria-label="이전">
                     <img
-                      src="/public/images/icon/icon_arrow_prev.png"
+                      src="/images/icon/icon_arrow_prev.png"
                       alt="icon_arrow_prev"
                     />
                   </button>
@@ -689,7 +680,7 @@
                           @click="menuClose"
                         >
                           <img
-                            src="/public/images/icon/icon_arrow_prev.png"
+                            src="/images/icon/icon_arrow_prev.png"
                             alt="icon_arrow_prev"
                           />
                         </button>
@@ -721,7 +712,7 @@
                             >
                               <span class="text">{{ item.name }}</span>
                               <img
-                                src="/public/images/icon/icon_arrow_down_black.png"
+                                src="/images/icon/icon_arrow_down_black.png"
                                 alt="icon_arrow_down_black"
                               />
                             </a>
@@ -762,7 +753,7 @@
                 <div class="swing-wrap">
                   <div class="head">
                     <ul class="category">
-                      <li class="category-list">Step {{ targetStep?.seq }}</li>
+                      <li class="category-list">미션 {{ targetStep?.seq }}</li>
                       <li class="category-list">{{ targetStep?.title }}</li>
                     </ul>
                     <h2 class="title">
@@ -873,7 +864,7 @@
                       </div>
                     </div>
                     <div class="form-box">
-                      <select v-model="selectedStep">
+                      <select aria-label="미션 선택" v-model="selectedStep" @change="stepChange">
                         <option
                           v-for="v in targetClass?.step_list ?? []"
                           :key="v.step_pk"
@@ -882,7 +873,7 @@
                           {{ v.title }}
                         </option>
                       </select>
-                      <select v-model="selectedMission">
+                      <select aria-label="미션 조건 선택" v-model="selectedMission" @change="missionChange">
                         <option
                           v-for="m in targetClass?.step_list?.find(
                             (s) => Number(s.step_pk) === Number(selectedStep),
@@ -893,7 +884,7 @@
                           {{ m.title }}
                         </option>
                       </select>
-                      <select v-model="selectedResult" @change="resultChange">
+                      <select aria-label="결과 선택" v-model="selectedResult" @change="resultChange">
                         <option
                           v-for="(r, i) in targetClass?.step_list
                             ?.find(
@@ -907,11 +898,11 @@
                           :key="r.result_pk"
                           :value="Number(r.result_pk)"
                         >
-                          #{{ i + 1 }}번째 시도 ({{ r.measured_value
+                          #{{ i + 1 }}번째 시도 ({{ common.n2(r.measured_value)
                           }}{{ r.unit }})
                         </option>
                       </select>
-                      <button type="button" class="btn-default btn-sm-fill">
+                      <button type="button" class="btn-default btn-sm-fill" @click="resultChange">
                         이동
                       </button>
                     </div>
@@ -926,7 +917,9 @@
                               v-if="swingView?.video_file?.[0]"
                             >
                               <videoPlayer
-                                ref="player1"
+                                ref="player1m"
+                                @time="onVideoTime"
+                                @state="onVideoState"
                                 :videoinfo="swingView?.video_file?.[0]"
                               />
                             </div>
@@ -938,7 +931,7 @@
                               v-if="swingView?.video_file?.[1]"
                             >
                               <videoPlayer
-                                ref="player2"
+                                ref="player2m"
                                 :videoinfo="swingView?.video_file?.[1]"
                               />
                             </div>
@@ -950,7 +943,7 @@
                             class="tab-list"
                             :class="{ 'is-active': currentTab == 'address' }"
                             @click="
-                              onClickStage(swingView?.fit_address, 'address')
+                              onStageSync(swingView?.fit_address, 'address')
                             "
                           >
                             <span class="icon">
@@ -964,7 +957,7 @@
                               'is-active': currentTab == 'backswing',
                             }"
                             @click="
-                              onClickStage(swingView?.fit_takeback, 'backswing')
+                              onStageSync(swingView?.fit_takeback, 'backswing')
                             "
                           >
                             <span class="icon">
@@ -977,7 +970,7 @@
                             class="tab-list"
                             :class="{ 'is-active': currentTab == 'topswing' }"
                             @click="
-                              onClickStage(swingView?.fit_top_swing, 'topswing')
+                              onStageSync(swingView?.fit_top_swing, 'topswing')
                             "
                           >
                             <span class="icon">
@@ -992,7 +985,7 @@
                               'is-active': currentTab == 'downswing',
                             }"
                             @click="
-                              onClickStage(
+                              onStageSync(
                                 swingView?.fit_down_swing,
                                 'downswing',
                               )
@@ -1008,7 +1001,7 @@
                             class="tab-list"
                             :class="{ 'is-active': currentTab == 'impact' }"
                             @click="
-                              onClickStage(swingView?.fit_impact, 'impact')
+                              onStageSync(swingView?.fit_impact, 'impact')
                             "
                           >
                             <span class="icon">
@@ -1022,7 +1015,7 @@
                               'is-active': currentTab == 'follow-through',
                             }"
                             @click="
-                              onClickStage(
+                              onStageSync(
                                 swingView?.fit_follow,
                                 'follow-through',
                               )
@@ -1037,7 +1030,7 @@
                             class="tab-list"
                             :class="{ 'is-active': currentTab == 'finish' }"
                             @click="
-                              onClickStage(swingView?.fit_finish, 'finish')
+                              onStageSync(swingView?.fit_finish, 'finish')
                             "
                           >
                             <span class="icon">
@@ -1062,8 +1055,8 @@
                               >
                               <span>
                                 <img
-                                  src="/public/images/default/img_human_footprints.png"
-                                  alt="img_human_footprints"
+                                  src="/images/default/img_human_footprints.png"
+                                  alt="발 밸런스"
                                 />
                               </span>
                               <span class="foot-area-list"
@@ -1077,13 +1070,16 @@
                               >
                               <span></span>
                             </div>
-                            <EChart
+                            <chart-line-type-1
                               :list="swingView?.shotweight_info?.list || []"
                               :totalFrames="
                                 Number(swingView?.fit_total_frames || 0)
                               "
                               :playTime="Number(swingView?.fit_play_time || 0)"
-                              @seek="onSeek"
+                              :markIndex="stageFrame"
+                              :currentTime="videoTime"
+                              :follow="true"
+                              @seek="onSeekSync"
                               @balance="onBalance"
                             />
                           </div>
@@ -1098,7 +1094,7 @@
                               <li class="row-list">
                                 <p class="tit">클럽 정보</p>
                                 <div class="info">
-                                  {{ swingView.fit_club_code }}
+                                  {{ common.getClubcodeToClubname(String(swingView.fit_club_code ?? '')) }}
                                 </div>
                               </li>
                               <li class="row-list">
@@ -1107,7 +1103,7 @@
                                   {{
                                     common.suffix(
                                       common.toFixed(swingView.ballspeed),
-                                      "km/h",
+                                      "m/s",
                                     )
                                   }}
                                 </div>
@@ -1138,7 +1134,7 @@
                                   {{
                                     common.suffix(
                                       common.toFixed(swingView.headspeed),
-                                      "km/h",
+                                      "m/s",
                                     )
                                   }}
                                 </div>
@@ -1178,7 +1174,7 @@
                               <li class="row-list">
                                 <p class="tit">체공시간</p>
                                 <div class="info">
-                                  {{ common.suffix(swingView.duration, "s") }}
+                                  {{ common.suffix(common.n2(swingView.duration), "s") }}
                                 </div>
                               </li>
 
@@ -1200,7 +1196,7 @@
                                   {{
                                     common.suffix(
                                       common.toFixed(swingView.smashfactor),
-                                      "%",
+                                      "",
                                     )
                                   }}
                                 </div>
@@ -1268,8 +1264,8 @@
         <div class="academy-left-head">
           <button type="button" class="btn-back" @click="goBack">
             <img
-              src="/public/images/icon/icon_arrow_left_white.png"
-              alt="icon_arrow_left_white"
+              src="/images/icon/icon_arrow_left_white.png"
+              alt=""
             />
             <span class="text">코칭 리스트 돌아가기</span>
           </button>
@@ -1279,15 +1275,13 @@
               {{ academyView.class_list?.length }}개의 클래스
             </li>
           </ul>
-          <h2 class="title">{{ academyView.title }}</h2>
+          <h2 role="heading" aria-level="1" class="title">{{ academyView.title }}</h2>
           <div class="profile">
+            <!-- 2026-10-07(UI 검토): 코치 사진 없을 때 로고가 원형에 잘려 '-Oi'로 보이던 문제 → 기본 프로필 아이콘(aimember·aishop 동일) -->
             <div
               class="profile-image"
-              :class="{
-                'no-data': !academyView.expert_master?.binary_filepath,
-              }"
               :style="{
-                backgroundImage: `url(${common.getImg(academyView.expert_master?.binary_filepath)})`,
+                backgroundImage: `url(${academyView.expert_master?.binary_filepath ? common.getImg(academyView.expert_master?.binary_filepath) : '/images/button/btn_profile.png'})`,
               }"
             ></div>
             <div class="text">
@@ -1327,7 +1321,7 @@
                   <span>클래스{{ index + 1 }}. {{ item.title }}</span>
                   <img
                     src="/images/icon/icon_chevron_down.png"
-                    alt="icon_chevron_down"
+                    alt=""
                     v-if="item.step_list?.length"
                   />
                 </span>
@@ -1343,14 +1337,12 @@
                       class="depth-list"
                       :class="{
                         'is-complete':
-                          depth.mission_list?.[0]?.required_success_cnt ==
-                          depth.mission_list?.[0]?.success_cnt,
+                          stepMissionDone(depth),
                         'is-active':
                           activeDepth.accIndex === index &&
                           activeDepth.depthIndex === j,
                         'is-current-complete':
-                          depth.mission_list?.[0]?.required_success_cnt ==
-                            depth.mission_list?.[0]?.success_cnt &&
+                          stepMissionDone(depth) &&
                           activeDepth.accIndex === index &&
                           activeDepth.depthIndex === j,
                       }"
@@ -1363,8 +1355,8 @@
                       >
                         <span class="circle">
                           <img
-                            src="/public/images/icon/icon_check_white.png"
-                            alt="icon_check_white"
+                            src="/images/icon/icon_check_white.png"
+                            alt=""
                           />
                         </span>
                         <span
@@ -1372,11 +1364,7 @@
                           :class="{
                             'is-active': currentStepData.title == depth.title,
                           }"
-                          >{{ depth.title }} ({{
-                            depth.mission_list?.[0]?.success_cnt
-                          }}/{{
-                            depth.mission_list?.[0]?.required_success_cnt
-                          }})</span
+                          >{{ depth.title }} {{ stepMissionLabel(depth) }}</span
                         >
                       </a>
                     </div>
@@ -1428,8 +1416,7 @@
               <span
                 class="state type01"
                 v-if="
-                  currentStepData.mission_list?.[0]?.success_cnt ==
-                  currentStepData.mission_list?.[0]?.required_success_cnt
+                  stepMissionDone(currentStepData)
                 "
               >
                 <span class="state-list color-grey">완료</span>
@@ -1444,10 +1431,7 @@
             </div>
             <div
               class="cont"
-              v-for="(item_, index_) in currentStepData.mission_list?.slice(
-                0,
-                1,
-              ) || {}"
+              v-for="(item_, index_) in currentStepData.mission_list || []"
               :key="index_"
             >
               <h3 class="tit">미션 조건</h3>
@@ -1460,18 +1444,12 @@
                         class="progress-bar-inner"
                         :style="{
                           width:
-                            Math.round(
-                              ((item_.success_cnt ?? 0) /
-                                (item_.required_success_cnt || 1)) *
-                                100,
-                            ) + '%',
+                            Math.min(100, Math.round(((item_.success_cnt ?? 0) / (item_.required_success_cnt || 1)) * 100)) + '%',
                         }"
                       ></span>
                     </span>
                     <span class="progress-num"
-                      ><strong>{{ item_.success_cnt }}</strong
-                      >/{{ item_.required_success_cnt }}회(총
-                      {{ item_.attempt_cnt }}회 시도)</span
+                      >성공 <strong>{{ Number(item_.success_cnt ?? 0) }}</strong>회 / 목표 {{ item_.required_success_cnt }}회 (총 {{ Number(item_.attempt_cnt ?? 0) }}회 시도)</span
                     >
                   </div>
                 </li>
@@ -1481,7 +1459,7 @@
               <div class="table">
                 <div class="table-head">
                   <div class="table-head-col col-1"></div>
-                  <div class="table-head-col">남은거리</div>
+                  <div class="table-head-col">{{ item_.metric_catalog?.name_ko || '기록' }}</div>
                   <div class="table-head-col">결과</div>
                   <!-- <div class="table-head-col is-mob">매장</div> -->
                   <div class="table-head-col is-mob">클럽</div>
@@ -1499,7 +1477,7 @@
                         #{{ item__.attempt_no }}
                       </div>
                       <div class="table-body-col">
-                        <strong>{{ item__.measured_value }}m</strong>
+                        <strong>{{ common.n2(item__.measured_value) }}{{ item__.unit_snapshot || item__.unit || item_.unit || item_.metric_catalog?.unit || '' }}</strong>
                       </div>
                       <div
                         class="table-body-col"
@@ -1516,17 +1494,18 @@
                           :class="{ 'is-active': mobListIndex === index__ }"
                         >
                           <img
-                            src="/public/images/icon/icon_arrow_down.png"
-                            alt="icon_arrow_down"
+                            src="/images/icon/icon_arrow_down.png"
+                            alt="펼치기"
                           />
                         </button>
                       </div>
                       <!-- <div class="table-body-col is-mob">{{ item.shop }}</div> -->
                       <div class="table-body-col is-mob">
-                        {{ item__.metric_code }}
+                        <!-- 2026-09-16: 클럽 자리엔 클럽 이름 표기 (fit_club_code→클럽명) -->
+                        {{ common.getClubcodeToClubname(String(item__.fit_club_code ?? '')) }}
                       </div>
                       <div class="table-body-col is-mob">
-                        <span class="color">{{
+                        <span class="color u-date">{{
                           common.dateformat(item__.regdate)
                         }}</span>
                       </div>
@@ -1552,12 +1531,12 @@
                       >
                         <dl class="list">
                           <dt class="tit">클럽</dt>
-                          <dd class="cnt">{{ item__.metric_code }}</dd>
+                          <dd class="cnt">{{ common.getClubcodeToClubname(String(item__.fit_club_code ?? '')) }}</dd>
                         </dl>
                         <dl class="list">
                           <dt class="tit">날짜</dt>
                           <dd class="cnt">
-                            <span class="color">{{
+                            <span class="color u-date">{{
                               common.dateformat(item__.regdate)
                             }}</span>
                           </dd>
@@ -1608,7 +1587,7 @@
                             ? common.getImg(th.top.member_photo_url)
                             : '/images/button/btn_profile.png'
                         "
-                        alt="profile"
+                        alt="프로필"
                       />
                     </div>
                     <div class="info-area">
@@ -1636,7 +1615,7 @@
                       <span class="text">{{ th.top.nickname }}</span>
                     </div>
                     <div class="text-area">
-                      <textarea
+                      <textarea aria-label="내용 입력"
                         v-model="commentEditText"
                         placeholder="내용을 입력해주세요."
                       ></textarea>
@@ -1697,7 +1676,7 @@
                         </div>
                       </div>
                     </transition>
-                    <button
+                    <button aria-label="댓글 더보기 메뉴"
                       type="button"
                       class="btn-more"
                       @click="toggleTooltip(th.top)"
@@ -1750,7 +1729,7 @@
                               ? common.getImg(reply.member_photo_url)
                               : '/images/button/btn_profile.png'
                           "
-                          alt="profile"
+                          alt="프로필"
                         />
                       </div>
                       <div class="info-area">
@@ -1768,7 +1747,7 @@
                         <span class="text">{{ reply.nickname }}</span>
                       </div>
                       <div class="text-area">
-                        <textarea
+                        <textarea aria-label="댓글 입력"
                           v-model="commentEditText"
                           placeholder="댓글을 입력해주세요."
                         ></textarea>
@@ -1830,7 +1809,7 @@
                           </div>
                         </div>
                       </transition>
-                      <button
+                      <button aria-label="답글 더보기 메뉴"
                         type="button"
                         class="btn-more"
                         @click="replyToggleTooltip(reply)"
@@ -1875,7 +1854,7 @@
                       <span class="text">{{ th.top.nickname }}</span>
                     </div>
                     <div class="text-area">
-                      <textarea
+                      <textarea aria-label="답글 입력"
                         v-model="replyNewText"
                         placeholder="답글을 입력해주세요."
                       ></textarea>
@@ -1909,7 +1888,7 @@
                 <span class="text">{{ nickname }}</span>
               </div>
               <div class="text-area">
-                <textarea
+                <textarea aria-label="댓글 입력"
                   v-model="commentText"
                   placeholder="댓글을 입력해주세요"
                 ></textarea>
@@ -1935,7 +1914,7 @@
             <!-- <div class="header">
               <button type="button" class="btn-back" @click="goBack" aria-label="이전">
                 <img
-                  src="/public/images/icon/icon_arrow_prev.png"
+                  src="/images/icon/icon_arrow_prev.png"
                   alt="icon_arrow_prev"
                 />
               </button>
@@ -1953,7 +1932,7 @@
                   <div class="header">
                     <button type="button" class="btn-prev" @click="menuClose" aria-label="닫기">
                       <img
-                        src="/public/images/icon/icon_arrow_prev.png"
+                        src="/images/icon/icon_arrow_prev.png"
                         alt="icon_arrow_prev"
                       />
                     </button>
@@ -1984,7 +1963,7 @@
                         >
                           <span class="text">{{ item.name }}</span>
                           <img
-                            src="/public/images/icon/icon_arrow_down_black.png"
+                            src="/images/icon/icon_arrow_down_black.png"
                             alt="icon_arrow_down_black"
                           />
                         </a>
@@ -2025,7 +2004,7 @@
             <div class="swing-wrap" v-if="!isMobile">
               <div class="head">
                 <ul class="category">
-                  <li class="category-list">Step {{ targetStep?.seq }}</li>
+                  <li class="category-list">미션 {{ targetStep?.seq }}</li>
                   <li class="category-list">{{ targetStep?.title }}</li>
                 </ul>
                 <h2 class="title">
@@ -2128,7 +2107,7 @@
                 </div>
                 <div class="form-box">
                   <!-- 스텝 -->
-                  <select v-model="selectedStep">
+                  <select aria-label="미션 선택" v-model="selectedStep" @change="stepChange">
                     <option
                       v-for="v in targetClass?.step_list ?? []"
                       :key="v.step_pk"
@@ -2139,7 +2118,7 @@
                   </select>
 
                   <!-- 미션 (선택된 스텝 기준) -->
-                  <select v-model="selectedMission">
+                  <select aria-label="미션 조건 선택" v-model="selectedMission" @change="missionChange">
                     <option
                       v-for="m in targetClass?.step_list?.find(
                         (s) => Number(s.step_pk) === Number(selectedStep),
@@ -2152,7 +2131,7 @@
                   </select>
 
                   <!-- 결과 (선택된 미션 기준) -->
-                  <select v-model="selectedResult" @change="resultChange">
+                  <select aria-label="결과 선택" v-model="selectedResult" @change="resultChange">
                     <option
                       v-for="(r, i) in targetClass?.step_list
                         ?.find(
@@ -2165,10 +2144,10 @@
                       :key="r.result_pk"
                       :value="Number(r.result_pk)"
                     >
-                      #{{ i + 1 }}번째 시도 ({{ r.measured_value }}{{ r.unit }})
+                      #{{ i + 1 }}번째 시도 ({{ common.n2(r.measured_value) }}{{ r.unit }})
                     </option>
                   </select>
-                  <button type="button" class="btn-default btn-sm-fill">
+                  <button type="button" class="btn-default btn-sm-fill" @click="resultChange">
                     이동
                   </button>
                 </div>
@@ -2184,6 +2163,8 @@
                         >
                           <videoPlayer
                             ref="player1"
+                            @time="onVideoTime"
+                            @state="onVideoState"
                             :videoinfo="swingView?.video_file?.[0]"
                           />
                         </div>
@@ -2206,7 +2187,7 @@
                       <li
                         class="tab-list"
                         :class="{ 'is-active': currentTab == 'address' }"
-                        @click="onClickStage(swingView?.fit_address, 'address')"
+                        @click="onStageSync(swingView?.fit_address, 'address')"
                       >
                         <span class="icon">
                           <svg-address />
@@ -2219,7 +2200,7 @@
                           'is-active': currentTab == 'backswing',
                         }"
                         @click="
-                          onClickStage(swingView?.fit_takeback, 'backswing')
+                          onStageSync(swingView?.fit_takeback, 'backswing')
                         "
                       >
                         <span class="icon">
@@ -2232,7 +2213,7 @@
                         class="tab-list"
                         :class="{ 'is-active': currentTab == 'topswing' }"
                         @click="
-                          onClickStage(swingView?.fit_top_swing, 'topswing')
+                          onStageSync(swingView?.fit_top_swing, 'topswing')
                         "
                       >
                         <span class="icon">
@@ -2247,7 +2228,7 @@
                           'is-active': currentTab == 'downswing',
                         }"
                         @click="
-                          onClickStage(swingView?.fit_down_swing, 'downswing')
+                          onStageSync(swingView?.fit_down_swing, 'downswing')
                         "
                       >
                         <span class="icon">
@@ -2259,7 +2240,7 @@
                       <li
                         class="tab-list"
                         :class="{ 'is-active': currentTab == 'impact' }"
-                        @click="onClickStage(swingView?.fit_impact, 'impact')"
+                        @click="onStageSync(swingView?.fit_impact, 'impact')"
                       >
                         <span class="icon">
                           <svg-impact />
@@ -2272,7 +2253,7 @@
                           'is-active': currentTab == 'follow-through',
                         }"
                         @click="
-                          onClickStage(swingView?.fit_follow, 'follow-through')
+                          onStageSync(swingView?.fit_follow, 'follow-through')
                         "
                       >
                         <span class="icon">
@@ -2283,7 +2264,7 @@
                       <li
                         class="tab-list"
                         :class="{ 'is-active': currentTab == 'finish' }"
-                        @click="onClickStage(swingView?.fit_finish, 'finish')"
+                        @click="onStageSync(swingView?.fit_finish, 'finish')"
                       >
                         <span class="icon">
                           <svg-finish />
@@ -2307,8 +2288,8 @@
                           >
                           <span>
                             <img
-                              src="/public/images/default/img_human_footprints.png"
-                              alt="img_human_footprints"
+                              src="/images/default/img_human_footprints.png"
+                              alt="발 밸런스"
                             />
                           </span>
                           <span class="foot-area-list"
@@ -2322,13 +2303,16 @@
                           >
                           <span></span>
                         </div>
-                        <EChart
+                        <chart-line-type-1
                           :list="swingView?.shotweight_info?.list || []"
                           :totalFrames="
                             Number(swingView?.fit_total_frames || 0)
                           "
                           :playTime="Number(swingView?.fit_play_time || 0)"
-                          @seek="onSeek"
+                          :markIndex="stageFrame"
+                          :currentTime="videoTime"
+                          :follow="true"
+                          @seek="onSeekSync"
                           @balance="onBalance"
                         />
                       </div>
@@ -2343,7 +2327,7 @@
                           <li class="row-list">
                             <p class="tit">클럽 정보</p>
                             <div class="info">
-                              {{ swingView.fit_club_code }}
+                              {{ common.getClubcodeToClubname(String(swingView.fit_club_code ?? '')) }}
                             </div>
                           </li>
                           <li class="row-list">
@@ -2352,7 +2336,7 @@
                               {{
                                 common.suffix(
                                   common.toFixed(swingView.ballspeed),
-                                  "km/h",
+                                  "m/s",
                                 )
                               }}
                             </div>
@@ -2383,7 +2367,7 @@
                               {{
                                 common.suffix(
                                   common.toFixed(swingView.headspeed),
-                                  "km/h",
+                                  "m/s",
                                 )
                               }}
                             </div>
@@ -2423,7 +2407,7 @@
                           <li class="row-list">
                             <p class="tit">체공시간</p>
                             <div class="info">
-                              {{ common.suffix(swingView.duration, "s") }}
+                              {{ common.suffix(common.n2(swingView.duration), "s") }}
                             </div>
                           </li>
 
@@ -2445,7 +2429,7 @@
                               {{
                                 common.suffix(
                                   common.toFixed(swingView.smashfactor),
-                                  "%",
+                                  "",
                                 )
                               }}
                             </div>
@@ -2528,11 +2512,8 @@
                   <p class="desc">불러오는 중입니다.</p>
                 </div>
               </template>
-              <template v-else-if="!finalReportView.analysis">
-                <div class="cont">
-                  <p class="desc">아직 등록된 코칭 리포트가 없습니다.</p>
-                </div>
-              </template>
+              <!-- 2026-09-18: aimember 정본과 통일 — 코치 리포트(analysis)가 없어도 자동 코칭결과분석(stats)은 항상 노출.
+                   analysis 의존 부분(코치총평/구질레이더/원포인트레슨)만 개별 v-if 로 가드하고 없으면 "내역이 없습니다". -->
               <template v-else>
                 <!-- 리포트 -->
                 <div class="cont" v-if="finalReportTab === 0">
@@ -2542,23 +2523,24 @@
                   <div class="section">
                     <div class="top-area">
                       <div class="title">
-                        {{ finalReportView.analysis.nickname }}님의 코칭
-                        결과입니다
+                        {{ finalReportView.analysis?.nickname ? finalReportView.analysis.nickname + '님의 ' : '' }}코칭 결과입니다
                       </div>
-                      <span class="sub">(Driver 기준)</span>
+                      <span class="sub" v-if="finalReportView.statsClubs?.length">({{ finalReportView.statsClubs.map((c) => common.getClubcodeToClubname(String(c))).join(", ") }} 기준)</span>
                     </div>
-                    <p class="desc-area">
+                    <p class="desc-area" v-if="finalReportView.analysis?.coaching_result">
                       {{ finalReportView.analysis.coaching_result }}
                     </p>
+                    <p class="desc-area" v-else>내역이 없습니다.</p>
                     <div class="chart-area">
                       <div class="chart-box">
                         <p class="title">코칭 구질분석</p>
-                        <div class="chart">
+                        <div class="chart" v-if="finalReportView.analysis">
                           <chart-radar
                             :analysis="finalReportView.analysis"
                             :readonly="true"
                           />
                         </div>
+                        <div class="no-info" v-else>내역이 없습니다.</div>
                       </div>
                       <div class="chart-box">
                         <div
@@ -2612,7 +2594,7 @@
                   <div class="title" id="lesson">
                     <h2 class="text">원포인트레슨</h2>
                   </div>
-                  <div class="section">
+                  <div class="section" v-if="finalReportView.analysis">
                     <div class="table-area">
                       <table class="type01">
                         <colgroup>
@@ -2674,6 +2656,9 @@
                       </table>
                     </div>
                   </div>
+                  <div class="section" v-else>
+                    <p class="desc">등록된 원포인트레슨이 없습니다.</p>
+                  </div>
                 </div>
 
                 <!-- 추천운동 -->
@@ -2681,42 +2666,20 @@
                   <div class="title" id="recommend">
                     <h2 class="text">추천운동</h2>
                   </div>
-                  <div
-                    class="section"
-                    v-if="finalReportView.recommendations?.length"
-                  >
-                    <div
-                      class="table-area"
-                      v-for="item in finalReportView.recommendations"
-                      :key="item.recommend_exercise_pk"
-                    >
-                      <div
-                        class="img-area"
-                        :style="{
-                          backgroundImage: `url(${item.thumbnail_url ? common.getImg(item.thumbnail_url) : '/images/default/img_recommend_01.png'})`,
-                        }"
-                      />
-                      <table class="type02">
-                        <colgroup>
-                          <col width="10%" />
-                          <col width="*" />
-                        </colgroup>
-                        <tbody>
-                          <tr>
-                            <th>제목</th>
-                            <td>{{ item.title }}</td>
-                          </tr>
-                          <tr>
-                            <th>목적</th>
-                            <td>{{ item.objective }}</td>
-                          </tr>
-                          <tr>
-                            <th>내용</th>
-                            <td>{{ item.content }}</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
+                  <div class="section rec-grid" v-if="finalReportView.recommendations?.length">
+                    <!-- 2026-10-20: 추천운동 여러 개 = 리포트 약점별 추천(우선순위 순, 사유 = 리포트 근거). 번호·사유가 보이는 카드 2열 -->
+                    <article class="rec-card" v-for="(item, i) in [...finalReportView.recommendations].sort((a, b) => Number(a.priority ?? 99) - Number(b.priority ?? 99))" :key="item.recommend_exercise_pk">
+                      <div class="rec-thumb" role="img" :aria-label="item.title" :style="{ backgroundImage: `url(${item.thumbnail_url ? common.getImg(item.thumbnail_url) : '/images/default/img_recommend_01.png'})` }" />
+                      <div class="rec-body">
+                        <span class="rec-no">추천 {{ i + 1 }}</span>
+                        <h3 class="rec-title">{{ item.title }}</h3>
+                        <p class="rec-reason" v-if="item.match_reason"><b>추천 사유</b>{{ item.match_reason }}</p>
+                        <dl class="rec-dl">
+                          <dt>목적</dt><dd>{{ item.objective || '-' }}</dd>
+                          <dt>내용</dt><dd>{{ item.content || '-' }}</dd>
+                        </dl>
+                      </div>
+                    </article>
                   </div>
                   <div class="section" v-else>
                     <p class="desc">추천운동이 없습니다.</p>
@@ -2731,7 +2694,7 @@
     <div class="academy-btn">
       <div class="btn-wrap">
         <button type="button" class="btn-out" @click="goBack">
-          <img src="/public/images/icon/icon_exit_to.png" alt="icon_exit_to" />
+          <img src="/images/icon/icon_exit_to.png" alt="" />
           <span class="text">나가기</span>
         </button>
         <button
@@ -2741,8 +2704,8 @@
           aria-label="이전"
         >
           <img
-            src="/public/images/icon/icon_arrow_backward.png"
-            alt="icon_arrow_backward"
+            src="/images/icon/icon_arrow_backward.png"
+            alt=""
           />
         </button>
         <button
@@ -2752,8 +2715,8 @@
           aria-label="다음"
         >
           <img
-            src="/public/images/icon/icon_arrow_forward.png"
-            alt="icon_arrow_forward"
+            src="/images/icon/icon_arrow_forward.png"
+            alt=""
           />
         </button>
       </div>
@@ -2809,8 +2772,25 @@ import toastWarnModal from "@/components/toast-ui/toast-warn-modal.vue";
 import toastErrorModal from "@/components/toast-ui/toast-error-modal.vue";
 
 definePageMeta({
-  layout: "publish-detail",
+  // 2026-10-20: 번호(숫자)만 상세로 — 그 외 주소는 404 (예: /academy/test 가 상세로 들어가 오류 창이 뜨던 것)
+  validate: (route) => /^\d+$/.test(String(route.params.slug ?? '')),
+  // 2026-09-18: 코칭 강의실(코칭 상세)은 aishop 과 동일하게 좌측 GNB 없는 전체화면으로 — layout/detail.vue(GNB 미포함) 사용.
+  //   강의실 내에서는 상단 "코칭 리스트 돌아가기" / 하단 "나가기" 버튼으로 이동.
+  layout: "detail",
 });
+
+
+// 2026-10-14 미션 표시 정합: 목표 이상 성공이면 완료(>=), 스텝 완료 = 스텝의 모든 미션 완료
+const missionDone = (m) => Number(m?.success_cnt ?? 0) >= Number(m?.required_success_cnt || 1);
+const stepMissionDone = (s) => (s?.mission_list?.length ?? 0) > 0 && s.mission_list.every(missionDone);
+const stepMissionLabel = (s) => {
+  const ms = s?.mission_list ?? [];
+  if (!ms.length) return '';
+  // 2026-10-20: 완료돼도 (성공/목표) 유지 + 완료 표시
+  const done = stepMissionDone(s) ? ' 완료' : '';
+  if (ms.length === 1) return `(${Number(ms[0].success_cnt ?? 0)}/${ms[0].required_success_cnt}${done})`;
+  return `(조건 ${ms.filter(missionDone).length}/${ms.length}${done})`; // 2026-10-20: 4앱 통일 — 스텝 = 미션, 그 안의 항목 = 미션 조건
+};
 
 const common = useCommon();
 const route = useRoute();
@@ -3012,6 +2992,7 @@ const _resultAnalysisView = async () => {
     finalReportView.value = {
       analysis: res.analysis,
       stats: res.stats,
+      statsClubs: res.stats_clubs || [], // 2026-10-13: 이 수강 샷의 클럽
       recommendations: res.recommendations || [],
     };
   } catch (err) {
@@ -3021,15 +3002,20 @@ const _resultAnalysisView = async () => {
   }
 };
 
-const handleFinalReport = (e) => {
+const handleFinalReport = async (e) => {
+  // 2026-09-18: 코치가 작성한 최종 코칭 리포트(analysis)가 없으면 진입 차단 + 안내 (3앱 통일).
+  //   analysis 를 먼저 로드해 존재 여부를 확인한 뒤에만 리포트 화면으로 전환한다.
+  if (!finalReportLoaded.value) {
+    await _resultAnalysisView();
+  }
+  if (!finalReportView.value.analysis) {
+    handleWarnToast("아직 등록된 코칭 리포트가 없습니다.");
+    return;
+  }
   finalReport.value = true;
   accordionLastIndex.value = true;
   swingPage.value = false;
   finalReportTab.value = 0;
-
-  if (!finalReportLoaded.value) {
-    _resultAnalysisView();
-  }
 };
 
 const finalReportMetricRows = computed(() => {
@@ -3050,7 +3036,7 @@ const finalReportMetricRows = computed(() => {
     },
     {
       key: "fit_ball_speed",
-      label: "평균 볼속도(km/h)",
+      label: "평균 볼속도(m/s)",
       mine: mine.fit_ball_speed ?? 0,
       others: others.fit_ball_speed ?? 0,
     },
@@ -3092,8 +3078,10 @@ const leave = (el) => {
 };
 
 const mobListIndex = ref(-1);
+// 2026-10-12(회귀 점검): 769~1024(태블릿)에서는 클럽·날짜·스윙영상 칸이 숨겨지는데 행 펼치기는 768 이하만 동작해
+//   스윙 영상으로 들어갈 방법이 없던 문제(원래부터) → 칸이 숨는 폭(1024 이하)까지 펼치기 허용
 const handleMobList = (index) => {
-  if (window.innerWidth <= 768) {
+  if (window.innerWidth <= 1024) {
     mobListIndex.value = mobListIndex.value === index ? -1 : index;
   }
 };
@@ -3329,9 +3317,17 @@ const handleDepthClick = (accIndex, depth, depthIndex, item) => {
 // 탭 메뉴 클릭 이벤트(최종 코칭 리포트) - 모바일
 const currentTab = ref("report");
 
-const tabMenuClick = (item) => {
+const tabMenuClick = async (item) => {
+  // 2026-10-13: '최종 코칭 리포트' 탭도 버튼과 같은 경로(리포트 없으면 진입 차단·안내)로. 이전엔 확인 없이 바로 열려
+  //   리포트가 없는 수강도 빈 리포트 화면(전체평균만)이 보였음.
+  if (item.title === "최종 코칭 리포트") {
+    tabIndex.value = -1;
+    swingPage.value = false;
+    await handleFinalReport();
+    return;
+  }
   currentClass.value = Number(item.class_pk);
-  finalReport.value = item.title === "최종 코칭 리포트";
+  finalReport.value = false;
 
   // ✅ 클래스 바꾸면 아코디언/스윙 상태 초기화
   tabIndex.value = -1;
@@ -3348,6 +3344,39 @@ const resultChange = async () => {
   await _playerswingview(selectedResult.value);
 };
 
+/**
+ * 2026-10-13: 스텝/미션 셀렉트를 바꾸면 상단 글자만 바뀌고 영상·지표는 이전 시도 그대로 남던 문제.
+ *   (결과 셀렉트만 @change 로 다시 불러왔음) → 바꾼 스텝/미션의 첫 시도를 골라 하단 전체를 다시 불러온다.
+ *   시도가 없는 미션이면 안내만 하고 하단은 유지. (aimember academy/[slug] 와 동일)
+ */
+const findStep = (stepPk) =>
+  (classList.value?.academy_master?.class_list || [])
+    .flatMap((c) => c.step_list || [])
+    .find((s) => Number(s.step_pk) === Number(stepPk));
+const loadFirstResult = async (mission) => {
+  const r = mission?.result_list?.[0];
+  if (!r) {
+    selectedResult.value = null;
+    handleWarnToast("이 미션에는 아직 시도 기록이 없습니다.");
+    return;
+  }
+  selectedResult.value = Number(r.result_pk);
+  await _playerswingview(selectedResult.value);
+};
+const stepChange = async () => {
+  const step = findStep(selectedStep.value);
+  const missions = step?.mission_list || [];
+  const m = missions.find((x) => (x.result_list || []).length) || missions[0];
+  selectedMission.value = m ? Number(m.mission_pk) : null;
+  await loadFirstResult(m);
+};
+const missionChange = async () => {
+  const m = (findStep(selectedStep.value)?.mission_list || []).find(
+    (x) => Number(x.mission_pk) === Number(selectedMission.value),
+  );
+  await loadFirstResult(m);
+};
+
 const _playerswingview = async (val) => {
   try {
     const res = await coachingApi._playerswingview(val);
@@ -3355,12 +3384,27 @@ const _playerswingview = async (val) => {
     swingView.value = res.view;
     classList.value = res.classlist;
 
-    if (classList.value.connected_paths) {
-      selectedStep.value = Number(classList.value.connected_paths.step_pk);
-      selectedMission.value = Number(
-        classList.value.connected_paths.mission_pk,
-      );
-      selectedResult.value = Number(classList.value.connected_paths.result_pk);
+    // 2026-09-16: 스윙 이동 드롭다운 초기 선택.
+    //   connected_paths가 채워지면 그대로, 아니면(빈 배열 등) 현재 시도(result_pk=val)를 클래스 트리에서 찾아 스텝/미션/시도 선택 → 미션/시도 드롭다운이 정상 채워짐
+    const cp = classList.value?.connected_paths;
+    if (cp && !Array.isArray(cp) && cp.step_pk != null) {
+      selectedStep.value = Number(cp.step_pk);
+      selectedMission.value = Number(cp.mission_pk);
+      selectedResult.value = Number(cp.result_pk);
+    } else {
+      const classes = classList.value?.academy_master?.class_list || [];
+      outer: for (const c of classes) {
+        for (const s of c.step_list || []) {
+          for (const m of s.mission_list || []) {
+            if ((m.result_list || []).some((r) => Number(r.result_pk) === Number(val))) {
+              selectedStep.value = Number(s.step_pk);
+              selectedMission.value = Number(m.mission_pk);
+              selectedResult.value = Number(val);
+              break outer;
+            }
+          }
+        }
+      }
     }
   } catch (err) {
     handleErrorToast(err.message);
@@ -3569,9 +3613,12 @@ watch(
   width,
   (newWidth) => {
     isMobile.value = newWidth <= 1024;
-  },
-  { immediate: true },
+  }
 );
+// 2026-10-06: SSR(width=Infinity)과 첫 클라 렌더를 일치시키고 마운트 후 반영 (hydration mismatch 방지)
+onMounted(() => {
+  isMobile.value = window.innerWidth <= 1024;
+});
 
 // 페이지 변경 시 URL 업데이트 (양방향 동기화)
 watch(currentPage, (page) => {
@@ -3752,23 +3799,30 @@ const totalFrames = computed(() => Number(swingView?.fit_total_frames) || 600);
 const playTime = computed(() => Number(swingView?.fit_play_time) || 5);
 const frameRate = computed(() => totalFrames.value / playTime.value);
 
+// 2026-09-16: 스윙 상세 페이지와 동일하게 — 구분동작 클릭 시 체중그래프(chart-line-type-1) 세로바(markIndex)를 해당 프레임에 고정
+const stageFrame = ref(null);
+
 // 탭 클릭 시 특정 프레임으로 이동
 const onClickStage = (frameIndex, tabName) => {
   currentTab.value = tabName;
-  if (!frameRate.value || !frameIndex) return;
-
-  // 프레임 → 초 변환
-  const sec = frameIndex / frameRate.value;
-
+  const fi = Number(frameIndex);
+  if (!Number.isFinite(fi)) return;
+  // 체중그래프 세로바 위치(markIndex) 반영
+  stageFrame.value = fi;
   // 두 비디오 플레이어 동시에 이동
-  player1.value?.setCurrentTime?.(sec);
-  player2.value?.setCurrentTime?.(sec);
+  if (frameRate.value) {
+    const sec = fi / frameRate.value;
+    player1.value?.setCurrentTime?.(sec);
+    player2.value?.setCurrentTime?.(sec);
+  }
 };
 
-const onSeek = (time) => {
-  if (time == null) return;
-  // 여기서 player1/player2 컨트롤
-  // player.currentTime(time); player.pause();
+// 차트 클릭 → 영상 seek (스윙 상세 정본 동일)
+const onSeek = (sec) => {
+  const t = Number(sec);
+  if (!Number.isFinite(t)) return;
+  player1.value?.setCurrentTime?.(t);
+  player2.value?.setCurrentTime?.(t);
 };
 
 const onBalance = ({ pct /*, raw*/ }) => {
@@ -3873,10 +3927,83 @@ useHead({
   title: "코칭",
   meta: [{ name: "description", content: "코칭 상세 페이지 입니다." }],
 });
+
+// ---------------------------------------------------------------------------
+// 2026-10-21: 스윙 영상 ↔ 구분동작 ↔ Step Balance 동기화 (4앱 공통 적용)
+//   - 정면 영상(player1)의 재생 위치를 따라 Step Balance 세로바·L/R/F/B 와 구분동작 탭이 움직임
+//   - 측면 영상(player2)은 정면 영상의 재생·정지·위치에 맞춤
+//   - 구분동작 클릭·그래프 클릭 → 두 영상이 그 프레임으로 이동 후 정지
+//   - 모바일(≤1024)·PC 블록이 같은 ref 이름을 써서 보이지 않는 플레이어가 움직이던 것 → 모바일은 player1m/player2m
+const player1m = ref(null);
+const player2m = ref(null);
+const videoTime = ref(0);
+const __pickRef = (r) => (Array.isArray(r) ? r.filter(Boolean).pop() : r) || null;
+const __players = () => ((import.meta.client && window.innerWidth <= 1024)
+  ? [__pickRef(player1m.value), __pickRef(player2m.value)]
+  : [__pickRef(player1.value), __pickRef(player2.value)]);
+const __fps = () => {
+  const tf = Number(swingView.value?.fit_total_frames) || 0;
+  const pt = Number(swingView.value?.fit_play_time) || 0;
+  return tf > 0 && pt > 0 ? tf / pt : 0;
+};
+const __seekAll = (sec) => {
+  for (const p of __players()) { p?.pause?.(); p?.setCurrentTime?.(sec); }
+  videoTime.value = sec;
+};
+const __stageOrder = [
+  ["fit_address", "address"], ["fit_takeback", "backswing"], ["fit_top_swing", "topswing"],
+  ["fit_down_swing", "downswing"], ["fit_impact", "impact"], ["fit_follow", "follow-through"], ["fit_finish", "finish"],
+];
+const __syncTab = (sec) => {
+  const fps = __fps(); if (!fps) return;
+  const frame = Number(sec) * fps;
+  let tab = "";
+  for (const [key, name] of __stageOrder) {
+    const fr = Number(swingView.value?.[key]);
+    if (Number.isFinite(fr) && fr > 0 && frame + 0.5 >= fr) tab = name;
+  }
+  if (tab && currentTab.value !== tab) currentTab.value = tab;
+};
+const onStageSync = (frameIndex, tabName) => {
+  currentTab.value = tabName;
+  stageFrame.value = Number(frameIndex);
+  const fps = __fps();
+  if (!fps || !frameIndex) return;
+  __seekAll(Number(frameIndex) / fps);
+};
+const onSeekSync = (sec) => {
+  if (sec == null) return;
+  __seekAll(Number(sec));
+  __syncTab(sec);
+};
+const onVideoTime = (t) => {
+  videoTime.value = t;
+  const side = __players()[1]?.getPlayer?.();
+  if (side && Math.abs(Number(side.currentTime?.() || 0) - t) > 0.08) { try { side.currentTime(t); } catch (err) {} }
+  __syncTab(t);
+};
+const onVideoState = (state) => {
+  const side = __players()[1];
+  if (state === "play") side?.play?.(); else side?.pause?.();
+};
 </script>
 <style lang="scss" scoped>
 @use "@/assets/scss/pages/coaching-detail.scss";
 @use "@/assets/scss/pages/swing.scss";
 @use "@/assets/scss/pages/final-report.scss";
 @use "@/assets/scss/components/modal.scss";
+
+/* 2026-10-20: 최종 리포트 추천운동 카드(번호·추천 사유·목적·내용), 앱 팔레트 색 */
+.rec-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+@media screen and (max-width: 1024px) { .rec-grid { grid-template-columns: 1fr; } }
+.rec-card { display: flex; flex-direction: column; border: 1px solid #E5E7E8; border-radius: 12px; overflow: hidden; background: #fff; }
+.rec-thumb { aspect-ratio: 16 / 9; background: #E5E7E8 center / cover no-repeat; }
+.rec-body { display: flex; flex-direction: column; gap: 10px; padding: 20px 22px 22px; }
+.rec-no { align-self: flex-start; padding: 3px 10px; border-radius: 6px; font-size: 12px; font-weight: 600; background: #E8F0FE; color: #2563EB; }
+.rec-title { font-size: 18px; font-weight: 700; color: #35383B; line-height: 1.4; }
+.rec-reason { margin: 0; padding: 10px 12px; border-radius: 8px; background: rgba(53, 119, 241, 0.06); font-size: 14px; line-height: 1.5; color: #35383B; }
+.rec-reason b { display: block; margin-bottom: 2px; font-size: 12px; color: #3577F1; }
+.rec-dl { margin: 0; }
+.rec-dl dt { margin-top: 6px; font-size: 12px; font-weight: 600; color: #72777A; }
+.rec-dl dd { margin: 2px 0 0; font-size: 14px; line-height: 1.6; color: #52575C; }
 </style>
