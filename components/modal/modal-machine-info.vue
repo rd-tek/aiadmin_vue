@@ -94,6 +94,8 @@
                 <th>설치일</th>
                 <td>
                     <div class="datepicker">
+                        <!-- 2026-10-21: VueDatePicker 는 브라우저 전용 플러그인(plugins/vue-datepicker.client.ts)으로 등록돼 서버에서 못 그림 → ClientOnly(하이드레이션 경고 해소) -->
+                        <ClientOnly>
                         <VueDatePicker
                             v-model="insDate"
                             :format="formatDate"
@@ -102,6 +104,7 @@
                             teleport
                             aria-label="설치일"
                         />
+                        </ClientOnly>
                     </div>
                 </td>
                 </tr>
@@ -128,6 +131,7 @@
                 <th>만료기한</th>
                 <td>
                     <div class="datepicker">
+                      <ClientOnly>
                       <VueDatePicker
                         v-model="expDate"
                         :format="formatDate"
@@ -136,6 +140,7 @@
                         teleport
                         aria-label="만료기한"
                     />
+                      </ClientOnly>
                     </div>
                 </td>
                 </tr>
@@ -321,4 +326,16 @@ const modalSave = async () => {
 .machine-alert { margin: 0 0 12px; padding: 10px 12px; border-radius: 6px; background: #fff4e5; color: #8a4b00; font-size: 13px; line-height: 1.5; }
 .req { color: #D81E3C; }
 th label { font-weight: inherit; }
+
+/* 2026-10-22: 항목 11줄이 세로로 쌓여 1440×900 에서도 팝업 안에 스크롤(본문 891 > 652) → PC(1024↑)는 2열.
+   짝: 타석 번호·이름 / 메인·서브 코드 / 기타 코드(한 줄) / H/W·S/W / 설치일·상태 / 토큰·만료기한. 모바일은 기존 1열 */
+@media screen and (min-width: 1024px) {
+  table { display: block; }
+  colgroup { display: none; }
+  tbody { display: grid; grid-template-columns: 1fr 1fr; column-gap: 16px; }
+  tr { display: grid; grid-template-columns: 96px minmax(0, 1fr); }
+  tr:has(#mi-etccode) { grid-column: 1 / -1; }
+  th, td { display: flex; align-items: center; }
+  td > * { flex: 1; min-width: 0; }
+}
 </style>

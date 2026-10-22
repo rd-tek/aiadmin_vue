@@ -4465,3 +4465,9 @@ html:has(> body[style*="zoom"]) {
   u { text-decoration: underline; }
   s { text-decoration: line-through; }
 }
+
+/* 2026-10-21: 첫 데이터 요청이 끝나기 전에는 빈 상태 문구를 숨김 — 서버 HTML·첫 화면에 '데이터가 없습니다' 가
+   잠깐 보였다가 목록으로 바뀌던 깜빡임 방지. plugins/empty-guard.client.js 가 요청이 끝나면 html.xg-ready 부여 */
+html:not(.xg-ready) :is(.no-data, .no-info, .stats-empty, .summary-empty, .mini-empty, .empty-game-text, .rec-empty, .rec-none, .cm-empty) {
+  visibility: hidden;
+}

@@ -3016,6 +3016,14 @@ const handleFinalReport = async (e) => {
   accordionLastIndex.value = true;
   swingPage.value = false;
   finalReportTab.value = 0;
+  // 2026-10-22: 모바일(≤1024)은 리포트가 미션 목록 아래에 붙어 그려지고 화면은 그대로라, 누른 뒤에도 미션·시도 목록만 보여
+  //   (스윙 영상을 본 뒤엔 펼친 행까지 남아) '리포트가 안 나온다/빈 화면'처럼 보였음 → 펼친 미션을 접고 리포트 위치로 이동
+  if (isMobile.value) {
+    tabIndex.value = -1;
+    await nextTick();
+    const el = [...document.querySelectorAll('[class*="final-report"]')].find((x) => x.offsetParent);
+    if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 70, behavior: "smooth" });
+  }
 };
 
 const finalReportMetricRows = computed(() => {

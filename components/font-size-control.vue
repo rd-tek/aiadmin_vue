@@ -55,6 +55,7 @@
   </div>
 </template>
 <script setup>
+import { useId } from "vue";
 const props = defineProps({
   // GNB 가 없는 화면(강좌 강의실)용 오른쪽 아래 고정 버튼
   floating: { type: Boolean, default: false },
@@ -79,7 +80,9 @@ const open = ref(false);
 const rootRef = ref(null);
 const toggleRef = ref(null);
 let firstPopBtn = null;
-const popId = props.floating ? "fs-pop-fab" : "fs-pop-gnb";
+// 2026-10-21: 한 화면에 위젯이 여러 개(PC GNB + 모바일 상단바, header + sub-header)라 id 가 겹쳤음(접근성: id 중복 금지)
+//   → 인스턴스마다 고유 id. Vue 3.5 useId 는 서버·브라우저에서 같은 값이라 하이드레이션 안전
+const popId = `fs-pop-${props.floating ? "fab" : props.compact ? "mob" : "gnb"}-${useId()}`;
 
 // 이전 단계(0.85·1.15·1.45 등)로 저장된 값은 가장 가까운 단계로 맞춤
 const nearest = (v) => LEVELS.reduce((a, b) => (Math.abs(b.v - v) < Math.abs(a.v - v) ? b : a)).v;

@@ -28,7 +28,7 @@
                 </div>
             </div>
             <div class="form-list">
-                <label for="">상태</label>
+                <label>상태</label>
                 <div class="form-list-box">
                     <div class="checkbox-list">
                         <div class="check-box">

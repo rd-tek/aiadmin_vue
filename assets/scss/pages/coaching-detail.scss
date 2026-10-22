@@ -2963,3 +2963,13 @@
         }
     }
 }
+
+/* 2026-10-22: 최종 리포트 '코칭 결과' 본문 — 줄 간격이 기본값이라 빽빽했고, 모바일은 아래 여백(50px)이 커서 차트와 멀리 떨어져 보였음 */
+.top-area + .desc-area {
+  line-height: 1.7;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+@media screen and (max-width: 1024px) {
+  .top-area + .desc-area { margin-bottom: 24px !important; }
+}
