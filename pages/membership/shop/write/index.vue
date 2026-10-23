@@ -162,7 +162,7 @@
                                 <th>전화번호</th>
                                 <td>
                                     <div class="input-text">
-                                        <input aria-label="전화번호" type="text" v-model="form.phone">
+                                        <input inputmode="tel" autocomplete="tel" aria-label="전화번호" type="text" v-model="form.phone">
                                     </div>
                                 </td>
                             </tr>

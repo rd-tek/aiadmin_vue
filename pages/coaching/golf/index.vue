@@ -337,8 +337,8 @@ const handleMobList = (index) => {
 const isRecent = ref(true);
 const sortByRecent = () => {
   coachingData.value.list.sort((a, b) => {
-    const dateA = new Date(a.timezone_enroll_date);
-    const dateB = new Date(b.timezone_enroll_date);
+    const dateA = parseServerDate(a.timezone_enroll_date);
+    const dateB = parseServerDate(b.timezone_enroll_date);
 
     return isRecent.value
       ? dateB - dateA // 최신순

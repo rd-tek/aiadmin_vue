@@ -84,10 +84,10 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th>핸드폰</th>
+                                <th>휴대폰</th>
                                 <td>
                                     <div class="input-text">
-                                        <input aria-label="핸드폰"
+                                        <input inputmode="tel" autocomplete="tel" aria-label="휴대폰"
                                             type="text"
                                             v-model="form.phone"
                                         />

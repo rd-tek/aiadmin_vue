@@ -79,13 +79,22 @@ const authApi = useAuthApi();
 
 // 로그인 폼 초기값 설정
 const defaultForm = {
-  id: process.client ? localStorage.getItem("remember_id") : "",
+  id: "",
   password: "",
-  remember_yn: process.client ? localStorage.getItem("remember_yn") : false,
+  remember_yn: false,
 };
 
 // 로그인 입력값 바인딩용
 const form = ref({ ...defaultForm });
+// 2026-10-23: 저장된 아이디는 화면이 뜬 뒤 채움 — 첫 렌더에서 localStorage 를 읽으면
+// 서버(빈 값)와 브라우저(저장값) 화면이 달라 hydration 경고가 났음(아이디 저장을 켠 사용자)
+onMounted(() => {
+  const savedId = localStorage.getItem("remember_id");
+  if (savedId && !form.value.id) {
+    form.value.id = savedId;
+    form.value.remember_yn = !!localStorage.getItem("remember_yn");
+  }
+});
 
 // 로그인 처리 함수
 const modals = reactive({});

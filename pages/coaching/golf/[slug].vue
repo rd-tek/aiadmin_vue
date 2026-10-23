@@ -3764,7 +3764,7 @@ const _qnaList = async () => {
 const threads = computed(() => {
   const list = qnaData.value.list || [];
   const map = new Map();
-  const toDate = (it) => new Date(it?.regdate ?? 0);
+  const toDate = (it) => parseServerDate(it?.regdate ?? 0);
 
   for (const it of list) {
     const isTop = it.parent_comment_fk == null; // ✅ 최상위

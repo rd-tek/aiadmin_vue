@@ -153,7 +153,7 @@
                       <th>전화번호 <span class="required"></span></th>
                       <td>
                         <div class="input-text">
-                          <input aria-label="전화번호" type="text" v-model="ownerinfo.phone">
+                          <input inputmode="tel" autocomplete="tel" aria-label="전화번호" type="text" v-model="ownerinfo.phone">
                         </div>
                       </td>
                   </tr>

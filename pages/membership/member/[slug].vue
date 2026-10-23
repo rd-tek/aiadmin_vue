@@ -32,7 +32,7 @@
                     <td>{{ [playerInfo.firstname, playerInfo.lastname].filter(v => v && v !== 'null' && v !== 'undefined').join(' ') || '-' }}</td>
                 </tr>
                 <tr>
-                    <th>핸드폰</th>
+                    <th>휴대폰</th>
                     <td>{{ playerInfo.handphone || '-' }}</td>
                 </tr>
                 <tr>
