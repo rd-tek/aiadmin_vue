@@ -19,7 +19,6 @@ logs
 .idea
 
 # Local env files
-package-lock.json
 .env
 .env.*
 !.env.example
