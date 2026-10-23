@@ -169,7 +169,7 @@ const titleMap = {
   lesson3: "Top Swing",
   lesson4: "Down Swing",
   lesson5: "Impact",
-  lesson6: "Follow Throw",
+  lesson6: "Follow Through",
   lesson7: "Finish",
   lessontotal: "종합 코칭",
 };

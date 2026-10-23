@@ -9,7 +9,9 @@
               <div class="quick-range" role="group" aria-label="빠른 기간 선택">
                         <button v-for="r in quickRanges" :key="r.key" type="button" class="quick-range-btn" :class="{ 'is-active': quickKey === r.key }" @click="applyQuickRange(r)">{{ r.label }}</button>
           </div>
+              <!-- 2026-10-23(태블릿 점검): 768~1024 에서 '~ 종료' 만 윗줄에 남고 종료 날짜가 아랫줄로 갈리던 문제 → 시작/종료를 묶음으로 -->
               <div class="gd-range">
+                <div class="gd-range-group">
                 <span class="gd-range-label">시작</span>
                 <div class="datepicker">
                   <client-only>
@@ -34,6 +36,8 @@
                     />
                   </client-only>
                 </div>
+                </div>
+                <div class="gd-range-group">
                 <span class="gd-range-sep">~</span>
                 <span class="gd-range-label">종료</span>
                 <div class="datepicker">
@@ -57,6 +61,7 @@
                       @closed="isFocused = false"
                     />
                   </client-only>
+                </div>
                 </div>
               </div>
             </div>
@@ -894,6 +899,16 @@ useHead({
 .gd-range .datepicker :deep(.dp__main) { width: 170px; }
 .gd-range-label { font-size: 13px; color: #72777A; }
 .gd-range-sep { color: #72777A; padding: 0 4px; }
+.gd-range-group { display: flex; align-items: center; gap: 8px; min-width: 0; }
+/* 2026-10-23: 1024 이하는 시작·종료를 한 줄씩(라벨 폭 고정, 입력은 남은 폭) */
+@media screen and (max-width: 1024px) {
+  .gd-range { flex-direction: column; align-items: stretch; }
+  .gd-range-group { width: 100%; }
+  .gd-range-group .gd-range-sep { display: none; }
+  .gd-range-group .gd-range-label { flex: 0 0 32px; }
+  .gd-range-group .datepicker { flex: 1; min-width: 0; }
+  .gd-range-group .datepicker :deep(.dp__main) { flex: 1 1 0; width: auto; min-width: 0; }
+}
 .gd-grid { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; column-gap: 20px; row-gap: 18px; }
 .gd-grid .gd-span2 { grid-column: span 2; }
 .gd-grid .game-data-item .input-wrap { display: flex; gap: 8px; }

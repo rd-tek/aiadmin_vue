@@ -4471,3 +4471,21 @@ html:has(> body[style*="zoom"]) {
 html:not(.xg-ready) :is(.no-data, .no-info, .stats-empty, .summary-empty, .mini-empty, .empty-game-text, .rec-empty, .rec-none, .cm-empty) {
   visibility: hidden;
 }
+
+// 2026-10-23(모바일 점검): 페이지 번호가 6~7개면 375px 에서 ▶ 버튼이 다음 줄로 밀리던 문제 — 작은 화면만 간격·크기 축소 (pagination 모바일)
+@media screen and (max-width: 480px) {
+    .pagination-container.type02 {
+        gap: 4px;
+        flex-wrap: nowrap;
+
+        & > li:first-child { margin-right: 4px; }
+        & > li:last-child { margin-left: 4px; }
+
+        .paginate-buttons {
+            width: 28px;
+            min-width: 28px;
+            height: 28px;
+            font-size: 13px;
+        }
+    }
+}

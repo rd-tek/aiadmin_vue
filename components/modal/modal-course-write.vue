@@ -62,7 +62,8 @@
               <th>홀 소개</th>
               <td>
                 <div class="text-area">
-                  <textarea aria-label="홀 소개" :value="item?.contents" placeholder="한글 100자 3줄까지 입력가능합니다."></textarea>
+                  <!-- 2026-10-23: :value(단방향)라 고친 내용이 저장되지 않던 문제 → 로컬 값으로 양방향 -->
+                  <textarea aria-label="홀 소개" v-model="contents" placeholder="한글 100자 3줄까지 입력가능합니다."></textarea>
                 </div>
               </td>
             </tr>
@@ -72,16 +73,21 @@
       <div class="modal-footer">
         <div class="btn-wrap">
           <button type="button" class="btn-md-line" @click="modalClose">닫기</button>
-          <button type="button" class="btn-md-fill btn-primary-purple" @click="modalSave">저장하기</button>
+          <button type="button" class="btn-md-fill btn-primary-purple" :disabled="saving" @click="modalSave">{{ saving ? '저장 중...' : '저장하기' }}</button>
         </div>
       </div>
     </div>
+    <!-- 2026-10-23: 기본 alert → 앱 공통 팝업(완료를 닫으면 이 창도 닫힘) -->
+    <toast-modal :isOpen="doneOpen" :toastMessage="doneMessage" @update:isOpen="onDoneClose" />
+    <toast-warn-modal :isOpen="warnOpen" :toastWarnMessage="warnMessage" @update:isOpen="warnOpen = $event" />
   </div>
 </template>
 
 <script setup>
 import { useCourseApi } from "~/api/course";
 import { useCommon } from "@/utils/common";
+import toastModal from "@/components/toast-ui/toast-modal.vue";
+import toastWarnModal from "@/components/toast-ui/toast-warn-modal.vue";
 
 const { _courseHoleEdit } = useCourseApi();
 const common = useCommon();
@@ -109,8 +115,18 @@ const props = defineProps({
   item: { type: Object }
 });
 
+const contents = ref('');
+const saving = ref(false);
+const doneOpen = ref(false);
+const doneMessage = ref('');
+const warnOpen = ref(false);
+const warnMessage = ref('');
+const showWarn = (m) => { warnMessage.value = m; warnOpen.value = true; };
+const onDoneClose = (v) => { doneOpen.value = v; if (!v) modalClose(); };
+
 watch(() => props.isOpen, (val) => {
   if (val) {
+    contents.value = props.item?.contents || '';
     // 새 홀 열릴 때 파일 상태 초기화
     fileFields.forEach(({ key }) => {
       fileStates[key] = { fileName: '', previewUrl: '', file: null };
@@ -150,25 +166,29 @@ const modalSave = async () => {
     formData.append('courseno', props.item.courseno);
     formData.append('coursubtype', props.item.coursubtype);
     formData.append('holeno', props.item.hole_no);
-    formData.append('contents', props.item.contents || '');
+    formData.append('contents', contents.value || '');
 
     if (fileStates.courseMinimap.file) formData.append('minimap', fileStates.courseMinimap.file);
     if (fileStates.greenMinimapL.file) formData.append('grnmap1', fileStates.greenMinimapL.file);
     if (fileStates.greenMinimapR.file) formData.append('grnmap2', fileStates.greenMinimapR.file);
     if (fileStates.holeVideo.file)     formData.append('movie',   fileStates.holeVideo.file);
 
+    if (saving.value) return;
+    saving.value = true; // 동영상 업로드 중 두 번 눌러 중복 저장되던 것 방지
     try {
         const res = await _courseHoleEdit(formData);
-        if (res?.code === 200) {
-            alert(res.message || '저장되었습니다.');
-            
-            modalClose();
+        if (Number(res?.code) === 200) {
+            if (props.item) props.item.contents = contents.value; // 다시 열었을 때 고친 소개가 보이게
+            doneMessage.value = res.message || '저장되었습니다.';
+            doneOpen.value = true;
         } else {
-            alert(res?.message || '저장에 실패했습니다.');
+            showWarn(res?.message || '저장에 실패했습니다.');
         }
     } catch (err) {
         console.error(err);
-        alert('저장 중 오류가 발생했습니다.');
+        showWarn('저장 중 오류가 발생했습니다.');
+    } finally {
+        saving.value = false;
     }
 };
 </script>

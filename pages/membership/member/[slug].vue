@@ -65,9 +65,9 @@
                   <th>세팅</th>
                   <td>
                     <div class="select-wrap flex-column">
-                      <div class="select-default">Fairway : <b>{{ distUnit(playerInfo.fieldunit) }}</b></div>
-                      <div class="select-default">Green : <b>{{ distUnit(playerInfo.greenunit) }}</b></div>
-                      <div class="select-default">Speed : <b>{{ speedUnit(playerInfo.speedunit) }}</b></div>
+                      <div class="select-default"><!-- 2026-10-23: 항목명 한국어(매장회원 화면과 같게) -->페어웨이 거리 : <b>{{ distUnit(playerInfo.fieldunit) }}</b></div>
+                      <div class="select-default">그린 거리 : <b>{{ distUnit(playerInfo.greenunit) }}</b></div>
+                      <div class="select-default">스피드 : <b>{{ speedUnit(playerInfo.speedunit) }}</b></div>
                     </div>
                   </td>
                 </tr>

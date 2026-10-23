@@ -51,6 +51,18 @@ export const useRouteTitleMap = () => ({
   "manager-write": "관리자 등록",
   "manager-list-write": "관리자 등록", // 2026-10-12(회귀 점검): 목록의 [등록하기](/manager/list/write) 제목이 "관리자 리스트"로 보이던 문제
 
+  // 2026-10-22: 대회관리·이벤트관리
+  "tournament-championship": "챔피언십",
+  "tournament-championship-slug": "챔피언십 상세",
+  "tournament-championship-edit-slug": "챔피언십 수정", // edit/0(신규)은 header.vue 에서 '등록'으로
+  "tournament-competition": "매장대회",
+  "tournament-competition-slug": "매장대회 상세",
+  "tournament-competition-edit-slug": "매장대회 수정",
+  "event-mini-game": "미니게임",
+  "event-mini-game-slug": "미니게임 상세",
+  "event-mini-game-edit-slug": "미니게임 수정",
+  "event-winner": "미니게임 당첨자",
+
   "manager-game-data": "게임데이터 관리",
   "manager-game-data-game-score": "게임데이터 관리(스코어보드)",
   "manager-game-data-game-oneshot": "게임데이터 관리(원샷정보)",

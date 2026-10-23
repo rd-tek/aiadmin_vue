@@ -91,30 +91,30 @@
                                 <td>
                                     <div class="input-wrap ">
                                         <div class="select-wrap flex-start">
-                                            <div class="select-default">
+                                            <div class="unit-item"><span class="unit-lbl" aria-hidden="true">페어웨이 거리</span><div class="select-default">
                                                 <select aria-label="거리 단위 선택" v-model="form.fieldunit">
-                                                    <option value="" disabled>페어웨이</option>
+                                                    <option value="" disabled>페어웨이 거리 단위</option>
                                                     <option value="1">M</option>
                                                     <option value="2">Yard</option>
                                                     <option value="3">Feet</option>
                                                 </select>
-                                            </div>
-                                            <div class="select-default">
+                                            </div></div>
+                                            <div class="unit-item"><span class="unit-lbl" aria-hidden="true">그린 거리</span><div class="select-default">
                                                 <select aria-label="그린 거리 단위 선택" v-model="form.greenunit">
-                                                    <option value="" disabled>Green</option>
+                                                    <option value="" disabled>그린 거리 단위</option>
                                                     <option value="1">M</option>
                                                     <option value="2">Yard</option>
                                                     <option value="3">Feet</option>
                                                 </select>
-                                            </div>
-                                            <div class="select-default">
+                                            </div></div>
+                                            <div class="unit-item"><span class="unit-lbl" aria-hidden="true">스피드</span><div class="select-default">
                                                 <select aria-label="스피드 단위 선택" v-model="form.speedunit">
-                                                    <option value="" disabled>Speed</option>
+                                                    <option value="" disabled>스피드 단위</option>
                                                     <option value="1">km/h</option>
                                                     <option value="2">mile/h</option>
                                                     <option value="3">m/s</option>
                                                 </select>
-                                            </div>
+                                            </div></div>
                                         </div>
                                     </div>
                                 </td>
@@ -433,5 +433,10 @@ useHead({
 
 </script>
 <style lang="scss" scoped>
+
 @use '@/assets/scss/pages/membership.scss';
+
+/* 2026-10-23: 세팅(단위) 칸 이름표 — 값(M·km/h)만 보여 무엇의 단위인지 알 수 없던 문제 */
+.unit-item { display: flex; align-items: center; gap: 8px; flex: 0 0 100%; } /* 세 항목을 한 줄씩(2+1 로 갈리지 않게) */
+.unit-lbl { flex: 0 0 auto; min-width: 76px; font-size: 13px; color: #6e6e6e; white-space: nowrap; }
 </style>

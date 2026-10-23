@@ -92,8 +92,7 @@ export const useMembersApi = () => {
 
       const mergedMemo = JSON.stringify(memoObj);
 
-      console.log("기존 memo:", form.memo);
-      console.log("변경 memo:", mergedMemo);
+      // 2026-10-23: 회원 메모 내용이 브라우저 콘솔에 찍히던 디버그 출력 제거
 
       const res = await apiFetch(`/membership/playerwrite/${playerpk}`, {
         method: "POST",

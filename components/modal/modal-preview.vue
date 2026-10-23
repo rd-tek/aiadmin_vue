@@ -242,7 +242,7 @@
 
                         <tr>
                           <td>
-                            <span class="color-point">Follow Throw </span>
+                            <span class="color-point">Follow Through </span>
                           </td>
                           <td>
                             <div class="border-box">
@@ -250,7 +250,7 @@
                             </div>
                           </td>
                           <td>
-                            <textarea aria-label="Follow Throw"
+                            <textarea aria-label="Follow Through"
                               disabled
                             ></textarea>
                           </td>
@@ -396,14 +396,14 @@
                           <td>
                             <div class="info-area">
                               <span class="info-area-list">
-                                <span class="color-point">Follow Throw</span>
+                                <span class="color-point">Follow Through</span>
                               </span>
                               <span class="info-area-list">
                                 <span class="border-box">-</span>
                               </span>
                             </div>
                             <div class="text-area">
-                              <textarea aria-label="Follow Throw"></textarea>
+                              <textarea aria-label="Follow Through"></textarea>
                             </div>
                             <div class="no-info">내역이 없습니다.</div>
                           </td>
@@ -578,7 +578,7 @@ const onePointLessonList = ref([
     desc: "1998년 US Women`s Open에서 우승하며 IMF로 어려움을 겪고 있는 우리 국민들에게 큰 희망과 위안을 주었고 젊은 나이에 LPGA 명예의 전당에 오를 정도로 수많은 대회에서 우승을 했던 한국 스포츠의 레전드입니다. 현재 세계 골프계를 정복하고 있는 박세리 키드들에게 골프에 대한 도전과 위기극복이라는 영감을 전해줬고 2016년을 끝으로 프로 생활을 마무리하면서 리우 올림픽 여자 골프 국가대표팀 감독을 맡으며 지도자의 길을 가고 있습니다. ",
   },
   {
-    name: "Follow Throw",
+    name: "Follow Through",
     state: "A",
     desc: "1998년 US Women`s Open에서 우승하며 IMF로 어려움을 겪고 있는 우리 국민들에게 큰 희망과 위안을 주었고 젊은 나이에 LPGA 명예의 전당에 오를 정도로 수많은 대회에서 우승을 했던 한국 스포츠의 레전드입니다. 현재 세계 골프계를 정복하고 있는 박세리 키드들에게 골프에 대한 도전과 위기극복이라는 영감을 전해줬고 2016년을 끝으로 프로 생활을 마무리하면서 리우 올림픽 여자 골프 국가대표팀 감독을 맡으며 지도자의 길을 가고 있습니다. ",
   },

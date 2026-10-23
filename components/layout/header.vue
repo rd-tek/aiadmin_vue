@@ -73,7 +73,10 @@ const pageTitle = computed(() => {
     .sort((a, b) => b.length - a.length)
     .find(k => name.startsWith(k));
 
-  return routeTitleMap[key] ?? "대시보드";
+  const title = routeTitleMap[key] ?? "대시보드";
+  // 2026-10-22: 대회·미니게임 등록/수정은 한 화면(edit/0 = 신규) → 번호 0 이면 '등록'으로
+  if (/^(tournament|event)-.*-edit-slug$/.test(name) && String(route.params.slug) === "0") return title.replace(/수정$/, "등록");
+  return title;
 });
 
 // 2026.03.04[cgnoh]: GNB 토글

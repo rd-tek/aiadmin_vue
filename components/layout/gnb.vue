@@ -33,7 +33,7 @@
         </div>
         <div class="nav-wrap-bottom">
             <div class="info">
-                <p>Connect Time</p>
+                <p>접속 시간</p><!-- 2026-10-23: 영문 문구 → 한국어 -->
                 <p>{{ currentTime }}</p>
             </div>
             <div class="btn-wrap align-left">
@@ -41,7 +41,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                         <path d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9M16 17L21 12M21 12L16 7M21 12H9" stroke="#ADB0B3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
-                    <span class="text">Log out</span>
+                    <span class="text">로그아웃</span>
                 </button>
             </div>
         </div>
@@ -61,6 +61,8 @@ import svgCourse from '@/components/svg/course.vue'
 import svgSettings from '@/components/svg/settings.vue'
 import svgVideo from '@/components/svg/video.vue'
 import svgCoaching from '@/components/svg/coaching.vue'
+import svgTournament from '@/components/svg/tournament.vue' // 2026-10-22: 대회관리
+import svgEvent from '@/components/svg/event.vue' // 2026-10-22: 이벤트관리
 
 // 2026.03.04[cgnoh]: 스토어 관련
 const authStore = useAuthStore();
@@ -80,6 +82,8 @@ const iconMap = {
   manager: svgSettings,
   swing: svgVideo,
   coaching: svgCoaching,
+  tournament: svgTournament,
+  event: svgEvent,
 }
 
 // 2026.03.04[cgnoh]: GNB 메뉴
@@ -141,6 +145,35 @@ const gnbMenu = [
             {
                 name: '스윙영상 목록', // 2026-10-20: '리스트' → '목록'
                 path: 'swing/list'
+            }
+        ]
+    },
+    // 2026-10-22: 대회관리·이벤트관리 추가(aishop 메뉴 구성 기준, 관리자는 전체 매장 대상)
+    {
+        name: '대회관리',
+        path: 'tournament',
+        children: [
+            {
+                name: '챔피언십',
+                path: 'tournament/championship'
+            },
+            {
+                name: '매장대회',
+                path: 'tournament/competition'
+            }
+        ]
+    },
+    {
+        name: '이벤트관리',
+        path: 'event',
+        children: [
+            {
+                name: '미니게임',
+                path: 'event/mini-game'
+            },
+            {
+                name: '미니게임 당첨자',
+                path: 'event/winner'
             }
         ]
     },
