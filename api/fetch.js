@@ -1,4 +1,5 @@
 import { ofetch } from "ofetch";
+import { dedupeInflight } from "./inflight"; // 2026-10-26: 같은 저장 요청 이중 제출 방지
 import { useRuntimeConfig, useNuxtApp, useCookie, useRoute, navigateTo } from "#app";
 import { useRequestStore } from "~/stores/request";
 
@@ -77,5 +78,5 @@ export function useApiFetch() {
     }
   };
 
-  return apiFetch;
+  return dedupeInflight(apiFetch);
 }

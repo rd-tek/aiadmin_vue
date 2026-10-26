@@ -127,4 +127,4 @@ useHead({
 </script>
 <style lang="scss" scoped>
 @use "@/assets/scss/pages/login.scss";
-</style>
+</style>
