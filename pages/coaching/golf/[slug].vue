@@ -323,7 +323,7 @@
                             <div class="info-area">
                               <div class="tit">{{ th.top.nickname }}</div>
                               <div class="date">
-                                {{ common.dateformat(th.top.regdate) }}
+                                {{ common.localDate(th.top.regdate) }}
                               </div>
                               <div class="desc">{{ th.top.content }}</div>
 
@@ -468,7 +468,7 @@
                               <div class="info-area">
                                 <div class="tit">{{ reply.nickname }}</div>
                                 <div class="date">
-                                  {{ common.dateformat(reply.regdate) }}
+                                  {{ common.localDate(reply.regdate) }}
                                 </div>
                                 <div class="desc">{{ reply.content }}</div>
                               </div>
@@ -1593,7 +1593,7 @@
                     <div class="info-area">
                       <div class="tit">{{ th.top.nickname }}</div>
                       <div class="date">
-                        {{ common.dateformat(th.top.regdate) }}
+                        {{ common.localDate(th.top.regdate) }}
                       </div>
                       <div class="desc">{{ th.top.content }}</div>
 
@@ -1735,7 +1735,7 @@
                       <div class="info-area">
                         <div class="tit">{{ reply.nickname }}</div>
                         <div class="date">
-                          {{ common.dateformat(reply.regdate) }}
+                          {{ common.localDate(reply.regdate) }}
                         </div>
                         <div class="desc">{{ reply.content }}</div>
                       </div>

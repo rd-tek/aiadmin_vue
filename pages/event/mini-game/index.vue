@@ -10,7 +10,7 @@
           <div class="select-default">
             <select aria-label="진행 상태 선택" v-model="form.status_cd" @change="search">
               <option value="">전체 상태</option>
-              <option value="0">대기</option>
+              <option value="0">예정</option>
               <option value="1">진행중</option>
               <option value="2">완료</option>
               <option value="3">취소</option>

@@ -25,9 +25,7 @@
       </div>
       <!-- 2026-10-21: 화면 크기 — 모바일(≤768) 상단바: 메뉴 버튼 옆 아이콘 --><font-size-control compact pop-align="left" class="header-fs header-fs--mob" />
       <!-- 2026-10-20: 모바일 이름 = PC 인사말과 같은 관리자 이름 -->
-      <div class="nickname">
-        <client-only>{{ displayName }}님</client-only>
-      </div>
+      <div class="nickname" :class="{ 'is-one-word': !/\s/.test(String(displayName || '')) }" :title="`${displayName}님`"><client-only>{{ displayName }}님</client-only></div><!-- 2026-10-27: 이름+님 한 덩어리, 띄어쓰기 없으면 한 줄 말줄임 -->
     </div>
     <!-- 2026-10-21: 오른쪽 영역 항상 표시 — 화면 크기(정부24 방식)는 헤더 오른쪽 끝 고정, 달력은 대시보드에서만 -->
     <div class="right-area" :class="{ 'is-empty': route.path !== '/' }">

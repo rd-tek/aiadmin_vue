@@ -137,7 +137,8 @@ header {
         // 2026-10-20: 한 줄 말줄임('X-GOL...') → 작은 글씨 두 줄까지
         white-space: normal;
         word-break: keep-all;
-        overflow-wrap: anywhere;
+        overflow-wrap: normal; // 2026-10-27: 글자 중간에서 끊지 않음('님'만 다음 줄로 떨어지던 것)
+        &.is-one-word { display: block; white-space: nowrap; text-overflow: ellipsis; }
         display: -webkit-box;
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 2;

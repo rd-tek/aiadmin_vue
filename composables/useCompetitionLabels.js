@@ -30,8 +30,8 @@ export const useCompetitionLabels = () => {
   const awardType = (v) =>
     pick({ 1: "홀인원", 2: "알바트로스", 3: "이글(P5)", 4: "버디(P5)", 5: "파(P5)", 6: "이글(P4)", 7: "버디(P4)", 8: "파(P4)", 9: "롱기스트", 10: "니어핀", 11: "롱기스트 랭크", 12: "니어핀 랭크" }, v);
   const isRankAward = (v) => [11, 12].includes(Number(v));
-  // 미니게임 상태 status_cd (0 대기·1 진행중·2 완료·3 취소)
-  const eventStatus = (v) => pick({ 0: "대기", 1: "진행중", 2: "완료", 3: "취소" }, v, "");
+  // 미니게임 상태 status_cd (0 예정·1 진행중·2 완료·3 취소) — 2026-10-27: 4앱 통일(이전 '대기')
+  const eventStatus = (v) => pick({ 0: "예정", 1: "진행중", 2: "완료", 3: "취소" }, v, "");
   const eventStatusClass = (v) => ({ 1: "color-green", 3: "color-red" }[Number(v)] || "color-grey");
 
   // 날짜: 'YYYY-MM-DD HH:mm:ss' → 'YYYY.MM.DD'

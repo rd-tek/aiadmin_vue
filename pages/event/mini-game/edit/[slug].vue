@@ -29,7 +29,7 @@
               <tr>
                 <th><label for="mg-status">진행 상태</label> <span class="required"></span></th>
                 <td><div class="select-default"><select id="mg-status" v-model.number="form.status">
-                  <option :value="0">대기</option><option :value="1">진행중</option><option :value="2">완료</option><option :value="3">취소</option>
+                  <option :value="0">예정</option><option :value="1">진행중</option><option :value="2">완료</option><option :value="3">취소</option>
                 </select></div></td>
               </tr>
               <tr>

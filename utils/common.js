@@ -188,6 +188,13 @@ export function useCommon() {
     }
   };
 
+  // 2026-10-27: 서버 저장 시각(UTC, 'YYYY-MM-DD HH:mm:ss') → 사용자 기기 시간으로 표시(Q&A 등). 이전엔 UTC 그대로라 9시간 이르게 보임
+  const localDate = (value, type = "YYYY.MM.DD") => {
+    if (!value || /^0000-00-00/.test(String(value))) return "-";
+    const s = String(value).trim();
+    const d = /^\d{4}-\d{2}-\d{2}[ T]\d{2}:\d{2}(:\d{2})?$/.test(s) ? new Date(s.replace(" ", "T") + "Z") : new Date(s);
+    return isNaN(d.getTime()) ? "-" : dayjs(d).format(type);
+  };
   const dateformat = (value, type = "YYYY.MM.DD") => {
     if (!value || /^0000-00-00/.test(String(value))) return "-"; // DB 빈 날짜
     const d = dayjs(value);
@@ -289,7 +296,7 @@ export function useCommon() {
   const tournament_status = (status) => {
     status = String(status ?? ""); // 2026-10-27: 숫자로 와도 같은 결과
     if (status === "1") {
-      return "대기";
+      return "예정"; // 2026-10-27: 4앱 통일(이전 '대기')
     } else if (status === "2") {
       return "진행중";
     } else if (status === "3") {
@@ -395,7 +402,7 @@ export function useCommon() {
   const event_status = (status) => {
     switch (String(status ?? "")) { // 2026-10-27: 숫자로 와도 같은 결과
       case "0":
-        return "대기";
+        return "예정"; // 2026-10-27: 4앱 통일(이전 '대기')
       case "1":
         return "진행중";
       case "2":
@@ -551,6 +558,7 @@ export function useCommon() {
     getLessonTitle,
     teeboxType,
     dateformat,
+    localDate,
     greenspeed,
     greengravity,
     hc_au,
