@@ -324,7 +324,7 @@ useHead({ htmlAttrs: { lang: "ko" }, title: isEdit ? "미니게임 수정" : "�
 td > p.hint { margin: 6px 0 0; }
 .input-wrap { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .input-text.narrow { width: 120px; }
-.period { display: flex; align-items: center; gap: 8px; max-width: 520px; :deep(.dp__main) { flex: 1 1 0; min-width: 0; } :deep(.dp__input) { height: 40px; } .wave { color: #72777A; } }
+.period { display: flex; align-items: center; gap: 8px; max-width: 520px; :deep(.dp__main) { flex: 1 1 0; min-width: 0; } :deep(.dp__input) { height: 40px; } .wave { color: #6c7174; } }
 .multi { display: flex; flex-wrap: wrap; gap: 10px 20px; }
 .multi-item { display: flex; align-items: center; gap: 8px; .multi-lbl { min-width: 44px; font-size: 13px; color: #6e6e6e; white-space: nowrap; } .select-default { width: 180px; } }
 .prize-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 240px)); gap: 8px 10px; }

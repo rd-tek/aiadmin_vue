@@ -29,7 +29,7 @@
               <tr v-if="info.remark"><th>대회 소개</th><td class="pre">{{ info.remark }}</td></tr>
               <tr><th>코스</th><td>{{ courseName }}</td></tr>
               <tr><th>서브코스</th><td>
-                <template v-if="subcourses.length"><span class="pair" v-for="(sc, i) in subcourses" :key="i"><em>{{ Number(sc.seq) === 2 ? 'In(후반)' : 'Out(전반)' }}</em>{{ sc.name }}</span></template>
+                <template v-if="subcourses.length"><span class="pair" v-for="(sc, i) in subcourses" :key="i"><em>{{ Number(sc.seq) === 2 ? '후반' : '전반' }}</em><!-- 2026-10-26: 코스 이름(Out/In)과 겹쳐 전반/후반만 -->{{ sc.name }}</span></template>
                 <template v-else>-</template>
               </td></tr>
               <tr><th>순위별 상품</th><td>

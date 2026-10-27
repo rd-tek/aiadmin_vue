@@ -154,7 +154,7 @@ useHead({
 .game-info-v2 .gi-table-wrap { overflow-x: auto; border: 1px solid #eceef3; border-radius: 12px; }
 .game-info-v2 .gi-table { opacity: 1 !important; transform: none !important; /* 공통 table 진입 애니메이션(opacity 0) 제외 */ width: 100%; border-collapse: collapse; font-size: 14px; }
 .game-info-v2 .gi-table th, .game-info-v2 .gi-table td { padding: 12px 16px; border-bottom: 1px solid #f0f1f5; text-align: left; }
-.game-info-v2 .gi-table tbody th { color: #676d73; font-weight: 500; background: #fbfbfd; white-space: nowrap; }
+.game-info-v2 .gi-table tbody th { color: #61666c; font-weight: 500; background: #fbfbfd; white-space: nowrap; }
 .game-info-v2 .gi-table td { color: #1b1d1f; font-variant-numeric: tabular-nums; }
 .game-info-v2 .gi-table thead th { background: #1b2559; color: #fff; font-weight: 600; }
 .game-info-v2 .gi-player { font-size: 15px; font-weight: 700; }

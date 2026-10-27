@@ -63,6 +63,8 @@ import Image from '@tiptap/extension-image'
 const props = defineProps({
   modelValue: { type: String, default: '' },
   placeholder: { type: String, default: '내용을 입력해주세요.' },
+  // 2026-10-26: 입력칸 접근성 이름(화면낭독기) — 없으면 placeholder 사용
+  label: { type: String, default: '' },
   minHeight: { type: [Number, String], default: 320 },
   // 2026-10-21: 4앱 공통 에디터(Tiptap) — 앱 대표색(관리자 보라 · 코치 청록)
   accent: { type: String, default: '#4b3df5' },
@@ -89,6 +91,7 @@ const editor = useEditor({
     Placeholder.configure({ placeholder: props.placeholder }),
     Image,
   ],
+  editorProps: { attributes: { role: 'textbox', 'aria-label': props.label || props.placeholder || '내용 입력', 'aria-multiline': 'true' } }, // 2026-10-26: 접근성(axe aria-input-field-name)
   onUpdate: ({ editor }) => emit('update:modelValue', editor.isEmpty ? '' : editor.getHTML()),
   onFocus: () => { focused.value = true },
   onBlur: () => { focused.value = false },

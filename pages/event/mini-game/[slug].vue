@@ -170,10 +170,10 @@ const loaded = ref(false);
 
 const isRank = computed(() => L.isRankAward(info.value.type));
 const isLongest = computed(() => [9, 11].includes(Number(info.value.type)));
+// 2026-10-26: 순위형은 순위가 곧 결과 → '당첨자' 탭 없이 순위만(사용자 지적), 그 외는 당첨자만
 const tabs = computed(() => [
   { key: "info", name: "이벤트 정보" },
-  { key: "winner", name: "당첨자" },
-  ...(isRank.value ? [{ key: "rank", name: "순위" }] : []),
+  isRank.value ? { key: "rank", name: "순위" } : { key: "winner", name: "당첨자" },
 ]);
 const tab = ref(["winner", "rank"].includes(route.query.tab) ? route.query.tab : "info");
 watch(tab, () => { mobIndex.value = -1; });
@@ -240,9 +240,14 @@ useHead({ title: computed(() => (info.value?.title ? `${info.value.title} - 미�
 
 onMounted(async () => {
   await loadView();
-  loadWinners();
-  if (isRank.value) loadRanks();
-  else if (tab.value === "rank") tab.value = "winner";
+  // 2026-10-26: 순위형 → 순위만, 그 외 → 당첨자만(주소의 tab 이 맞지 않으면 맞는 탭으로)
+  if (isRank.value) {
+    loadRanks();
+    if (tab.value === "winner") tab.value = "rank";
+  } else {
+    loadWinners();
+    if (tab.value === "rank") tab.value = "winner";
+  }
 });
 
 definePageMeta({ layout: "default" });

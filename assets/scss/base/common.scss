@@ -6,7 +6,7 @@ div, ul {
     }
 
     &::-webkit-scrollbar-thumb {
-        background-color: #ADB0B3;
+        background-color: #727476;
         border-radius: 10px;
     }
 
@@ -294,7 +294,7 @@ select {
             &:disabled {
                 & + label {
                     .check-box-txt {
-                        color: #676D73;
+                        color: #61666c;
                     }
                 }
 
@@ -432,7 +432,7 @@ select {
                         }
 
                         .check-box-txt {
-                            color: #676D73;
+                            color: #61666c;
                         }
                     }
                 }
@@ -1039,7 +1039,7 @@ button, a {
     }
 
     &[class*=btn-primary-blue] {
-        background: #3577F1;
+        background: #3270e3;
 
         &:hover {
             &:before {
@@ -1049,7 +1049,7 @@ button, a {
     }
 
     &[class*=btn-primary-grey] {
-        background: #9B9FA3;
+        background: #717477;
 
         &:hover {
             &:before {
@@ -1309,7 +1309,7 @@ button, a {
         line-height: 1.7;
 
         .num {
-            color: #3577F1;
+            color: #3270e3;
         }
     }
 
@@ -1552,7 +1552,7 @@ table {
                         }
                         
                         .color-grey {
-                            color: #72777A; 
+                            color: #6c7174; 
                         }
 
                         .color-red {
@@ -1565,7 +1565,7 @@ table {
 
                         .link {
                             cursor: pointer;
-                            color: #3577F1;
+                            color: #3270e3;
                             text-decoration: underline;
                             text-underline-offset: 4px;
                             padding-bottom: 4px;
@@ -1574,7 +1574,7 @@ table {
                             text-overflow: ellipsis;
 
                             &:after {
-                                background: #3577F1;
+                                background: #3270e3;
                                 bottom: -2px;
                             }
                         }
@@ -1599,7 +1599,7 @@ table {
                                 font-size: 14px;
                                 font-weight: 400;
                                 line-height: 1.42;
-                                color: #3577F1;
+                                color: #3270e3;
                                 text-decoration: underline;
                                 overflow: hidden;
                                 text-overflow: ellipsis;
@@ -1645,7 +1645,7 @@ table {
                         border-bottom: 1px solid #E6EDFF;
 
                         .color-blue {
-                            color: #3577F1;
+                            color: #3270e3;
                         }
 
                         .text-underline {
@@ -1773,11 +1773,11 @@ table {
                 line-height: 1.4;
 
                 &.color-blue {
-                    color: #3577F1;
+                    color: #3270e3;
 
                     &:after {
                         transform: scaleX(1);
-                        background: #3577F1;
+                        background: #3270e3;
                     }
                 }
 
@@ -1885,7 +1885,7 @@ table {
             }
 
             .color-grey {
-                color: #ADB0B3;
+                color: #727476;
             }
         }
 
@@ -1953,7 +1953,7 @@ table {
             overflow: hidden;
             z-index: 0;
             transition: all ease .2s;
-            color: #676D73;
+            color: #61666c;
             position: relative;
 
             &:hover {
@@ -2101,7 +2101,7 @@ table {
                 &:has(:checked) {
                     .btn-toggle {
                         &-box {
-                            background: #3577F1;
+                            background: #3270e3;
                         }
 
                         &-circle {
@@ -2168,7 +2168,7 @@ table {
         .tab-highlight {
             display: block;
             width: calc(100% / 3);
-            background: #3577F1;
+            background: #3270e3;
             height: 2px;
             position: absolute;
             bottom: 0;
@@ -2216,7 +2216,7 @@ table {
             }
 
             &.is-active {
-                color: #3577F1;
+                color: #3270e3;
                 font-weight: 700;
 
                 &:after {
@@ -2460,7 +2460,7 @@ table {
             padding: 12px 16px;
             border-radius: 20px;
             background: #EFF2F2;
-            color: #676D73;
+            color: #61666c;
             font-size: 16px;
             min-width: 80px;
             text-align: center;
@@ -3244,7 +3244,7 @@ table {
                         &:after {
                             content: '';
                             display: block;
-                            border: 1px solid #3577F1;
+                            border: 1px solid #3270e3;
                             height: calc(100% + 2px);
                             left: -1px;
                             opacity: 0;
@@ -3273,7 +3273,7 @@ table {
                             }
 
                             .check-box-txt {
-                                color: #3577F1;
+                                color: #3270e3;
                             }
                         }
                     }
@@ -3402,7 +3402,7 @@ table {
 
                 &-date {
                     font-size: 12px;
-                    color: #676D73;
+                    color: #61666c;
                     line-height: 1.66;
                 }
             }
@@ -3457,15 +3457,15 @@ table {
             }
 
             &.color-blue {
-                background: #3577F1;
+                background: #3270e3;
                 color: #fff;
-                border: 1px solid #3577F1;
+                border: 1px solid #3270e3;
             }
 
             &.border-blue {
                 background: #fff;
-                color: #3577F1;
-                border: 1px solid #3577F1;
+                color: #3270e3;
+                border: 1px solid #3270e3;
             }
 
             &.color-pink {
@@ -3612,7 +3612,7 @@ table {
                     }
 
                     .color-grey {
-                        color: #676D73;
+                        color: #61666c;
                     }
 
                     .fs-12 {
@@ -3726,7 +3726,7 @@ table {
                             line-height: 1.5;
 
                             .color-grey {
-                                color: #72777A;
+                                color: #6c7174;
                             }
 
                             .color-red {
@@ -4489,3 +4489,8 @@ html:not(.xg-ready) :is(.no-data, .no-info, .stats-empty, .summary-empty, .mini-
         }
     }
 }
+
+// 2026-10-26: 구분동작 탭 글자 — 선택되면 글자는 즉시 흰색, 배경은 0.3초 동안 차올라 그 사이 흰 글자가 흰 바탕에 묻혀
+//   칸이 빈 것처럼 보였음(영상 재생 중 탭이 계속 바뀌어 자주 보임) → 글자색은 배경이 반쯤 찬 뒤 바뀌게
+.tab.type03 .tab-list { transition: color .12s linear; }
+.tab.type03 .tab-list.is-active { transition: color .12s linear .16s; }

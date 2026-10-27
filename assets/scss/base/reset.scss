@@ -116,3 +116,8 @@ textarea:focus-visible {
 :focus:not(:focus-visible) {
   outline: none;
 }
+
+// 2026-10-26: 가로 스크롤 표 — 더 있는 쪽 가장자리 흐리게(plugins/scroll-hint.client.js 가 클래스 부여)
+.scroll-more-right { -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 32px), transparent); mask-image: linear-gradient(to right, #000 calc(100% - 32px), transparent); }
+.scroll-more-left { -webkit-mask-image: linear-gradient(to left, #000 calc(100% - 32px), transparent); mask-image: linear-gradient(to left, #000 calc(100% - 32px), transparent); }
+.scroll-more-left.scroll-more-right { -webkit-mask-image: linear-gradient(to right, transparent, #000 32px, #000 calc(100% - 32px), transparent); mask-image: linear-gradient(to right, transparent, #000 32px, #000 calc(100% - 32px), transparent); }

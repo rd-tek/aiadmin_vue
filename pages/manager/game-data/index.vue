@@ -144,7 +144,7 @@
               <div class="game-data-list" :class="{ 'is-move': tableMove }" ref="tableRef" v-for="(item, index) in tableList" :key="index">
                   <div class="game-data-item">
                   <div class="num">{{ item.gameno || '-' }}</div>
-                  <div class="nickname">{{ item.playername || '비회원' }}</div>
+                  <div class="nickname">{{ item.playername || (isMember(item) ? '-' : '비회원') }}</div><!-- 2026-10-26: 이름 없는 회원 게임도 '비회원'으로 보이던 것 -->
                   <div class="name">({{ item.gameplayername || '-' }})</div>
                   </div>
                   <div class="game-data-item align-left">
@@ -207,9 +207,9 @@
                   </div>
                   <div class="game-data-item">
                   <div class="btn-group">
-                      <button type="button" class="btn-sm-line" @click="handleScoreboard(item.gameno)">스코어보드</button>
-                      <button type="button" class="btn-sm-line" v-if="Number(item.has_shot) !== 0" @click="handleOneshotInfo(item.gameno)">원샷정보</button>
-                      <button type="button" class="btn-sm-line" @click="handleGameInfo(item.gameno)">게임정보</button>
+                      <button type="button" class="btn-sm-line" :disabled="!isMember(item)" :title="isMember(item) ? '' : NO_MEMBER_TIP" @click="handleScoreboard(item.gameno)">스코어보드</button>
+                      <button type="button" class="btn-sm-line" :disabled="!canShot(item)" :title="shotTip(item)" @click="handleOneshotInfo(item.gameno)">원샷정보</button>
+                      <button type="button" class="btn-sm-line" :disabled="!isMember(item)" :title="isMember(item) ? '' : NO_MEMBER_TIP" @click="handleGameInfo(item.gameno)">게임정보</button>
                   </div>
                   </div>
               </div>
@@ -344,7 +344,7 @@
                     </dl>
                     <dl class="list">
                       <dt class="tit">회원유형</dt>
-                      <dd class="cnt">{{ item.membertype || '-' }}</dd>
+                      <dd class="cnt">{{ isMember(item) ? '회원' : '비회원' }}</dd><!-- 2026-10-26: login_flag(0/1) 숫자가 그대로 보이던 것 -->
                     </dl>
                     <dl class="list">
                       <dt class="tit">방번호</dt>
@@ -355,9 +355,9 @@
                       <dd class="cnt">{{ item.cnt ? item.cnt + '명' : '-' }}</dd>
                     </dl>
                     <div class="btn-wrap">
-                      <button type="button" class="btn-md-line" @click="handleScoreboard(item.gameno)">스코어보드</button>
-                      <button type="button" class="btn-md-line" @click="handleOneshotInfo(item.gameno)">원샷정보</button>
-                      <button type="button" class="btn-md-line" @click="handleGameInfo(item.gameno)">게임정보</button>
+                      <button type="button" class="btn-md-line" :disabled="!isMember(item)" :title="isMember(item) ? '' : NO_MEMBER_TIP" @click="handleScoreboard(item.gameno)">스코어보드</button>
+                      <button type="button" class="btn-md-line" :disabled="!canShot(item)" :title="shotTip(item)" @click="handleOneshotInfo(item.gameno)">원샷정보</button>
+                      <button type="button" class="btn-md-line" :disabled="!isMember(item)" :title="isMember(item) ? '' : NO_MEMBER_TIP" @click="handleGameInfo(item.gameno)">게임정보</button>
                     </div>
                   </div>
                 </transition>
@@ -627,6 +627,12 @@ const searchForm = reactive({
   pageno: 1,
 });
 
+// 2026-10-26: 비회원 게임은 샷 단위 상세 기록이 없음 → 스코어보드·원샷정보·게임정보 버튼 비활성(사용자 요청). 회원이라도 샷 기록 없으면 원샷정보 비활성(이전엔 PC만 숨김, 모바일은 그대로)
+const NO_MEMBER_TIP = "비회원 게임은 상세 기록이 없습니다.";
+const isMember = (it) => Number(it?.membertype) === 1;
+const canShot = (it) => isMember(it) && Number(it?.has_shot) !== 0;
+const shotTip = (it) => (!isMember(it) ? NO_MEMBER_TIP : (canShot(it) ? "" : "이 게임은 샷 기록이 없습니다."));
+
 // 2026.06.17[cgnoh]: 스코어보드
 const handleScoreboard = (item) => {
   mobListIndex.value = -1;
@@ -877,7 +883,7 @@ useHead({
 
 /* 2026-10-13: 빠른 기간 선택 */
 .quick-range { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 4px 0 18px; }
-.quick-range-label { font-size: 14px; color: #676d73; margin-right: 6px; }
+.quick-range-label { font-size: 14px; color: #61666c; margin-right: 6px; }
 .quick-range-btn { height: 32px; padding: 0 14px; border: 1px solid #d9dbe1; border-radius: 16px; background: #fff; font-size: 13px; color: #333; }
 .quick-range-btn:hover { border-color: #4318FF; color: #4318FF; }
 .quick-range-btn.is-active { background: #4318FF; border-color: #4318FF; color: #fff; }
@@ -891,14 +897,14 @@ useHead({
 
 /* 2026-10-20: 검색 필터 재배치 */
 .gd-period { display: flex; align-items: flex-start; gap: 16px; padding-bottom: 20px; margin-bottom: 20px; border-bottom: 1px solid #E5E7E8; }
-.gd-period > .game-data-title { flex: 0 0 72px; padding-top: 6px; font-size: 16px; font-weight: 500; color: #72777A; }
+.gd-period > .game-data-title { flex: 0 0 72px; padding-top: 6px; font-size: 16px; font-weight: 500; color: #6c7174; }
 .gd-period-body { display: flex; flex-direction: column; gap: 12px; min-width: 0; flex: 1; }
 .gd-period-body .quick-range { margin: 0; }
 .gd-range { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
 .gd-range .datepicker { display: flex; gap: 8px; }
 .gd-range .datepicker :deep(.dp__main) { width: 170px; }
-.gd-range-label { font-size: 13px; color: #72777A; }
-.gd-range-sep { color: #72777A; padding: 0 4px; }
+.gd-range-label { font-size: 13px; color: #6c7174; }
+.gd-range-sep { color: #6c7174; padding: 0 4px; }
 .gd-range-group { display: flex; align-items: center; gap: 8px; min-width: 0; }
 /* 2026-10-23: 1024 이하는 시작·종료를 한 줄씩(라벨 폭 고정, 입력은 남은 폭) */
 @media screen and (max-width: 1024px) {
@@ -935,7 +941,7 @@ useHead({
 .gd-filter { display: flex; flex-direction: column; gap: 18px; }
 .gd-segs { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 16px 28px; }
 .gd-seg-field { display: flex; flex-direction: column; gap: 8px; }
-.gd-label { font-size: 14px; font-weight: 500; color: #72777A; }
+.gd-label { font-size: 14px; font-weight: 500; color: #6c7174; }
 .gd-seg { display: inline-flex; padding: 3px; border-radius: 10px; background: #F2F3F4; gap: 2px; }
 .gd-seg-btn {
   min-width: 64px; height: 36px; padding: 0 14px; border: 0; border-radius: 8px; background: transparent;
@@ -967,4 +973,10 @@ useHead({
   .gd-range .datepicker { display: grid !important; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; }
   .gd-range .datepicker :deep(.dp__input) { font-size: 14px; padding-left: 32px; padding-right: 26px; }
 }
+
+/* 2026-10-26: 비활성 버튼(비회원·샷 기록 없음) */
+.btn-sm-line:disabled, .btn-md-line:disabled { opacity: .4; cursor: not-allowed; pointer-events: auto; }
+/* 2026-10-26: 모바일 펼친 카드의 게임 버튼 3개가 영역 높이(51px)에 눌려 2px 로 거의 안 보이던 것 → 영역 높이를 내용에 맞추고 버튼은 줄지 않게 */
+.btn-wrap:has(> .btn-md-line + .btn-md-line + .btn-md-line) { height: auto !important; max-height: none !important; }
+.btn-wrap > .btn-md-line { flex: 0 0 auto; }
 </style>

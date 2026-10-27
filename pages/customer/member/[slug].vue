@@ -5,10 +5,10 @@
                 <div class="title">{{ noticeInfo.title }}</div>
                 <div class="info">
                     <div class="info-list label">
-                        <span class="label" :class="{ 'color-purple': noticeInfo.type === '1', 'color-blue': noticeInfo.type === '2' }">{{ noticeInfo.type === '1' ? '공지' : '뉴스' }}</span>
+                        <span class="label" :class="{ 'color-blue': noticeInfo.type === '1', 'color-purple': noticeInfo.type === '2' }">{{ noticeInfo.type === '1' ? '공지' : '뉴스' }}</span>
                     </div>
                     <div class="info-list name">{{ noticeInfo.regname }}</div>
-                    <div class="info-list date">{{ noticeInfo.date }}</div>
+                    <div class="info-list date">{{ dispDate(noticeInfo, true) }}</div>
                     <div class="info-list count">조회수 : {{ noticeInfo.cnt }}</div>
                     <div class="info-list download" v-if="noticeInfo.filename">
                         <button type="button" class="btn-download" :aria-label="`${noticeInfo.originname || '첨부파일'} 다운로드`" :disabled="!noticeInfo.download_link" @click="handleDownload">
@@ -127,8 +127,9 @@ const getNoticeDetail = async () => {
   const res = await customerApi._playerNoticeview(route.params.slug);
 
   noticeInfo.value = res.noticeview || {};
-  nextPost.value = res.next_post || null;
-  prevPost.value = res.prev_post || null;
+  // 2026-10-27: 이전글 = 목록에서 위(더 최신, next_post), 다음글 = 아래(더 오래된, prev_post) — 회원·매장 앱과 같은 방향
+  nextPost.value = res.prev_post || null;
+  prevPost.value = res.next_post || null;
 };
 
 // 2026.06.08[cgnoh]: 글 수정 페이지로 이동

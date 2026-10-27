@@ -146,7 +146,7 @@
                     </div>
                     <div class="row-item">
                       <div class="tit">볼방향</div>
-                      <div class="info">{{ common.suffix(common.toFixed(swingInfo.balldirection), 'deg') }}</div>
+                      <div class="info">{{ common.suffix(common.toFixed(swingInfo.balldirection), '°') }}</div>
                     </div>
                     <div class="row-item">
                       <div class="tit">사이드스핀</div>
@@ -162,7 +162,7 @@
                     </div>
                     <div class="row-item">
                       <div class="tit">탈출각</div>
-                      <div class="info">{{ common.suffix(common.toFixed(swingInfo.launchangle), 'deg') }}</div>
+                      <div class="info">{{ common.suffix(common.toFixed(swingInfo.launchangle), '°') }}</div>
                     </div>
                     <div class="row-item">
                       <div class="tit">미트율</div>

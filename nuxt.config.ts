@@ -17,6 +17,8 @@ export default defineNuxtConfig({
   ],
   app: {
     baseURL: '/',
+    // 2026-10-26: 페이지 언어 기본값(접근성 html-has-lang)
+    head: { htmlAttrs: { lang: 'ko' } },
   },
   vite: {
     server: {

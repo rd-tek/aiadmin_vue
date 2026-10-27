@@ -46,14 +46,14 @@ const getOption = () => ({
     data: props.labels,
     axisTick: { show: false },
     axisLine: { show: false },
-    axisLabel: { color: "#A3AED0" },
+    axisLabel: { color: "#6c7389" },
   },
 
   yAxis: {
     minInterval: 1,
     min: 0,
     type: "value",
-    axisLabel: { color: "#A3AED0" },
+    axisLabel: { color: "#6c7389" },
     splitLine: {
       lineStyle: { color: "rgba(163, 174, 208, 0.2)" },
     },

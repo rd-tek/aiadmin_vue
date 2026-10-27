@@ -408,7 +408,7 @@ td > .hint, td > p.hint { margin: 6px 0 0; }
 .input-text.narrow { width: 120px; }
 .input-text.wide { width: 100%; max-width: 760px; }
 .textarea textarea { width: 100%; max-width: 760px; min-height: 90px; padding: 10px 12px; border: 1px solid #E5E7E8; border-radius: 4px; line-height: 1.6; resize: vertical; }
-.period { display: flex; align-items: center; gap: 8px; max-width: 520px; :deep(.dp__main) { flex: 1 1 0; min-width: 0; } .wave { color: #72777A; } }
+.period { display: flex; align-items: center; gap: 8px; max-width: 520px; :deep(.dp__main) { flex: 1 1 0; min-width: 0; } .wave { color: #6c7174; } }
 .multi { display: flex; flex-wrap: wrap; gap: 10px 20px; }
 .multi-item { display: flex; align-items: center; gap: 8px; .multi-lbl { min-width: 44px; font-size: 13px; color: #6e6e6e; white-space: nowrap; } .select-default { width: 200px; } }
 .select-default.small { width: 120px; }

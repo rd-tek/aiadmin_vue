@@ -214,7 +214,7 @@ onBeforeUnmount(() => {
   margin: 2px 6px 6px;
   font-size: 12px;
   font-weight: 700;
-  color: #72777A;
+  color: #6c7174;
 }
 .fs-list {
   margin: 0;
@@ -247,7 +247,7 @@ onBeforeUnmount(() => {
 }
 .fs-opt-name {
   flex: 1;
-  small { margin-left: 3px; font-size: 12px; font-weight: 400; color: #72777A; }
+  small { margin-left: 3px; font-size: 12px; font-weight: 400; color: #6c7174; }
 }
 .fs-check { flex: none; color: #35383B; }
 .fs-reset {
@@ -259,7 +259,7 @@ onBeforeUnmount(() => {
   border-top: 1px solid #E5E7E8;
   background: transparent;
   font-size: 13px;
-  color: #72777A;
+  color: #6c7174;
   cursor: pointer;
   &:hover { color: #35383B; }
 }

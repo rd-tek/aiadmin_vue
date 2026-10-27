@@ -218,7 +218,7 @@ onMounted(load);
 .date-range {
   align-items: center;
   gap: 6px;
-  .wave { color: #72777A; }
+  .wave { color: #6c7174; }
   :deep(.dp__main) { width: 150px; }
 }
 .title-col {

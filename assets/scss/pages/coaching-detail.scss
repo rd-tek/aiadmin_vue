@@ -1506,7 +1506,7 @@
                             margin-top: 8px;
 
                             .text {
-                                color: #3577F1;
+                                color: #3270e3;
                                 font-size: 14px;
                                 text-decoration: underline;
                                 text-underline-offset: 2px;
@@ -2973,3 +2973,8 @@
 @media screen and (max-width: 1024px) {
   .top-area + .desc-area { margin-bottom: 24px !important; }
 }
+
+
+// 2026-10-26: 왼쪽 목차 마지막 '최종 코칭 리포트' 버튼 — 목차가 길면 영역(calc(100vh - 350px)) 끝에 버튼 아랫선이 잘려
+//   영역을 끝까지 스크롤해야만 선이 보였음(사용자 지적) → 영역 아래에 붙여(sticky) 항상 온전히 보이게
+.academy-left-cont .accordion > .accordion-list:last-child { position: sticky; bottom: 0; z-index: 1; background: #fff; padding-bottom: 2px; }

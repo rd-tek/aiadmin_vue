@@ -120,8 +120,8 @@ const route = useRoute();
 const playerInfo = ref({});
 
 // 2026-09-14: 세팅 단위 코드→라벨 (정본=매장 등록 폼 select 옵션: field/green 1=M/2=Yard/3=Feet, speed 1=km/h/2=mile/h/3=m/s)
-const distUnit = (v) => ({ "1": "M", "2": "Yard", "3": "Feet" }[String(v)] ?? "-");
-const speedUnit = (v) => ({ "1": "km/h", "2": "mile/h", "3": "m/s" }[String(v)] ?? "-");
+const distUnit = (v) => ({ "1": "m", "2": "yd", "3": "ft" }[String(v)] ?? "-");
+const speedUnit = (v) => ({ "1": "km/h", "2": "mph", "3": "m/s" }[String(v)] ?? "-");
 
 // 2026.06.12[cgnoh]: 상세 정보 조회
 const getDetail = async () => {

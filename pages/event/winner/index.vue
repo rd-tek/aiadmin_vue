@@ -190,7 +190,7 @@ useHead({ htmlAttrs: { lang: "ko" }, title: "미니게임 당첨자", meta: [{ n
 <style lang="scss" scoped>
 @use '@/assets/scss/pages/membership.scss';
 
-.date-range { align-items: center; gap: 6px; .wave { color: #72777A; } :deep(.dp__main) { width: 150px; } }
+.date-range { align-items: center; gap: 6px; .wave { color: #6c7174; } :deep(.dp__main) { width: 150px; } }
 .title-col { justify-content: flex-start; text-align: left; }
 .title-wrap { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; min-width: 0; }
 .title-text { display: block; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

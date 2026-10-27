@@ -7,7 +7,7 @@
           스코어보드(홀)
         </div>
         <div class="game-data-cont">
-          <div class="table type03 mob-type02">
+          <div class="table type03 mob-type02" data-scroll-hint="게임 점수 표(좌우로 스크롤)">
           <div class="table-head">
             <div class="table-head-col">닉네임</div>
             <div class="table-head-col">홀</div>
@@ -99,7 +99,7 @@
           스코어보드(게임)
         </div>
         <div class="game-data-cont">
-          <div class="table type03 mob-type02">
+          <div class="table type03 mob-type02" data-scroll-hint="게임 점수 표(좌우로 스크롤)">
           <div class="table-head">
             <div class="table-head-col">닉네임</div>
             <div class="table-head-col">매장명</div>

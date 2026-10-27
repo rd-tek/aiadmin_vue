@@ -64,7 +64,7 @@ const getOption = () => ({
     },
 
     axisLabel: {
-      color: "#A3AED0",
+      color: "#6c7389",
     },
   },
 
@@ -72,7 +72,7 @@ const getOption = () => ({
     type: "value",
 
     axisLabel: {
-      color: "#A3AED0",
+      color: "#6c7389",
     },
   },
 

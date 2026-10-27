@@ -50,7 +50,7 @@
                   <nuxt-link :to="`/customer/inquiry/${item.inquiryno}`" class="link" :class="{ 'line-through': item.deleteflag === '1' }">{{ item.title }}</nuxt-link>
                 </div>
                 <div class="table-body-col col-1 is-mob">
-                  <span class="color-grey">{{ item.date }}</span>
+                  <span class="color-grey">{{ dispDate(item) }}</span>
                 </div>
                 <div class="table-body-col col-1 is-mob">
                   <span :class="{ 'color-green': String(item.viewflag) === '1', 'color-grey': String(item.viewflag) === '0' }">{{ String(item.viewflag) === '1' ? '처리완료' : '접수' }}</span>
@@ -62,7 +62,7 @@
               <div class="table-body-mob">
                 <div class="row">
                   <div class="row-list">
-                    <span class="date">{{ item.date }}</span>
+                    <span class="date">{{ dispDate(item) }}</span>
                     <span class="status">{{ item.cnt }}</span>
                     <span class="status" :class="{ 'color-green': String(item.viewflag) === '1', 'color-grey': String(item.viewflag) === '0' }">{{ String(item.viewflag) === '1' ? '처리완료' : '접수' }}</span>
                     <span class="status" :class="{ 'color-green': item.deleteflag === '0', 'color-red': item.deleteflag === '1' }">{{ item.deleteflag === '1' ? '삭제' : '정상' }}</span>

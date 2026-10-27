@@ -7,7 +7,7 @@
           원샷정보
         </div>
         <div class="game-data-cont">
-          <div class="table type03 mob-type02">
+          <div class="table type03 mob-type02" data-scroll-hint="게임 점수 표(좌우로 스크롤)">
           <div class="table-head">
             <div class="table-head-col">닉네임</div>
             <div class="table-head-col">홀번호</div>

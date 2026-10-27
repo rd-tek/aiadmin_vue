@@ -154,7 +154,7 @@ const hasDaily = computed(() => dailyLabels.value.length > 0);
 const axisBase = {
   axisLine: { lineStyle: { color: "#E3E6EE" } },
   axisTick: { show: false },
-  axisLabel: { color: "#8F9BBA", fontSize: 11 },
+  axisLabel: { color: "#6b748b", fontSize: 11 },
 };
 const sparkOption = (k) => ({
   animation: false,
@@ -206,7 +206,7 @@ const donutOption = computed(() => ({
     center: isMobile.value ? ["50%", "42%"] : ["36%", "50%"],
     avoidLabelOverlap: true,
     itemStyle: { borderColor: "#fff", borderWidth: 2 },
-    label: { show: true, position: "center", formatter: () => `{a|${fmt(monthSum.value)}}\n{b|이번 달 합계}`, rich: { a: { fontSize: 24, fontWeight: 700, color: "#1B2559" }, b: { fontSize: 12, color: "#8F9BBA", padding: [6, 0, 0, 0] } } },
+    label: { show: true, position: "center", formatter: () => `{a|${fmt(monthSum.value)}}\n{b|이번 달 합계}`, rich: { a: { fontSize: 24, fontWeight: 700, color: "#1B2559" }, b: { fontSize: 12, color: "#6b748b", padding: [6, 0, 0, 0] } } },
     labelLine: { show: false },
     data: kpis.value.map((k) => ({ name: k.label, value: k.month })),
   }],
@@ -242,10 +242,10 @@ useHead({
   &-title { font-size: 13px; color: #6B7280; font-weight: 600; }
   &-main { display: flex; align-items: baseline; gap: 6px; }
   &-value { font-size: 28px; font-weight: 800; color: #1B2559; letter-spacing: -0.5px; font-variant-numeric: tabular-nums; }
-  &-unit { font-size: 12px; color: #A3AED0; }
-  &-delta { font-size: 12px; font-weight: 600; small { font-weight: 500; color: #A3AED0; margin-left: 2px; } &.up { color: #05A66B; } &.down { color: #E5484D; } &.flat { color: #A3AED0; } }
+  &-unit { font-size: 12px; color: #6c7389; }
+  &-delta { font-size: 12px; font-weight: 600; small { font-weight: 500; color: #6c7389; margin-left: 2px; } &.up { color: #05A66B; } &.down { color: #E5484D; } &.flat { color: #6c7389; } }
   &-spark { margin: 2px -4px 0; }
-  &-foot { font-size: 12px; color: #8F9BBA; border-top: 1px dashed #EEF0F6; padding-top: 8px; b { color: #1B2559; font-weight: 700; margin-left: 2px; } }
+  &-foot { font-size: 12px; color: #6b748b; border-top: 1px dashed #EEF0F6; padding-top: 8px; b { color: #1B2559; font-weight: 700; margin-left: 2px; } }
 }
 .dash2-row { display: grid; gap: 20px; &.two { grid-template-columns: 3fr 2fr; } }
 .card {
@@ -254,10 +254,10 @@ useHead({
   padding: 20px 22px;
   box-shadow: 0 6px 24px rgba(112, 144, 176, 0.10);
   min-width: 0;
-  &-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; h3 { font-size: 18px; font-weight: 700; color: #1B2559; small { font-size: 13px; font-weight: 500; color: #A3AED0; margin-left: 6px; } } }
+  &-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; h3 { font-size: 18px; font-weight: 700; color: #1B2559; small { font-size: 13px; font-weight: 500; color: #6c7389; margin-left: 6px; } } }
 }
-.seg { display: inline-flex; background: #F4F7FE; border-radius: 10px; padding: 3px; button { padding: 4px 12px; border-radius: 8px; font-size: 12px; color: #8F9BBA; &.on { background: #fff; color: #4318FF; font-weight: 700; box-shadow: 0 2px 6px rgba(0,0,0,.06); } } }
-.empty { height: 240px; display: flex; align-items: center; justify-content: center; color: #A3AED0; font-size: 14px; }
+.seg { display: inline-flex; background: #F4F7FE; border-radius: 10px; padding: 3px; button { padding: 4px 12px; border-radius: 8px; font-size: 12px; color: #6b748b; &.on { background: #fff; color: #4318FF; font-weight: 700; box-shadow: 0 2px 6px rgba(0,0,0,.06); } } }
+.empty { height: 240px; display: flex; align-items: center; justify-content: center; color: #6c7389; font-size: 14px; }
 .totals { display: flex; flex-direction: column; gap: 12px; padding: 4px 0; }
 .total-row { display: grid; grid-template-columns: 120px 1fr 80px; align-items: center; gap: 14px; }
 .total-label { font-size: 14px; color: #475467; font-weight: 600; }

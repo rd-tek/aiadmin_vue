@@ -94,24 +94,24 @@
                                             <div class="unit-item"><span class="unit-lbl" aria-hidden="true">페어웨이 거리</span><div class="select-default">
                                                 <select aria-label="거리 단위 선택" v-model="form.fieldunit">
                                                     <option value="" disabled>페어웨이 거리 단위</option>
-                                                    <option value="1">M</option>
-                                                    <option value="2">Yard</option>
-                                                    <option value="3">Feet</option>
+                                                    <option value="1">m</option>
+                                                    <option value="2">yd</option>
+                                                    <option value="3">ft</option>
                                                 </select>
                                             </div></div>
                                             <div class="unit-item"><span class="unit-lbl" aria-hidden="true">그린 거리</span><div class="select-default">
                                                 <select aria-label="그린 거리 단위 선택" v-model="form.greenunit">
                                                     <option value="" disabled>그린 거리 단위</option>
-                                                    <option value="1">M</option>
-                                                    <option value="2">Yard</option>
-                                                    <option value="3">Feet</option>
+                                                    <option value="1">m</option>
+                                                    <option value="2">yd</option>
+                                                    <option value="3">ft</option>
                                                 </select>
                                             </div></div>
                                             <div class="unit-item"><span class="unit-lbl" aria-hidden="true">스피드</span><div class="select-default">
                                                 <select aria-label="스피드 단위 선택" v-model="form.speedunit">
                                                     <option value="" disabled>스피드 단위</option>
                                                     <option value="1">km/h</option>
-                                                    <option value="2">mile/h</option>
+                                                    <option value="2">mph</option>
                                                     <option value="3">m/s</option>
                                                 </select>
                                             </div></div>

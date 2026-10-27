@@ -5,7 +5,7 @@
                 <div class="title">{{ noticeInfo.title || '-' }}</div>
                 <div class="info">
                     <div class="info-list name">{{ noticeInfo.lastname || '-' }}</div>
-                    <div class="info-list date">{{ noticeInfo.date || '-' }}</div>
+                    <div class="info-list date">{{ dispDate(noticeInfo, true) }}</div>
                 </div>
             </div>
             <div class="desc-area">
@@ -112,8 +112,9 @@ const nextPost = ref(null);
 const getNoticeDetail = async () => {
     const res = await customerApi._inquiryView(route.params.slug);
     noticeInfo.value = res.inquiryview || {};
-    prevPost.value = res.prev_post || null;
-    nextPost.value = res.next_post || null;
+    // 2026-10-27: 이전글 = 목록에서 위(더 최신, next_post) — 다른 게시판·회원 앱과 같은 방향
+    prevPost.value = res.next_post || null;
+    nextPost.value = res.prev_post || null;
 };
 
 // 2026.06.08[cgnoh]: 글 수정 페이지로 이동

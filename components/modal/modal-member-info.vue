@@ -126,12 +126,12 @@ const card = computed(() => {
   .profile-name { display: flex; align-items: center; gap: 8px; font-size: 20px; font-weight: 700; color: #35383B; }
   .chip { padding: 2px 8px; border-radius: 999px; background: color-mix(in srgb, #4318FF 12%, #fff); color: #4318FF; font-size: 12px; font-weight: 600; }
   .profile-meta { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 8px 0 0;
-    .meta { display: flex; gap: 6px; font-size: 14px; } dt { color: #72777A; } dd { margin: 0; color: #35383B; } }
+    .meta { display: flex; gap: 6px; font-size: 14px; } dt { color: #6c7174; } dd { margin: 0; color: #35383B; } }
   .stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin: 0; padding: 0; list-style: none; }
   .stat { display: flex; flex-direction: column; gap: 6px; padding: 14px 12px; border-radius: 10px; background: #F7F8F9; min-width: 0;
-    .label { font-size: 12px; color: #72777A; line-height: 1.3; word-break: keep-all; }
+    .label { font-size: 12px; color: #6c7174; line-height: 1.3; word-break: keep-all; }
     .value { font-size: 18px; font-weight: 700; color: #35383B; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } }
-  .stats-empty { margin: 0; padding: 18px; border-radius: 10px; background: #F7F8F9; color: #72777A; text-align: center; font-size: 14px; }
+  .stats-empty { margin: 0; padding: 18px; border-radius: 10px; background: #F7F8F9; color: #6c7174; text-align: center; font-size: 14px; }
 }
 @media screen and (max-width: 768px) {
   .member-card { .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; } .stat { padding: 10px 12px; .value { font-size: 16px; } } }

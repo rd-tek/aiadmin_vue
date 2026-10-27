@@ -13,6 +13,7 @@ export function useCommon() {
   // 2026-10-13: 화면 숫자는 소수점 2자리까지(반올림 없이 자름). 숫자가 아니거나 비어 있으면 그대로 반환
   const n2 = (v) => {
     if (v === null || v === undefined || v === "" || typeof v === "boolean") return v;
+    if (typeof v === "number" && !Number.isFinite(v)) return "-"; // 2026-10-27: 'NaN' 노출 방지
     if (typeof v === "string" && !/^\s*-?\d+(\.\d+)?\s*$/.test(v)) return v;
     const n = Number(v);
     if (!isFinite(n)) return v;
@@ -20,14 +21,25 @@ export function useCommon() {
     return Math.trunc(n * 100 + (n >= 0 ? 1e-9 : -1e-9)) / 100;
   };
 
-  const toFixed = (value, text) =>
-    value ? Number(value).toFixed(2) : text || 0;
+  // 2026-10-27: 숫자가 아니면 'NaN' 대신 text 또는 '-'
+  const toFixed = (value, text) => {
+    if (!value) return text || 0;
+    const n = Number(value);
+    return Number.isFinite(n) ? n.toFixed(2) : text || "-";
+  };
 
   const transToValue = (value, text) => (value == "0" ? text : value || 0);
 
+  // 2026-10-27: 'YYYY-MM-DD HH:mm:ss' 는 구형 Safari 가 못 읽음 → 'T' 로 바꿔 읽고, 잘못된 값이면 toISOString 오류 대신 ''
+  const toDate = (value) => {
+    if (/^0000-00-00/.test(String(value))) return null;
+    const d = value instanceof Date ? value : new Date(typeof value === "string" ? value.replace(/^(\d{4}-\d{2}-\d{2}) /, "$1T") : value);
+    return isNaN(d.getTime()) ? null : d;
+  };
   const GMTtuUTCTIME = (value) => {
     if (!value) return "";
-    const date = new Date(value);
+    const date = toDate(value);
+    if (!date) return "";
     const now_utc = Date.UTC(
       date.getUTCFullYear(),
       date.getUTCMonth(),
@@ -44,7 +56,8 @@ export function useCommon() {
 
   const GMTtuUTC = (value) => {
     if (!value) return "";
-    const date = new Date(value);
+    const date = toDate(value);
+    if (!date) return "";
     const now_utc = Date.UTC(
       date.getUTCFullYear(),
       date.getUTCMonth(),
@@ -58,12 +71,16 @@ export function useCommon() {
 
   const getImg = (value, img = "") => {
     const base = useRuntimeConfig().public.s3BucketUrl;
+    // 2026-10-27: 전체 URL(https://…)은 그대로 — 이전엔 앞에 S3 주소를 또 붙여 이미지가 깨짐(aimember 와 같게)
+    if (value && /^https?:\/\//i.test(value)) return value;
     if (value) return `${base}/${value}`;
     return img || "/images/default/img_logo.png";
   };
 
   const getURL = (value, img = "") => {
     const base = useRuntimeConfig().public.s3BucketUrl;
+    // 2026-10-27: 전체 URL(https://…)은 그대로 — 이전엔 앞에 S3 주소를 또 붙여 이미지가 깨짐(aimember 와 같게)
+    if (value && /^https?:\/\//i.test(value)) return value;
     if (value) return `${base}/${value}`;
     return img || "/images/default/img_logo.png";
   };
@@ -74,7 +91,7 @@ export function useCommon() {
   };
 
   const getClubType = (value) => {
-    switch (value) {
+    switch (String(value ?? "")) { // 2026-10-27: 숫자로 와도 같은 결과
       case "1":
         return "드라이버";
       case "2":
@@ -93,7 +110,7 @@ export function useCommon() {
   };
 
   const getShaftMaterial = (value) => {
-    switch (value) {
+    switch (String(value ?? "")) { // 2026-10-27: 숫자로 와도 같은 결과
       case "1":
         return "그라파이트";
       case "2":
@@ -117,7 +134,7 @@ export function useCommon() {
   };
 
   const getInterestClub = (value) => {
-    switch (value) {
+    switch (String(value ?? "")) { // 2026-10-27: 숫자로 와도 같은 결과
       case "1":
         return "타구감";
       case "2":
@@ -157,7 +174,7 @@ export function useCommon() {
   };
 
   const teeboxType = (teebox) => {
-    switch (teebox) {
+    switch (String(teebox ?? "")) { // 2026-10-27: 숫자로 와도 같은 결과
       case "1":
         return "프로(블루)";
       case "2":
@@ -172,7 +189,9 @@ export function useCommon() {
   };
 
   const dateformat = (value, type = "YYYY.MM.DD") => {
-    return value ? dayjs(value).format(type) : "-";
+    if (!value || /^0000-00-00/.test(String(value))) return "-"; // DB 빈 날짜
+    const d = dayjs(value);
+    return d.isValid() ? d.format(type) : "-"; // 2026-10-27: 'Invalid Date' 노출 방지
   };
 
   const greenspeed = (status) => {
@@ -204,23 +223,23 @@ export function useCommon() {
       return "-"; // 기본값
     }
 
-    const num = Number(value);
-
-    if (num < 1) {
-      return num.toFixed(0); // 음수나 0일 때
-    } else {
-      return "+" + Math.abs(num).toFixed(0); // 양수일 때
-    }
+    // 2026-10-27: 반올림 후 부호 — 이전엔 0.6 → '1'(+ 없음), -0.4 → '-0'
+    const r = Math.round(Number(value));
+    if (r > 0) return "+" + r;
+    return r === 0 ? "0" : String(r);
   };
 
   const suffix = (value, text) => {
-    // 2026-09-16: null/undefined/"" 도 "-" 로 처리 (기존엔 "null점"/"undefined원" 출력됨)
-    if (value === null || value === undefined || value === "" || value == "0") {
-      return "-";
-    } else return value + text;
+    // 2026-10-27: 4앱 같은 함수 — 값 없음(null·undefined·빈 값·'undefined'·'null'·NaN)과 0 은 '-' (aicoach 체공시간 'undefineds' 노출 수정)
+    if (value === null || value === undefined) return "-";
+    const s = String(value).trim();
+    if (s === "" || s === "-" || s === "undefined" || s === "null" || s === "NaN" || value == "0") return "-";
+    if (/^-?0+(\.0+)?$/.test(s)) return "-"; // '0.00' 같은 소수 0 도 0 과 같게
+    return value + text;
   };
 
   const gamestatus = (status) => {
+    status = String(status ?? ""); // 2026-10-27: 숫자로 와도 같은 결과
     if (status === "1") return "준비";
     else if (status === "2") return "플레이";
     else if (status === "3") return "이동";
@@ -228,9 +247,11 @@ export function useCommon() {
     else if (status === "5") return "중단";
     else if (status === "6") return "완료";
     // else return "대기";
+    return "-";
   };
 
   const play_type = (mode) => {
+    mode = String(mode ?? ""); // 2026-10-27: 숫자로 와도 같은 결과
     if (mode === "1") {
       return "stroke";
     } else if (mode === "2") {
@@ -250,6 +271,7 @@ export function useCommon() {
     } else if (mode === "9") {
       return "nearpin";
     }
+    return "-";
   };
   const change_balltype = (type) => {
     if (type == 1) return "스트레이트";
@@ -265,6 +287,7 @@ export function useCommon() {
   };
 
   const tournament_status = (status) => {
+    status = String(status ?? ""); // 2026-10-27: 숫자로 와도 같은 결과
     if (status === "1") {
       return "대기";
     } else if (status === "2") {
@@ -274,8 +297,10 @@ export function useCommon() {
     } else if (status === "4") {
       return "취소";
     }
+    return "-";
   };
   const tournament_type = (type) => {
+    type = String(type ?? ""); // 2026-10-27: 숫자로 와도 같은 결과
     if (type === "1") {
       return "공개";
     } else if (type === "2") {
@@ -283,9 +308,11 @@ export function useCommon() {
     } else if (type === "3") {
       return "비공개";
     }
+    return "-";
   };
 
   const tournament_level = (level) => {
+    level = String(level ?? ""); // 2026-10-27: 숫자로 와도 같은 결과
     if (level === "1") {
       return "프로";
     } else if (level === "2") {
@@ -302,6 +329,7 @@ export function useCommon() {
   };
 
   const wind_type = (wind) => {
+    wind = String(wind ?? ""); // 2026-10-27: 숫자로 와도 같은 결과
     if (wind === "0") {
       return "무풍";
     } else if (wind === "1") {
@@ -313,11 +341,11 @@ export function useCommon() {
     } else if (wind === "4") {
       return "랜덤";
     } else {
-      return wind;
+      return wind || "-";
     }
   };
   const teeboxman_type = (teebox) => {
-    switch (teebox) {
+    switch (String(teebox ?? "")) { // 2026-10-27: 숫자로 와도 같은 결과
       case "1":
         return "프로(블루)";
       case "2":
@@ -331,7 +359,7 @@ export function useCommon() {
     }
   };
   const teeboxwoman_type = (teebox) => {
-    switch (teebox) {
+    switch (String(teebox ?? "")) { // 2026-10-27: 숫자로 와도 같은 결과
       case "1":
         return "프로(블루)";
       case "2":
@@ -349,22 +377,23 @@ export function useCommon() {
     const map = {
       1: "홀인원",
       2: "알바트로스",
-      3: "이글-파5",
-      4: "버디-P5",
-      5: "파-P5",
-      6: "이글-파4",
-      7: "버디-P4",
-      8: "파-P4",
+      // 2026-10-27: 매장·관리자 앱과 같은 이름('이글-파5'·'버디-P5' 섞임 정리)
+      3: "이글(P5)",
+      4: "버디(P5)",
+      5: "파(P5)",
+      6: "이글(P4)",
+      7: "버디(P4)",
+      8: "파(P4)",
       9: "롱기스트",
       10: "니어핀",
-      11: "롱기스트 랭킹",
-      12: "니어핀 랭킹",
+      11: "롱기스트 랭크",
+      12: "니어핀 랭크",
     };
     return map[type] || "";
   };
 
   const event_status = (status) => {
-    switch (status) {
+    switch (String(status ?? "")) { // 2026-10-27: 숫자로 와도 같은 결과
       case "0":
         return "대기";
       case "1":
@@ -374,11 +403,12 @@ export function useCommon() {
       case "3":
         return "취소";
       default:
-        return "대기"; // 정의되지 않은 값은 null
+        return "-"; // 2026-10-27: 정의되지 않은 값(이전엔 "대기")
     }
   };
 
   const event_level = (level) => {
+    level = String(level ?? ""); // 2026-10-27: 숫자로 와도 같은 결과
     if (level === "1") {
       return "프로";
     } else if (level === "2") {
@@ -394,7 +424,7 @@ export function useCommon() {
     }
   };
   const getClubcodeToClubname = (value) => {
-    switch (value) {
+    switch (String(value ?? "")) { // 2026-10-27: 숫자로 와도 같은 결과
       case "101":
         return "DR";
       case "202":

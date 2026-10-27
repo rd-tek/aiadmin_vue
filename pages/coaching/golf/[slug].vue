@@ -1146,7 +1146,7 @@
                                   {{
                                     common.suffix(
                                       common.toFixed(swingView.balldirection),
-                                      "deg",
+                                      "°",
                                     )
                                   }}
                                 </div>
@@ -1184,7 +1184,7 @@
                                   {{
                                     common.suffix(
                                       common.toFixed(swingView.launchangle),
-                                      "deg",
+                                      "°",
                                     )
                                   }}
                                 </div>
@@ -1305,7 +1305,7 @@
             </li>
           </ul>
         </div>
-        <div class="academy-left-cont">
+        <div class="academy-left-cont" tabindex="0" role="region" aria-label="강좌 목차">
           <ul class="accordion">
             <li
               class="accordion-list"
@@ -2379,7 +2379,7 @@
                               {{
                                 common.suffix(
                                   common.toFixed(swingView.balldirection),
-                                  "deg",
+                                  "°",
                                 )
                               }}
                             </div>
@@ -2417,7 +2417,7 @@
                               {{
                                 common.suffix(
                                   common.toFixed(swingView.launchangle),
-                                  "deg",
+                                  "°",
                                 )
                               }}
                             </div>
@@ -2528,7 +2528,7 @@
                       <span class="sub" v-if="finalReportView.statsClubs?.length">({{ finalReportView.statsClubs.map((c) => common.getClubcodeToClubname(String(c))).join(", ") }} 기준)</span>
                     </div>
                     <p class="desc-area" v-if="finalReportView.analysis?.coaching_result">
-                      {{ finalReportView.analysis.coaching_result }}
+                      <highlight-text :text="finalReportView.analysis.coaching_result" /><!-- 2026-10-26: 핵심 단어 강조(회원 앱과 같게) -->
                     </p>
                     <p class="desc-area" v-else>내역이 없습니다.</p>
                     <div class="chart-area">
@@ -2632,9 +2632,7 @@
                             </td>
                             <td>
                               <div class="text-area">
-                                {{
-                                  finalReportView.analysis[`lesson${idx + 1}`]
-                                }}
+                                <highlight-text :text="finalReportView.analysis[`lesson${idx + 1}`]" />
                               </div>
                             </td>
                           </tr>
@@ -2648,7 +2646,7 @@
                             <td></td>
                             <td>
                               <div class="text-area">
-                                {{ finalReportView.analysis.lessontotal }}
+                                <highlight-text :text="finalReportView.analysis.lessontotal" />
                               </div>
                             </td>
                           </tr>
@@ -2788,8 +2786,9 @@ const stepMissionLabel = (s) => {
   if (!ms.length) return '';
   // 2026-10-20: 완료돼도 (성공/목표) 유지 + 완료 표시
   const done = stepMissionDone(s) ? ' 완료' : '';
-  if (ms.length === 1) return `(${Number(ms[0].success_cnt ?? 0)}/${ms[0].required_success_cnt}${done})`;
-  return `(조건 ${ms.filter(missionDone).length}/${ms.length}${done})`; // 2026-10-20: 4앱 통일 — 스텝 = 미션, 그 안의 항목 = 미션 조건
+  // 2026-10-27: '조건' 사족 제거, 완료는 괄호 밖 — 예) (1/2) · (3/3) 완료
+  if (ms.length === 1) return `(${Number(ms[0].success_cnt ?? 0)}/${ms[0].required_success_cnt})${done}`;
+  return `(${ms.filter(missionDone).length}/${ms.length})${done}`; // 2026-10-20: 스텝 = 미션, 그 안의 항목 = 미션 조건 / 2026-10-27: '조건' 글자 제거
 };
 
 const common = useCommon();
@@ -3443,7 +3442,7 @@ const swingInfo = [
   },
   {
     name: "볼속도",
-    info: "97.5km/h",
+    info: "27.1m/s",
   },
   {
     name: "백스핀",
@@ -3455,11 +3454,11 @@ const swingInfo = [
   },
   {
     name: "클럽속도",
-    info: "77.5km/h",
+    info: "21.5m/s",
   },
   {
     name: "볼방향",
-    info: "0.2deg",
+    info: "0.2°",
   },
   {
     name: "사이드스핀",
@@ -3471,11 +3470,11 @@ const swingInfo = [
   },
   {
     name: "클럽진입각",
-    info: "10.5deg",
+    info: "10.5°",
   },
   {
     name: "탈출각",
-    info: "20.5deg",
+    info: "20.5°",
   },
   {
     name: "구질",
@@ -4010,8 +4009,8 @@ const onVideoState = (state) => {
 .rec-no { align-self: flex-start; padding: 3px 10px; border-radius: 6px; font-size: 12px; font-weight: 600; background: #E8F0FE; color: #2563EB; }
 .rec-title { font-size: 18px; font-weight: 700; color: #35383B; line-height: 1.4; }
 .rec-reason { margin: 0; padding: 10px 12px; border-radius: 8px; background: rgba(53, 119, 241, 0.06); font-size: 14px; line-height: 1.5; color: #35383B; }
-.rec-reason b { display: block; margin-bottom: 2px; font-size: 12px; color: #3577F1; }
+.rec-reason b { display: block; margin-bottom: 2px; font-size: 12px; color: #3270e3; }
 .rec-dl { margin: 0; }
-.rec-dl dt { margin-top: 6px; font-size: 12px; font-weight: 600; color: #72777A; }
+.rec-dl dt { margin-top: 6px; font-size: 12px; font-weight: 600; color: #6c7174; }
 .rec-dl dd { margin: 2px 0 0; font-size: 14px; line-height: 1.6; color: #52575C; }
 </style>

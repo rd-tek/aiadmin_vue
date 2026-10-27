@@ -13,8 +13,8 @@
                     <td>
                       <div class="select-default">
                         <select aria-label="상태 선택" v-model="form.type">
-                            <option value="1">공지</option>
-                            <option value="2">뉴스</option>
+                            <option value="1">매뉴얼</option>
+                            <option value="2">홍보</option>
                         </select>
                       </div>
                     </td>

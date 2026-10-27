@@ -49,13 +49,13 @@
                   <span class="color-grey">{{ item.no }}</span>
                 </div>
                 <div class="table-body-col col-1">
-                  <span class="label" :class="{ 'color-purple': item.type === '1', 'color-blue': item.type === '2' }">{{ item.type === '1' ? '공지' : '뉴스' }}</span>
+                  <span class="label" :class="{ 'color-blue': item.type === '1', 'color-purple': item.type === '2' }">{{ item.type === '1' ? '공지' : '뉴스' }}</span>
                 </div>
                 <div class="table-body-col align-left">
                   <nuxt-link :to="`/customer/shop/${item.noticeno}`" class="link" :class="{ 'line-through': item.deleteflag === '1' }">{{ item.title }}</nuxt-link>
                 </div>
                 <div class="table-body-col col-1 is-mob">
-                  <span class="color-grey">{{ item.date }}</span>
+                  <span class="color-grey">{{ dispDate(item) }}</span>
                 </div>
                 <div class="table-body-col col-1 is-mob">
                   <span class="color-grey">{{ item.cnt }}</span>
@@ -70,7 +70,7 @@
               <div class="table-body-mob">
                 <div class="row">
                   <div class="row-list">
-                    <span class="date">{{ item.date }}</span>
+                    <span class="date">{{ dispDate(item) }}</span>
                     <span class="status">{{ item.cnt }}</span>
                     <span class="status" :class="{ 'color-green': item.status === '1', 'color-grey': item.status === '0' }">{{ item.status === '1' ? '게시' : '대기' }}</span>
                     <span class="status" :class="{ 'color-green': item.deleteflag === '0', 'color-red': item.deleteflag === '1' }">{{ item.deleteflag === '1' ? '삭제' : '정상' }}</span>
