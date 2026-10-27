@@ -168,7 +168,7 @@
                     .text {
                         font-size: 14px;
                         font-weight: 700;
-                        color: #ADB0B3;
+                        color: #6c7174; // 2026-10-27: 아직 안 한 단계 글자 대비 2.17 → 4.94
                         line-height: 1.42;
                     }
                 }
@@ -536,7 +536,7 @@
                                 }
 
                                 .text {
-                                    color: #28B5E1;
+                                    color: #18789a; // 2026-10-27: 범례 글자 대비 2.38 → 5.01(같은 색 계열)
                                     font-size: 12px;
                                     font-weight: 500;
                                     font-family: 'Roboto';

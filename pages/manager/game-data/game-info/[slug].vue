@@ -145,12 +145,12 @@ useHead({
 }
 
 /* 2026-10-13: 게임정보 개편 */
-.game-info-v2 .no-data { padding: 40px 0; text-align: center; color: #8a8f98; }
+.game-info-v2 .no-data { padding: 40px 0; text-align: center; color: #61666c; }
 .game-info-v2 .gi-summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-bottom: 24px; }
 .game-info-v2 .gi-sum-item { background: #f6f7fb; border: 1px solid #eceef3; border-radius: 12px; padding: 14px 18px; display: flex; flex-direction: column; gap: 6px; }
-.game-info-v2 .gi-sum-item .k { font-size: 13px; color: #7a8088; }
+.game-info-v2 .gi-sum-item .k { font-size: 13px; color: #5f6570; }
 .game-info-v2 .gi-sum-item .v { font-size: 17px; font-weight: 700; color: #1b2559; word-break: break-all; }
-.game-info-v2 .gi-sum-item .v small { font-size: 12px; font-weight: 500; color: #8a8f98; }
+.game-info-v2 .gi-sum-item .v small { font-size: 12px; font-weight: 500; color: #61666c; }
 .game-info-v2 .gi-table-wrap { overflow-x: auto; border: 1px solid #eceef3; border-radius: 12px; }
 .game-info-v2 .gi-table { opacity: 1 !important; transform: none !important; /* 공통 table 진입 애니메이션(opacity 0) 제외 */ width: 100%; border-collapse: collapse; font-size: 14px; }
 .game-info-v2 .gi-table th, .game-info-v2 .gi-table td { padding: 12px 16px; border-bottom: 1px solid #f0f1f5; text-align: left; }

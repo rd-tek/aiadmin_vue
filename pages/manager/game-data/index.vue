@@ -978,5 +978,6 @@ useHead({
 .btn-sm-line:disabled, .btn-md-line:disabled { opacity: .4; cursor: not-allowed; pointer-events: auto; }
 /* 2026-10-26: 모바일 펼친 카드의 게임 버튼 3개가 영역 높이(51px)에 눌려 2px 로 거의 안 보이던 것 → 영역 높이를 내용에 맞추고 버튼은 줄지 않게 */
 .btn-wrap:has(> .btn-md-line + .btn-md-line + .btn-md-line) { height: auto !important; max-height: none !important; }
-.btn-wrap > .btn-md-line { flex: 0 0 auto; }
+/* 2026-10-27: 버튼 3개 묶음에만 — 이전엔 검색 영역(초기화·검색)에도 걸려 768px 에서 검색 버튼이 39px 밖으로 넘침 */
+.btn-wrap:has(> .btn-md-line + .btn-md-line + .btn-md-line) > .btn-md-line { flex: 0 0 auto; }
 </style>

@@ -226,6 +226,6 @@ onBeforeUnmount(() => editor.value?.destroy())
   border-top: 1px solid #f0f1f4;
   text-align: right;
   font-size: 12px;
-  color: #8a8f98;
+  color: #61666c;
 }
 </style>

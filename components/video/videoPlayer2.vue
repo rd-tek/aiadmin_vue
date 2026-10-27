@@ -43,7 +43,7 @@ class MyCustomButton extends Button {
   }
 
   handleClick() {
-    alert('커스텀 버튼 클릭됨!')
+    // 2026-10-27: 디버그 alert 제거
   }
 }
 videojs.registerComponent('MyCustomButton', MyCustomButton)

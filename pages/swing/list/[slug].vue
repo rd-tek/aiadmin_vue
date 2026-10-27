@@ -848,9 +848,9 @@ const onVideoState = (state) => {
 }
 
 /* 2026-10-20: 댓글 없음 안내 */
-.review .no-data { padding: 40px 0; text-align: center; color: #8a8f98; border-bottom: 1px solid #e5e7e8; }
+.review .no-data { padding: 40px 0; text-align: center; color: #61666c; border-bottom: 1px solid #e5e7e8; }
 
 /* 2026-10-20: 클럽 패스 이미지 */
 .col-list-cont .image.club-path { width: 100%; aspect-ratio: 16 / 9; background: #000 center / contain no-repeat; border-radius: 12px; }
-.col-list-cont .no-data { padding: 60px 0; text-align: center; color: #8a8f98; }
+.col-list-cont .no-data { padding: 60px 0; text-align: center; color: #61666c; }
 </style>

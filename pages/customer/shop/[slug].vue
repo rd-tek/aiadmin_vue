@@ -26,7 +26,7 @@
                 </div>
             </div>
             <div class="desc-area"> 
-                <span v-html="noticeInfo.contents" />
+                <span v-html="common.richHtml(noticeInfo.contents)" />
             </div>
             <div class="page-area">
                 <div class="page-area-list">
@@ -100,6 +100,7 @@
     </div>
 </template>
 <script setup>
+const common = useCommon(); // 2026-10-27: 본문 richHtml(허용 태그만)
 import { useRoute, useRouter } from "vue-router";
 import { useIntersectionObserver } from "@vueuse/core";
 import { useCustomerApi } from "~/api/support";
