@@ -1,4 +1,4 @@
-// AI검토 3차:토너먼트/이벤트포함마무리
+// AI검토 3차:토너먼트/이벤트포함마무리 (2026-10-27)
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2025-08-27',
