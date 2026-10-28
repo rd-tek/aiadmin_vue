@@ -24,11 +24,11 @@
           </div>
           <div class="d-flex date-range">
             <ClientOnly>
-              <VueDatePicker v-model="startDate" :format="L.pickerFormat" :enable-time-picker="false" auto-apply placeholder="시작일" aria-label="기간 시작일" />
+              <VueDatePicker locale="ko" :week-start="0" v-model="startDate" :format="L.pickerFormat" :enable-time-picker="false" auto-apply placeholder="시작일" aria-label="기간 시작일" />
             </ClientOnly>
             <span class="wave">~</span>
             <ClientOnly>
-              <VueDatePicker v-model="endDate" :format="L.pickerFormat" :enable-time-picker="false" auto-apply placeholder="종료일" aria-label="기간 종료일" />
+              <VueDatePicker locale="ko" :week-start="0" v-model="endDate" :format="L.pickerFormat" :enable-time-picker="false" auto-apply placeholder="종료일" aria-label="기간 종료일" />
             </ClientOnly>
           </div>
         </div>

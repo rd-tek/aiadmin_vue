@@ -15,11 +15,11 @@
           </div>
           <div class="d-flex date-range">
             <ClientOnly>
-              <VueDatePicker v-model="startDate" :format="L.pickerFormat" :enable-time-picker="false" auto-apply placeholder="당첨일 시작" aria-label="당첨일 시작" />
+              <VueDatePicker locale="ko" :week-start="0" v-model="startDate" :format="L.pickerFormat" :enable-time-picker="false" auto-apply placeholder="당첨일 시작" aria-label="당첨일 시작" />
             </ClientOnly>
             <span class="wave">~</span>
             <ClientOnly>
-              <VueDatePicker v-model="endDate" :format="L.pickerFormat" :enable-time-picker="false" auto-apply placeholder="당첨일 종료" aria-label="당첨일 종료" />
+              <VueDatePicker locale="ko" :week-start="0" v-model="endDate" :format="L.pickerFormat" :enable-time-picker="false" auto-apply placeholder="당첨일 종료" aria-label="당첨일 종료" />
             </ClientOnly>
           </div>
         </div>

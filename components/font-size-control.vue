@@ -92,7 +92,7 @@ const currentLabel = computed(() => (LEVELS.find((l) => isCurrent(l.v)) || LEVEL
 const apply = (v) => {
   if (!import.meta.client) return;
   try {
-    document.body.style.zoom = String(v);
+    document.body.style.zoom = String(v); document.documentElement.style.setProperty("--fs-zoom", String(v)); /* 2026-11-02: 100vh 높이 보정용 */
     localStorage.setItem(KEY, String(v));
   } catch (e) {}
 };
@@ -144,7 +144,7 @@ onMounted(() => {
     const s = parseFloat(localStorage.getItem(KEY));
     if (!isNaN(s) && s > 0) {
       scale.value = nearest(s);
-      document.body.style.zoom = String(scale.value);
+      document.body.style.zoom = String(scale.value); document.documentElement.style.setProperty("--fs-zoom", String(scale.value)); /* 2026-11-02: 100vh 높이 보정용 */
     }
   } catch (e) {}
   document.addEventListener("click", onDocClick);

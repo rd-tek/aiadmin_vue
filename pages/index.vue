@@ -85,8 +85,9 @@ const DEFS = [
   { key: "owner", label: "매장 회원", color: "#05CD99" },
   { key: "gameend", label: "게임 완료", color: "#2B7FFF" },
   { key: "gamestop", label: "게임 중단", color: "#EE5D50" },
-  { key: "tournament", label: "토너먼트", color: "#FFB547" },
-  { key: "eventwinning", label: "미니게임 당첨", color: "#A855F7" },
+  // 2026-10-27 서비스 정리(토너먼트/미니게임 숨김): 아래 두 줄 주석 — KPI 카드·일별/6개월 그래프·도넛·누적 현황에서 함께 빠짐. 다시 쓰려면 주석 해제
+  // { key: "tournament", label: "토너먼트", color: "#FFB547" },
+  // { key: "eventwinning", label: "미니게임 당첨", color: "#A855F7" },
 ];
 
 // 좁은 화면: 범례를 아래로, 위 여백 확대
@@ -129,7 +130,9 @@ const load = async () => {
   prev.value = results[4];
   const rows = {};
   for (const def of DEFS) rows[def.key] = results.map((r) => (r ? num(r[`${def.key}cntmonth`]) : 0));
-  trend.value = { labels: months.map((d) => `${String(d.getFullYear()).slice(2)}.${d.getMonth() + 1}월`), rows };
+  // 2026-10-30: 축 이름 '26.5월' → '5월'(첫 달과 1월만 연도 표시)
+  // trend.value = { labels: months.map((d) => `${String(d.getFullYear()).slice(2)}.${d.getMonth() + 1}월`), rows };
+  trend.value = { labels: months.map((d, i) => (i === 0 || d.getMonth() === 0 ? `${String(d.getFullYear()).slice(2)}년 ${d.getMonth() + 1}월` : `${d.getMonth() + 1}월`)), rows };
 };
 
 const kpis = computed(() => DEFS.map((def) => {
@@ -166,7 +169,7 @@ const sparkOption = (k) => ({
 const dailyOption = computed(() => ({
   color: DEFS.map((d) => d.color),
   tooltip: { trigger: "axis" },
-  legend: { top: 0, icon: "circle", itemWidth: 8, itemHeight: 8, textStyle: { color: "#475467", fontSize: 12 } },
+  legend: { top: 0, left: 0, icon: "circle", itemWidth: 8, itemHeight: 8, itemGap: 14, textStyle: { color: "#475467", fontSize: 12 } }, // 2026-10-30: 범례를 제목과 같은 왼쪽 선에
   grid: { left: 36, right: 16, top: isMobile.value ? 70 : 40, bottom: 28 },
   xAxis: { type: "category", data: dailyLabels.value, boundaryGap: dailyMode.value === "bar", ...axisBase },
   yAxis: { type: "value", minInterval: 1, splitLine: { lineStyle: { color: "#F1F3F9" } }, ...axisBase, axisLine: { show: false } },
@@ -188,7 +191,7 @@ const dailyOption = computed(() => ({
 const trendOption = computed(() => ({
   color: DEFS.map((d) => d.color),
   tooltip: { trigger: "axis", axisPointer: { type: "shadow" } },
-  legend: { top: 0, icon: "circle", itemWidth: 8, itemHeight: 8, textStyle: { color: "#475467", fontSize: 12 } },
+  legend: { top: 0, left: 0, icon: "circle", itemWidth: 8, itemHeight: 8, itemGap: 14, textStyle: { color: "#475467", fontSize: 12 } }, // 2026-10-30: 범례를 제목과 같은 왼쪽 선에
   grid: { left: 36, right: 12, top: isMobile.value ? 70 : 56, bottom: 24 },
   xAxis: { type: "category", data: trend.value.labels, ...axisBase },
   yAxis: { type: "value", minInterval: 1, splitLine: { lineStyle: { color: "#F1F3F9" } }, ...axisBase, axisLine: { show: false } },
@@ -199,11 +202,13 @@ const donutOption = computed(() => ({
   tooltip: { trigger: "item", formatter: "{b}: {c}건 ({d}%)" },
   legend: isMobile.value
     ? { orient: "horizontal", bottom: 0, left: "center", icon: "circle", itemWidth: 8, itemHeight: 8, textStyle: { color: "#475467", fontSize: 12 } }
-    : { orient: "vertical", right: 8, top: "middle", icon: "circle", itemWidth: 8, itemHeight: 8, textStyle: { color: "#475467", fontSize: 12 } },
+    : { orient: "vertical", left: "57%", top: "middle", icon: "circle", itemWidth: 10, itemHeight: 10, itemGap: 14, // 2026-10-30: 범례를 차트 옆으로, 건수 함께
+        formatter: (name) => `{n|${name}}{v|${fmt(kpis.value.find((k) => k.label === name)?.month || 0)}건}`,
+        textStyle: { color: "#475467", fontSize: 13, rich: { n: { width: 72, color: "#475467", fontSize: 13 }, v: { fontWeight: 700, color: "#1B2559", fontSize: 13 } } } },
   series: [{
     type: "pie",
-    radius: isMobile.value ? ["44%", "66%"] : ["52%", "78%"],
-    center: isMobile.value ? ["50%", "42%"] : ["36%", "50%"],
+    radius: isMobile.value ? ["44%", "66%"] : ["46%", "70%"], // 2026-10-30: 범례와 겹치지 않게
+    center: isMobile.value ? ["50%", "42%"] : ["29%", "50%"], // 2026-10-30: 범례와 균형
     avoidLabelOverlap: true,
     itemStyle: { borderColor: "#fff", borderWidth: 2 },
     label: { show: true, position: "center", formatter: () => `{a|${fmt(monthSum.value)}}\n{b|이번 달 합계}`, rich: { a: { fontSize: 24, fontWeight: 700, color: "#1B2559" }, b: { fontSize: 12, color: "#6b748b", padding: [6, 0, 0, 0] } } },
@@ -225,7 +230,7 @@ useHead({
 
 <style lang="scss" scoped>
 .dash2 { display: flex; flex-direction: column; gap: 20px; }
-.dash2-kpis { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 14px; }
+.dash2-kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; } /* 2026-10-27: 지표 6 → 4개(토너먼트·미니게임 당첨 숨김), 원래 repeat(6, …) */
 .kpi {
   position: relative;
   background: #fff;
@@ -264,7 +269,7 @@ useHead({
 .total-bar { height: 10px; background: #F1F3F9; border-radius: 10px; overflow: hidden; i { display: block; height: 100%; background: var(--c); border-radius: 10px; transition: width .6s ease; } }
 .total-val { text-align: right; font-weight: 700; color: #1B2559; font-variant-numeric: tabular-nums; }
 
-@media screen and (max-width: 1400px) { .dash2-kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media screen and (max-width: 1400px) { .dash2-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } } /* 2026-10-27: 4개라 2칸(원래 3칸) */
 @media screen and (max-width: 1024px) { .dash2-row.two { grid-template-columns: 1fr; } }
 @media screen and (max-width: 768px) {
   .dash2-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }

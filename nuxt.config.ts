@@ -1,4 +1,6 @@
 // AI검토 3차:토너먼트/이벤트포함마무리 (2026-10-27)
+// 2026-10-28 AI검토 4차: 클릭만 되는 칸(div·li 등 @click)에 키보드 접근을 붙이는 템플릿 컴파일 변환 (짝: plugins/click-a11y.client.js)
+import { xgClickA11y } from './xg-click-a11y.mjs'
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2025-08-27',
@@ -19,9 +21,10 @@ export default defineNuxtConfig({
   app: {
     baseURL: '/',
     // 2026-10-26: 페이지 언어 기본값(접근성 html-has-lang)
-    head: { htmlAttrs: { lang: 'ko' } },
+    head: { link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }, { rel: "apple-touch-icon", sizes: "180x180", href: "/apple-touch-icon.png" }, { rel: "icon", type: "image/png", sizes: "100x100", href: "/favicon.png" }], /* 2026-10-29: 파비콘 = 한국 서비스(kr_12) 앱과 같은 X-GOLF X(favicon.ico·favicon.png 원본 그대로). 이전: Nuxt 기본 로고 */ htmlAttrs: { lang: 'ko' }, meta: [{ name: 'theme-color', content: '#ffffff' }] }, // 2026-10-28 AI검토 4차: theme-color = 모바일 상단 색
   },
   vite: {
+    vue: { template: { compilerOptions: { nodeTransforms: [xgClickA11y] } } }, // 2026-10-28 AI검토 4차
     server: {
       watch: {
         usePolling: true,

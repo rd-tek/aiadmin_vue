@@ -14,7 +14,7 @@
                       <div class="select-default">
                         <select aria-label="상태 선택" v-model="form.type">
                             <option value="1">공지</option>
-                            <option value="2">뉴스</option>
+                            <option value="2">패치</option><!-- 2026-10-29: 매장 공지 구분 공지/패치 -->
                         </select>
                       </div>
                     </td>
@@ -176,6 +176,8 @@ const getNoticeDetail = async () => {
   try {
     const res = await customerApi._ownerNoticeview(noticeno.value);
 
+    // 2026-10-27 AI검토 4차: 없는(삭제된) 번호면 API 가 빈 값(200) — 빈 틀 대신 404 안내
+    if (!res?.noticeview?.title) return showNotFound();
     const notice = res.noticeview || {};
 
     form.type = notice.type || "1";
@@ -291,9 +293,9 @@ useHead({
   htmlAttrs: {
     lang: 'ko'
   },
-  title: '공지사항(매장)',
+  title: '공지사항(매장) 수정',
   meta: [
-    { name: 'description', content: '공지사항(매장) 페이지 입니다.' }
+    { name: 'description', content: '공지사항(매장) 수정 페이지 입니다.' }
   ]
 })
 </script>

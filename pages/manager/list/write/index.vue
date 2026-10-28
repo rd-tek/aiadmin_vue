@@ -103,7 +103,7 @@
                                 <th>이메일</th>
                                 <td>
                                     <div class="input-text">
-                                        <input aria-label="이메일"
+                                        <input inputmode="email" aria-label="이메일"
                                             type="text"
                                             placeholder="abc@example.com"
                                             v-model="form.email"

@@ -56,7 +56,7 @@
                                 <td>
                                     <div class="input-wrap">
                                         <div class="input-text">
-                                            <input aria-label="이메일" type="text" v-model="form.email">
+                                            <input inputmode="email" aria-label="이메일" type="text" v-model="form.email">
                                         </div>
                                         <button type="button" class="btn-md-line" @click="checkDuplicate(3, form.email)">중복체크</button>
                                     </div>
@@ -425,9 +425,9 @@ useHead({
   htmlAttrs: {
     lang: 'ko'
   },
-  title: '매장회원',
+  title: '매장회원 등록',
   meta: [
-    { name: 'description', content: '매장회원 페이지 입니다.' }
+    { name: 'description', content: '매장회원 등록 페이지 입니다.' }
   ]
 })
 

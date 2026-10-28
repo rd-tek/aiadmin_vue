@@ -14,7 +14,7 @@
                       <div class="select-default">
                         <select aria-label="상태 선택" v-model="form.type">
                             <option value="1">공지</option>
-                            <option value="2">뉴스</option>
+                            <option value="2">패치</option><!-- 2026-10-29: 매장 공지 구분 공지/패치 -->
                         </select>
                       </div>
                     </td>
@@ -269,9 +269,9 @@ useHead({
   htmlAttrs: {
     lang: 'ko'
   },
-  title: '공지사항(매장)',
+  title: '공지사항(매장) 등록',
   meta: [
-    { name: 'description', content: '공지사항(매장) 페이지 입니다.' }
+    { name: 'description', content: '공지사항(매장) 등록 페이지 입니다.' }
   ]
 })
 </script>

@@ -2978,3 +2978,13 @@
 // 2026-10-26: 왼쪽 목차 마지막 '최종 코칭 리포트' 버튼 — 목차가 길면 영역(calc(100vh - 350px)) 끝에 버튼 아랫선이 잘려
 //   영역을 끝까지 스크롤해야만 선이 보였음(사용자 지적) → 영역 아래에 붙여(sticky) 항상 온전히 보이게
 .academy-left-cont .accordion > .accordion-list:last-child { position: sticky; bottom: 0; z-index: 1; background: #fff; padding-bottom: 2px; }
+
+// 2026-11-02: 왼쪽 목차 영역 높이를 calc(100vh - 350px) 로 고정해 두어, 위쪽(제목·좋아요 줄, 약 386px — 제목 길이·글자 크기에 따라 더 커짐)이
+//   350px 보다 크면 영역 아래가 화면 밖으로 나가 '최종 코칭 리포트'(아래 고정)가 보이지 않고 누를 수 없었음(1440×900 에서 y=928)
+//   → PC(왼쪽 패널이 보이는 1025px 이상)에서는 패널을 화면 높이로 두고 목차 영역이 남은 높이를 채우게(위쪽 높이와 무관)
+//   글자 크기(body zoom)를 키우면 100vh 도 함께 커져 화면을 넘으므로 zoom 값(--fs-zoom, 글자 크기 위젯이 설정)으로 나눔
+@media screen and (min-width: 1025px) {
+  .academy-left { display: flex; flex-direction: column; height: calc(100vh / var(--fs-zoom, 1)); }
+  .academy-left-head, .academy-left-btn { flex-shrink: 0; }
+  .academy-left-cont { flex: 1 1 auto; min-height: 0; height: auto; }
+}

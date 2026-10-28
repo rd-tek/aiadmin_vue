@@ -140,8 +140,14 @@
                                         />
                                         <button type="button" class="btn-file" @click="triggerFile">파일선택</button>
                                         <span class="name" v-if="fileName">{{ fileName }}</span>
+                                        <!-- 2026-10-29: 이미 등록된 코스 이미지가 있으면 그 파일 이름을 보여 줌(전엔 늘 '파일을 선택하거나…') -->
+                                        <span class="name" v-else-if="existingImageName">{{ existingImageName }}</span>
                                         <span class="name placeholder" v-else>파일을 선택하거나 여기에 드롭하세요.</span>
                                     </div>
+                                </div>
+                                <!-- 2026-10-29: 코스 이미지 미리보기(새로 고른 파일 또는 기존 이미지) -->
+                                <div class="course-img-preview" v-if="previewImage || (existingImageUrl && !existingBroken)">
+                                    <img :src="previewImage || existingImageUrl" alt="코스 이미지 미리보기" @error="existingBroken = true" />
                                 </div>
                                 <div class="desc">
                                     <div class="desc-list">* 파일 총 용량은 최대 26MB까지 (파일당 최대 4MB 등록 가능)</div>
@@ -176,8 +182,8 @@
                                             id="chk_1" 
                                             name="chk_1" 
                                             v-model="form.viewflag" 
-                                            true-value="0" 
-                                            false-value="1">
+                                            true-value="1" 
+                                            false-value="0"><!-- 2026-10-29: view_flag 1=공개(회원 앱·대회·이벤트 기준). 전엔 0을 공개/표시로 보여 실제 공개 코스가 '비공개'로 보였음 -->
                                         <label for="chk_1">
                                             <span class="check-box-item">
                                                 <i class="item-line" />
@@ -265,18 +271,37 @@
             :isOpen="modals.modalCourseWrite"
             :item="selectedItem"
             @update:isOpen="modals.modalCourseWrite = $event"/>
+
+            <!-- 2026-10-29: 저장 결과 안내 — 전엔 저장해도 아무 반응이 없었음. 완료를 닫으면 상세로 이동 -->
+            <toast-modal :isOpen="modals.toastModal" :toastMessage="toastMessage" @update:isOpen="onSaveDone" />
+            <toast-warn-modal :isOpen="modals.toastWarnModal" :toastWarnMessage="toastWarnMessage" @update:isOpen="modals.toastWarnModal = $event" />
     </div>
 </template>
 <script setup>
 import { useRoute } from "vue-router";
 import { useIntersectionObserver } from "@vueuse/core";
 import { useCourseApi } from "~/api/course";
+import toastModal from '@/components/toast-ui/toast-modal.vue';
+import toastWarnModal from '@/components/toast-ui/toast-warn-modal.vue';
+import { useCommon } from "@/utils/common";
 
 // 2026.06.16[cgnoh]: 선택된 홀 정보
 const selectedItem = ref(null);
 
 // 2026.06.16[cgnoh]: 모달 관련
-const modals = reactive({ modalCourseWrite: false });
+const modals = reactive({ modalCourseWrite: false, toastModal: false, toastWarnModal: false });
+// 2026-10-29: 저장 결과 안내·기존 코스 이미지
+const common = useCommon();
+const toastMessage = ref('');
+const toastWarnMessage = ref('');
+const existingImageName = ref('');
+const existingImageUrl = ref('');
+const existingBroken = ref(false);
+const saving = ref(false);
+const onSaveDone = (v) => {
+    modals.toastModal = v;
+    if (!v) { document.querySelector('body')?.classList.remove('is-hidden'); navigateTo(`/golfcourse/list/${route.params.slug}`); }
+};
 // 2026-09-14: kradmin CourseEdit.showModal 참고 — 홀 클릭 시 courseholeview를 fetch해 홀 이미지/정보 표시.
 // 기존엔 form 전체를 넘겨(홀 데이터 없이) 팝업이 비어 있었음.
 const modalOpen = async (holeno, subIdx) => {
@@ -355,7 +380,7 @@ const form = reactive({
     },
     filename: "", // 코스 이미지
     status: "0", // 코스 사용 여부(사용)
-    viewflag: "0", // 코스 사용 여부(표시)
+    viewflag: "1", // 코스 사용 여부(표시) — 2026-10-29: 1=공개
     field: "", // 난이도(필드)
     green: "", // 난이도(그린)
     area: "", // 지역
@@ -403,8 +428,15 @@ const subcourse = ref({});
 const getCourseDetail = async () => {
   try {
     const res = await _courseView(route.params.slug);
+    // 2026-10-27 AI검토 4차: 없는(삭제된) 번호면 API 가 빈 값(200) — 빈 틀 대신 404 안내
+    if (!res?.coursebasicinfo?.coursename) return showNotFound();
     const info = res.coursebasicinfo || {};
     subcourse.value = res.subcourse;
+    // 2026-10-29: 기존 코스 이미지(파일이 없으면 course_image_url 이 '/' 로 옴)
+    const imgPath = String(info.course_image_url || '');
+    existingImageUrl.value = /[^/]$/.test(imgPath) ? common.getImg(imgPath) : '';
+    existingImageName.value = existingImageUrl.value ? (info.originname || imgPath.split('/').pop()) : '';
+    existingBroken.value = false;
     
 
     Object.assign(form, {
@@ -421,7 +453,7 @@ const getCourseDetail = async () => {
         country: info.country || "", // 국가
         contents: info.contents || "", // 설명
         status: info.status ?? "0",
-        viewflag: info.viewflag ?? "0",
+        viewflag: String(info.viewflag ?? "1"), // 2026-10-29: 1=공개
     });
 
     // 2026-09-14: form.subcourse가 미채움(서브코스명 빈값, 파/핸디캡 편집불가)이던 것 → API(res.subcourse)로 채움.
@@ -506,7 +538,26 @@ const handleSave = async () => {
     }
     }
 
-    await _courseEdit(route.params.slug, formData);
+    // 2026-10-29: 결과를 확인해 안내(전엔 응답을 버려 저장됐는지 알 수 없었음), 두 번 눌러 중복 저장 방지
+    // await _courseEdit(route.params.slug, formData);
+    if (saving.value) return;
+    saving.value = true;
+    try {
+        const res = await _courseEdit(route.params.slug, formData);
+        if (Number(res?.code) === 200) {
+            toastMessage.value = res.message || '수정되었습니다.';
+            modals.toastModal = true;
+        } else {
+            toastWarnMessage.value = res?.message || '저장에 실패했습니다.';
+            modals.toastWarnModal = true;
+        }
+    } catch (err) {
+        console.error(err);
+        toastWarnMessage.value = '저장 중 오류가 발생했습니다.';
+        modals.toastWarnModal = true;
+    } finally {
+        saving.value = false;
+    }
 };
 
 // 2026.06.16[cgnoh]: 인터렉션 관련
@@ -543,6 +594,12 @@ useHead({
 @use '@/assets/scss/pages/golf-course.scss';
 
 /* 2026-09-14: 난이도 별점 아이콘 — golf-course.scss는 .info-area-cnt 하위로만 스코프돼 수정폼 난이도(.select-list)엔 미적용이라 여기 재정의 */
+/* 2026-10-29: 코스 이미지 미리보기 */
+.course-img-preview {
+  margin-top: 10px;
+  img { display: block; width: 240px; max-width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 8px; border: 1px solid rgb(229, 231, 235); }
+}
+
 .star {
   display: flex;
   align-items: center;

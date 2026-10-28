@@ -54,9 +54,9 @@
                 <th><span id="tf-period">기간</span> <span class="required"></span></th>
                 <td>
                   <div class="period" role="group" aria-labelledby="tf-period">
-                    <ClientOnly><VueDatePicker v-model="startDate" :format="L.pickerFormat" :enable-time-picker="false" :clearable="false" auto-apply placeholder="시작일" aria-label="시작일" /></ClientOnly>
+                    <ClientOnly><VueDatePicker locale="ko" :week-start="0" v-model="startDate" :format="L.pickerFormat" :enable-time-picker="false" :clearable="false" auto-apply placeholder="시작일" aria-label="시작일" /></ClientOnly>
                     <span class="wave">~</span>
-                    <ClientOnly><VueDatePicker v-model="endDate" :format="L.pickerFormat" :enable-time-picker="false" :clearable="false" auto-apply placeholder="종료일" aria-label="종료일" /></ClientOnly>
+                    <ClientOnly><VueDatePicker locale="ko" :week-start="0" v-model="endDate" :format="L.pickerFormat" :enable-time-picker="false" :clearable="false" auto-apply placeholder="종료일" aria-label="종료일" /></ClientOnly>
                   </div>
                 </td>
               </tr>

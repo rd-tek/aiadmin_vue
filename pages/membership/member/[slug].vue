@@ -128,6 +128,8 @@ const getDetail = async () => {
   try {
     const playerPk = route.params.slug;
     const res = await membersApi._playerview(playerPk);
+    // 2026-10-27 AI검토 4차: 없는(삭제된) 번호면 API 가 빈 값(200) — 빈 틀 대신 404 안내
+    if (!res?.memberinfo?.player_pk) return showNotFound();
     const selected = res?.memberinfo;
 
     if (!selected) {
@@ -214,9 +216,9 @@ useHead({
   htmlAttrs: {
     lang: 'ko'
   },
-  title: '일반회원',
+  title: '일반회원 상세',
   meta: [
-    { name: 'description', content: '일반회원 페이지 입니다.' }
+    { name: 'description', content: '일반회원 상세 페이지 입니다.' }
   ]
 })
 

@@ -3,7 +3,7 @@ export default defineNuxtPlugin(() => {
   if (import.meta.client) {
     try {
       const s = parseFloat(localStorage.getItem("xg_fontscale"));
-      if (!isNaN(s) && s > 0) document.body.style.zoom = String(s);
+      if (!isNaN(s) && s > 0) { document.body.style.zoom = String(s); document.documentElement.style.setProperty("--fs-zoom", String(s)); /* 2026-11-02: 100vh 높이 보정용 */ }
     } catch (e) {}
   }
 });

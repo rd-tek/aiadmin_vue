@@ -386,6 +386,8 @@ const subcourse = ref({});
 const getCourseDetail = async () => {
   try {
     const res = await _courseView(route.params.slug);
+    // 2026-10-27 AI검토 4차: 없는(삭제된) 번호면 API 가 빈 값(200) — 빈 틀 대신 404 안내
+    if (!res?.coursebasicinfo?.coursename) return showNotFound();
     const info = res.coursebasicinfo || {};
     subcourse.value = res.subcourse;
     

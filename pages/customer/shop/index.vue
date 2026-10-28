@@ -49,7 +49,7 @@
                   <span class="color-grey">{{ item.no }}</span>
                 </div>
                 <div class="table-body-col col-1">
-                  <span class="label" :class="{ 'color-blue': item.type === '1', 'color-purple': item.type === '2' }">{{ item.type === '1' ? '공지' : '뉴스' }}</span>
+                  <span class="label" :class="{ 'color-blue': item.type === '1', 'color-purple': item.type === '2' }">{{ item.type === '1' ? '공지' : '패치' }}</span>
                 </div>
                 <div class="table-body-col align-left">
                   <nuxt-link :to="`/customer/shop/${item.noticeno}`" class="link" :class="{ 'line-through': item.deleteflag === '1' }">{{ item.title }}</nuxt-link>

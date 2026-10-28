@@ -23,7 +23,9 @@
             <div class="row-list-item">
               <div class="state type01">
                 <span class="state-list" :class="{ 'color-blue': item.status === '0', 'border-grey': item.status === '1' }">{{ item.status === '0' ? '사용' : '대기' }}</span>
-                <span class="state-list" :class="{ 'color-green': item.viewflag === '0', 'color-black': item.viewflag === '1' }">{{ item.viewflag === '0' ? '공개' : '비공개' }}</span>
+                <!-- 2026-10-29: view_flag 1=공개(회원 앱·대회·이벤트 기준). 전엔 0을 공개/표시로 보여 실제 공개 코스가 '비공개'로 보였음 -->
+                <!-- <span class="state-list" :class="{ 'color-green': item.viewflag === '0', 'color-black': item.viewflag === '1' }">{{ item.viewflag === '0' ? '공개' : '비공개' }}</span> -->
+                <span class="state-list" :class="{ 'color-green': item.viewflag === '1', 'color-black': item.viewflag !== '1' }">{{ item.viewflag === '1' ? '공개' : '비공개' }}</span>
               </div>
               <div class="title">
                 <nuxt-link :to="`/golfcourse/list/${item.courseno}`" class="link">{{ item.coursename || '-' }}</nuxt-link>

@@ -127,4 +127,9 @@ useHead({
 </script>
 <style lang="scss" scoped>
 @use "@/assets/scss/pages/login.scss";
+/* 2026-10-30: 로그인 저장 체크박스 — 체크하지 않았을 때도 체크 표시(강조색 선)가 그려져 체크된 것처럼 보였음 → 체크했을 때만 표시 */
+.check-box input[type=checkbox]:not(:checked) + label .check-box-item .item-line::before,
+.check-box input[type=checkbox]:not(:checked) + label .check-box-item .item-line::after {
+  background: transparent !important;
+}
 </style>

@@ -2731,6 +2731,14 @@
     @update:isOpen="modals.modalCallback = $event"
   />
 
+  <!-- 2026-10-28 AI검토 4차: Q&A 삭제 전 확인(aicoach·aimember 와 같은 토스트) -->
+  <toast-delete-modal
+    :isOpen="modals.toastDeleteModal"
+    :toastDeleteMessage="toastDeleteMessage"
+    @delete="handleQnaDelete"
+    @update:isOpen="modals.toastDeleteModal = $event"
+  />
+
   <!-- 토스트 알림 모달 -->
   <toast-modal
     :isOpen="modals.toastModal"
@@ -2768,6 +2776,7 @@ import { useHead } from "#app";
 import toastModal from "@/components/toast-ui/toast-modal.vue";
 import toastWarnModal from "@/components/toast-ui/toast-warn-modal.vue";
 import toastErrorModal from "@/components/toast-ui/toast-error-modal.vue";
+import toastDeleteModal from "@/components/toast-ui/toast-delete-modal.vue"; // 2026-10-28 AI검토 4차
 
 definePageMeta({
   // 2026-10-20: 번호(숫자)만 상세로 — 그 외 주소는 404 (예: /academy/test 가 상세로 들어가 오류 창이 뜨던 것)
@@ -2858,17 +2867,40 @@ const _coachingView = async () => {
       handleDepthClick(0, firstStep, 0, firstCls);
     }
   } catch (err) {
+    if (isNotFoundError(err)) return showNotFound(); // 2026-10-27 AI검토 4차: 없는 번호 → 404 안내
     handleErrorToast(err.message);
   }
 };
 
 const modals = reactive({});
 
-const _qnaDrop = async (comment_pk) => {
+// 2026-10-28 AI검토 4차: 메뉴에서 [삭제]를 누르면 바로 지워지던 것 → 확인 토스트 후 삭제(aicoach·aimember 와 같게)
+// const _qnaDrop = async (comment_pk) => {
+//   tooltipShow.value = -1;
+//   replyTooltipShow.value = -1;
+//   try {
+//     await coachingApi._qnadrop(comment_pk);
+//     await _qnaList();
+//   } catch (err) {
+//     handleErrorToast(err.message);
+//   }
+// };
+const qnaDelKey = ref(null);
+const toastDeleteMessage = ref();
+const _qnaDrop = (comment_pk) => {
   tooltipShow.value = -1;
   replyTooltipShow.value = -1;
+  qnaDelKey.value = comment_pk;
+  toastDeleteMessage.value = "댓글이 삭제됩니다";
+  document.querySelector("body").classList.add("is-hidden");
+  modals["toastDeleteModal"] = true;
+};
+const handleQnaDelete = async () => {
+  const pk = qnaDelKey.value;
+  qnaDelKey.value = null;
+  if (!pk) return;
   try {
-    await coachingApi._qnadrop(comment_pk);
+    await coachingApi._qnadrop(pk);
     await _qnaList();
   } catch (err) {
     handleErrorToast(err.message);
@@ -3499,6 +3531,7 @@ const mobMenuList = [
         name: "나의 라운드",
         link: "/myrecord/myround",
       },
+      /* 2026-10-30 서비스 정리(토너먼트/이벤트 숨김) 누락분 — aimember 원본과 같게, 주석 해제하면 다시 보임
       {
         name: "나의 토너먼트",
         link: "/myrecord/mytournament",
@@ -3507,6 +3540,7 @@ const mobMenuList = [
         name: "나의 이벤트",
         link: "/myrecord/myevent",
       },
+      */
       {
         name: "나의 스윙",
         link: "/myrecord/myswing",
@@ -3931,8 +3965,8 @@ useHead({
   htmlAttrs: {
     lang: "ko",
   },
-  title: "코칭",
-  meta: [{ name: "description", content: "코칭 상세 페이지 입니다." }],
+  title: "코칭 상세",
+  meta: [{ name: "description", content: "코칭 상세 상세 페이지 입니다." }],
 });
 
 // ---------------------------------------------------------------------------

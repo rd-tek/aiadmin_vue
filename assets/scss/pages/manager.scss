@@ -208,3 +208,13 @@
         }
     }
 }
+// 2026-10-28 AI검토 4차: 관리자 목록이 비면(페이지 번호 없음) 버튼 줄 높이가 0 이 되어 '등록하기'가 표 카드 밖으로 걸치던 것
+//   → PC 는 페이지 번호가 있을 때와 같은 높이 유지, 빈 상태 문구는 행 전체 폭
+.manager-list .table-body-flex > .no-data {
+    flex: 1 1 100%;
+}
+@media screen and (min-width: 769px) {
+    .manager-list .btn-wrap {
+        min-height: 114px;
+    }
+}

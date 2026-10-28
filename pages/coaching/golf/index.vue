@@ -65,12 +65,14 @@
               </div>
             </div>
             <div class="table-body-col">
-              <span class="link" @click="onModalPlayerEdit(item.player_fk)">{{
+              <span class="link" role="button" tabindex="0" @click="onModalPlayerEdit(item.player_fk)" @keydown.enter.prevent="onModalPlayerEdit(item.player_fk)" @keydown.space.prevent="onModalPlayerEdit(item.player_fk)"><!-- 2026-10-28 AI검토 4차: 키보드(Enter·Space)로도 회원 정보 열기 -->{{
                 item.nickname
               }}</span>
             </div>
             <div class="table-body-col is-mob">
-              {{ item.shopname || "-" }}
+              <!-- {{ item.shopname || "-" }} -->
+              <!-- 2026-10-28 AI검토 4차: 긴 매장명이 칸 양쪽으로 잘려 보이던 것 → 말줄임(…) + 마우스 올리면 전체 이름 -->
+              <span class="shop-ellipsis" :title="item.shopname || ''">{{ item.shopname || "-" }}</span>
             </div>
             <div class="table-body-col is-mob">
               {{ common.dateformat(item.timezone_enroll_date) }}
@@ -387,5 +389,7 @@ useHead({
   .table-head-col:nth-child(2), .table-body-flex > .table-body-col:nth-child(2) { justify-content: flex-start; text-align: left; padding-left: 24px; }
   .table-body-flex > .table-body-col:nth-child(2) .item-wrap { width: 100%; justify-content: flex-start; text-align: left; }
   .table-body-flex > .table-body-col:nth-child(4) { white-space: nowrap; }
+  /* 2026-10-28 AI검토 4차: flex 칸 안 글자는 말줄임이 안 돼 긴 매장명이 양쪽으로 잘림 → 안쪽 span 에서 말줄임 */
+  .table-body-flex > .table-body-col:nth-child(4) .shop-ellipsis { display: block; min-width: 0; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 }
 </style>

@@ -5,7 +5,7 @@
             <div class="col d-flex">
                 <div class="d-flex">
                   <ClientOnly>
-                    <VueDatePicker
+                    <VueDatePicker :enable-time-picker="false" locale="ko" :week-start="0"
                       v-model="startDate"
                       :format="formatDate"
                       date-picker
@@ -14,7 +14,7 @@
                   </ClientOnly>
                   <span class="wave">~</span>
                   <ClientOnly>
-                    <VueDatePicker
+                    <VueDatePicker :enable-time-picker="false" locale="ko" :week-start="0"
                       v-model="endDate"
                       :format="formatDate"
                       date-picker

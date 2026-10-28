@@ -270,9 +270,9 @@ useHead({
   htmlAttrs: {
     lang: 'ko'
   },
-  title: '공지사항(회원)',
+  title: '공지사항(회원) 등록',
   meta: [
-    { name: 'description', content: '공지사항(회원) 페이지 입니다.' }
+    { name: 'description', content: '공지사항(회원) 등록 페이지 입니다.' }
   ]
 })
 </script>

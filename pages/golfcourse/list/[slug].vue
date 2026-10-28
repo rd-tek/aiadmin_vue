@@ -11,7 +11,9 @@
                         courseData.imgurl,
                     )}')`,
                     }">
+                    <!-- 2026-10-30 서비스 정리(토너먼트/이벤트 숨김) 누락분: 코스 이미지의 'T'(토너먼트) 표시 — 데이터와 무관한 고정 글자라 모든 코스에 붙어 보였음. 다시 쓰려면 주석 해제
                     <span class="label">T</span>
+                    -->
                 </div>
                 <div class="info-area">
                     <div class="info-area-list">
@@ -63,7 +65,9 @@
                             @click="modalOpen(hole.hole_no, idx + 1)">
                         {{ hole.hole_no }}
                         </td>
-                        <td>{{ course.subparcnt }}</td>
+                        <!-- 2026-10-29: 홀 줄 끝 칸은 머리 '합계'(전엔 숫자가 나와 파 합계와 같은 값이 두 번 보였음) -->
+                        <!-- <td>{{ course.subparcnt }}</td> -->
+                        <th>합계</th>
                         </tr>
 
                         <!-- 파 -->
@@ -95,6 +99,10 @@
             @update:isOpen="modals.modalGolfCourse = $event"
             :holeData="holeData"
             :eventList="eventList"
+            :holeIndex="currentHoleIdx"
+            :holeTotal="flatHoles.length"
+            @prev="goHole(-1)"
+            @next="goHole(1)"
         />
     </div>
 </template> 
@@ -130,6 +138,8 @@ const subCourseList = ref([]);
 const getCourseDetail = async () => {
     try {
         const res = await _courseView(route.params.slug);
+        // 2026-10-27 AI검토 4차: 없는(삭제된) 번호면 API 가 빈 값(200) — 빈 틀 대신 404 안내
+        if (!res?.coursebasicinfo?.coursename) return showNotFound();
         const info = res.coursebasicinfo || {};
         courseData.value = {
             coursename: info.coursename || "", // 코스이름
@@ -186,8 +196,22 @@ const handleEdit = () => {
 // 2026-09-16: subcourseseq(=백엔드 coursubtype)는 par_score가 아니라 코스타입코드(1=1~9,2=10~18).
 //   서브코스는 type_fk ASC로 정렬되고 type_code=type_fk-1 이므로 idx+1이 코스타입코드와 일치(근거: tg_coursetype, courseholeview_get CT.type_code)
 const modals = reactive({});
+
+// 2026-10-29: 홀 팝업 이전/다음 홀(aimember 와 같게) — 서브코스 순서대로 펼친 전체 홀 목록
+const currentHoleIdx = ref(-1);
+const flatHoles = computed(() =>
+  subCourseList.value.flatMap((sc, idx) => (sc.subcoursehole || []).map((h) => ({ hole_no: h.hole_no, subcourseseq: idx + 1 })))
+);
+const goHole = async (delta) => {
+  const ni = currentHoleIdx.value + delta;
+  if (ni < 0 || ni >= flatHoles.value.length) return;
+  currentHoleIdx.value = ni;
+  const h = flatHoles.value[ni];
+  await getCourseHoleDetail({ courseno: route.params.slug, hole_pk: h.hole_no, subcourseseq: h.subcourseseq });
+};
 const modalOpen = async (hole_pk, subcourseseq) => {
   modals.modalGolfCourse = true;
+  currentHoleIdx.value = flatHoles.value.findIndex((h) => String(h.hole_no) === String(hole_pk) && h.subcourseseq === subcourseseq); // 2026-10-29
 
   document.body.classList.add("is-hidden");
 

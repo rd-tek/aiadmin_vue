@@ -118,9 +118,7 @@
                 {{ item.playerinfo.shopname || "-" }}
               </div>
               <div class="table-body-col is-mob">
-                <span class="color-grey">{{
-                  item.playerinfo.regdate || "-"
-                }}</span>
+                <span class="color-grey">{{ utcText(item.playerinfo.regdate, "YYYY.MM.DD HH:mm") }}</span>
               </div>
               <div class="table-body-col is-mob">
                 <span v-if="item.playerinfo.status === '1'" class="color-green"
@@ -176,9 +174,7 @@
                 <dl class="list">
                   <dt class="tit">가입일</dt>
                   <dd class="cnt">
-                    <span class="color-grey">{{
-                      item.playerinfo.regdate || "-"
-                    }}</span>
+                    <span class="color-grey">{{ utcText(item.playerinfo.regdate, "YYYY.MM.DD HH:mm") }}</span>
                   </dd>
                 </dl>
                 <dl class="list">
@@ -283,6 +279,8 @@
   </div>
 </template>
 <script setup>
+// 2026-10-27 AI검토 4차: DB 저장값(UTC)을 그대로 보여 9시간 이르게 보이던 일시 → 기기 시간 "YYYY.MM.DD HH:mm"
+const { localDate: utcText } = useCommon();
 import { useIntersectionObserver } from "@vueuse/core";
 import { useMembersApi } from "~/api/member";
 import { useDebounceFn } from "@vueuse/core";

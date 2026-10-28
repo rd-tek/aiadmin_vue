@@ -36,7 +36,9 @@
                     <th>비밀번호</th>
                     <td>
                       <div class="input-text">
-                        <input aria-label="비밀번호" type="text">
+                        <!-- <input aria-label="비밀번호" type="text"> -->
+                        <!-- 2026-10-28 AI검토 4차: 칸이 저장과 연결되지 않아(입력해도 무시) 매장회원 비밀번호를 바꿀 수 없었고, 입력 글자가 그대로 보였음 → 연결 + 가림 -->
+                        <input aria-label="새 비밀번호" type="password" v-model="newPassword" autocomplete="new-password" placeholder="변경할 때만 입력">
                       </div>
                     </td>
                   </tr>
@@ -56,7 +58,7 @@
                     <td>
                       <div class="input-wrap">
                         <div class="input-text">
-                          <input aria-label="이메일" type="text" v-model="ownerinfo.email">
+                          <input inputmode="email" aria-label="이메일" type="text" v-model="ownerinfo.email">
                         </div>
                         <button type="button" class="btn-md-line" @click="checkDuplicate(3, ownerinfo.email)">중복체크</button>
                       </div>
@@ -260,6 +262,8 @@ const getDetail = async () => {
       console.error(res.message);
       return;
     }
+    // 2026-10-27 AI검토 4차: 없는(삭제된) 번호면 API 가 빈 값(200) — 빈 틀 대신 404 안내
+    if (!res?.ownerinfo?.owner_pk) return showNotFound();
     
     ownerinfo.value = {
       ...res.ownerinfo,
@@ -314,15 +318,18 @@ const openErrorToast = (message) => {
 
 watch(() => ownerinfo.value?.ownerno, () => { originId.value = ownerinfo.value?.id ?? ''; checkedId.value = ''; });
 // 2026.06.04[cgnoh]: 저장 핸들링
+// 2026-10-28 AI검토 4차: 새 비밀번호(입력했을 때만 전송 — 백엔드는 password 가 있을 때만 바꿈)
+const newPassword = ref("");
 const handleSave = async () => {
   const curId = (ownerinfo.value?.id ?? '').trim();
   if (curId !== originId.value && checkedId.value !== curId) { openWarnToast('회원 ID 중복체크를 해 주세요.'); return; }
   try {
     const res = await membersApi._owneredit(
       ownerinfo.value.ownerno,
-      ownerinfo.value
+      { ...ownerinfo.value, password: newPassword.value.trim() }
     );
     if (res?.code === 200) {
+      newPassword.value = "";
       openSaveToast("저장되었습니다.");
       await getDetail();
     } else {
@@ -435,9 +442,9 @@ useHead({
   htmlAttrs: {
     lang: 'ko'
   },
-  title: '매장회원',
+  title: '매장회원 수정',
   meta: [
-    { name: 'description', content: '매장회원 페이지 입니다.' }
+    { name: 'description', content: '매장회원 수정 페이지 입니다.' }
   ]
 })
 

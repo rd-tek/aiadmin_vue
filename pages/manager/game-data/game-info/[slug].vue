@@ -10,8 +10,8 @@
               <div class="gi-sum-item"><span class="k">게임 번호</span><span class="v">{{ g.gameno || '-' }}</span></div>
               <div class="gi-sum-item"><span class="k">매장</span><span class="v">{{ g.shopname || '-' }}</span></div>
               <div class="gi-sum-item"><span class="k">코스</span><span class="v">{{ g.coursename || '-' }}<small v-if="g.coursecode"> ({{ g.coursecode }})</small></span></div>
-              <div class="gi-sum-item"><span class="k">시작</span><span class="v">{{ g.regdate || '-' }}</span></div>
-              <div class="gi-sum-item"><span class="k">완료(중단)</span><span class="v">{{ g.enddate || '-' }}</span></div>
+              <div class="gi-sum-item"><span class="k">시작</span><span class="v">{{ utcText(g.regdate, "YYYY.MM.DD HH:mm") }}</span></div>
+              <div class="gi-sum-item"><span class="k">완료(중단)</span><span class="v">{{ utcText(g.enddate, "YYYY.MM.DD HH:mm") }}</span></div>
               <div class="gi-sum-item"><span class="k">플레이어</span><span class="v">{{ players.length }}명</span></div>
             </div>
             <div class="gi-table-wrap">
@@ -47,6 +47,8 @@
     </div>
 </template>
 <script setup>
+// 2026-10-27 AI검토 4차: DB 저장값(UTC)을 그대로 보여 9시간 이르게 보이던 일시 → 기기 시간 "YYYY.MM.DD HH:mm"
+const { localDate: utcText } = useCommon();
 import { useIntersectionObserver } from "@vueuse/core";
 import { useGameDataApi } from "@/api/gamedata";
 import { useRoute } from "vue-router";
@@ -66,7 +68,16 @@ const handleGameInfo = async () => {
     return;
   }
 
-  const res = await _gameInfo(gameno);
+  // 2026-10-28 AI검토 4차: 없는(삭제된) 게임 번호면 빈 표 대신 404 안내
+  let res;
+  try {
+    res = await _gameInfo(gameno);
+  } catch (err) {
+    if (isNotFoundError(err)) return showNotFound("게임 정보를 찾을 수 없습니다.");
+    throw err;
+  }
+  // apiFetch 는 4xx 도 본문({code, message})을 그대로 돌려줌 → code 로도 판별
+  if (res?.code !== 200 && isNotFoundError(res)) return showNotFound("게임 정보를 찾을 수 없습니다.");
   gameinfoList.value = res.playerlist
 
 };
@@ -130,9 +141,9 @@ useHead({
   htmlAttrs: {
     lang: 'ko'
   },
-  title: '게임데이터 관리',
+  title: '게임데이터 상세',
   meta: [
-    { name: 'description', content: '게임데이터 관리 페이지 입니다.' }
+    { name: 'description', content: '게임데이터 상세 페이지 입니다.' }
   ]
 })
 </script>

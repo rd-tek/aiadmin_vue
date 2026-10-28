@@ -60,7 +60,7 @@
                        취소선·회색 표시는 유지하고 클릭(상세 열람)은 기존처럼 가능하게 함. */
                     .line-through {
                         text-decoration: line-through;
-                        color: #ADB0B3;
+                        color: #6E7378; // 2026-10-27 AI검토 4차: 게시 종료 제목 대비 2.18 → 4.7 (줄 긋기는 유지)
 
                         &:hover {
                             cursor: pointer;

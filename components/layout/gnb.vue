@@ -114,6 +114,7 @@ const gnbMenu = [
                 name: '공지사항(매장)',
                 path: 'customer/shop'
             },
+            /* 2026-10-27 서비스 정리: 공지사항(앱)·자료실·고객문의 주석 — 다시 쓰려면 주석 해제
             {
                 name: '공지사항(앱)',
                 path: 'customer/app'
@@ -126,6 +127,7 @@ const gnbMenu = [
                 name: '고객문의',
                 path: 'customer/inquiry'
             }
+            */
         ]
     },
     {
@@ -149,6 +151,7 @@ const gnbMenu = [
         ]
     },
     // 2026-10-22: 대회관리·이벤트관리 추가(aishop 메뉴 구성 기준, 관리자는 전체 매장 대상)
+    /* 2026-10-27 서비스 정리(토너먼트/이벤트 숨김) — 삭제하지 않고 주석. 다시 쓰려면 주석 해제
     {
         name: '대회관리',
         path: 'tournament',
@@ -177,6 +180,7 @@ const gnbMenu = [
             }
         ]
     },
+    */
     {
         name: '관리자',
         path: 'manager',

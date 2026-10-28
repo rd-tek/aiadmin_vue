@@ -1749,6 +1749,10 @@ onUnmounted(() => {
 //   layout: 'empty',
 // });
 
+definePageMeta({
+  // 2026-10-28 AI검토 4차: 퍼블리싱 가이드(공통 UI 견본)는 개발 서버(nuxi dev)에서만 — 빌드된 서버에서는 404
+  middleware: [() => { if (!import.meta.dev) return abortNavigation(createError({ statusCode: 404, statusMessage: 'Page Not Found' })); }],
+});
 </script>
 <style lang="scss" scoped>
 @use '@/assets/scss/pages/guide.scss';

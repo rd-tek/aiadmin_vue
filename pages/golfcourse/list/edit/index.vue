@@ -203,7 +203,7 @@
                             <td>
                                 <div class="checkbox-list">
                                     <div class="check-box">
-                                        <input type="checkbox" id="chk_0" name="chk_0" v-model="form.status">
+                                        <input type="checkbox" id="chk_0" name="chk_0" v-model="form.status" true-value="0" false-value="1"><!-- 2026-10-29: 값 지정이 없어 true/false 가 그대로 전송되던 것 → 사용=0(delete_flag) -->
                                         <label for="chk_0">
                                             <span class="check-box-item">
                                                 <i class="item-line" />
@@ -214,7 +214,7 @@
                                 </div>
                                 <div class="checkbox-list">
                                     <div class="check-box">
-                                        <input type="checkbox" id="chk_1" name="chk_1" v-model="form.viewflag">
+                                        <input type="checkbox" id="chk_1" name="chk_1" v-model="form.viewflag" true-value="1" false-value="0"><!-- 2026-10-29: view_flag 1=공개(회원 앱·대회·이벤트 기준). 전엔 0을 공개/표시로 보여 실제 공개 코스가 '비공개'로 보였음 -->
                                         <label for="chk_1">
                                             <span class="check-box-item">
                                                 <i class="item-line" />
@@ -365,8 +365,8 @@ const form = reactive({
         ],
     },
     filename: null, // 코스 이미지
-    status: '', // 코스 사용 여부(사용여부)
-    viewflag: "0", // 코스 사용 여부(사용여부)
+    status: '0', // 코스 사용 여부(사용) — 2026-10-29: 기본 사용
+    viewflag: "1", // 코스 표시 — 2026-10-29: 1=공개, 기본 공개
     field: "1", // 필드
     green: "1", // 그린
     area: "", // 지역

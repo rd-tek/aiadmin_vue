@@ -178,6 +178,8 @@ const getNoticeDetail = async () => {
   try {
     const res = await customerApi._playerNoticeview(noticeno.value);
 
+    // 2026-10-27 AI검토 4차: 없는(삭제된) 번호면 API 가 빈 값(200) — 빈 틀 대신 404 안내
+    if (!res?.noticeview?.title) return showNotFound();
     const notice = res.noticeview || {};
 
     form.type = notice.type || "1";
@@ -293,9 +295,9 @@ useHead({
   htmlAttrs: {
     lang: 'ko'
   },
-  title: '공지사항(회원)',
+  title: '공지사항(회원) 수정',
   meta: [
-    { name: 'description', content: '공지사항(회원) 페이지 입니다.' }
+    { name: 'description', content: '공지사항(회원) 수정 페이지 입니다.' }
   ]
 })
 </script>

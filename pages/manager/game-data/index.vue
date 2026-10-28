@@ -15,7 +15,7 @@
                 <span class="gd-range-label">시작</span>
                 <div class="datepicker">
                   <client-only>
-                    <VueDatePicker 
+                    <VueDatePicker :enable-time-picker="false" locale="ko" :week-start="0" 
                       v-model="startDate"
                       :format="formatStartDate" 
                       date-picker
@@ -26,7 +26,7 @@
                     />
                   </client-only>
                   <client-only>
-                    <VueDatePicker 
+                    <VueDatePicker locale="ko" :week-start="0" 
                       v-model="startTime"
                       :format="formatStartTime" 
                       time-picker
@@ -42,7 +42,7 @@
                 <span class="gd-range-label">종료</span>
                 <div class="datepicker">
                   <client-only>
-                    <VueDatePicker 
+                    <VueDatePicker :enable-time-picker="false" locale="ko" :week-start="0" 
                       v-model="endDate"
                       :format="formatEndDate" 
                       date-picker
@@ -52,7 +52,7 @@
                     />
                   </client-only>
                   <client-only>
-                    <VueDatePicker 
+                    <VueDatePicker locale="ko" :week-start="0" 
                       v-model="endTime"
                       :format="formatEndTime" 
                       time-picker
@@ -164,7 +164,7 @@
                       <path d="M12.7917 13.5417L13.8542 12.4792L10.75 9.375V5H9.25V10L12.7917 13.5417ZM10 18C8.8975 18 7.86146 17.7917 6.89188 17.375C5.92229 16.9583 5.07292 16.3854 4.34375 15.6562C3.61458 14.9271 3.04167 14.0767 2.625 13.105C2.20833 12.1333 2 11.0951 2 9.99042C2 8.88569 2.20833 7.84722 2.625 6.875C3.04167 5.90278 3.61458 5.05556 4.34375 4.33333C5.07292 3.61111 5.92333 3.04167 6.895 2.625C7.86667 2.20833 8.90486 2 10.0096 2C11.1143 2 12.1528 2.21 13.1252 2.63C14.0974 3.05 14.9432 3.62 15.6625 4.34C16.3817 5.06 16.951 5.90667 17.3706 6.88C17.7902 7.85333 18 8.89333 18 10C18 11.1025 17.7917 12.1385 17.375 13.1081C16.9583 14.0777 16.3889 14.9271 15.6667 15.6562C14.9444 16.3854 14.0963 16.9583 13.1223 17.375C12.1483 17.7917 11.1075 18 10 18Z" fill="#72777A"/>
                       </g>
                       </svg>
-                      <span class="text">{{ item.timezone_regdate || '-' }}</span>
+                      <span class="text">{{ dtText(item.timezone_regdate) }}</span>
                   </div>
                   <div class="icon-list">
                       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -323,7 +323,7 @@
                     </dl>
                     <dl class="list">
                       <dt class="tit">시작시간</dt>
-                      <dd class="cnt">{{ item.timezone_regdate || '-' }}</dd>
+                      <dd class="cnt">{{ dtText(item.timezone_regdate) }}</dd>
                     </dl>
                     <dl class="list">
                       <dt class="tit">멀리건</dt>
@@ -419,6 +419,8 @@
     </div>
 </template>
 <script setup>
+// 2026-10-27 AI검토 4차: 일시 표기 통일 "2026-10-20 19:30:00" → "2026.10.20 19:30" (값은 이미 시간대 변환됨, 표기만)
+const dtText = (v) => (v && !/^0000-00-00/.test(String(v)) ? String(v).slice(0, 16).replace(/-/g, ".") : "-");
 import { useIntersectionObserver } from "@vueuse/core";
 import { useGameDataApi } from "@/api/gamedata";
 import { useRouter } from "vue-router";

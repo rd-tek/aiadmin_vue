@@ -992,6 +992,7 @@ button, a {
 
     &[class*=btn-primary-yellow] {
         background: #F8AD15;
+        color: #000; // 2026-10-27 AI검토 4차: 노랑 위 흰 글자 대비 1.91 → 검정(aimember 와 같게)
 
         &:before {
             background: #fac65c;
@@ -1309,7 +1310,7 @@ button, a {
         line-height: 1.7;
 
         .num {
-            color: #3270e3;
+            color: #2A63D0; // 2026-10-27 AI검토 4차: 연파랑 배경 대비 4.29 → 5.1
         }
     }
 
@@ -4494,3 +4495,107 @@ html:not(.xg-ready) :is(.no-data, .no-info, .stats-empty, .summary-empty, .mini-
 //   칸이 빈 것처럼 보였음(영상 재생 중 탭이 계속 바뀌어 자주 보임) → 글자색은 배경이 반쯤 찬 뒤 바뀌게
 .tab.type03 .tab-list { transition: color .12s linear; }
 .tab.type03 .tab-list.is-active { transition: color .12s linear .16s; }
+
+// 2026-10-28 AI검토 4차: 토스트 문구가 길거나 끊김 없는 문자열(주소 등)이면 [확인] 버튼이 상자 밖으로 밀리던 것
+//   → 문구 칸만 줄어들며 줄바꿈, 버튼은 크기 유지(4앱 같은 규칙)
+.toast-modal .toast-modal-body {
+    max-width: 100%;
+
+    .cont-area {
+        flex: 1 1 auto;
+        min-width: 0;
+        word-break: keep-all;
+        overflow-wrap: anywhere;
+    }
+
+    > button {
+        flex-shrink: 0;
+        white-space: nowrap;
+    }
+}
+
+// 2026-10-28 AI검토 4차: 데이터 불러오기 실패 안내(plugins/load-error.client.js, 4앱 같은 규칙)
+//   1) 요청 실패 시 글자 있는 빈 상태 문구('데이터가 없습니다' 등)를 '불러오지 못했습니다' 로 바꿔 보여 줌
+//      — 빈 <div class="no-data" /> 는 이미지 자리(로고)라 제외(:not(:empty))
+html.xg-load-error :is(.no-data, .no-info, .stats-empty, .summary-empty, .mini-empty, .empty-game-text, .rec-empty, .rec-none, .cm-empty):not(:empty) {
+    position: relative;
+    color: transparent !important;
+
+    > * { visibility: hidden; }
+
+    &::after {
+        content: "불러오지 못했습니다. 잠시 후 다시 시도해 주세요.";
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 12px;
+        text-align: center;
+        font-size: 14px;
+        color: #52575C;
+        visibility: visible;
+    }
+}
+
+//   2) 화면 아래 안내 바 — 다시 시도·닫기
+.xg-snackbar {
+    position: fixed;
+    left: 50%;
+    bottom: max(24px, env(safe-area-inset-bottom));
+    transform: translateX(-50%);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: max-content;
+    max-width: calc(100vw - 32px);
+    padding: 12px 12px 12px 20px;
+    border-radius: 12px;
+    background: #1F2328;
+    color: #fff;
+    font-size: 14px;
+    line-height: 1.4;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+    animation: xg-snackbar-in .25s ease-out;
+
+    .xg-snackbar-msg { flex: 1 1 auto; min-width: 0; word-break: keep-all; overflow-wrap: anywhere; }
+
+    button {
+        flex-shrink: 0;
+        border: 0;
+        background: none;
+        color: inherit;
+        font: inherit;
+        cursor: pointer;
+        border-radius: 8px;
+        &:focus-visible { outline: 2px solid #8AB4FF; outline-offset: 2px; }
+    }
+    .xg-snackbar-retry { padding: 6px 10px; color: #8AB4FF; font-weight: 600; white-space: nowrap; }
+    .xg-snackbar-close { width: 32px; height: 32px; font-size: 20px; line-height: 1; color: #C9CDD2; }
+}
+@keyframes xg-snackbar-in {
+    from { opacity: 0; transform: translate(-50%, 12px); }
+    to { opacity: 1; transform: translate(-50%, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .xg-snackbar { animation: none; }
+}
+
+// 2026-10-28 AI검토 4차: 팝업이 열릴 때 포커스를 팝업 자체로 옮김(plugins/modal-a11y.client.js) — 팝업 상자에 포커스 테두리는 그리지 않음
+[data-xg-dialog]:focus,
+[data-xg-dialog]:focus-visible {
+    outline: none;
+}
+
+// 2026-10-28 AI검토 4차: OS '동작 줄이기'(prefers-reduced-motion) 사용자 — 화면 전환·펼침·슬라이드 애니메이션을 사실상 즉시 끝냄
+//   (0 이 아닌 아주 짧은 시간이라 transitionend/animationend 이벤트는 그대로 발생 → 펼침·닫힘 동작은 유지)
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+        transition-delay: 0s !important;
+        scroll-behavior: auto !important;
+    }
+}

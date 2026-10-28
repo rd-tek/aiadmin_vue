@@ -4,7 +4,7 @@
       <div class="detail-wrap">
         <div class="head">
           <div class="title">{{ swingInfo.title || '스윙영상' }}</div>
-          <div class="date">{{ swingInfo.timezone_regdate || swingInfo.regdate || '-' }}</div>
+          <div class="date">{{ dtText(swingInfo.timezone_regdate || swingInfo.regdate) }}</div>
         </div>
         <div class="cont">
            <div class="video-area">
@@ -180,19 +180,20 @@
                 <div class="col-wrap">
                   <!-- 2026-09-16: 목업(월별 mock) 제거 → 실제 fit_ball_trajectory([lateral,height,downrange] 3D좌표) 사용.
                        측면 뷰=EChart3(x:다운레인지, y:높이), 상단 뷰=EChart2(x:다운레인지, y:좌우편차). aishop coaching 상세 정본 참조. -->
-                  <div class="col-list">
-                    <div class="col-list-title">궤적 측면 뷰</div>
-                    <div class="col-list-cont">
-                      <div class="chart" style="height:300px;">
-                        <EChart3 :raw="swingInfo?.fit_ball_trajectory || []" />
-                      </div>
-                    </div>
-                  </div>
+                  <!-- 2026-10-29: aimember 와 같은 순서(상단 뷰 → 측면 뷰)로 두 칸 위치 교체 -->
                   <div class="col-list">
                     <div class="col-list-title">궤적 상단 뷰</div>
                     <div class="col-list-cont">
                       <div class="chart" style="height:300px;">
                         <EChart2 :raw="swingInfo?.fit_ball_trajectory || []" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-list">
+                    <div class="col-list-title">궤적 측면 뷰</div>
+                    <div class="col-list-cont">
+                      <div class="chart" style="height:300px;">
+                        <EChart3 :raw="swingInfo?.fit_ball_trajectory || []" />
                       </div>
                     </div>
                   </div>
@@ -432,6 +433,8 @@
     </div>
 </template>
 <script setup>
+// 2026-10-27 AI검토 4차: 일시 표기 통일 "2026-10-20 19:30:00" → "2026.10.20 19:30" (값은 이미 시간대 변환됨, 표기만)
+const dtText = (v) => (v && !/^0000-00-00/.test(String(v)) ? String(v).slice(0, 16).replace(/-/g, ".") : "-");
 import { useRoute } from "vue-router";
 import { useSwingApi } from "~/api/swing";
 // 2026-09-14: 스윙 영상/밸런스 배선 (aishop coaching/golf 상세 정본 참고)
@@ -502,6 +505,8 @@ const getDetail = async () => {
   const res = await _swingView(swingPk.value);
   // 백엔드 응답 구조: { swingview: {...}, code:200 }
   if (res.code === 200) {
+    // 2026-10-27 AI검토 4차: 없는(삭제된) 번호면 API 가 빈 값(200) — 빈 틀 대신 404 안내
+    if (!res?.swingview?.swing_pk) return showNotFound();
     swingInfo.value = res.swingview || {};
   }
 };

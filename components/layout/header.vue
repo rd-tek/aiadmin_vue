@@ -33,7 +33,7 @@
         <div class="datepicker" 
             :class="{ active: isFocused }">
         <client-only>
-          <VueDatePicker 
+          <VueDatePicker locale="ko" :week-start="0" 
             v-model="month"
             :format="formatMonth" 
             month-picker

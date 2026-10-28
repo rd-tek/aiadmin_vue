@@ -123,6 +123,9 @@ const onFileChange = (event) => {
 // 2026.03.04[cgnoh]: 페이지 메타 정보
 definePageMeta({
   layout: "default",
+  // 2026-10-28 AI검토 4차: 이 화면은 데이터 연결 없는 퍼블리싱 시안(저장 안 됨) — 메뉴에서 연결되지 않음.
+  //   주소로 직접 들어오면 실제 공지(회원) 수정 화면으로 보냄(시안 코드는 그대로 둠)
+  redirect: (to) => `/customer/member/edit/${to.params.slug}`,
 });
 
 // 2026-10-06: 상세 탭 타이틀 (형제 상세와 같은 useHead 형식)

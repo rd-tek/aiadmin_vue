@@ -127,6 +127,8 @@ const prevPost = ref(null);
 const getNoticeDetail = async () => {
   const res = await customerApi._playerNoticeview(route.params.slug);
 
+  // 2026-10-27 AI검토 4차: 없는(삭제된) 번호면 API 가 빈 값(200) — 빈 틀 대신 404 안내
+  if (!res?.noticeview?.title) return showNotFound();
   noticeInfo.value = res.noticeview || {};
   // 2026-10-27: 이전글 = 목록에서 위(더 최신, next_post), 다음글 = 아래(더 오래된, prev_post) — 회원·매장 앱과 같은 방향
   nextPost.value = res.prev_post || null;
@@ -263,9 +265,9 @@ useHead({
   htmlAttrs: {
     lang: 'ko'
   },
-  title: '공지사항(회원)',
+  title: '공지사항(회원) 상세',
   meta: [
-    { name: 'description', content: '공지사항(회원) 페이지 입니다.' }
+    { name: 'description', content: '공지사항(회원) 상세 페이지 입니다.' }
   ]
 })
 </script>

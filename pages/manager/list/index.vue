@@ -50,7 +50,7 @@
               <div class="table-body-col is-mob"><span class="u-tel">{{ item.phone }}</span></div>
               <div class="table-body-col is-mob">{{ item.email }}</div>
               <div class="table-body-col is-mob">
-                <span class="color-grey">{{ item.regdate }}</span>
+                <span class="color-grey">{{ utcText(item.regdate, "YYYY.MM.DD HH:mm") }}</span>
               </div>
               <div class="table-body-col is-mob">
                 <span :class="{ 'color-green': String(item.status) === '1', 'color-grey': String(item.status) === '0' }">{{ String(item.status) === '1' ? '사용' : String(item.status) === '0' ? '대기' : '-' }}</span>
@@ -87,7 +87,7 @@
                 <dl class="list">
                   <dt class="tit">등록일</dt>
                   <dd class="cnt">
-                    <span class="color-grey">{{ item.regdate }}</span>
+                    <span class="color-grey">{{ utcText(item.regdate, "YYYY.MM.DD HH:mm") }}</span>
                   </dd>
                 </dl>
                 <dl class="list">
@@ -98,6 +98,12 @@
                 </dl>
               </div>
             </transition>
+          </div>
+          <!-- 2026-10-28 AI검토 4차: 목록이 비면 빈 상태 행이 없어 표가 머리줄만 남고 아래 버튼이 표 카드에 걸쳐 보이던 것 → 다른 목록과 같은 빈 상태 행 -->
+          <div class="table-body-row is-move" v-if="!tableList?.length">
+            <div class="table-body-flex">
+              <div class="no-data">데이터가 없습니다.</div>
+            </div>
           </div>
         </div>
         <div class="btn-wrap">
@@ -158,6 +164,8 @@
     </div>
 </template>
 <script setup>
+// 2026-10-27 AI검토 4차: DB 저장값(UTC)을 그대로 보여 9시간 이르게 보이던 일시 → 기기 시간 "YYYY.MM.DD HH:mm"
+const { localDate: utcText } = useCommon();
 import { useRouter } from "vue-router";
 import { useIntersectionObserver } from "@vueuse/core";
 import { useManagerApi } from "@/api/manager";

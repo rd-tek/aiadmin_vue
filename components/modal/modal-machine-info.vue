@@ -96,7 +96,7 @@
                     <div class="datepicker">
                         <!-- 2026-10-21: VueDatePicker 는 브라우저 전용 플러그인(plugins/vue-datepicker.client.ts)으로 등록돼 서버에서 못 그림 → ClientOnly(하이드레이션 경고 해소) -->
                         <ClientOnly>
-                        <VueDatePicker
+                        <VueDatePicker locale="ko" :week-start="0"
                             v-model="insDate"
                             :format="formatDate"
                             :enable-time-picker="false"
@@ -132,7 +132,7 @@
                 <td>
                     <div class="datepicker">
                       <ClientOnly>
-                      <VueDatePicker
+                      <VueDatePicker locale="ko" :week-start="0"
                         v-model="expDate"
                         :format="formatDate"
                         :enable-time-picker="false"

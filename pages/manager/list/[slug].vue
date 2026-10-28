@@ -98,7 +98,7 @@
                                 <th>이메일</th>
                                 <td>
                                     <div class="input-text">
-                                        <input aria-label="이메일"
+                                        <input inputmode="email" aria-label="이메일"
                                             type="text"
                                             v-model="form.email"
                                         />
@@ -165,6 +165,8 @@ const getAdminView = async () => {
     const res = await _adminView(adminno);
 
     if (res.code === 200) {
+      // 2026-10-27 AI검토 4차: 없는(삭제된) 번호면 API 가 빈 값(200) — 빈 틀 대신 404 안내
+      if (!res?.admininfo?.id) return showNotFound();
       const info = res.admininfo || {};
 
       form.value = {
@@ -216,9 +218,9 @@ useHead({
   htmlAttrs: {
     lang: 'ko'
   },
-  title: '관리자',
+  title: '관리자 상세',
   meta: [
-    { name: 'description', content: '관리자 페이지 입니다.' }
+    { name: 'description', content: '관리자 상세 페이지 입니다.' }
   ]
 })
 </script>
