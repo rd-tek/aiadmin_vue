@@ -287,6 +287,12 @@
         }
 
         .table {
+            // 2026-11-02: 일반회원 — 페이지네이션이 .btn-wrap 없이 표 바로 아래에 있어
+            //   공통 모바일 규칙(padding-bottom: 4px)만 적용돼 하단 여백이 없던 것 → 위쪽(30px)과 같게
+            & > .pagination-container {
+                padding-bottom: 30px;
+            }
+
             .btn-wrap {
                 flex-direction: column;
 
