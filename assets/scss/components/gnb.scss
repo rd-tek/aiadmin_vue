@@ -247,6 +247,7 @@
 
 @media screen and (max-width: 1300px) {
     .nav-wrap {
-        z-index: 2;
+        // 2026-11-02: 2 → 3 — 헤더 화면 크기 버튼(.header-fs, z-index 2)이 열린 GNB 위에 보이던 것
+        z-index: 3;
     }
 }
