@@ -7,7 +7,7 @@
             <ul class="gnb">
                 <li class="gnb-list" v-for="(item, i) in gnbMenu" :key="i">
                     <div class="gnb-list-link" 
-                        :class="{ 'is-active': gnbIndex === i, 'is-fill': item.path === 'customer' || item.path === 'golfcourse' || item.path === 'swing' }" 
+                        :class="{ 'is-active': gnbIndex === i, 'is-fill': item.path === 'customer' || item.path === 'golfcourse' || item.path === 'swing', 'is-coaching': item.path === 'coaching' }" 
                         @click="handleAccordion(item, i)">
                         <component :is="iconMap[item.path]" />
                         <span class="name">{{ item.name }}</span>

@@ -110,9 +110,9 @@
                   </div>
                   <div class="cont">
                     <h3 class="tit">학습 목표</h3>
-                    <p class="desc">
+                    <div class="desc">
                       <div class="rich-content" v-html="common.richHtml(academyView.intro)"></div>
-                    </p>
+                    </div>
                   </div>
 
                   <div
