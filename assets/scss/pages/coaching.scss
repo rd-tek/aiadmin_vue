@@ -115,6 +115,14 @@
                     &:nth-child(8) {
                         transition-delay: .8s;
                     }
+
+                    &:nth-child(9) {
+                        transition-delay: .9s;
+                    }
+
+                    &:nth-child(10) {
+                        transition-delay: 1s;
+                    }
                 }
 
                 &:last-child {
