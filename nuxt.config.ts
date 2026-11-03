@@ -1,4 +1,5 @@
 // AI검토 3차:토너먼트/이벤트포함마무리 (2026-10-27)
+// AI검토 4차:메뉴정리및검증마무리 (2026-11-03)
 // 2026-10-28 AI검토 4차: 클릭만 되는 칸(div·li 등 @click)에 키보드 접근을 붙이는 템플릿 컴파일 변환 (짝: plugins/click-a11y.client.js)
 import { xgClickA11y } from './xg-click-a11y.mjs'
 // https://nuxt.com/docs/api/configuration/nuxt-config
