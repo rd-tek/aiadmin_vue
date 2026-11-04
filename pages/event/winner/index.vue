@@ -212,6 +212,8 @@ useHead({ htmlAttrs: { lang: "ko" }, title: "미니게임 당첨자", meta: [{ n
   .c-date { flex: 130 1 0; }
 }
 @media (max-width: 768px) {
+  /* 2026-11-03: 페이지네이션 아래에 버튼이 없어 공통 규칙(padding: 30px 0 0)으로 하단 여백이 0이던 것 → 위쪽과 같게 30px */
+  .membership-member.winner-list .table .btn-wrap .pagination-container { padding-bottom: 30px; }
   .filter-box .col-2 .col:first-child { flex-wrap: wrap; }
   .filter-box .col-2 .col .date-range {
     flex: 1 1 100% !important; width: 100%; flex-direction: row !important; flex-wrap: nowrap !important; align-items: center; gap: 6px;
