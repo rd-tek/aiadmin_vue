@@ -899,9 +899,9 @@
                       <select aria-label="스윙 선택" v-model="selectedResult" @change="resultChange">
                         <option v-for="r in stepResults" :key="r.result_pk" :value="Number(r.result_pk)">#{{ r._no }}번째 스윙 ({{ common.n2(r.measured_value) }}{{ r.unit }})</option>
                       </select>
-                      <button type="button" class="btn-default btn-sm-fill" @click="resultChange">
+                      <!-- 2026-11-11: 고르면 바로 이동 — '이동' 버튼 숨김 <button type="button" class="btn-default btn-sm-fill" @click="resultChange">
                         이동
-                      </button>
+                      </button> -->
                     </div>
                   </div>
                   <div class="cont">
@@ -2143,9 +2143,9 @@
                   <select aria-label="스윙 선택" v-model="selectedResult" @change="resultChange">
                     <option v-for="r in stepResults" :key="r.result_pk" :value="Number(r.result_pk)">#{{ r._no }}번째 스윙 ({{ common.n2(r.measured_value) }}{{ r.unit }})</option>
                   </select>
-                  <button type="button" class="btn-default btn-sm-fill" @click="resultChange">
+                  <!-- 2026-11-11: 고르면 바로 이동 — '이동' 버튼 숨김 <button type="button" class="btn-default btn-sm-fill" @click="resultChange">
                     이동
-                  </button>
+                  </button> -->
                 </div>
               </div>
               <div class="cont">
