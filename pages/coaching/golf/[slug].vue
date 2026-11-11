@@ -764,19 +764,7 @@
                       >
                       <span class="title-depth">
                         <span class="text"
-                          >#{{
-                            targetStep?.mission_list
-                              ?.find(
-                                (m) =>
-                                  Number(m.mission_pk) ===
-                                  Number(selectedMission),
-                              )
-                              ?.result_list?.find(
-                                (r) =>
-                                  Number(r.result_pk) ===
-                                  Number(selectedResult),
-                              )?.attempt_no || ""
-                          }}</span
+                          >#{{ curSwingNo }}</span
                         >
                         <span class="date"
                           >({{
@@ -829,6 +817,7 @@
                         </span>
                       </span>
                     </h2>
+<p class="swing-cond" v-if="curCondTitle"><span class="swing-cond-label">조건</span>{{ curCondTitle }}</p>
                     <div class="date is-mob-show">
                       ({{
                         targetStep?.mission_list
@@ -864,6 +853,10 @@
                       </div>
                     </div>
                     <div class="form-box">
+                      <!-- 2026-11-10: 클래스 → 미션 → 미션 조건 → 시도(이전: 클래스 선택이 없어 다른 클래스로 옮길 수 없었음) -->
+                      <select aria-label="클래스 선택" :key="'cls' + classSelKey" :value="targetClass ? Number(targetClass.class_pk) : ''" @change="classChange($event.target.value)">
+                        <option v-for="(c, ci) in classList?.academy_master?.class_list ?? []" :key="c.class_pk" :value="Number(c.class_pk)">클래스{{ ci + 1 }}. {{ c.title }}</option>
+                      </select>
                       <select aria-label="미션 선택" v-model="selectedStep" @change="stepChange">
                         <option
                           v-for="v in targetClass?.step_list ?? []"
@@ -873,7 +866,8 @@
                           {{ v.title }}
                         </option>
                       </select>
-                      <select aria-label="미션 조건 선택" v-model="selectedMission" @change="missionChange">
+                      <!-- 2026-11-11: 3단계(클래스 → 미션 → 스윙)로 — 미션 조건 선택은 스윙 선택에 합침
+<select aria-label="미션 조건 선택" v-model="selectedMission" @change="missionChange">
                         <option
                           v-for="m in targetClass?.step_list?.find(
                             (s) => Number(s.step_pk) === Number(selectedStep),
@@ -883,8 +877,8 @@
                         >
                           {{ m.title }}
                         </option>
-                      </select>
-                      <select aria-label="결과 선택" v-model="selectedResult" @change="resultChange">
+                      </select> -->
+                      <!-- <select aria-label="결과 선택" v-model="selectedResult" @change="resultChange">
                         <option
                           v-for="(r, i) in targetClass?.step_list
                             ?.find(
@@ -901,6 +895,9 @@
                           #{{ i + 1 }}번째 시도 ({{ common.n2(r.measured_value)
                           }}{{ r.unit }})
                         </option>
+                      </select> -->
+                      <select aria-label="스윙 선택" v-model="selectedResult" @change="resultChange">
+                        <option v-for="r in stepResults" :key="r.result_pk" :value="Number(r.result_pk)">#{{ r._no }}번째 스윙 ({{ common.n2(r.measured_value) }}{{ r.unit }})</option>
                       </select>
                       <button type="button" class="btn-default btn-sm-fill" @click="resultChange">
                         이동
@@ -2013,17 +2010,7 @@
                   >
                   <span class="title-depth">
                     <span class="text"
-                      >#{{
-                        targetStep?.mission_list
-                          ?.find(
-                            (m) =>
-                              Number(m.mission_pk) === Number(selectedMission),
-                          )
-                          ?.result_list?.find(
-                            (r) =>
-                              Number(r.result_pk) === Number(selectedResult),
-                          )?.attempt_no || ""
-                      }}</span
+                      >#{{ curSwingNo }}</span
                     >
                     <span class="date"
                       >({{
@@ -2073,6 +2060,7 @@
                     </span>
                   </span>
                 </h2>
+<p class="swing-cond" v-if="curCondTitle"><span class="swing-cond-label">조건</span>{{ curCondTitle }}</p>
                 <div class="date is-mob-show">
                   ({{
                     targetStep?.mission_list
@@ -2107,6 +2095,10 @@
                 </div>
                 <div class="form-box">
                   <!-- 스텝 -->
+                  <!-- 2026-11-10: 클래스 → 미션 → 미션 조건 → 시도(이전: 클래스 선택이 없어 다른 클래스로 옮길 수 없었음) -->
+                  <select aria-label="클래스 선택" :key="'cls' + classSelKey" :value="targetClass ? Number(targetClass.class_pk) : ''" @change="classChange($event.target.value)">
+                    <option v-for="(c, ci) in classList?.academy_master?.class_list ?? []" :key="c.class_pk" :value="Number(c.class_pk)">클래스{{ ci + 1 }}. {{ c.title }}</option>
+                  </select>
                   <select aria-label="미션 선택" v-model="selectedStep" @change="stepChange">
                     <option
                       v-for="v in targetClass?.step_list ?? []"
@@ -2118,7 +2110,8 @@
                   </select>
 
                   <!-- 미션 (선택된 스텝 기준) -->
-                  <select aria-label="미션 조건 선택" v-model="selectedMission" @change="missionChange">
+                  <!-- 2026-11-11: 3단계(클래스 → 미션 → 스윙)로 — 미션 조건 선택은 스윙 선택에 합침
+<select aria-label="미션 조건 선택" v-model="selectedMission" @change="missionChange">
                     <option
                       v-for="m in targetClass?.step_list?.find(
                         (s) => Number(s.step_pk) === Number(selectedStep),
@@ -2128,10 +2121,10 @@
                     >
                       {{ m.title }}
                     </option>
-                  </select>
+                  </select> -->
 
                   <!-- 결과 (선택된 미션 기준) -->
-                  <select aria-label="결과 선택" v-model="selectedResult" @change="resultChange">
+                  <!-- <select aria-label="결과 선택" v-model="selectedResult" @change="resultChange">
                     <option
                       v-for="(r, i) in targetClass?.step_list
                         ?.find(
@@ -2146,6 +2139,9 @@
                     >
                       #{{ i + 1 }}번째 시도 ({{ common.n2(r.measured_value) }}{{ r.unit }})
                     </option>
+                  </select> -->
+                  <select aria-label="스윙 선택" v-model="selectedResult" @change="resultChange">
+                    <option v-for="r in stepResults" :key="r.result_pk" :value="Number(r.result_pk)">#{{ r._no }}번째 스윙 ({{ common.n2(r.measured_value) }}{{ r.unit }})</option>
                   </select>
                   <button type="button" class="btn-default btn-sm-fill" @click="resultChange">
                     이동
@@ -3379,9 +3375,24 @@ const goToSwing = async (data) => {
   await _playerswingview(data);
 };
 
+// const resultChange = async () => {
+//   await _playerswingview(selectedResult.value);
+// };
+// 2026-11-11: 스윙 선택 — 고른 미션의 모든 조건 시도를 시간순 한 목록으로(미션 조건 선택 없앰). 고르면 그 시도의 조건으로 맞춤
+const stepResults = computed(() => {
+  const step = findStep(selectedStep.value);
+  const rows = (step?.mission_list || []).flatMap((m) => (m.result_list || []).map((r) => ({ ...r, _mission: Number(m.mission_pk) })));
+  rows.sort((x, y) => String(x.regdate || '').localeCompare(String(y.regdate || '')) || Number(x.result_pk) - Number(y.result_pk));
+  return rows.map((r, i) => ({ ...r, _no: i + 1 }));
+});
 const resultChange = async () => {
+  const row = stepResults.value.find((r) => Number(r.result_pk) === Number(selectedResult.value));
+  if (row) selectedMission.value = row._mission;
   await _playerswingview(selectedResult.value);
 };
+// 2026-11-11: 제목 아래 미션 조건 표시 + 제목 # 번호를 스윙 선택과 같은 번호로
+const curSwingNo = computed(() => stepResults.value.find((r) => Number(r.result_pk) === Number(selectedResult.value))?._no || "");
+const curCondTitle = computed(() => (findStep(selectedStep.value)?.mission_list || []).find((m) => Number(m.mission_pk) === Number(selectedMission.value))?.title || "");
 
 /**
  * 2026-10-13: 스텝/미션 셀렉트를 바꾸면 상단 글자만 바뀌고 영상·지표는 이전 시도 그대로 남던 문제.
@@ -3401,6 +3412,22 @@ const loadFirstResult = async (mission) => {
   }
   selectedResult.value = Number(r.result_pk);
   await _playerswingview(selectedResult.value);
+};
+// 2026-11-10: 클래스 선택 — 고른 클래스에서 시도 기록이 있는 첫 미션 조건으로 이동(클래스 → 미션 → 미션 조건 → 시도)
+const classSelKey = ref(0);
+const classChange = async (pk) => {
+  const c = (classList.value?.academy_master?.class_list || []).find((x) => Number(x.class_pk) === Number(pk));
+  for (const s of c?.step_list || []) {
+    const m = (s.mission_list || []).find((x) => (x.result_list || []).length);
+    if (m) {
+      selectedStep.value = Number(s.step_pk);
+      selectedMission.value = Number(m.mission_pk);
+      await loadFirstResult(m);
+      return;
+    }
+  }
+  handleWarnToast("이 클래스에는 아직 시도 기록이 없습니다.");
+  classSelKey.value++;
 };
 const stepChange = async () => {
   const step = findStep(selectedStep.value);
@@ -4047,4 +4074,22 @@ const onVideoState = (state) => {
 .rec-dl { margin: 0; }
 .rec-dl dt { margin-top: 6px; font-size: 12px; font-weight: 600; color: #6c7174; }
 .rec-dl dd { margin: 2px 0 0; font-size: 14px; line-height: 1.6; color: #52575C; }
+</style>
+
+<style lang="scss" scoped>
+/* 2026-11-11: 제목 아래 미션 조건 줄 */
+.swing-cond { display: flex; align-items: baseline; gap: 8px; margin: 6px 0 0; font-size: 15px; line-height: 1.5; color: #35383B; }
+.swing-cond-label { flex: 0 0 auto; padding: 1px 8px; border-radius: 999px; background: #EEF1F3; font-size: 12px; font-weight: 600; color: #52575C; }
+/* 2026-11-10: 클래스·미션·미션 조건·시도 선택 4칸 + 이동 — 한 줄 균등(이전 칸당 min-width 274px 라 두 줄로 넘침), 좁은 화면은 2칸씩 */
+.form-box:has(select[aria-label="클래스 선택"]) {
+  flex-wrap: wrap;
+  select { flex: 1 1 0; min-width: 0 !important; width: auto; text-overflow: ellipsis; }
+  button { flex: 0 0 auto; }
+}
+@media (max-width: 1024px) {
+  /* 좁은 화면: 한 줄에 하나씩, 화면 밖으로 넘치지 않게(2026-11-10 모바일 실측: 오른쪽 3px 잘림) */
+  .form-box:has(select[aria-label="클래스 선택"]) {
+    select, button { flex: 1 1 100%; width: 100%; max-width: 100%; box-sizing: border-box; }
+  }
+}
 </style>
