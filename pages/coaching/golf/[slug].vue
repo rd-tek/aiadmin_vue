@@ -2596,11 +2596,11 @@
                       </thead>
                       <tbody>
                         <tr v-for="(c, ci) in finalReportView.statsByClub" :key="ci">
-                          <td>{{ common.getClubcodeToClubname(String(c.fit_club_code ?? '')) }}</td>
-                          <td>{{ c.fit_distance != null ? common.n2(c.fit_distance) : '-' }}</td>
-                          <td>{{ c.fit_carry != null ? common.n2(c.fit_carry) : '-' }}</td>
-                          <td>{{ c.fit_ball_speed != null ? common.n2(c.fit_ball_speed) : '-' }}</td>
-                          <td>{{ c.shot_cnt ?? '-' }}</td>
+                          <td class="club-name">{{ common.getClubcodeToClubname(String(c.fit_club_code ?? '')) }}</td>
+                          <td data-label="비거리(m)">{{ c.fit_distance != null ? common.n2(c.fit_distance) : '-' }}</td>
+                          <td data-label="캐리(m)">{{ c.fit_carry != null ? common.n2(c.fit_carry) : '-' }}</td>
+                          <td data-label="볼스피드(m/s)">{{ c.fit_ball_speed != null ? common.n2(c.fit_ball_speed) : '-' }}</td>
+                          <td data-label="샷 수">{{ c.shot_cnt ?? '-' }}</td>
                         </tr>
                       </tbody>
                     </table>
@@ -4122,5 +4122,16 @@ const onVideoState = (state) => {
   .form-box:has(select[aria-label="클래스 선택"]) {
     select, button { flex: 1 1 100%; width: 100%; max-width: 100%; box-sizing: border-box; }
   }
+}
+/* 2026-11-12: 전체 클럽 결과 — 모바일은 클럽별 카드(이전: 표를 가로로 밀어야 볼스피드·샷 수가 보임) */
+@media screen and (max-width: 768px) {
+  .club-table { overflow-x: visible !important; }
+  .club-table table.type01 { min-width: 0 !important; width: 100%; }
+  .club-table table.type01 thead { display: none; }
+  .club-table table.type01 tbody { display: flex; flex-direction: column; gap: 10px; }
+  .club-table table.type01 tbody tr { display: grid !important; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px 20px; padding: 14px 16px; border: 1px solid #E5E7E8; border-radius: 12px; background: #fff; }
+  .club-table table.type01 tbody tr td { display: flex !important; justify-content: space-between; align-items: center; width: auto !important; height: auto !important; padding: 0 !important; border: 0 !important; white-space: nowrap; font-size: 14px; color: #17191C; }
+  .club-table table.type01 tbody tr td[data-label]::before { content: attr(data-label); color: #72777A; font-size: 13px; margin-right: 8px; }
+  .club-table table.type01 tbody tr td.club-name { grid-column: 1 / -1; justify-content: flex-start; font-weight: 700; font-size: 15px; padding-bottom: 8px !important; border-bottom: 1px solid #F1F3F4 !important; }
 }
 </style>
