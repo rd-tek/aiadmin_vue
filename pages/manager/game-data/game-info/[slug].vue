@@ -4,7 +4,7 @@
       <div class="game-data-wrap">
         <div class="game-data-title">게임정보</div>
         <div class="game-data-cont">
-          <div class="no-data" v-if="!players.length">데이터가 없습니다.</div>
+          <div class="no-data" v-if="!players.length">내역이 없습니다.</div>
           <template v-else>
             <div class="gi-summary">
               <div class="gi-sum-item"><span class="k">게임 번호</span><span class="v">{{ g.gameno || '-' }}</span></div>

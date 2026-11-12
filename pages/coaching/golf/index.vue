@@ -131,7 +131,7 @@
           </transition>
         </div>
         <div class="no-info" v-if="coachingData.list.length === 0">
-          데이터가 없습니다.
+          내역이 없습니다.
         </div>
       </div>
       <ul class="pagination-container type02">

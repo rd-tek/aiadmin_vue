@@ -44,6 +44,7 @@ export const useRouteTitleMap = () => ({
   "swing-list-slug": "스윙영상 상세",
 
   "coaching-golf": "코칭",
+  "coaching-exercise": "추천 운동 관리", // 2026-11-12
   "coaching-golf-slug": "코칭 상세",
 
   "manager-list": "관리자", // 2026-10-20: 제목에서 "리스트" 제거

@@ -146,7 +146,7 @@
           </template>
           <div class="table-body-row is-move" v-else>
             <div class="table-body-flex">
-              <div class="no-data">데이터가 없습니다.</div>
+              <div class="no-data">내역이 없습니다.</div>
             </div>
           </div>
         </div>

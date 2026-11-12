@@ -466,7 +466,8 @@
      &-content {
         flex: 1;
         /* 2026-09-16: 오타 수정(calc(100px-384px)=음수) + 좌우 여백 축소로 스윙 화면이 남는 폭을 꽉 채우도록 */
-        padding: 40px 40px;
+        /* padding: 40px 40px; */
+        padding: 66px 80px; /* 2026-11-12(aisports2 11-11): 매장·코치·회원 앱과 같은 여백(관리자만 좁아 최종 리포트·강의실 폭이 달랐음) */
         border-left: 1px solid #E5E7E8;
         width: calc(100% - 384px);
         max-width: calc(100% - 384px);

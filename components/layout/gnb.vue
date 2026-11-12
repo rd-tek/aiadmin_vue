@@ -198,10 +198,15 @@ const gnbMenu = [
     {
         name: '코칭',
         path: 'coaching',
+        // 2026-11-12(aisports2 11-11): 하위 '코칭 관리'(이전 이름 '골프' — 종목이 하나뿐) + '추천 운동'(추천 운동 관리 신설)
         children: [
             {
-                name: '골프',
+                name: '코칭 관리',
                 path: 'coaching/golf'
+            },
+            {
+                name: '추천 운동',
+                path: 'coaching/exercise'
             }
         ]
     },

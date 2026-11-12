@@ -234,6 +234,7 @@ export const useCoachingApi = () => {
           analysis: res.analysis,
           stats: res.stats,
           stats_clubs: res.stats_clubs || [], // 2026-10-13
+          stats_by_club: res.stats_by_club || [], // 2026-11-11
           recommendations: res.recommendations,
           message: res.message,
         };

@@ -2583,6 +2583,29 @@
                       </div>
                     </div>
                   </div>
+                <!-- 2026-11-12(aisports2 11-11): 전체 클럽 결과(회원 앱과 같은 표) -->
+                <div class="section club-section" v-if="finalReportView.statsByClub && finalReportView.statsByClub.length">
+                  <div class="top-area">
+                    <div class="title">전체 클럽 결과</div>
+                    <span class="sub">클럽별 평균</span>
+                  </div>
+                  <div class="table-area club-table" style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
+                    <table class="type01">
+                      <thead>
+                        <tr><th>클럽</th><th>평균 비거리(m)</th><th>평균 캐리(m)</th><th>볼스피드(m/s)</th><th>샷 수</th></tr>
+                      </thead>
+                      <tbody>
+                        <tr v-for="(c, ci) in finalReportView.statsByClub" :key="ci">
+                          <td>{{ common.getClubcodeToClubname(String(c.fit_club_code ?? '')) }}</td>
+                          <td>{{ c.fit_distance != null ? common.n2(c.fit_distance) : '-' }}</td>
+                          <td>{{ c.fit_carry != null ? common.n2(c.fit_carry) : '-' }}</td>
+                          <td>{{ c.fit_ball_speed != null ? common.n2(c.fit_ball_speed) : '-' }}</td>
+                          <td>{{ c.shot_cnt ?? '-' }}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
                 </div>
 
                 <!-- 원포인트레슨 -->
@@ -3020,6 +3043,7 @@ const _resultAnalysisView = async () => {
       analysis: res.analysis,
       stats: res.stats,
       statsClubs: res.stats_clubs || [], // 2026-10-13: 이 수강 샷의 클럽
+      statsByClub: res.stats_by_club || [], // 2026-11-12(aisports2 11-11): 전체 클럽 결과
       recommendations: res.recommendations || [],
     };
   } catch (err) {
@@ -4060,6 +4084,13 @@ const onVideoState = (state) => {
 @use "@/assets/scss/pages/swing.scss";
 @use "@/assets/scss/pages/final-report.scss";
 @use "@/assets/scss/components/modal.scss";
+/* 2026-11-12(aisports2 11-11): 최종 코칭 리포트 — 회원 앱과 같게(제목 굵게·소제목 검정, 전체 클럽 결과 표) */
+#report .text { font-weight: 700; }
+.final-report .section .top-area .title, .cont .section .top-area .title { color: #000 !important; }
+.club-section { margin-top: 48px; clear: both; }
+.club-table .type01 thead tr th { white-space: nowrap; padding: 0 12px !important; }
+.club-table .type01 tbody tr td { height: auto !important; padding: 18px 12px !important; white-space: nowrap; }
+@media screen and (max-width: 768px) { .club-table .type01 { min-width: 520px; } }
 
 /* 2026-10-20: 최종 리포트 추천운동 카드(번호·추천 사유·목적·내용), 앱 팔레트 색 */
 .rec-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }

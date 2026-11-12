@@ -216,7 +216,7 @@
           </template>
           <div class="game-data-list is-move" v-else>
             <div class="game-data-item">
-              <div class="no-data">데이터가 없습니다.</div>
+              <div class="no-data">내역이 없습니다.</div>
             </div>
           </div>
           <ul
@@ -364,7 +364,7 @@
               </div>
             </template>
             <div class="table-body-row is-move" v-else>
-              <div class="no-data">데이터가 없습니다.</div>
+              <div class="no-data">내역이 없습니다.</div>
             </div>
           </div>
           <ul

@@ -102,7 +102,7 @@
           <!-- 2026-10-28 AI검토 4차: 목록이 비면 빈 상태 행이 없어 표가 머리줄만 남고 아래 버튼이 표 카드에 걸쳐 보이던 것 → 다른 목록과 같은 빈 상태 행 -->
           <div class="table-body-row is-move" v-if="!tableList?.length">
             <div class="table-body-flex">
-              <div class="no-data">데이터가 없습니다.</div>
+              <div class="no-data">내역이 없습니다.</div>
             </div>
           </div>
         </div>

@@ -34,7 +34,7 @@
         </div>
         <client-only>
           <dash-echart v-if="hasDaily" :option="dailyOption" height="320px" />
-          <div v-else class="empty">이번 달 데이터가 없습니다.</div>
+          <div v-else class="empty">이번 달 내역이 없습니다.</div>
         </client-only>
       </div>
     </section>
