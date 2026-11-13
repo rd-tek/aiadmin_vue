@@ -1,6 +1,9 @@
 .login {
     background: #fff;
-    height: 100svh;
+    // 2026-11-13: 화면 크기 위젯(body zoom)을 바꾸면 100svh 도 같이 커지거나 작아져 로그인창이 가운데에서 벗어나던 문제 수정(aishop 8fd984a 이식)
+    //   → zoom 값(--fs-zoom, 화면 크기 위젯이 설정)으로 나눠 항상 실제 화면 높이에 맞춤
+    height: calc(100svh / var(--fs-zoom, 1));
+    word-break: keep-all; // 2026-11-13: 좁은 화면·큰 배율에서 낱말 중간 줄바꿈(예: 아이디 저/장) 방지
     display: flex;
     align-items: center;
     justify-content: center;
@@ -560,7 +563,8 @@
 @media screen and (max-width: 768px) {
     .login {
         background: #fff;
-        height: calc(100svh - 80px);
+        // 2026-11-13: 화면 크기 위젯(body zoom) 보정 — 100svh 만 zoom 값으로 나누고 헤더 높이(80px)는 그대로 빼기
+        height: calc(100svh / var(--fs-zoom, 1) - 80px);
 
         .logo {
             margin-bottom: 15px;
