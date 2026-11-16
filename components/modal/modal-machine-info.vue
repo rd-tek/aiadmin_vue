@@ -102,6 +102,8 @@
                             :enable-time-picker="false"
                             auto-apply
                             teleport
+                            :alt-position="dpMenuPosition"
+                            :ui="{ menu: 'mi-dp-menu' }"
                             aria-label="설치일"
                         />
                         </ClientOnly>
@@ -138,6 +140,8 @@
                         :enable-time-picker="false"
                         auto-apply
                         teleport
+                        :alt-position="dpMenuPosition"
+                        :ui="{ menu: 'mi-dp-menu' }"
                         aria-label="만료기한"
                     />
                       </ClientOnly>
@@ -317,7 +321,30 @@ const modalSave = async () => {
     saving.value = false;
   }
 };
+
+// 2026-11-16: 달력 위치 직접 계산 — 달력은 body 로 옮겨 그리는데(teleport), 화면 크기 위젯이 body 에 zoom 을 걸면
+//   라이브러리가 계산한 좌표(화면 px)가 zoom 배율만큼 다시 곱해져 달력이 입력칸에서 떨어진 곳에 나타남(오른쪽 아래 만료기한이 가장 심함)
+//   → 화면 좌표를 zoom 값으로 나눠 입력칸 바로 아래(자리가 없으면 위)에 맞춤
+const dpMenuPosition = (el) => {
+  if (!el) return { top: "0", left: "0" };
+  const zoom = parseFloat(document.body.style.zoom) || 1;
+  const input = el.getBoundingClientRect();
+  const menu = document.querySelector(".mi-dp-menu")?.getBoundingClientRect();
+  const menuH = menu?.height || 330 * zoom;
+  const menuW = menu?.width || 263 * zoom;
+  const gap = 10;
+  const below = window.innerHeight - input.bottom;
+  const top = menuH + gap > below && input.top > below ? input.top - gap - menuH : input.bottom + gap;
+  const maxLeft = document.documentElement.clientWidth - menuW - 8;
+  const left = Math.max(8, Math.min(input.left + input.width / 2 - menuW / 2, maxLeft));
+  return { top: `${(top + window.scrollY) / zoom}px`, left: `${(left + window.scrollX) / zoom}px` };
+};
 </script>
+<style lang="scss">
+/* 달력은 body 로 옮겨지므로 scoped 밖에서 지정 — 위치를 직접 잡아 위로 열릴 때 화살표 방향이 맞지 않아 숨김 */
+.mi-dp-menu .dp__arrow_top,
+.mi-dp-menu .dp__arrow_bottom { display: none; }
+</style>
 <style lang="scss" scoped>
 @use "@/assets/scss/components/modal.scss";
 .machine-summary { margin: 0 0 12px; font-size: 14px; color: #333; }
