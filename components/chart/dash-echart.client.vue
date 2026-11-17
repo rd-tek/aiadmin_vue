@@ -6,6 +6,7 @@
 <script setup>
 import * as echarts from "echarts";
 import { ref, onMounted, onBeforeUnmount, watch, nextTick } from "vue";
+import { attachEchartZoomFix } from "~/utils/echart-zoom-fix";
 
 const props = defineProps({
   option: { type: Object, required: true },
@@ -14,6 +15,7 @@ const props = defineProps({
 const el = ref(null);
 let chart = null;
 let ro = null;
+let detachZoomFix = null; // 2026-11-17: 화면 크기 배율(body zoom) 상태에서 범례·점 클릭 위치 보정
 
 const render = () => {
   if (!chart) return;
@@ -23,6 +25,7 @@ const render = () => {
 onMounted(async () => {
   await nextTick();
   chart = echarts.init(el.value);
+  detachZoomFix = attachEchartZoomFix(el.value, () => chart);
   render();
   ro = new ResizeObserver(() => chart && chart.resize());
   ro.observe(el.value);
@@ -30,6 +33,7 @@ onMounted(async () => {
 watch(() => props.option, render, { deep: true });
 onBeforeUnmount(() => {
   ro?.disconnect();
+  detachZoomFix?.();
   chart?.dispose();
   chart = null;
 });
