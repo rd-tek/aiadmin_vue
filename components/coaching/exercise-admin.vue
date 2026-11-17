@@ -197,7 +197,7 @@ onMounted(load);
 .ex-top { display: flex; justify-content: space-between; align-items: center; }
 .ex-new { min-width: 0 !important; width: auto !important; padding: 0 16px !important; }
 .ex-thumb { display: block; width: 84px; aspect-ratio: 7 / 5; border: 1px solid #E5E7E8; border-radius: 8px; background: #F1F3F4 center / cover no-repeat; cursor: pointer; margin: 0 auto; }
-.ex-info { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; min-width: 0; }
+.ex-info { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 4px; min-width: 0; }
 .ex-title { font-weight: 600; color: #17191C; }
 .ex-sub { font-size: 13px; color: #72777A; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; }
 .adm-view { margin-top: 32px; padding: 28px 32px; border: 1px solid #E5E7E8; border-radius: 16px; background: #fff; }
