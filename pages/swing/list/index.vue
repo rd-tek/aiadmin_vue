@@ -45,7 +45,7 @@
                       <span class="name">{{ item.nickname || '-' }}</span>
                     </span>
                     <span class="desc-list">
-                      <span class="date"><template v-for="(dtp, dti) in String(item.regdate || '-').split(' ')" :key="dti"><span class="u-date">{{ dtp }}</span>{{ ' ' }}</template></span>
+                      <span class="date"><template v-for="(dtp, dti) in String(item.timezone_regdate || item.regdate || '-').split(' ')" :key="dti"><span class="u-date">{{ dtp }}</span>{{ ' ' }}</template></span>
                     </span>
                     <span class="desc-list">
                       <span class="location">{{ item.shopname || '-' }}</span>

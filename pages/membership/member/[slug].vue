@@ -74,7 +74,7 @@
             </tbody>
           </table>
           <div class="btn-wrap">
-            <button type="button" class="btn-md-line" @click="handleList">목록보기</button>
+            <button type="button" class="btn-md-line" @click="handleList">목록 보기</button>
             <button type="button" class="btn-primary-purple btn-md-fill" @click="handleSave">저장</button>
           </div>
         </div>
@@ -153,7 +153,7 @@ useIntersectionObserver(tableRef, ([{ isIntersecting }]) => {
     if (isIntersecting) tableMove.value = true;
 }, { threshold: 0 });
 
-// 2026.05.22[cgnoh]: 목록보기 이벤트
+// 2026.05.22[cgnoh]: 목록 보기 이벤트
 const handleList = () => {
   router.push('/membership/member');
 }

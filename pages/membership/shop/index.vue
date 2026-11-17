@@ -28,7 +28,7 @@
                     </select>
                     <input aria-label="검색어 입력" type="text" v-model="searchForm.searchname" placeholder="검색어 입력" @input="handleSearch">
                 </div>
-                <button type="button" class="btn" @click="handleSearch">검색</button>
+                <button type="button"  class="btn" @click="handleSearch">검색</button>
             </div>
         </div>
       </div>
@@ -72,7 +72,7 @@
                 <div class="table-body-col col-1 align-left">{{ item.no }}</div>
                 <div class="table-body-col" @click="handleMobList(index)">
                   <span class="text-overflow">{{ item.id }}</span>
-                  <button type="button" class="btn-arrow" :class="{ 'is-active': mobListIndex === index }">
+                  <button type="button"  aria-label="하위 메뉴 펼치기" class="btn-arrow" :class="{ 'is-active': mobListIndex === index }">
                     <img
                       src="/images/icon/icon_arrow_down.png"
                       alt="펼치기"
@@ -85,7 +85,7 @@
                 <div class="table-body-col is-mob">{{ regionText(item) }}</div>
                 <div class="table-body-col is-mob">{{ item.name || '-' }}</div>
                 <div class="table-body-col is-mob">
-                  <button type="button" @click="modalOpen(item)" class="link text-underline">{{ item.roomcnt || '-' }}</button>
+                  <button type="button" @click="modalOpen(item)"  class="link text-underline">{{ item.roomcnt || '-' }}</button>
                 </div>
                 <div class="table-body-col is-mob"><span class="u-tel">{{ item.phone || '-' }}</span></div>
                 <div class="table-body-col is-mob">
@@ -120,7 +120,7 @@
                   <dl class="list">
                     <dt class="tit">장비 수</dt>
                     <dd class="cnt">
-                      <button type="button" @click="modalOpen(item)" class="text-underline">{{ item.roomcnt || '-' }}</button>
+                      <button type="button" @click="modalOpen(item)"  class="text-underline">{{ item.roomcnt || '-' }}</button>
                     </dd>
                   </dl>
                   <dl class="list">
@@ -156,7 +156,7 @@
             <li>
               <button
                 type="button"
-                class="paginate-buttons"
+                 class="paginate-buttons"
                 aria-label="이전"
                 :disabled="searchForm.pageno === 1"
                 @click="prevPage"
@@ -172,7 +172,7 @@
             <li v-if="pageNumbers[0] > 1">
               <button
                 type="button"
-                class="paginate-buttons"
+                 class="paginate-buttons"
                 @click="changePage(1)"
               >
                 1
@@ -180,7 +180,7 @@
             </li>
 
             <li v-if="pageNumbers[0] > 2">
-              <button type="button" class="paginate-buttons" disabled>
+              <button type="button"  class="paginate-buttons" disabled>
                 ...
               </button>
             </li>
@@ -192,7 +192,7 @@
             >
               <button
                 type="button"
-                class="paginate-buttons"
+                 class="paginate-buttons"
                 :class="{ active: page === searchForm.pageno }"
                 @click="changePage(page)"
               >
@@ -202,7 +202,7 @@
 
             <!-- 마지막 페이지 -->
             <li v-if="pageNumbers[pageNumbers.length - 1] < totalPage - 1">
-              <button type="button" class="paginate-buttons" disabled>
+              <button type="button"  class="paginate-buttons" disabled>
                 ...
               </button>
             </li>
@@ -210,7 +210,7 @@
             <li v-if="pageNumbers[pageNumbers.length - 1] < totalPage">
               <button
                 type="button"
-                class="paginate-buttons"
+                 class="paginate-buttons"
                 @click="changePage(totalPage)"
               >
                 {{ totalPage }}
@@ -221,7 +221,7 @@
             <li>
               <button
                 type="button"
-                class="paginate-buttons"
+                 class="paginate-buttons"
                 aria-label="다음"
                 :disabled="searchForm.pageno === totalPage"
                 @click="nextPage"
@@ -234,7 +234,7 @@
             </li>
           </ul>
           <div class="btn-group">
-            <button type="button" class="btn-primary-purple btn-md-fill" @click="handleWrite">등록하기</button>
+            <button type="button"  class="btn-primary-purple btn-md-fill" @click="handleWrite">등록하기</button>
           </div>
         </div>
       </div>

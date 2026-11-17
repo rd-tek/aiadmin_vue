@@ -37,7 +37,7 @@
                   <div class="table-body-col" @click="handleMobOneshotList(index)">
                     <!-- 2026-09-16: 샷번호가 0부터 시작하는 원본값 → 1부터 보이도록 +1 표기 -->
                     <span>{{ item.shotno == null || item.shotno === '' ? '-' : Number(item.shotno) + 1 }}</span>
-                    <button type="button" class="btn-arrow" :class="{ 'is-active': mobOneshotListIndex === index }">
+                    <button type="button"  aria-label="하위 메뉴 펼치기" class="btn-arrow" :class="{ 'is-active': mobOneshotListIndex === index }">
                       <img
                         src="/images/icon/icon_arrow_down.png"
                         alt="펼치기"

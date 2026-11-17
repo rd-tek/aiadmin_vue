@@ -230,13 +230,13 @@
                         <div class="date">{{ item.date }}</div>
                         <div class="desc">{{ item.text }}</div>
                         <div class="btn-wrap align-left">
-                          <button type="button" class="btn-comment" @click="handleComment(index)">
+                          <button type="button"  class="btn-comment" @click="handleComment(index)">
                             <span class="text">답글쓰기</span>
                           </button>
                         </div>
                       </div>
                       <div class="more-area">
-                        <button type="button" class="btn-more" @click="handleTooltip(index)">
+                        <button type="button"  aria-label="더보기" class="btn-more" @click="handleTooltip(index)">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="24"
@@ -269,10 +269,10 @@
                               <div class="cont">
                                 <template v-if="item.is_candelete">
                                   <div class="cont-list">
-                                    <button type="button" class="btn-edit" @click="handleEdit(index)">수정</button>
+                                    <button type="button"  class="btn-edit" @click="handleEdit(index)">수정</button>
                                   </div>
                                   <div class="cont-list">
-                                    <button type="button" class="btn-delete" @click="handleDelete(index)">삭제</button>
+                                    <button type="button"  class="btn-delete" @click="handleDelete(index)">삭제</button>
                                   </div>
                                 </template>
                                 <div class="cont-list" v-else>
@@ -295,8 +295,8 @@
                       </div>
                       <div class="attach-area">
                         <div class="btn-area">
-                          <button type="button" class="btn-default btn-md-line" @click="handleCancel(index)">취소</button>
-                          <button type="button" class="btn-primary-purple btn-md-fill" @click="handleSave(index)">등록</button>
+                          <button type="button"  class="btn-default btn-md-line" @click="handleCancel(index)">취소</button>
+                          <button type="button"  class="btn-primary-purple btn-md-fill" @click="handleSave(index)">등록</button>
                         </div>
                       </div>
                     </div> 
@@ -320,7 +320,7 @@
                           <div class="desc">{{ reply.text }}</div>
                         </div>
                         <div class="more-area">
-                          <button type="button" class="btn-more" @click="handleReplyTooltip(k)">
+                          <button type="button"  aria-label="더보기" class="btn-more" @click="handleReplyTooltip(k)">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               width="24"
@@ -353,10 +353,10 @@
                                 <div class="cont">
                                   <template v-if="reply.is_candelete">
                                     <div class="cont-list">
-                                      <button type="button" class="btn-edit" @click="handleReplyEdit(index, k)">수정</button>
+                                      <button type="button"  class="btn-edit" @click="handleReplyEdit(index, k)">수정</button>
                                     </div>
                                     <div class="cont-list">
-                                      <button type="button" class="btn-delete" @click="handleReplyDelete(index, k)">삭제</button>
+                                      <button type="button"  class="btn-delete" @click="handleReplyDelete(index, k)">삭제</button>
                                     </div>
                                   </template>
                                   <div class="cont-list" v-else>
@@ -379,8 +379,8 @@
                         </div>
                         <div class="attach-area">
                           <div class="btn-area">
-                            <button type="button" class="btn-default btn-md-line" @click="handleReplyCancel(k)">취소</button>
-                            <button type="button" class="btn-primary-purple btn-md-fill" @click="handleReplySave(index, k)">등록</button>
+                            <button type="button"  class="btn-default btn-md-line" @click="handleReplyCancel(k)">취소</button>
+                            <button type="button"  class="btn-primary-purple btn-md-fill" @click="handleReplySave(index, k)">등록</button>
                           </div>
                         </div>
                       </div>
@@ -398,8 +398,8 @@
                       </div>
                       <div class="attach-area">
                         <div class="btn-area">
-                          <button type="button" class="btn-default btn-md-line" @click="handleReplyCancel">취소</button>
-                          <button type="button" class="btn-primary-purple btn-md-fill" @click="handleReplySubmit(index)">등록</button>
+                          <button type="button"  class="btn-default btn-md-line" @click="handleReplyCancel">취소</button>
+                          <button type="button"  class="btn-primary-purple btn-md-fill" @click="handleReplySubmit(index)">등록</button>
                         </div>
                       </div>
                     </div>
@@ -418,7 +418,7 @@
                 </div>
                 <div class="attach-area"> 
                   <div class="btn-area">
-                    <button type="button" class="btn-primary-purple btn-md-fill" @click="handleSubmit">등록</button>
+                    <button type="button"  class="btn-primary-purple btn-md-fill" @click="handleSubmit">등록</button>
                   </div>
                 </div>
               </div> 
@@ -506,7 +506,7 @@ const getDetail = async () => {
   // 백엔드 응답 구조: { swingview: {...}, code:200 }
   if (res.code === 200) {
     // 2026-10-27 AI검토 4차: 없는(삭제된) 번호면 API 가 빈 값(200) — 빈 틀 대신 404 안내
-    if (!res?.swingview?.swing_pk) return showNotFound();
+    if (!res?.swingview?.fit_shotdata_pk && !res?.swingview?.swing_pk) return showNotFound(); // 2026-11-12: aisports2 백엔드는 번호를 fit_shotdata_pk 로 줌(swing_pk 는 스윙 레코드 있을 때만) — 이전엔 정상 영상도 404. 이전: if (!res?.swingview?.swing_pk)
     swingInfo.value = res.swingview || {};
   }
 };

@@ -3,6 +3,7 @@
   <div class="video-wrapper">
     <client-only>
       <!-- src 있을 때만 보여주고, 에러로 가리지 않음 -->
+      <!-- 2026-11-09 aisports1 반영: crossorigin="anonymous" 제거 — S3 응답에 CORS 헤더가 없어 재생이 차단됨(canvas·WebAudio 로 읽는 코드 없음) -->
       <video
         v-show="hasSrc"
         ref="videoRef"
@@ -12,7 +13,6 @@
         preload="auto"
         muted
         :poster="poster || defaultPoster"
-        crossorigin="anonymous"
       ></video>
 
       <div v-if="!hasSrc" class="no-data" />

@@ -35,7 +35,7 @@
               <div class="table-body-col">{{ index + 1 }}</div>
               <div class="table-body-col" @click="handleMobList(index)">
                 <span>{{ item.name }}</span>
-                <button type="button" class="btn-arrow" :class="{ 'is-active': mobListIndex === index }">
+                <button type="button"  aria-label="하위 메뉴 펼치기" class="btn-arrow" :class="{ 'is-active': mobListIndex === index }">
                   <img
                     src="/images/icon/icon_arrow_down.png"
                     alt="펼치기"
@@ -115,7 +115,7 @@
             <li>
               <button
                 type="button"
-                class="paginate-buttons"
+                 class="paginate-buttons"
                 :disabled="pageNo === 1"
                 @click="changePage(pageNo - 1)"
               >
@@ -133,7 +133,7 @@
             >
               <button
                 type="button"
-                class="paginate-buttons"
+                 class="paginate-buttons"
                 :class="{ active: pageNo === page }"
                 @click="changePage(page)"
               >
@@ -145,7 +145,7 @@
             <li>
               <button
                 type="button"
-                class="paginate-buttons"
+                 class="paginate-buttons"
                 :disabled="pageNo === totalPage"
                 @click="changePage(pageNo + 1)"
               >
@@ -157,7 +157,7 @@
             </li>
           </ul>
           <div class="btn-group">
-            <button type="button" class="btn-primary-purple btn-md-fill" @click="handleRegister">등록하기</button>
+            <button type="button"  class="btn-primary-purple btn-md-fill" @click="handleRegister">등록하기</button>
           </div>
         </div>
       </div>

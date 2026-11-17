@@ -7,7 +7,7 @@
             <div class="game-data-title">기간</div>
             <div class="gd-period-body">
               <div class="quick-range" role="group" aria-label="빠른 기간 선택">
-                        <button v-for="r in quickRanges" :key="r.key" type="button" class="quick-range-btn" :class="{ 'is-active': quickKey === r.key }" @click="applyQuickRange(r)">{{ r.label }}</button>
+                        <button v-for="r in quickRanges" :key="r.key" type="button"  class="quick-range-btn" :class="{ 'is-active': quickKey === r.key }" @click="applyQuickRange(r)">{{ r.label }}</button>
           </div>
               <!-- 2026-10-23(태블릿 점검): 768~1024 에서 '~ 종료' 만 윗줄에 남고 종료 날짜가 아랫줄로 갈리던 문제 → 시작/종료를 묶음으로 -->
               <div class="gd-range">
@@ -74,7 +74,7 @@
                 <span class="gd-label">게임 상태</span>
                 <div class="gd-seg" role="radiogroup" aria-label="게임 상태">
                   <button v-for="(lb, i) in ['전체', '진행', '중단', '완료']" :key="'gs' + i" type="button" role="radio"
-                    class="gd-seg-btn" :class="{ 'is-active': searchForm['gamestatus' + i] }" :aria-checked="searchForm['gamestatus' + i] ? 'true' : 'false'"
+                     class="gd-seg-btn" :class="{ 'is-active': searchForm['gamestatus' + i] }" :aria-checked="searchForm['gamestatus' + i] ? 'true' : 'false'"
                     @click="setGameStatus(i)">{{ lb }}</button>
                 </div>
               </div>
@@ -82,7 +82,7 @@
                 <span class="gd-label">회원 유형</span>
                 <div class="gd-seg" role="radiogroup" aria-label="회원 유형">
                   <button v-for="opt in [['', '전체'], ['1', '비회원'], ['2', '회원']]" :key="'mt' + opt[0]" type="button" role="radio"
-                    class="gd-seg-btn" :class="{ 'is-active': String(searchForm.membertype ?? '') === opt[0] }" :aria-checked="String(searchForm.membertype ?? '') === opt[0] ? 'true' : 'false'"
+                     class="gd-seg-btn" :class="{ 'is-active': String(searchForm.membertype ?? '') === opt[0] }" :aria-checked="String(searchForm.membertype ?? '') === opt[0] ? 'true' : 'false'"
                     @click="searchForm.membertype = opt[0]">{{ opt[1] }}</button>
                 </div>
               </div>
@@ -90,11 +90,11 @@
                 <span class="gd-label">코스 종류</span>
                 <div class="gd-seg" role="radiogroup" aria-label="코스 종류">
                   <button v-for="opt in [['', '전체'], ['C', '골프 코스'], ['D', '연습장']]" :key="'ct' + opt[0]" type="button" role="radio"
-                    class="gd-seg-btn" :class="{ 'is-active': String(searchForm.coursetype ?? '') === opt[0] }" :aria-checked="String(searchForm.coursetype ?? '') === opt[0] ? 'true' : 'false'"
+                     class="gd-seg-btn" :class="{ 'is-active': String(searchForm.coursetype ?? '') === opt[0] }" :aria-checked="String(searchForm.coursetype ?? '') === opt[0] ? 'true' : 'false'"
                     @click="searchForm.coursetype = opt[0]">{{ opt[1] }}</button>
                 </div>
               </div>
-              <button type="button" class="gd-more" :aria-expanded="gdMoreOpen ? 'true' : 'false'" @click="gdMoreOpen = !gdMoreOpen">
+              <button type="button"  class="gd-more" :aria-expanded="gdMoreOpen ? 'true' : 'false'" @click="gdMoreOpen = !gdMoreOpen">
                 상세 조건 <span class="gd-more-ico" :class="{ 'is-open': gdMoreOpen }" aria-hidden="true">▾</span>
               </button>
             </div>
@@ -130,8 +130,8 @@
             </div>
           </div>
           <div class="btn-wrap gd-actions">
-            <button type="button" class="btn-md-line" @click="resetSearch">초기화</button>
-            <button type="button" class="btn-md-fill btn-primary-purple" @click="getGameList">검색</button>
+            <button type="button"  class="btn-md-line" @click="resetSearch">초기화</button>
+            <button type="button"  class="btn-md-fill btn-primary-purple" @click="getGameList">검색</button>
           </div>
         </div>
       </div>
@@ -207,9 +207,9 @@
                   </div>
                   <div class="game-data-item">
                   <div class="btn-group">
-                      <button type="button" class="btn-sm-line" :disabled="!isMember(item)" :title="isMember(item) ? '' : NO_MEMBER_TIP" @click="handleScoreboard(item.gameno)">스코어보드</button>
-                      <button type="button" class="btn-sm-line" :disabled="!canShot(item)" :title="shotTip(item)" @click="handleOneshotInfo(item.gameno)">원샷정보</button>
-                      <button type="button" class="btn-sm-line" :disabled="!isMember(item)" :title="isMember(item) ? '' : NO_MEMBER_TIP" @click="handleGameInfo(item.gameno)">게임정보</button>
+                      <button type="button"  class="btn-sm-line" :disabled="!isMember(item)" :title="isMember(item) ? '' : NO_MEMBER_TIP" @click="handleScoreboard(item.gameno)">스코어보드</button>
+                      <button type="button"  class="btn-sm-line" :disabled="!canShot(item)" :title="shotTip(item)" @click="handleOneshotInfo(item.gameno)">원샷정보</button>
+                      <button type="button"  class="btn-sm-line" :disabled="!isMember(item)" :title="isMember(item) ? '' : NO_MEMBER_TIP" @click="handleGameInfo(item.gameno)">게임정보</button>
                   </div>
                   </div>
               </div>
@@ -226,7 +226,7 @@
             <li>
               <button
                 type="button"
-                class="paginate-buttons"
+                 class="paginate-buttons"
                 :disabled="searchForm.pageno === 1"
                 @click="changePage(searchForm.pageno - 1)"
               >
@@ -243,7 +243,7 @@
             >
               <button
                 type="button"
-                class="paginate-buttons"
+                 class="paginate-buttons"
                 :class="{ active: page === searchForm.pageno }"
                 @click="changePage(page)"
               >
@@ -254,7 +254,7 @@
             <li>
               <button
                 type="button"
-                class="paginate-buttons"
+                 class="paginate-buttons"
                 :disabled="searchForm.pageno === totalPages"
                 @click="changePage(searchForm.pageno + 1)"
               >
@@ -281,7 +281,7 @@
                   </div>
                   <div class="table-body-col" @click="handleMobList(index)">
                     <span class="no-wrap">{{ item.playername || '-' }}({{ item.gameplayername || '-' }})</span>
-                    <button type="button" class="btn-arrow" :class="{ 'is-active': mobListIndex === index }">
+                    <button type="button"  aria-label="하위 메뉴 펼치기" class="btn-arrow" :class="{ 'is-active': mobListIndex === index }">
                       <img
                         src="/images/icon/icon_arrow_down.png"
                         alt="펼치기"
@@ -355,9 +355,9 @@
                       <dd class="cnt">{{ item.cnt ? item.cnt + '명' : '-' }}</dd>
                     </dl>
                     <div class="btn-wrap">
-                      <button type="button" class="btn-md-line" :disabled="!isMember(item)" :title="isMember(item) ? '' : NO_MEMBER_TIP" @click="handleScoreboard(item.gameno)">스코어보드</button>
-                      <button type="button" class="btn-md-line" :disabled="!canShot(item)" :title="shotTip(item)" @click="handleOneshotInfo(item.gameno)">원샷정보</button>
-                      <button type="button" class="btn-md-line" :disabled="!isMember(item)" :title="isMember(item) ? '' : NO_MEMBER_TIP" @click="handleGameInfo(item.gameno)">게임정보</button>
+                      <button type="button"  class="btn-md-line" :disabled="!isMember(item)" :title="isMember(item) ? '' : NO_MEMBER_TIP" @click="handleScoreboard(item.gameno)">스코어보드</button>
+                      <button type="button"  class="btn-md-line" :disabled="!canShot(item)" :title="shotTip(item)" @click="handleOneshotInfo(item.gameno)">원샷정보</button>
+                      <button type="button"  class="btn-md-line" :disabled="!isMember(item)" :title="isMember(item) ? '' : NO_MEMBER_TIP" @click="handleGameInfo(item.gameno)">게임정보</button>
                     </div>
                   </div>
                 </transition>
@@ -374,7 +374,7 @@
             <li>
               <button
                 type="button"
-                class="paginate-buttons"
+                 class="paginate-buttons"
                 :disabled="searchForm.pageno === 1"
                 @click="changePage(searchForm.pageno - 1)"
               >
@@ -391,7 +391,7 @@
             >
               <button
                 type="button"
-                class="paginate-buttons"
+                 class="paginate-buttons"
                 :class="{ active: page === searchForm.pageno }"
                 @click="changePage(page)"
               >
@@ -402,7 +402,7 @@
             <li>
               <button
                 type="button"
-                class="paginate-buttons"
+                 class="paginate-buttons"
                 :disabled="searchForm.pageno === totalPages"
                 @click="changePage(searchForm.pageno + 1)"
               >

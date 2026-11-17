@@ -105,7 +105,7 @@
                     class="btn-md-line"
                     @click="handleList"
                 >
-                    목록보기
+                    목록 보기
                 </button>
                 <button
                     type="button"

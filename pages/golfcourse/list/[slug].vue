@@ -88,7 +88,7 @@
                 </div>
             </div>
             <div class="btn-wrap">
-                <nuxt-link to="/golfcourse/list" class="btn-md-line">목록보기</nuxt-link>
+                <nuxt-link to="/golfcourse/list" class="btn-md-line">목록 보기</nuxt-link>
                 <button type="button" class="btn-md-fill btn-primary-purple" @click="handleEdit">수정하기</button>
             </div>
         </div>

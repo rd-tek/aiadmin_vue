@@ -34,7 +34,7 @@
                     </div>
                     <div class="table-body-col" @click="handleMobHoleList(index)">
                       <span>{{ data.par || '-' }}</span>
-                      <button type="button" class="btn-arrow" :class="{ 'is-active': mobHoleListIndex === index }">
+                      <button type="button"  aria-label="하위 메뉴 펼치기" class="btn-arrow" :class="{ 'is-active': mobHoleListIndex === index }">
                         <img
                           src="/images/icon/icon_arrow_down.png"
                           alt="펼치기"
@@ -119,7 +119,7 @@
                   </div>
                   <div class="table-body-col" @click="handleMobGameList(index)">
                     <span>{{ item.total.shopname }}</span>
-                    <button type="button" class="btn-arrow" :class="{ 'is-active': mobGameListIndex === index }">
+                    <button type="button"  aria-label="하위 메뉴 펼치기" class="btn-arrow" :class="{ 'is-active': mobGameListIndex === index }">
                       <img
                         src="/images/icon/icon_arrow_down.png"
                         alt="펼치기"
@@ -187,7 +187,7 @@
           </div>
           </div>
           <div class="btn-wrap">
-            <nuxt-link to="/manager/game-data" class="btn-md-line">목록보기</nuxt-link>
+            <nuxt-link to="/manager/game-data" class="btn-md-line">목록 보기</nuxt-link>
           </div>
         </div>
       </div>

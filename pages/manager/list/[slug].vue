@@ -119,7 +119,7 @@
                         </tbody>
                     </table>
                     <div class="btn-wrap">
-                        <nuxt-link to="/manager/list" class="btn-md-line">목록보기</nuxt-link>
+                        <nuxt-link to="/manager/list" class="btn-md-line">목록 보기</nuxt-link>
                         <button class="btn-primary-purple btn-md-fill" @click="saveAdmin">저장하기</button>
                     </div>
                 </div>

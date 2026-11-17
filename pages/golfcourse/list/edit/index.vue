@@ -36,9 +36,10 @@
                             <th>홀 수</th>
                             <td>
                                 <div class="input-text">
+                                    <!-- 2026-11-16: 이전 v-model="holesum"(없는 변수라 입력값이 저장에 안 실림) -->
                                     <input aria-label="홀 수" 
                                         type="text" 
-                                        v-model="holesum"
+                                        v-model="form.holesum"
                                         placeholder="홀 수를 입력해주세요." 
                                         required>
                                 </div>

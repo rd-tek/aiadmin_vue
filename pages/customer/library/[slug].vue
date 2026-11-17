@@ -59,7 +59,7 @@
                 </div>
             </div>
             <div class="btn-wrap column-reverse">
-                <nuxt-link to="/customer/library" class="btn-md-line">목록보기</nuxt-link>
+                <nuxt-link to="/customer/library" class="btn-md-line">목록 보기</nuxt-link>
                   <button
                         type="button"
                         class="btn-md-line"

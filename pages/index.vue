@@ -12,9 +12,9 @@
           <span class="kpi-unit">이번 달</span>
         </div>
         <div class="kpi-delta" :class="k.deltaClass">
-          <template v-if="k.delta === null">전월 데이터 없음</template>
-          <template v-else-if="k.delta === 0">전월과 동일</template>
-          <template v-else>{{ k.delta > 0 ? '▲' : '▼' }} {{ fmt(Math.abs(k.delta)) }} <small>전월 대비</small></template>
+          <template v-if="k.delta === null">{{ isThisMonth ? '지난달 데이터 없음' : '전월 데이터 없음' }}</template>
+          <template v-else-if="k.delta === 0">{{ isThisMonth ? '지난달 같은 기간과 동일' : '전월과 동일' }}</template>
+          <template v-else>{{ k.delta > 0 ? '▲' : '▼' }} {{ fmt(Math.abs(k.delta)) }} <small>{{ isThisMonth ? '지난달 같은 기간 대비' : '전월 대비' }}</small></template><!-- 2026-11-16: 이전 '전월 대비'(지난달 한 달 전체와 비교) -->
         </div>
         <client-only>
           <dash-echart class="kpi-spark" :option="sparkOption(k)" height="44px" />
@@ -135,9 +135,22 @@ const load = async () => {
   trend.value = { labels: months.map((d, i) => (i === 0 || d.getMonth() === 0 ? `${String(d.getFullYear()).slice(2)}년 ${d.getMonth() + 1}월` : `${d.getMonth() + 1}월`)), rows };
 };
 
+// 2026-11-16: 지금 보는 달이 이번 달인지, 지난달 같은 기간(1일부터 오늘 날짜까지) 건수 — 일별 목록(list: date·cnt)으로 계산
+const isThisMonth = computed(() => { const n = new Date(); return base.value.getFullYear() === n.getFullYear() && base.value.getMonth() === n.getMonth(); });
+const prevSamePeriod = (key) => {
+  const full = num(prev.value?.[`${key}cntmonth`]);
+  if (!isThisMonth.value) return full;
+  const list = prev.value?.[`${key}list`];
+  if (!Array.isArray(list) || !list.length) return full;
+  const today = new Date().getDate();
+  return list.reduce((sum, v) => (Number(String(v.date).slice(-2)) <= today ? sum + num(v.cnt) : sum), 0);
+};
+
 const kpis = computed(() => DEFS.map((def) => {
   const m = num(cur.value[`${def.key}cntmonth`]);
-  const p = prev.value ? num(prev.value[`${def.key}cntmonth`]) : null;
+  // 2026-11-16: 이번 달을 볼 때는 지난달도 오늘 날짜까지만 더해 비교(이전: 지난달 한 달 전체 — 월 중순엔 늘 감소로 보임). 매장앱 '지난달 같은 기간 대비'와 같은 기준
+  // const p = prev.value ? num(prev.value[`${def.key}cntmonth`]) : null;
+  const p = prev.value ? prevSamePeriod(def.key) : null;
   const delta = p === null ? null : m - p;
   return {
     ...def,

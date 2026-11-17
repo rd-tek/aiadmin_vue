@@ -652,7 +652,7 @@
                   <button type="button" class="btn-back" @click="goBack" aria-label="이전">
                     <img
                       src="/images/icon/icon_arrow_prev.png"
-                      alt="icon_arrow_prev"
+                      alt=""
                     />
                   </button>
                   <div class="title">나의 스윙</div>
@@ -681,7 +681,7 @@
                         >
                           <img
                             src="/images/icon/icon_arrow_prev.png"
-                            alt="icon_arrow_prev"
+                            alt="이전"
                           />
                         </button>
                       </div>
@@ -713,7 +713,7 @@
                               <span class="text">{{ item.name }}</span>
                               <img
                                 src="/images/icon/icon_arrow_down_black.png"
-                                alt="icon_arrow_down_black"
+                                alt=""
                               />
                             </a>
                             <transition
@@ -1912,7 +1912,7 @@
               <button type="button" class="btn-back" @click="goBack" aria-label="이전">
                 <img
                   src="/images/icon/icon_arrow_prev.png"
-                  alt="icon_arrow_prev"
+                  alt=""
                 />
               </button>
               <div class="title">나의 스윙</div>
@@ -1930,7 +1930,7 @@
                     <button type="button" class="btn-prev" @click="menuClose" aria-label="닫기">
                       <img
                         src="/images/icon/icon_arrow_prev.png"
-                        alt="icon_arrow_prev"
+                        alt=""
                       />
                     </button>
                   </div>
@@ -1961,7 +1961,7 @@
                           <span class="text">{{ item.name }}</span>
                           <img
                             src="/images/icon/icon_arrow_down_black.png"
-                            alt="icon_arrow_down_black"
+                            alt=""
                           />
                         </a>
                         <transition

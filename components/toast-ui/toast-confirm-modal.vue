@@ -17,7 +17,7 @@
                     </div>
                     <div class="cont-area">
                         <div class="tit">{{ toastConfirmMessage }}</div>
-                        <p class="dsc">{{ toastConfirmDescription || '이 게시물을 수정하시겠습니까? 이 작업은 취소할 수 없습니다.' }}</p><!-- 2026-10-22: 설명 문구를 넘길 수 있게(기본값 = 기존 문구) -->
+                        <p class="dsc">{{ toastConfirmDescription || '이 작업은 취소할 수 없습니다.' }}</p><!-- 2026-10-22: 설명 문구를 넘길 수 있게(기본값 = 기존 문구) -->
                     </div>
                 </div>
                 <div class="toast-modal-footer">
