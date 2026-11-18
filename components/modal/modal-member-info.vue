@@ -87,7 +87,7 @@ const card = computed(() => {
     joined: String(b.regdate || '').slice(0, 10).replace(/-/g, '.'),
     stats: [
       { label: '라운드 수', value: num(p.total_rounds) ? String(num(p.total_rounds)) : '' },
-      { label: '평균 타수', value: fx(p.avg_strokes) },
+      { label: '평균 타수(18홀)', value: fx(p.avg_strokes) }, // 2026-11-18 C안: 이전 '평균 타수' — 라운드 수(9홀 포함)와 기준이 달라 함께 표시
       { label: best !== null && best < 40 ? '베스트(파 대비)' : '베스트 타수', value: bestText },
       { label: '평균 드라이버 거리', value: fx(p.avg_driver_distance, 'm') },
       { label: '평균 퍼트 거리', value: fx(p.avg_putt_distance, 'm') },
