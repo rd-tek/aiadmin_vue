@@ -433,6 +433,7 @@
     </div>
 </template>
 <script setup>
+import { createSideVideoSync } from "@/utils/videoSync";
 // 2026-10-27 AI검토 4차: 일시 표기 통일 "2026-10-20 19:30:00" → "2026.10.20 19:30" (값은 이미 시간대 변환됨, 표기만)
 const dtText = (v) => (v && !/^0000-00-00/.test(String(v)) ? String(v).slice(0, 16).replace(/-/g, ".") : "-");
 import { useRoute } from "vue-router";
@@ -823,15 +824,18 @@ const onSeekSync = (sec) => {
   __seekAll(Number(sec));
   __syncTab(sec);
 };
+// 2026-11-18: 측면 영상 맞춤을 매 프레임 강제 이동에서 완만한 보정으로 변경(영상 버벅임 개선) → utils/videoSync.js
+const __sideSync = createSideVideoSync(
+  () => __players()[0]?.getPlayer?.(),
+  () => __players()[1]?.getPlayer?.(),
+);
 const onVideoTime = (t) => {
   videoTime.value = t;
-  const side = __players()[1]?.getPlayer?.();
-  if (side && Math.abs(Number(side.currentTime?.() || 0) - t) > 0.08) { try { side.currentTime(t); } catch (err) {} }
+  __sideSync.onTime(t);
   __syncTab(t);
 };
 const onVideoState = (state) => {
-  const side = __players()[1];
-  if (state === "play") side?.play?.(); else side?.pause?.();
+  __sideSync.onState(state);
 };
 </script>
 <style lang="scss" scoped>

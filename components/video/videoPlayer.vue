@@ -42,9 +42,20 @@ const emit = defineEmits(['time', 'state'])
 let timeRaf = null
 const stopTimeLoop = () => { if (timeRaf) { cancelAnimationFrame(timeRaf); timeRaf = null } }
 const emitTime = () => { try { emit('time', Number(player?.currentTime?.() || 0)) } catch {} }
+// 2026-11-18: 재생 중 위치 알림을 초당 60회 → 약 30회로 줄이고, 위치가 그대로면 보내지 않음
+//   (알림마다 부모 화면 전체가 다시 그려져 재생이 버벅이던 문제 완화)
+const TIME_EMIT_MS = 33
 const startTimeLoop = () => {
   stopTimeLoop()
-  const loop = () => { emitTime(); timeRaf = requestAnimationFrame(loop) }
+  let lastAt = 0
+  let lastT = -1
+  const loop = (now) => {
+    if (now - lastAt >= TIME_EMIT_MS) {
+      const t = Number(player?.currentTime?.() || 0)
+      if (t !== lastT) { lastAt = now; lastT = t; try { emit('time', t) } catch {} }
+    }
+    timeRaf = requestAnimationFrame(loop)
+  }
   timeRaf = requestAnimationFrame(loop)
 }
 const bindSyncEvents = () => {

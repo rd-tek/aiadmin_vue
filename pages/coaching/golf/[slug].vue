@@ -2781,6 +2781,7 @@
 </template>
 
 <script setup>
+import { createSideVideoSync } from "@/utils/videoSync";
 import { useRouter, useRoute } from "vue-router";
 import { useCoachingApi } from "~/api/coaching";
 import { useMembersApi } from "~/api/members";
@@ -4068,15 +4069,18 @@ const onSeekSync = (sec) => {
   __seekAll(Number(sec));
   __syncTab(sec);
 };
+// 2026-11-18: 측면 영상 맞춤을 매 프레임 강제 이동에서 완만한 보정으로 변경(영상 버벅임 개선) → utils/videoSync.js
+const __sideSync = createSideVideoSync(
+  () => __players()[0]?.getPlayer?.(),
+  () => __players()[1]?.getPlayer?.(),
+);
 const onVideoTime = (t) => {
   videoTime.value = t;
-  const side = __players()[1]?.getPlayer?.();
-  if (side && Math.abs(Number(side.currentTime?.() || 0) - t) > 0.08) { try { side.currentTime(t); } catch (err) {} }
+  __sideSync.onTime(t);
   __syncTab(t);
 };
 const onVideoState = (state) => {
-  const side = __players()[1];
-  if (state === "play") side?.play?.(); else side?.pause?.();
+  __sideSync.onState(state);
 };
 </script>
 <style lang="scss" scoped>
