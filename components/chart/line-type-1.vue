@@ -38,8 +38,15 @@ const props = defineProps({
    *   이전에는 영상과 무관하게 6초짜리 자체 루프가 돌아(영상 길이 약 5초) 재생·정지·이동과 어긋났습니다.
    */
   currentTime: { type: Number, default: null },
+  /**
+   * 2026-11-18: 재생 위치를 담은 ref 를 그대로 넘기는 방식(:clock="videoClock.t").
+   *   currentTime 으로 넘기면 값이 바뀔 때마다 부모 화면 전체가 다시 그려져 영상이 버벅였습니다.
+   *   clock 이 있으면 currentTime 보다 우선합니다.
+   */
+  clock: { type: Object, default: null },
   follow: { type: Boolean, default: false },
 })
+const nowTime = () => (props.clock ? props.clock.value : props.currentTime)
 
 const emit = defineEmits(['seek', 'point', 'balance'])
 
@@ -250,7 +257,7 @@ const startBalanceLoop = () => {
   // 2026-10-21: 영상 동기화 모드에서는 자체 루프 대신 현재 재생 위치로 맞춤
   if (props.follow && seriesData.value.labels.length) {
     stopBalanceLoop()
-    moveMarkTo(timeToIndex(props.currentTime ?? 0))
+    moveMarkTo(timeToIndex(nowTime() ?? 0))
     return
   }
   stopBalanceLoop()
@@ -548,7 +555,7 @@ watch(() => [props.list, props.kind], async () => {
  * 버튼을 누르면 영상도 그 지점에서 멈추므로, 자동으로 흐르던 루프도
  * 함께 멈추고 세로바를 그 자리에 고정합니다.
  */
-watch(() => props.currentTime, (t) => {
+watch(nowTime, (t) => {
   if (!props.follow || t === null || t === undefined) return
   const i = timeToIndex(t)
   if (i === lastMarkIdx) return

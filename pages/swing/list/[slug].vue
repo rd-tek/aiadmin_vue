@@ -76,12 +76,12 @@
               <span></span>
               <span class="foot-area-list">
                 <span class="point teal">L</span>
-                {{ animated.Left }}
+                <chart-balance-value :source="animated.Left" />
               </span>
               <span></span>
               <span class="foot-area-list">
                 <span class="point yellow">B</span>
-                {{ animated.Back }}
+                <chart-balance-value :source="animated.Back" />
               </span>
               <span>
                 <img
@@ -91,12 +91,12 @@
               </span>
               <span class="foot-area-list">
                 <span class="point yellow">F</span>
-                {{ animated.Front }}
+                <chart-balance-value :source="animated.Front" />
               </span>
               <span></span>
               <span class="foot-area-list">
                 <span class="point teal">R</span>
-                {{ animated.Right }}
+                <chart-balance-value :source="animated.Right" />
               </span>
               <span></span>
             </div>
@@ -108,7 +108,7 @@
                 :totalFrames="Number(swingInfo?.fit_total_frames || 0)"
                 :playTime="Number(swingInfo?.fit_play_time || 0)"
                 :markIndex="stageFrame"
-                :currentTime="videoTime"
+                :clock="videoClock.t"
                 :follow="true"
                 @seek="onSeekSync"
                 @balance="onBalance" />
@@ -785,6 +785,8 @@ useHead({
 //   - 구분동작 클릭·그래프 클릭 → 두 영상이 그 프레임으로 이동 후 정지
 
 const videoTime = ref(0);
+// 2026-11-18: 재생 위치·발 밸런스 숫자를 화면(template)에서 직접 읽지 않도록 분리 → 재생 중 화면 전체 재렌더링 방지
+const videoClock = { t: videoTime };
 const __pickRef = (r) => (Array.isArray(r) ? r.filter(Boolean).pop() : r) || null;
 const __players = () => (false
   ? [__pickRef(player1.value), __pickRef(player2.value)]

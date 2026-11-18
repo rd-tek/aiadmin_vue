@@ -750,7 +750,8 @@
                     </div>
                   </nav>
                 </div> -->
-                <div class="swing-wrap">
+                <!-- 2026-11-18: 모바일용 스윙 화면은 모바일 폭에서만 생성(PC에서 숨은 영상 2개가 함께 재생·동기화에 끼어드는 것 방지) -->
+                <div class="swing-wrap" v-if="isMobile">
                   <div class="head">
                     <ul class="category">
                       <li class="category-list">미션 {{ targetStep?.seq }}</li>
@@ -1043,12 +1044,12 @@
                               <span></span>
                               <span class="foot-area-list"
                                 ><span class="point teal">L</span
-                                >{{ animated.Left }}</span
+                                ><chart-balance-value :source="animated.Left" /></span
                               >
                               <span></span>
                               <span class="foot-area-list"
                                 ><span class="point yellow">B</span
-                                >{{ animated.Back }}</span
+                                ><chart-balance-value :source="animated.Back" /></span
                               >
                               <span>
                                 <img
@@ -1058,12 +1059,12 @@
                               </span>
                               <span class="foot-area-list"
                                 ><span class="point yellow">F</span
-                                >{{ animated.Front }}</span
+                                ><chart-balance-value :source="animated.Front" /></span
                               >
                               <span></span>
                               <span class="foot-area-list"
                                 ><span class="point teal">R</span
-                                >{{ animated.Right }}</span
+                                ><chart-balance-value :source="animated.Right" /></span
                               >
                               <span></span>
                             </div>
@@ -1074,7 +1075,7 @@
                               "
                               :playTime="Number(swingView?.fit_play_time || 0)"
                               :markIndex="stageFrame"
-                              :currentTime="videoTime"
+                              :clock="videoClock.t"
                               :follow="true"
                               @seek="onSeekSync"
                               @balance="onBalance"
@@ -2275,12 +2276,12 @@
                           <span></span>
                           <span class="foot-area-list"
                             ><span class="point teal">L</span
-                            >{{ animated.Left }}</span
+                            ><chart-balance-value :source="animated.Left" /></span
                           >
                           <span></span>
                           <span class="foot-area-list"
                             ><span class="point yellow">B</span
-                            >{{ animated.Back }}</span
+                            ><chart-balance-value :source="animated.Back" /></span
                           >
                           <span>
                             <img
@@ -2290,12 +2291,12 @@
                           </span>
                           <span class="foot-area-list"
                             ><span class="point yellow">F</span
-                            >{{ animated.Front }}</span
+                            ><chart-balance-value :source="animated.Front" /></span
                           >
                           <span></span>
                           <span class="foot-area-list"
                             ><span class="point teal">R</span
-                            >{{ animated.Right }}</span
+                            ><chart-balance-value :source="animated.Right" /></span
                           >
                           <span></span>
                         </div>
@@ -2306,7 +2307,7 @@
                           "
                           :playTime="Number(swingView?.fit_play_time || 0)"
                           :markIndex="stageFrame"
-                          :currentTime="videoTime"
+                          :clock="videoClock.t"
                           :follow="true"
                           @seek="onSeekSync"
                           @balance="onBalance"
@@ -4030,6 +4031,8 @@ useHead({
 const player1m = ref(null);
 const player2m = ref(null);
 const videoTime = ref(0);
+// 2026-11-18: 재생 위치·발 밸런스 숫자를 화면(template)에서 직접 읽지 않도록 분리 → 재생 중 화면 전체 재렌더링 방지
+const videoClock = { t: videoTime };
 const __pickRef = (r) => (Array.isArray(r) ? r.filter(Boolean).pop() : r) || null;
 const __players = () => ((import.meta.client && window.innerWidth <= 1024)
   ? [__pickRef(player1m.value), __pickRef(player2m.value)]
