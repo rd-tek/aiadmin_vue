@@ -335,6 +335,9 @@ const dpMenuPosition = (el) => {
   const gap = 10;
   const below = window.innerHeight - input.bottom;
   const top = menuH + gap > below && input.top > below ? input.top - gap - menuH : input.bottom + gap;
+  // 2026-11-18: 처음 열릴 때는 달력이 아직 없어 높이를 추정값(330)으로 계산 → 위로 열리면 실제 높이(약 285)와의 차이만큼 입력칸에서 떨어져 보였음
+  //   → 높이를 못 잰 첫 계산이면 달력이 그려진 뒤 resize 를 한 번 보내 라이브러리가 실제 높이로 다시 계산하게 함(두 번째는 높이가 있어 반복 안 됨)
+  if (!menu) requestAnimationFrame(() => requestAnimationFrame(() => window.dispatchEvent(new Event("resize"))));
   const maxLeft = document.documentElement.clientWidth - menuW - 8;
   const left = Math.max(8, Math.min(input.left + input.width / 2 - menuW / 2, maxLeft));
   return { top: `${(top + window.scrollY) / zoom}px`, left: `${(left + window.scrollX) / zoom}px` };
