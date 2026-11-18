@@ -39,7 +39,10 @@
           <div class="table-body-row is-move" v-for="item in list" :key="item.recommend_exercise_pk">
             <div class="table-body-flex flex-column">
               <div class="table-body-col col-2 ex-c-thumb">
-                <button type="button" class="ex-thumb" :aria-label="item.title + ' 수정'" :style="{ backgroundImage: `url(${thumb(item.thumbnail_url)})` }" @click="openEdit(item)"></button>
+                <!-- 2026-11-18: 대표 이미지가 없거나 불러오지 못하면 기본 로고(img_logo_black.png) 표시, alt 추가 -->
+                <button type="button" class="ex-thumb" :class="{ 'is-empty': !hasThumb(item.thumbnail_url) }" :aria-label="item.title + ' 수정'" @click="openEdit(item)">
+                  <img :src="thumb(item.thumbnail_url)" :alt="hasThumb(item.thumbnail_url) ? `${item.title || '추천 운동'} 대표 이미지` : 'X-COACH 로고 (대표 이미지 없음)'" loading="lazy" @error="onThumbError(item.thumbnail_url)" />
+                </button>
               </div>
               <div class="table-body-col align-left ex-info">
                 <button type="button" class="link ex-title" @click="openEdit(item)">{{ item.title }}</button>
@@ -75,10 +78,11 @@
       </div>
       <div class="ex-form">
         <div class="ex-img">
-          <div class="ex-img-preview" :class="{ 'is-empty': !preview }" :style="preview ? { backgroundImage: `url(${preview})` } : {}">
-            <span v-if="!preview">대표 이미지</span>
+          <!-- 2026-11-18: 대표 이미지가 없거나 불러오지 못하면 기본 로고(img_logo_black.png) 표시, alt 추가 -->
+          <div class="ex-img-preview" :class="{ 'is-empty': !hasPreview }">
+            <img :src="hasPreview ? preview : defaultThumb" :alt="hasPreview ? `${edit.form.title || '추천 운동'} 대표 이미지` : 'X-COACH 로고 (대표 이미지 없음)'" @error="onPreviewError" />
           </div>
-          <button type="button" class="btn-xs-line ex-file" @click="fileInput?.click()">{{ preview ? '이미지 바꾸기' : '이미지 선택' }}</button>
+          <button type="button" class="btn-xs-line ex-file" @click="fileInput?.click()">{{ hasPreview ? '이미지 바꾸기' : '이미지 선택' }}</button>
           <input ref="fileInput" class="ex-file-input" type="file" accept="image/jpeg,image/png,image/gif" aria-label="대표 이미지 파일 선택" @change="onFile" />
           <p class="ex-help">JPG·PNG, 가로형(7:5) 권장</p>
         </div>
@@ -118,10 +122,19 @@ const list = ref([]); const total = ref(0); const loaded = ref(false);
 const pageno = ref(1); const status = ref(""); const owner = ref(""); const searchname = ref("");
 const toast = reactive({ open: false, msg: "" });
 const notify = (m) => { toast.msg = m; toast.open = true; };
-const thumb = (u) => (u ? common.getImg(u) : "/images/default/img_logo.png");
+// 2026-11-18: 이미지가 비었거나 불러오기 실패하면 기본 로고로 대체
+const defaultThumb = "/images/default/img_logo_black.png";
+const brokenThumbs = reactive({});
+const hasThumb = (u) => !!String(u || "").trim() && !brokenThumbs[u];
+const onThumbError = (u) => { if (u) brokenThumbs[u] = true; };
+const thumb = (u) => (hasThumb(u) ? common.getImg(u) : defaultThumb);
 const blank = () => ({ title: "", target_audience: "", objective: "", content: "", video_url: "", status: 1, thumbnail_url: "" });
 const edit = reactive({ open: false, pk: 0, form: blank(), file: null, error: "", saving: false });
 const preview = ref("");
+const previewBroken = ref(false);
+const hasPreview = computed(() => !!preview.value && !previewBroken.value);
+const onPreviewError = () => { if (preview.value) previewBroken.value = true; };
+watch(preview, () => { previewBroken.value = false; });
 const fileInput = ref(null);
 
 const load = async () => {
@@ -196,7 +209,9 @@ onMounted(load);
 .table-body-col .color-grey { white-space: nowrap; }
 .ex-top { display: flex; justify-content: space-between; align-items: center; }
 .ex-new { min-width: 0 !important; width: auto !important; padding: 0 16px !important; }
-.ex-thumb { display: block; width: 84px; aspect-ratio: 7 / 5; border: 1px solid #E5E7E8; border-radius: 8px; background: #F1F3F4 center / cover no-repeat; cursor: pointer; margin: 0 auto; }
+.ex-thumb { display: block; width: 84px; aspect-ratio: 7 / 5; border: 1px solid #E5E7E8; border-radius: 8px; background: #F1F3F4; cursor: pointer; margin: 0 auto; padding: 0; overflow: hidden; }
+.ex-thumb img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.ex-thumb.is-empty img { object-fit: contain; box-sizing: border-box; padding: 14%; }
 .ex-info { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 4px; min-width: 0; }
 .ex-title { font-weight: 600; color: #17191C; }
 .ex-sub { font-size: 13px; color: #72777A; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; }
@@ -206,8 +221,9 @@ onMounted(load);
 .ex-sport { font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 6px; background: #F1F3F4; color: #5B6168; }
 .ex-form { display: grid; grid-template-columns: 280px minmax(0, 1fr); gap: 28px; }
 .ex-img { display: flex; flex-direction: column; gap: 10px; }
-.ex-img-preview { width: 100%; aspect-ratio: 7 / 5; border-radius: 12px; border: 1px solid #E5E7E8; background: #F7F8F9 center / cover no-repeat; display: flex; align-items: center; justify-content: center; }
-.ex-img-preview.is-empty span { font-size: 13px; color: #9AA0A6; }
+.ex-img-preview { width: 100%; aspect-ratio: 7 / 5; border-radius: 12px; border: 1px solid #E5E7E8; background: #F7F8F9; overflow: hidden; }
+.ex-img-preview img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.ex-img-preview.is-empty img { object-fit: contain; box-sizing: border-box; padding: 18%; }
 .ex-file { align-self: flex-start; padding: 0 14px !important; min-width: 0 !important; width: auto !important; }
 .ex-file-input { display: none; }
 .ex-help { font-size: 12px; color: #9AA0A6; }

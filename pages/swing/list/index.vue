@@ -35,7 +35,15 @@
             <div class="row-list-item">
               <div class="cont-wrap">
                 <div class="img-area">
-                  <div class="image" :style="{ backgroundImage: `url(${item.fit_preview_path})` }"></div>
+                  <!-- 2026-11-18: 썸네일이 없거나 불러오지 못하면 기본 로고(img_logo_black.png) 표시, alt 추가 -->
+                  <div class="image" :class="{ 'is-empty': !hasThumb(item) }">
+                    <img
+                      :src="hasThumb(item) ? item.fit_preview_path : defaultThumb"
+                      :alt="hasThumb(item) ? `${item.title || '스윙영상'} 썸네일` : 'X-COACH 로고 (썸네일 없음)'"
+                      loading="lazy"
+                      @error="onThumbError(item)"
+                    />
+                  </div>
                 </div>
                 <nuxt-link :to="`/swing/list/${item.fit_shotdata_pk}`" class="info-area">
                   <div class="label" :class="{ 'color-green': item.view_flag === '1' }">{{ item.view_flag === '1' ? '공개' : '비공개' }}</div>
@@ -168,6 +176,17 @@ const { _swingList } = useSwingApi();
 
 // 2026.06.16[cgnoh]: 스윙영상 리스트
 const rowList = ref([]);
+// 2026-11-18: 썸네일이 비었거나 불러오기 실패하면 기본 로고로 대체
+const defaultThumb = '/images/default/img_logo_black.png';
+const brokenThumbs = reactive({});
+const hasThumb = (item) => {
+  const p = String(item?.fit_preview_path || '').trim();
+  return !!p && !brokenThumbs[p];
+};
+const onThumbError = (item) => {
+  const p = String(item?.fit_preview_path || '').trim();
+  if (p) brokenThumbs[p] = true;
+};
 
 // 2026.06.16[cgnoh]: 페이지 관련
 const pageNo = ref(1);
