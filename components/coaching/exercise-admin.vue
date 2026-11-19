@@ -209,7 +209,7 @@ onMounted(load);
 .table-body-col .color-grey { white-space: nowrap; }
 .ex-top { display: flex; justify-content: space-between; align-items: center; }
 .ex-new { min-width: 0 !important; width: auto !important; padding: 0 16px !important; }
-.ex-thumb { display: block; width: 84px; aspect-ratio: 7 / 5; border: 1px solid #E5E7E8; border-radius: 8px; background: #F1F3F4; cursor: pointer; margin: 0 auto; padding: 0; overflow: hidden; }
+.ex-thumb { display: block; width: 84px; aspect-ratio: 7 / 5; border: 1px solid #E5E7E8; border-radius: 8px; background-color: #F1F3F4; cursor: pointer; margin: 0 auto; padding: 0; overflow: hidden; }
 .ex-thumb img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .ex-thumb.is-empty img { object-fit: contain; box-sizing: border-box; padding: 14%; }
 .ex-info { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 4px; min-width: 0; }

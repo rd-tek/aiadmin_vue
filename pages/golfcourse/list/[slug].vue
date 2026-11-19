@@ -6,10 +6,12 @@
                 <div class="sub">코드: {{ courseData.coursecode || '-' }}</div>
             </div>
             <div class="view-area">
-                <div class="img-area" :style="{
-                    backgroundImage: `url('${common.getImg(
-                        courseData.imgurl,
-                    )}')`,
+                <!-- 2026-11-19: 코스 이미지가 없거나 불러오지 못하면 XGOLF 로고 노데이터 이미지(img_course_nodata.png) 표시.
+                     배경을 두 겹으로 깔아(코스 이미지 위, 노데이터 아래) 코스 이미지가 깨져도 아래 이미지가 보인다 -->
+                <div class="img-area" role="img" :aria-label="courseData.imgurl ? `${courseData.coursename} 코스 이미지` : '등록된 코스 이미지 없음'" :style="{
+                    backgroundImage: courseData.imgurl
+                        ? `url('${common.getImg(courseData.imgurl)}'), url('${courseNoDataImg}')`
+                        : `url('${courseNoDataImg}')`,
                     }">
                     <!-- 2026-10-30 서비스 정리(토너먼트/이벤트 숨김) 누락분: 코스 이미지의 'T'(토너먼트) 표시 — 데이터와 무관한 고정 글자라 모든 코스에 붙어 보였음. 다시 쓰려면 주석 해제
                     <span class="label">T</span>
@@ -130,6 +132,9 @@ const eventList = ref([]);
 
 // 2026.06.18[cgnoh]: 코스 기본 정보
 const courseData = ref({});
+
+// 2026-11-19: 코스 이미지가 없을 때 쓰는 노데이터 이미지(XGOLF 로고)
+const courseNoDataImg = "/images/default/img_course_nodata.png";
 
 // 2026.06.18[cgnoh]: 서브코스 목록
 const subCourseList = ref([]);

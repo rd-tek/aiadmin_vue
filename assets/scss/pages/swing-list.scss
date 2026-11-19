@@ -102,12 +102,17 @@
                     }
 
                     .img-area {
+                        // 2026-11-19: 썸네일 크기 고정(180px). <img> 로 바꾼 뒤 원본 이미지 크기에 따라
+                        // 썸네일 칸이 행마다 다르게 커지던 문제 — 칸 너비를 고정하고 이미지는 칸에 맞춘다
+                        flex: 0 0 180px;
+                        width: 180px;
+
                         .image {
                             aspect-ratio: 175/108;
                             border: 1px solid #ccc;
                             border-radius: 6px;
                             background-color: #D9D9D9;
-                            min-width: 180px;
+                            width: 100%;
                             background-size: cover;
                             background-repeat: no-repeat;
                             background-position: center;
@@ -784,6 +789,8 @@
                         align-items: flex-start;
 
                         .img-area {
+                            // 2026-11-19: 모바일은 세로 배치라 썸네일을 가로 전체로(PC 고정 너비 해제)
+                            flex: none;
                             width: 100%;
                         }
 
