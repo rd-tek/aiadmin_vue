@@ -939,7 +939,7 @@
                         <ul class="tab type03 box">
                           <li
                             class="tab-list"
-                            :class="{ 'is-active': currentTab == 'address' }"
+                            is="vue:chart-stage-tab" name="address" :current="stageTab.r"
                             @click="
                               onStageSync(swingView?.fit_address, 'address')
                             "
@@ -951,9 +951,7 @@
                           </li>
                           <li
                             class="tab-list"
-                            :class="{
-                              'is-active': currentTab == 'backswing',
-                            }"
+                            is="vue:chart-stage-tab" name="backswing" :current="stageTab.r"
                             @click="
                               onStageSync(swingView?.fit_takeback, 'backswing')
                             "
@@ -966,7 +964,7 @@
 
                           <li
                             class="tab-list"
-                            :class="{ 'is-active': currentTab == 'topswing' }"
+                            is="vue:chart-stage-tab" name="topswing" :current="stageTab.r"
                             @click="
                               onStageSync(swingView?.fit_top_swing, 'topswing')
                             "
@@ -979,9 +977,7 @@
 
                           <li
                             class="tab-list"
-                            :class="{
-                              'is-active': currentTab == 'downswing',
-                            }"
+                            is="vue:chart-stage-tab" name="downswing" :current="stageTab.r"
                             @click="
                               onStageSync(
                                 swingView?.fit_down_swing,
@@ -997,7 +993,7 @@
 
                           <li
                             class="tab-list"
-                            :class="{ 'is-active': currentTab == 'impact' }"
+                            is="vue:chart-stage-tab" name="impact" :current="stageTab.r"
                             @click="
                               onStageSync(swingView?.fit_impact, 'impact')
                             "
@@ -1009,9 +1005,7 @@
                           </li>
                           <li
                             class="tab-list"
-                            :class="{
-                              'is-active': currentTab == 'follow-through',
-                            }"
+                            is="vue:chart-stage-tab" name="follow-through" :current="stageTab.r"
                             @click="
                               onStageSync(
                                 swingView?.fit_follow,
@@ -1026,7 +1020,7 @@
                           </li>
                           <li
                             class="tab-list"
-                            :class="{ 'is-active': currentTab == 'finish' }"
+                            is="vue:chart-stage-tab" name="finish" :current="stageTab.r"
                             @click="
                               onStageSync(swingView?.fit_finish, 'finish')
                             "
@@ -2183,7 +2177,7 @@
                     <ul class="tab type03 box">
                       <li
                         class="tab-list"
-                        :class="{ 'is-active': currentTab == 'address' }"
+                        is="vue:chart-stage-tab" name="address" :current="stageTab.r"
                         @click="onStageSync(swingView?.fit_address, 'address')"
                       >
                         <span class="icon">
@@ -2193,9 +2187,7 @@
                       </li>
                       <li
                         class="tab-list"
-                        :class="{
-                          'is-active': currentTab == 'backswing',
-                        }"
+                        is="vue:chart-stage-tab" name="backswing" :current="stageTab.r"
                         @click="
                           onStageSync(swingView?.fit_takeback, 'backswing')
                         "
@@ -2208,7 +2200,7 @@
 
                       <li
                         class="tab-list"
-                        :class="{ 'is-active': currentTab == 'topswing' }"
+                        is="vue:chart-stage-tab" name="topswing" :current="stageTab.r"
                         @click="
                           onStageSync(swingView?.fit_top_swing, 'topswing')
                         "
@@ -2221,9 +2213,7 @@
 
                       <li
                         class="tab-list"
-                        :class="{
-                          'is-active': currentTab == 'downswing',
-                        }"
+                        is="vue:chart-stage-tab" name="downswing" :current="stageTab.r"
                         @click="
                           onStageSync(swingView?.fit_down_swing, 'downswing')
                         "
@@ -2236,7 +2226,7 @@
 
                       <li
                         class="tab-list"
-                        :class="{ 'is-active': currentTab == 'impact' }"
+                        is="vue:chart-stage-tab" name="impact" :current="stageTab.r"
                         @click="onStageSync(swingView?.fit_impact, 'impact')"
                       >
                         <span class="icon">
@@ -2246,9 +2236,7 @@
                       </li>
                       <li
                         class="tab-list"
-                        :class="{
-                          'is-active': currentTab == 'follow-through',
-                        }"
+                        is="vue:chart-stage-tab" name="follow-through" :current="stageTab.r"
                         @click="
                           onStageSync(swingView?.fit_follow, 'follow-through')
                         "
@@ -2260,7 +2248,7 @@
                       </li>
                       <li
                         class="tab-list"
-                        :class="{ 'is-active': currentTab == 'finish' }"
+                        is="vue:chart-stage-tab" name="finish" :current="stageTab.r"
                         @click="onStageSync(swingView?.fit_finish, 'finish')"
                       >
                         <span class="icon">
@@ -2792,6 +2780,8 @@ import EChart from "~/components/chart/EChart.vue";
 import EChart2 from "~/components/chart/EChart2.vue";
 import EChart3 from "~/components/chart/EChart3.vue";
 import VideoPlayer from "~/components/video/videoPlayer.vue";
+// 2026-11-19: 구분동작 탭 한 칸(재생 중 탭 표시만 따로 갱신)
+import ChartStageTab from "~/components/chart/stage-tab.vue";
 import { useWindowSize } from "@vueuse/core";
 import { useHead } from "#app";
 import toastModal from "@/components/toast-ui/toast-modal.vue";
@@ -4033,6 +4023,8 @@ const player2m = ref(null);
 const videoTime = ref(0);
 // 2026-11-18: 재생 위치·발 밸런스 숫자를 화면(template)에서 직접 읽지 않도록 분리 → 재생 중 화면 전체 재렌더링 방지
 const videoClock = { t: videoTime };
+// 2026-11-19: 구분동작 탭 표시도 화면(template)에서 직접 읽지 않도록 분리(chart-stage-tab) → 재생 중 구분동작이 바뀔 때 화면 전체 재렌더링 방지
+const stageTab = { r: currentTab };
 const __pickRef = (r) => (Array.isArray(r) ? r.filter(Boolean).pop() : r) || null;
 const __players = () => ((import.meta.client && window.innerWidth <= 1024)
   ? [__pickRef(player1m.value), __pickRef(player2m.value)]

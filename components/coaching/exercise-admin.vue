@@ -94,9 +94,22 @@
           <label class="ex-row"><span class="ex-label">운동 설명</span><textarea v-model="edit.form.content" rows="4" placeholder="방법·횟수·주의할 점"></textarea></label>
           <label class="ex-row"><span class="ex-label">영상 주소</span><input type="text" v-model.trim="edit.form.video_url" maxlength="500" placeholder="https://" /></label>
           <div class="ex-row"><span class="ex-label">공개 여부</span>
-            <div class="ex-radio">
-              <label><input type="radio" :value="1" v-model="edit.form.status" /> 공개</label>
-              <label><input type="radio" :value="0" v-model="edit.form.status" /> 비공개</label>
+            <!-- 2026-11-19: 브라우저 기본 라디오 → 공통 라디오(radio-box, 가이드·다른 화면과 같은 모양) -->
+            <div class="ex-radio" role="radiogroup" aria-label="공개 여부">
+              <div class="radio-box">
+                <input type="radio" id="ex_status_open" name="ex_status" :value="1" v-model="edit.form.status" />
+                <label for="ex_status_open">
+                  <span class="check-box-item" />
+                  <span class="check-box-txt">공개</span>
+                </label>
+              </div>
+              <div class="radio-box">
+                <input type="radio" id="ex_status_closed" name="ex_status" :value="0" v-model="edit.form.status" />
+                <label for="ex_status_closed">
+                  <span class="check-box-item" />
+                  <span class="check-box-txt">비공개</span>
+                </label>
+              </div>
             </div>
           </div>
         </div>
@@ -237,7 +250,7 @@ onMounted(load);
 .ex-label .req { color: #D81E3C; font-style: normal; }
 .ex-row input[type="text"], .ex-row textarea { width: 100%; border: 1px solid #DDE1E6; border-radius: 8px; padding: 10px 12px; font-size: 14px; color: #17191C; background: #fff; }
 .ex-row textarea { resize: vertical; min-height: 96px; line-height: 1.6; }
-.ex-radio { display: flex; gap: 20px; font-size: 14px; color: #35383B; label { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; } }
+.ex-radio { display: flex; align-items: center; gap: 20px; font-size: 14px; color: #35383B; .radio-box + .radio-box { margin-left: 0; } }
 .ex-error { margin-top: 14px; font-size: 13px; color: #D81E3C; text-align: right; }
 .ex-foot { display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px; button { min-width: 88px !important; width: auto !important; } }
 @media screen and (max-width: 768px) {

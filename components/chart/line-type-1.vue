@@ -5,7 +5,16 @@
       차트 요소는 v-show 로 남겨 둡니다. v-if 로 없애면 ref 가
       사라져 나중에 데이터가 와도 그릴 대상이 없습니다.
   -->
-  <div class="line-chart" ref="chartRef" v-show="hasData"></div>
+  <!--
+    2026-11-19: 재생 위치 세로바를 차트 밖의 얇은 막대(.line-chart-mark)로 분리했습니다.
+      이전에는 세로바를 옮길 때마다(재생 중 초당 약 30회) 차트 전체(그림자 있는 곡선 포함)를
+      다시 그려 영상 재생이 버벅였습니다. 이제는 막대의 위치만 옮기고 차트는 다시 그리지 않습니다.
+      바깥 .line-chart 가 크기를 정하고(부모 화면의 높이 지정 그대로), 안쪽 .line-chart-canvas 에 차트를 그립니다.
+  -->
+  <div class="line-chart" v-show="hasData">
+    <div class="line-chart-canvas" ref="chartRef"></div>
+    <div class="line-chart-mark" ref="markRef" aria-hidden="true"></div>
+  </div>
   <div class="no-info" v-if="!hasData">내역이 없습니다.</div>
 </template>
 
@@ -51,7 +60,30 @@ const nowTime = () => (props.clock ? props.clock.value : props.currentTime)
 const emit = defineEmits(['seek', 'point', 'balance'])
 
 const chartRef = ref(null)
+const markRef = ref(null)
 let chartInstance = null
+
+/**
+ * 2026-11-19: 세로바(재생 위치) — 차트를 다시 그리지 않고 막대 위치만 옮깁니다.
+ *   markIdx 는 지금 세로바가 가리키는 데이터 인덱스(없으면 -1). 크기 변경·확대 이동 때 다시 맞추는 데 씁니다.
+ */
+let markIdx = -1
+const placeMark = (idx) => {
+  const el = markRef.value
+  if (!el) return
+  if (idx !== undefined) markIdx = idx
+  let x = NaN
+  if (chartInstance && markIdx >= 0) {
+    try { x = Number(chartInstance.convertToPixel({ xAxisIndex: 0 }, markIdx)) } catch {}
+  }
+  const width = chartRef.value?.clientWidth || 0
+  if (!Number.isFinite(x) || x < -1 || x > width + 1) {
+    el.style.opacity = '0'
+    return
+  }
+  el.style.transform = `translate3d(${Math.round(x * 10) / 10}px, 0, 0)`
+  el.style.opacity = '1'
+}
 
 /* -------------------- 유틸 -------------------- */
 const parseCSV = (csv) =>
@@ -237,9 +269,8 @@ const moveMarkTo = (idx) => {
   pendingMarkIdx = null
   const i = Math.max(0, Math.min(len - 1, Math.round(Number(idx) || 0)))
   lastMarkIdx = i
-  chartInstance.setOption({
-    series: [{ markLine: { data: [{ xAxis: i }] } }],
-  })
+  // 2026-11-19: setOption(차트 전체 다시 그리기) 대신 막대 위치만 이동
+  placeMark(i)
   emit('balance', { index: i, pct: pctAt(i) })
 }
 
@@ -315,9 +346,8 @@ const startBalanceLoop = () => {
      */
     if (idx !== lastMarkIdx) {
       lastMarkIdx = idx
-      chartInstance?.setOption({
-        series: [{ markLine: { data: [{ xAxis: idx }] } }],
-      })
+      // 2026-11-19: setOption 대신 막대 위치만 이동
+      placeMark(idx)
     }
 
     if (p < 1) rafId = requestAnimationFrame(tick)
@@ -483,10 +513,16 @@ const render = () => {
 
   if (!chartInstance) {
     chartInstance = echarts.init(chartRef.value, null, { renderer: 'canvas', useDirtyRect: false })
+    lastW = chartRef.value.clientWidth
+    lastH = chartRef.value.clientHeight
   }
 
   const { labels, values, getAt, hasFB } = seriesData.value
   chartInstance.setOption(buildOption(labels, values, { getAt, hasFB }), true)
+  // 2026-11-19: 데이터가 바뀌면 세로바를 숨겼다가 새 위치가 정해질 때 다시 표시, 확대·이동 시에는 위치 재계산
+  placeMark(-1)
+  chartInstance.off('datazoom')
+  chartInstance.on('datazoom', () => placeMark())
 
   // ✅ 차트 애니메이션과 동일한 6초에 맞춰 부모 animated 업데이트
   startBalanceLoop()
@@ -520,11 +556,19 @@ const render = () => {
   //   그릴 때마다 쌓이는 누수였습니다.
 }
 
+// 2026-11-19: 크기가 실제로 바뀐 때만 다시 그립니다.
+//   이 함수는 스크롤 때도 불리는데, 이전에는 크기가 그대로여도 스크롤할 때마다 차트 전체를 다시 그렸습니다.
+let lastW = 0
+let lastH = 0
 const resizeChart = () => {
   if (!chartInstance) return
   const dom = chartRef.value
   if (!dom || dom.clientWidth === 0 || dom.clientHeight === 0) return
+  if (dom.clientWidth === lastW && dom.clientHeight === lastH) return
+  lastW = dom.clientWidth
+  lastH = dom.clientHeight
   chartInstance.resize()
+  placeMark()
 }
 
 /**
@@ -599,8 +643,27 @@ onBeforeUnmount(() => {
   color: #52575C;
   font-size: 15px;
 }.line-chart {
+  position: relative;
   width: 100%;
   height: 11.5vh;
+}
+
+/* 2026-11-19: 차트는 안쪽 칸에, 재생 위치 세로바는 그 위에 겹친 얇은 막대로(색·굵기는 이전 세로바와 같게) */
+.line-chart-canvas {
+  width: 100%;
+  height: 100%;
+}
+
+.line-chart-mark {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -1px;
+  width: 2px;
+  background: rgba(53, 56, 59, 0.85);
+  opacity: 0;
+  pointer-events: none;
+  will-change: transform;
 }
 
 ::v-deep(.custom-tooltip) {
