@@ -27,7 +27,8 @@
     </div>
     <div class="table type03 mob-type02">
       <div class="table-head is-mob">
-        <div class="table-head-col col-2">이미지</div>
+        <!-- 2026-11-19: 썸네일 84px → 128px(모바일 96px → 112px). 이미지 칸은 비율(col-N) 대신 썸네일에 딱 맞는 고정 너비(ex-col-thumb)로 — 좌우 빈 간격 축소 -->
+        <div class="table-head-col ex-col-thumb">이미지</div>
         <div class="table-head-col">운동</div>
         <div class="table-head-col col-1">등록</div>
         <div class="table-head-col col-1">사용</div>
@@ -38,7 +39,7 @@
         <template v-if="list.length">
           <div class="table-body-row is-move" v-for="item in list" :key="item.recommend_exercise_pk">
             <div class="table-body-flex flex-column">
-              <div class="table-body-col col-2 ex-c-thumb">
+              <div class="table-body-col ex-col-thumb ex-c-thumb">
                 <!-- 2026-11-18: 대표 이미지가 없거나 불러오지 못하면 기본 로고(img_logo_black.png) 표시, alt 추가 -->
                 <button type="button" class="ex-thumb" :class="{ 'is-empty': !hasThumb(item.thumbnail_url) }" :aria-label="item.title + ' 수정'" @click="openEdit(item)">
                   <img :src="thumb(item.thumbnail_url)" :alt="hasThumb(item.thumbnail_url) ? `${item.title || '추천 운동'} 대표 이미지` : 'X-COACH 로고 (대표 이미지 없음)'" loading="lazy" @error="onThumbError(item.thumbnail_url)" />
@@ -209,7 +210,9 @@ onMounted(load);
 .table-body-col .color-grey { white-space: nowrap; }
 .ex-top { display: flex; justify-content: space-between; align-items: center; }
 .ex-new { min-width: 0 !important; width: auto !important; padding: 0 16px !important; }
-.ex-thumb { display: block; width: 84px; aspect-ratio: 7 / 5; border: 1px solid #E5E7E8; border-radius: 8px; background-color: #F1F3F4; cursor: pointer; margin: 0 auto; padding: 0; overflow: hidden; }
+/* 이미지 칸: 썸네일 128px + 좌우 여백 10px */
+.ex-admin .table-head-col.ex-col-thumb, .ex-admin .table-body-col.ex-col-thumb { flex: 0 0 148px; }
+.ex-thumb { display: block; width: 128px; max-width: 100%; aspect-ratio: 7 / 5; border: 1px solid #E5E7E8; border-radius: 8px; background-color: #F1F3F4; cursor: pointer; margin: 0 auto; padding: 0; overflow: hidden; }
 .ex-thumb img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .ex-thumb.is-empty img { object-fit: contain; box-sizing: border-box; padding: 14%; }
 .ex-info { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 4px; min-width: 0; }
@@ -239,7 +242,7 @@ onMounted(load);
 .ex-foot { display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px; button { min-width: 88px !important; width: auto !important; } }
 @media screen and (max-width: 768px) {
   /* 모바일 목록: 이미지 왼쪽 / 제목·대상 / 등록·사용·공개 한 줄 / 버튼 */
-  .ex-admin .table-body-flex { display: grid !important; grid-template-columns: 96px auto auto minmax(0, 1fr); grid-template-areas: 'thumb info info info' 'thumb owner use status' 'act act act act'; column-gap: 10px; row-gap: 8px; align-items: center; }
+  .ex-admin .table-body-flex { display: grid !important; grid-template-columns: 112px auto auto minmax(0, 1fr); grid-template-areas: 'thumb info info info' 'thumb owner use status' 'act act act act'; column-gap: 10px; row-gap: 8px; align-items: center; }
   .ex-admin .table-body-flex > .table-body-col { width: auto !important; min-width: 0 !important; max-width: none !important; padding: 0 !important; justify-content: flex-start !important; text-align: left !important; }
   .ex-c-thumb { grid-area: thumb; align-self: start; } .ex-info { grid-area: info; } .ex-c-owner { grid-area: owner; } .ex-c-use { grid-area: use; } .ex-c-status { grid-area: status; } .ex-c-act { grid-area: act; justify-content: flex-end !important; }
   .ex-c-owner .color-grey, .ex-c-use .color-grey, .ex-c-status span { font-size: 12px; }
@@ -248,7 +251,7 @@ onMounted(load);
   .adm-view { padding: 20px; }
   .ex-form { grid-template-columns: minmax(0, 1fr); gap: 20px; }
   .ex-row { grid-template-columns: minmax(0, 1fr); gap: 6px; }
-  .ex-thumb { width: 96px; margin: 0; }
+  .ex-thumb { width: 112px; margin: 0; }
   .ex-foot button { flex: 1; }
 }
 </style>
