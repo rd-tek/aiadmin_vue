@@ -61,7 +61,8 @@
                   <span class="color-grey">{{ item.cnt }}</span>
                 </div>
                 <div class="table-body-col col-1 is-mob">
-                  <span :class="{ 'color-green': item.status === '1', 'color-grey': item.status === '0' }">{{ item.status === '1' ? '게시' : '대기' }}</span>
+                  <!-- 2026-11-20: 삭제된 글은 상태 '-'(이전엔 '게시'와 비고 '삭제'가 함께 보였음) -->
+                  <span :class="{ 'color-green': item.status === '1' && item.deleteflag !== '1', 'color-grey': item.status === '0' || item.deleteflag === '1' }">{{ item.deleteflag === '1' ? '-' : (item.status === '1' ? '게시' : '대기') }}</span>
                 </div>
                 <div class="table-body-col col-1 is-mob">
                   <span :class="{ 'color-green': item.deleteflag === '0', 'color-red': item.deleteflag === '1' }">{{ item.deleteflag === '1' ? '삭제' : '정상' }}</span>
@@ -72,7 +73,7 @@
                   <div class="row-list">
                     <span class="date">{{ dispDate(item) }}</span>
                     <span class="status">{{ item.cnt }}</span>
-                    <span class="status" :class="{ 'color-green': item.status === '1', 'color-grey': item.status === '0' }">{{ item.status === '1' ? '게시' : '대기' }}</span>
+                    <span class="status" :class="{ 'color-green': item.status === '1' && item.deleteflag !== '1', 'color-grey': item.status === '0' || item.deleteflag === '1' }">{{ item.deleteflag === '1' ? '-' : (item.status === '1' ? '게시' : '대기') }}</span>
                     <span class="status" :class="{ 'color-green': item.deleteflag === '0', 'color-red': item.deleteflag === '1' }">{{ item.deleteflag === '1' ? '삭제' : '정상' }}</span>
                   </div>
                 </div> 
