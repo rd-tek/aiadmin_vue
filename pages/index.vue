@@ -261,7 +261,8 @@ useHead({
   &-main { display: flex; align-items: baseline; gap: 6px; }
   &-value { font-size: 28px; font-weight: 800; color: #1B2559; letter-spacing: -0.5px; font-variant-numeric: tabular-nums; }
   &-unit { font-size: 12px; color: #6c7389; }
-  &-delta { font-size: 12px; font-weight: 600; small { font-weight: 500; color: #6c7389; margin-left: 2px; } &.up { color: #05A66B; } &.down { color: #E5484D; } &.flat { color: #6c7389; } }
+  // 2026-11-20: 증감 글자 대비 — 증가 #05A66B(3.2:1) → #047857(5.5:1), 감소 #E5484D(3.9:1) → #C8323A(5.3:1)
+  &-delta { font-size: 12px; font-weight: 600; small { font-weight: 500; color: #6c7389; margin-left: 2px; } &.up { color: #047857; } &.down { color: #C8323A; } &.flat { color: #6c7389; } }
   &-spark { margin: 2px -4px 0; }
   &-foot { font-size: 12px; color: #6b748b; border-top: 1px dashed #EEF0F6; padding-top: 8px; b { color: #1B2559; font-weight: 700; margin-left: 2px; } }
 }
