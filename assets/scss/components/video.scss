@@ -112,7 +112,9 @@
       }
   }
 
-  &::v-deep(.vjs-mute-control) {
+  // 2026-11-26: 소리 아이콘 겹침 수정 — video.js 기본 규칙(.vjs-mute-control.vjs-vol-N)과 우선순위가 같아
+  //   나중에 불러오는 video.js CSS 의 글자 아이콘이 이미지 위에 겹쳐 보임 → .vjs-control 을 더해 우선순위를 높임.
+  &::v-deep(.vjs-mute-control.vjs-control) {
     .vjs-icon-placeholder {
       &:before {
         content: '';
