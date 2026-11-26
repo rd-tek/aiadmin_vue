@@ -62,12 +62,12 @@
                     <td>{{ playerInfo.teeheight }}mm</td>
                 </tr>
                 <tr>
-                  <th>세팅</th>
+                  <th>단위 설정</th><!-- 2026-11-26: 값이 거리·속도가 아니라 단위라서 이름을 분명히(이전: 세팅, 항목 '페어웨이 거리 : m' 은 숫자가 빠진 것처럼 읽혔음) -->
                   <td>
                     <div class="select-wrap flex-column">
-                      <div class="select-default"><!-- 2026-10-23: 항목명 한국어(매장회원 화면과 같게) -->페어웨이 거리 : <b>{{ distUnit(playerInfo.fieldunit) }}</b></div>
-                      <div class="select-default">그린 거리 : <b>{{ distUnit(playerInfo.greenunit) }}</b></div>
-                      <div class="select-default">스피드 : <b>{{ speedUnit(playerInfo.speedunit) }}</b></div>
+                      <div class="select-default"><!-- 2026-10-23: 항목명 한국어(매장회원 화면과 같게) -->페어웨이 거리 단위 : <b>{{ distUnit(playerInfo.fieldunit) }}</b></div>
+                      <div class="select-default">그린 거리 단위 : <b>{{ distUnit(playerInfo.greenunit) }}</b></div>
+                      <div class="select-default">스피드 단위 : <b>{{ speedUnit(playerInfo.speedunit) }}</b></div>
                     </div>
                   </td>
                 </tr>

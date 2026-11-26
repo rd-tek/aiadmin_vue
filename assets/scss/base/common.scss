@@ -4599,3 +4599,7 @@ html.xg-load-error :is(.no-data, .no-info, .stats-empty, .summary-empty, .mini-e
         scroll-behavior: auto !important;
     }
 }
+
+/* 2026-11-26: 페이지 번호가 한 쪽뿐(목록 0~10건)이면 숨김 — 이전엔 listcnt || 1 로 '‹ 1 ›' 이 늘 보였음.
+   현재 쪽이 아닌 번호 버튼이 없을 때만 숨기고 자리는 남김(옆 '목록' 버튼 등 배치 유지, 숨긴 버튼은 Tab 으로도 안 감). */
+.pagination-container:has(.number-buttons):not(:has(.number-buttons:not(.active))) { visibility: hidden; } /* number-buttons 가 있는(VueAwesomePaginate) 것만 — 직접 만든 페이지 번호는 제외 */
